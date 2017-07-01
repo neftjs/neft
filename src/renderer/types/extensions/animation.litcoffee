@@ -28,13 +28,14 @@
         itemUtils.defineProperty
             constructor: @
             name: 'running'
+            developmentSetter: (val) ->
+                assert.isBoolean val
             setter: (_super) -> (val) ->
                 @_when = val
                 oldVal = @_running
                 if oldVal is val
                     return
 
-                assert.isBoolean val
                 _super.call @, val
 
                 if val
@@ -56,12 +57,13 @@
         itemUtils.defineProperty
             constructor: @
             name: 'paused'
+            developmentSetter: (val) ->
+                assert.isBoolean val
             setter: (_super) -> (val) ->
                 oldVal = @_paused
                 if oldVal is val
                     return
 
-                assert.isBoolean val
                 _super.call @, val
 
                 if val
@@ -119,8 +121,6 @@
 
         enable: ->
             @running = true
-            super()
 
         disable: ->
             @running = false
-            super()
