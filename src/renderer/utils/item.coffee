@@ -73,6 +73,8 @@ module.exports = (Renderer, Impl) ->
                 for child in opts.children
                     if child instanceof Renderer.Item
                         child.parent = @
+                    else if @ instanceof Renderer.Extension
+                        @_children = opts.children
                     else if child instanceof Renderer.Extension and not child._bindings?.target
                         child.target = @
 
@@ -162,7 +164,10 @@ module.exports = (Renderer, Impl) ->
 
             `//<development>`
             unless prop of @
-                log.warn "Binding on the '#{prop}' property can't be created, because this object (#{@toString()}) doesn't have such property"
+                log.warn """
+                    Binding on the '#{prop}' property can't be created, \
+                    because this object (#{@toString()}) doesn't have such property
+                """
                 return
             `//</development>`
 

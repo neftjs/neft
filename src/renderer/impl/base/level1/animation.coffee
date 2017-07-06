@@ -3,6 +3,7 @@
 module.exports = (impl) ->
     DATA =
         bindings: null
+        reversed: false
 
     DATA: DATA
 
@@ -11,6 +12,10 @@ module.exports = (impl) ->
     create: (data) ->
 
     setAnimationLoop: (val) ->
+
+    setAnimationReversed: (val) ->
+        @_impl.reversed = val
+        return
 
     startAnimation: ->
 

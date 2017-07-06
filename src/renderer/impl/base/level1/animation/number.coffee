@@ -48,10 +48,18 @@ module.exports = (impl) ->
         data.progress = progress
         running = progress isnt 1 or (anim._running and anim._loop and anim._when)
 
+        fromVal = if data.reversed then data.to else data.from
+        toVal = if data.reversed then data.from else data.to
+
         if progress is 1
-            val = data.to
+            val = toVal
         else
-            val = data.easing anim._duration * progress, data.from, (data.to - data.from), anim._duration
+            val = data.easing(
+                anim._duration * progress,
+                fromVal,
+                (toVal - fromVal),
+                anim._duration
+            )
         target = anim._target
 
         if val is val and target and (property = anim._property) # isNaN hack

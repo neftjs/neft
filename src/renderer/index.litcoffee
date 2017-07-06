@@ -27,8 +27,12 @@
     exports.Extension = require('./types/extension') exports, Impl, itemUtils
     exports.Class = require('./types/extensions/class') exports, Impl, itemUtils
     exports.Animation = require('./types/extensions/animation') exports, Impl, itemUtils
-    exports.PropertyAnimation = require('./types/extensions/animation/types/property') exports, Impl, itemUtils
-    exports.NumberAnimation = require('./types/extensions/animation/types/property/types/number') exports, Impl, itemUtils
+    exports.PropertyAnimation =
+        require('./types/extensions/animation/types/property') exports, Impl, itemUtils
+    exports.NumberAnimation =
+        require('./types/extensions/animation/types/property/types/number') exports, Impl, itemUtils
+    exports.SequentialAnimation =
+        require('./types/extensions/animation/types/sequential') exports, Impl, itemUtils
     exports.Transition = require('./types/extensions/transition') exports, Impl, itemUtils
 
     exports.Item = require('./types/basics/item') exports, Impl, itemUtils

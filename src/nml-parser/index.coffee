@@ -50,6 +50,7 @@ MODIFIERS_NAMES =
     Animation: true
     PropertyAnimation: true
     NumberAnimation: true
+    SequentialAnimation: true
     FontLoader: true
     ResourcesLoader: true
 

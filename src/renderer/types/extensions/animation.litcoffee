@@ -14,8 +14,8 @@
         constructor: ->
             super()
             @_loop = false
-            @_updatePending = false
             @_paused = false
+            @_reversed = false
 
 ## *Signal* Animation::onStart()
 
@@ -28,13 +28,14 @@
         itemUtils.defineProperty
             constructor: @
             name: 'running'
+            developmentSetter: (val) ->
+                assert.isBoolean val
             setter: (_super) -> (val) ->
                 @_when = val
                 oldVal = @_running
                 if oldVal is val
                     return
 
-                assert.isBoolean val
                 _super.call @, val
 
                 if val
@@ -56,12 +57,13 @@
         itemUtils.defineProperty
             constructor: @
             name: 'paused'
+            developmentSetter: (val) ->
+                assert.isBoolean val
             setter: (_super) -> (val) ->
                 oldVal = @_paused
                 if oldVal is val
                     return
 
-                assert.isBoolean val
                 _super.call @, val
 
                 if val
@@ -69,6 +71,17 @@
                 else
                     Impl.resumeAnimation.call @
                 return
+
+## *Boolean* Animation::reversed
+
+## *Signal* Animation::onReversedChange(*Boolean* oldValue)
+
+        itemUtils.defineProperty
+            constructor: @
+            name: 'reversed'
+            implementation: Impl.setAnimationReversed
+            developmentSetter: (val) ->
+                assert.isBoolean val
 
 ## *Boolean* Animation::loop
 
@@ -80,12 +93,6 @@
             implementation: Impl.setAnimationLoop
             developmentSetter: (val) ->
                 assert.isBoolean val
-
-## ReadOnly *Boolean* Animation::updatePending
-
-        utils.defineProperty @::, 'updatePending', null, ->
-            @_updatePending
-        , null
 
 ## Animation::start()
 
@@ -114,8 +121,6 @@
 
         enable: ->
             @running = true
-            super()
 
         disable: ->
             @running = false
-            super()
