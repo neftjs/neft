@@ -2,6 +2,11 @@
 
     'use strict'
 
+    assert = require 'src/assert'
+    log = require 'src/log'
+
+    log = log.scope 'Renderer', 'PropertyAnimation', 'Easing'
+
     module.exports = (Renderer, Impl, itemUtils) -> class Easing extends itemUtils.DeepObject
 
 ## *Easing* Easing::constructor()
