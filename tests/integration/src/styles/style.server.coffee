@@ -1,30 +1,9 @@
 'use strict'
 
 {utils, Document, Renderer, styles} = Neft
-{createView} = require '../document/utils.server'
+{render} = require './utils.server'
 
 {Element} = Document
-
-testViews = []
-
-render = (opts) ->
-    doc = createView opts.html
-    {path} = doc
-
-    Style = styles
-        styles: opts.styles or {}
-        queries: opts.queries or {}
-        windowStyle: opts.windowStyle or {objects: {}}
-
-    for key, subfile of Document._files
-        if key.indexOf(path) is 0
-            testViews.push subfile
-            Style.extendDocumentByStyles subfile
-
-    clone = doc.render()
-    clone.destroy()
-
-    doc.render()
 
 describe 'styles', ->
     describe 'n-style', ->
@@ -579,8 +558,3 @@ describe 'styles', ->
             iNode = doc.node.query 'i'
 
             assert.is emNode.style.previousSibling, iNode.style
-
-    it '', ->
-        for view in testViews
-            utils.clear view.styles
-        return
