@@ -35,10 +35,10 @@ module.exports = (platform, options, callback) ->
         stack.add saveBundle, null, args
 
     # notify
-    if options.notify
-        callback = do (callback) -> (err) ->
+    callback = do (callback) -> (err) ->
+        if options.notify or err?
             notify err
-            callback err
+        callback err
 
     # run
     stack.runAll (err) ->
