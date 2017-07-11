@@ -68,7 +68,7 @@ module.exports = (impl) ->
                 if item._children
                     child = item._children.topChild
                     while child
-                        result |= checkItem(child, ex, ey, onItem, x, y, scale)
+                        result = checkItem(child, ex, ey, onItem, x, y, scale)
                         if result & STOP_PROPAGATION
                             return result
                         if result & STOP_ASIDE_PROPAGATION
@@ -77,7 +77,7 @@ module.exports = (impl) ->
 
                 # test content item
                 if item._contentItem and not (result & STOP_ASIDE_PROPAGATION)
-                    result |= checkItem(
+                    result = checkItem(
                         item._contentItem,
                         ex, ey,
                         onItem,
@@ -89,7 +89,7 @@ module.exports = (impl) ->
 
             # test this child
             if result & PROPAGATE_UP or isPointInBox(ex, ey, x, y, w, h)
-                result |= onItem(item)
+                result = onItem(item)
 
             return result
 
