@@ -3,6 +3,7 @@
     'use strict'
 
     {isArray} = Array
+    hasOwnProp = Object.hasOwnProperty
 
     module.exports = (utils) ->
 
@@ -82,7 +83,7 @@ console.log(clone instanceof Sample)
                     len = objs.push obj
                     ids.push objIds = []
 
-                    for key, value of obj when obj.hasOwnProperty key
+                    for key, value of obj when hasOwnProp.call(obj, key)
 
                         unless value and typeof value is 'object'
                             continue
@@ -123,7 +124,7 @@ console.log(clone instanceof Sample)
                     # Value of each property will be changed to referenced object id
                     obji = 0
                     objReferences = null
-                    for key, value of obj when obj.hasOwnProperty key
+                    for key, value of obj when hasOwnProp.call(obj, key)
 
                         r[key] = value
 
@@ -159,7 +160,7 @@ console.log(clone instanceof Sample)
                     if optsCtors and ctor = obj.constructor
 
                         # save for instance or for prototype depend on the flag
-                        if optsInsts or obj.hasOwnProperty('constructor')
+                        if optsInsts or hasOwnProp.call(obj, 'constructor')
 
                             # omits native constructors (Array, Object etc.)
                             unless ~(nativeCtors.indexOf ctor)
@@ -227,7 +228,7 @@ Backward utils.simplify() operation.
                 # set properties
                 if optsProps
                     for obj in objects
-                        for key, value of obj when obj.hasOwnProperty key
+                        for key, value of obj when hasOwnProp.call(obj, key)
                             defObjProp obj, key, value
 
                 # set protos
