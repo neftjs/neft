@@ -279,3 +279,33 @@ describe 'Document script', ->
         it 'fails on unknown prop', ->
             @view.render()
             assert.lengthOf @errors, 1
+
+    describe 'defaultState', ->
+        beforeEach ->
+            @view = createView """
+                <script>
+                    this.defaultState = {
+                        abc: 123
+                    };
+                    this.onBeforeRender(() => {
+                        this.savedState = this.state;
+                    });
+                </script>
+            """
+            @view = @view.clone()
+
+        it 'is not applied on created document', ->
+            assert.notOk @view.inputState.abc
+
+        it 'is applied on rendered document', ->
+            @view.render()
+            assert.is @view.inputState.abc, 123
+
+        it 'is not applied on reverted document', ->
+            @view.render()
+            @view.revert()
+            assert.notOk @view.inputState.abc
+
+        it 'is applied in onBeforeRender signal', ->
+            @view.render()
+            assert.is @view.scope.savedState.abc, 123
