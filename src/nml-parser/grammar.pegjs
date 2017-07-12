@@ -354,22 +354,7 @@ SelectStatement "select statement"
 
 /* CODE */
 
-CodeBody
-    = CodeBodyCode (CodeBodyCode CodeBodyFunc)* CodeBodyCode
-
-CodeBodyCode
-    = CodeBodyAny (StringLiteral CodeBodyAny)* CodeBodyAny
-
-CodeBodyAny
-    = CodeBodyAnyChar*
-
-CodeBodyAnyChar
-    = (!(name:TypeName WhiteSpace* "{")) [a-zA-Z0-9_\-+=!@#$%^&*()~\[\]\\|<>,.?/ \t\r\n;:]
-
-CodeBodyFunc
-    = "{" CodeBody "}"
-
 Code "code"
-    = "`" d:$(d:$CodeBody &{return d.trim() ? d : undefined;}) "`" {
+    = "`" d:$((!"`" FunctionBodyText)*) "`" {
         return { type: 'code', body: d }
     }
