@@ -13,14 +13,15 @@ log = log.scope 'NML'
 module.exports = (file, filename) ->
     getErrorMessage = (error) ->
         lines = file.split '\n'
-        line = error.location.start.line
+        {start, end} = error.location
 
-        msg = '\n'
-        for i in [error.location.start.line..error.location.end.line]
+        msg = 'Code: '
+        for i in [start.line - 1..end.line - 1]
             msg += lines[i] + '\n'
         msg += """
-            \nLine #{error.location.start.line}, \
-            column #{error.location.start.column}: \
+            Error: \
+            Line #{start.line}, \
+            column #{start.column}: \
             #{error.message}
         """
         msg

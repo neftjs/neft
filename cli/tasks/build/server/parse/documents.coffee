@@ -21,11 +21,18 @@ Document.SCRIPTS_PATH = SCRIPTS_DIR
 Document.STYLES_PATH = STYLES_DIR
 loadedExtensions = {}
 
+class DocumentParseError extends Error
+    constructor: (@message, @previousError) ->
+        if @previousError
+            @message += "\n\n#{@previousError.message}"
+
 module.exports = (platform, app, callback) ->
     unless fs.existsSync(IN_DIR)
         return callback null
 
     logtime = log.time 'Parse documents'
+
+    parsingError = null
 
     # clear
     fs.removeSync "./#{OUT_DIR}/#{IN_DIR}"
@@ -71,11 +78,8 @@ module.exports = (platform, app, callback) ->
         try
             Document.parse file
         catch error
-            log.error """
-                View file `#{path}` can't be parsed; \
-                if it's not related to your component scripts, please report this error on GitHub
-                #{error.stack}
-            """
+            msg = "Cannot parse file '#{path}'\n#{error.message}"
+            parsingError = new DocumentParseError msg, parsingError
             return
         file
 
@@ -106,7 +110,7 @@ module.exports = (platform, app, callback) ->
         Document.onStyle.disconnect onStyleListener
 
         log.end logtime
-        callback err
+        callback parsingError
         return
 
     cliUtils.forEachFileDeep IN_DIR, (path, stat) ->
