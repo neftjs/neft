@@ -9,6 +9,7 @@
     eventLoop = require 'src/eventLoop'
     Dict = require 'src/dict'
     List = require 'src/list'
+    Schema = require 'src/schema'
 
     assert = assert.scope 'View'
     log = log.scope 'View'
@@ -318,7 +319,7 @@ Corresponding node handler: *n-onRevert=""*.
 
             `//<development>`
             if @constructor is Document
-                Object.preventExtensions @
+                Object.seal @
             `//</development>`
 
 # *Document* Document::render([*Any* props, *Any* context, *Document* source])
@@ -352,6 +353,21 @@ Corresponding node handler: *n-onRevert=""*.
                 inputProps.pop key
             else
                 inputProps.set key, val
+            return
+
+        _warnPropSchema: (error) ->
+            log.error "Invalid props passed for component #{@path}: #{error.message}"
+            return
+
+        validateProps = (doc) ->
+            if propsSchema = doc.scope.propsSchema
+                if utils.isPlainObject(propsSchema)
+                    propsSchema = new Schema propsSchema
+                assert.instanceOf propsSchema, Schema, '''
+                    propsSchema needs to be an instance of Neft.Schema
+                '''
+                if error = utils.catchError(propsSchema.validate, propsSchema, [doc.inputProps])
+                    doc._warnPropSchema error
             return
 
         _render: do ->
@@ -418,6 +434,9 @@ Corresponding node handler: *n-onRevert=""*.
                             inputRefs.set prop, val
                     for prop, val of viewRefs
                         inputRefs.set prop, val
+
+                # propsSchema
+                validateProps @
 
                 Document.onBeforeRender.emit @
                 emitNodeSignal @, 'n-onBeforeRender'
