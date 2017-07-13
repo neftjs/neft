@@ -251,3 +251,31 @@ describe 'Document script', ->
         assert.isEqual events, [
             'onBeforeRender', 'onRender', 'onBeforeRevert', 'onRevert'
         ]
+
+    describe 'propsSchema', ->
+        beforeEach ->
+            @view = createView """
+                <script>
+                    this.propsSchema = {
+                        id: {
+                            type: 'string'
+                        }
+                    };
+                </script>
+            """
+            @view = Object.create @view.clone()
+
+            @errors = []
+            @view._warnPropSchema = (error) => @errors.push error
+
+        it 'passes on valid props', ->
+            @view.render id: 'abc'
+            assert.lengthOf @errors, 0
+
+        it 'fails on invalid prop', ->
+            @view.render id: 2
+            assert.lengthOf @errors, 1
+
+        it 'fails on unknown prop', ->
+            @view.render()
+            assert.lengthOf @errors, 1
