@@ -4,14 +4,14 @@ assert = require 'src/assert'
 utils = require 'src/utils'
 log = require 'src/log'
 
-assert = assert.scope 'View.PropChange'
-log = log.scope 'View', 'PropChange'
+assert = assert.scope 'View.StateChange'
+log = log.scope 'View', 'StateChange'
 
-module.exports = (File) -> class PropChange
-    @__name__ = 'PropChange'
-    @__path__ = 'File.PropChange'
+module.exports = (File) -> class StateChange
+    @__name__ = 'StateChange'
+    @__path__ = 'File.StateChange'
 
-    JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(PropChange) - 1
+    JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(StateChange) - 1
 
     i = 1
     JSON_NODE = i++
@@ -23,7 +23,7 @@ module.exports = (File) -> class PropChange
         unless obj
             node = file.node.getChildByAccessPath arr[JSON_NODE]
             target = file.node.getChildByAccessPath arr[JSON_TARGET]
-            obj = new PropChange file, node, target, arr[JSON_NAME]
+            obj = new StateChange file, node, target, arr[JSON_NAME]
         obj
 
     constructor: (@file, @node, @target, @name) ->
@@ -33,28 +33,36 @@ module.exports = (File) -> class PropChange
         assert.isString @name
         assert.notLengthOf @name, 0
 
-        @_defaultValue = @target.props[@name]
+        @_defaultValue = undefined
 
         @update()
         @node.onVisibleChange onVisibleChange, @
         @node.onPropsChange onPropsChange, @
 
         `//<development>`
-        if @constructor is PropChange
-            Object.preventExtensions @
+        if @constructor is StateChange
+            Object.seal @
         `//</development>`
 
     update: ->
+        {inputState} = @file
         val = if @node.visible then @node.props.value else @_defaultValue
-        @target.props.set @name, val
+        if val isnt undefined
+            inputState.set @name, val
+        else if inputState.has(@name)
+            inputState.pop @name
         return
+
+    render: ->
+        @_defaultValue = @file.inputState[@name]
+        @update()
 
     onVisibleChange = ->
         @update()
 
     onPropsChange = (name, oldValue) ->
         if name is 'name'
-            throw new Error 'Dynamic prop name is not implemented'
+            throw new Error 'Dynamic <state /> name is not yet supported'
         else if name is 'value'
             @update()
         return
@@ -63,7 +71,7 @@ module.exports = (File) -> class PropChange
         node = original.node.getCopiedElement @node, file.node
         target = original.node.getCopiedElement @target, file.node
 
-        new PropChange file, node, target, @name
+        new StateChange file, node, target, @name
 
     toJSON: (key, arr) ->
         unless arr
