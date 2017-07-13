@@ -441,6 +441,13 @@ Corresponding node handler: *n-onRevert=""*.
                 Document.onBeforeRender.emit @
                 emitNodeSignal @, 'n-onBeforeRender'
 
+                # defaultState
+                if isScopeRender and @scope.defaultState isnt undefined
+                    assert.isPlainObject @scope.defaultState, '''
+                        defaultState needs to be a plain object
+                    '''
+                    @inputState.extend @scope.defaultState
+
                 # if set scope is original, prepare it
                 if isScopeRender
                     emitSignal @scope, 'onBeforeRender'
