@@ -8,6 +8,17 @@ repeatString = (str, amount) ->
         r += str
     r
 
+isArrayElementIndexer = (string, index) ->
+    if string[index] isnt '['
+        return false
+    while index++ < string.length
+        char = string[index]
+        if char is ']'
+            return true
+        unless /[0-9]/.test(char)
+            return false
+    false
+
 exports.isBinding = (code) ->
     try
         func = new Function 'console', "'use strict'; return #{code};"
@@ -23,8 +34,15 @@ exports.parse = (val, isPublicId, opts = 0, objOpts = {}, isVariableId) ->
     val += ' '
     lastBinding = null
     isString = false
+    isArrayIndexer = false
     for char, i in val
-        if char is '.' and lastBinding
+        if isArrayIndexer and char is ']'
+            isArrayIndexer = false
+            continue
+
+        isCurrenrArrayIndexer = not isString and isArrayElementIndexer(val, i)
+        if (char is '.' and lastBinding) or isCurrenrArrayIndexer
+            isArrayIndexer = isCurrenrArrayIndexer
             lastBinding.push ''
             continue
 
@@ -40,7 +58,7 @@ exports.parse = (val, isPublicId, opts = 0, objOpts = {}, isVariableId) ->
                 lastBinding = null
                 binding.push char
 
-        if /'|"/.test(char) and val[i - 1] isnt '\\'
+        if char in ['\'', '"'] and val[i - 1] isnt '\\'
             isString = not isString
 
     # filter by ids
@@ -95,7 +113,10 @@ exports.parse = (val, isPublicId, opts = 0, objOpts = {}, isVariableId) ->
             elem.shift()
             for id, i in elem
                 text += ", '#{id}']"
-                hash += ".#{id}"
+                if isFinite(id)
+                    hash += "[#{id}]"
+                else
+                    hash += ".#{id}"
         else
             if elem[0] is "this"
                 hash += "this"

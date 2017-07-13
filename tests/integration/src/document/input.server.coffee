@@ -375,6 +375,18 @@ describe 'Document string interpolation', ->
             elem.props.set 'x', 1
             assert.is view.node.stringify(), '1'
 
+        it 'on `props` list element', ->
+            source = createView '''
+                <component name="a">${props.list[0]}</component>
+                <use component="a" list="List()" />
+            '''
+            view = source.clone()
+            elem = view.node.children[0]
+
+            renderParse view
+            elem.props.list.append 'a'
+            assert.is view.node.stringify(), 'a'
+
         it 'on `context`', ->
             source = createView '${context.x}'
             view = source.clone()
