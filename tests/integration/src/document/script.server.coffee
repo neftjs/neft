@@ -47,16 +47,19 @@ describe 'Document script', ->
         assert.isNot view2.scope, scope
         assert.is view2.scope.a, 1
 
-    it 'is called with props in scope', ->
+    it 'is called with props in beforeRender', ->
         view = createView '''
             <script>
-                this.a = this.props.a;
+                this.onBeforeRender(() => {
+                    this.a = this.props.a;
+                });
             </script>
-            <prop name="a" value="1" />
         '''
         view = view.clone()
 
-        renderParse view
+        renderParse view,
+            props:
+                a: 1
         assert.is view.scope.a, 1
 
     it 'is called with refs in scope', ->

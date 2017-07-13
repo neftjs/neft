@@ -322,7 +322,6 @@ describe 'Document string interpolation', ->
     describe 'prop handler', ->
         it 'is called with proper scope and parameters', ->
             source = createView '''
-                <prop name="y" value="3" />
                 <span
                   x="1"
                   ref="a1"
@@ -333,6 +332,8 @@ describe 'Document string interpolation', ->
 
             calls = 0
             renderParse view,
+                props:
+                    y: 3
                 storage:
                     test: (x, y) ->
                         calls += 1
@@ -344,13 +345,14 @@ describe 'Document string interpolation', ->
 
         it 'is not called if the document is not rendered', ->
             source = createView '''
-                <prop name="y" value="3" />
                 <span x="1" ref="a1" onPropsChange="${context.onPropsChange()}" />
             '''
             view = source.clone()
 
             calls = 0
             renderParse view,
+                props:
+                    y: 3
                 storage:
                     onPropsChange: (x, y) ->
                         calls += 1

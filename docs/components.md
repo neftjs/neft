@@ -120,14 +120,16 @@ Tags with the `ref` attribute are available in the `refs` object.
 <h1>Your name: ${refs.userNameInput.props.value}</h1>
 ```
 
-# prop
+# state
 
-This tag is used to dynamically change the given property on the parent element.
+This tag is used to dynamically change state in component.
+
+It allows to use data-binding for state properties what is not possible inside `<script>` tag.
 
 ```xhtml
 <header ref="header">
-    <prop name="isActive" value="true" n-if="${state.isActive}" />
-    <span>Active: ${refs.header.props.isActive}</span>
+    <state name="active" value="${props.nav.active}" n-if="${props.useNav}" />
+    <span>Active: ${state.active}</span>
 </header>
 ```
 
