@@ -24,3 +24,8 @@ describe 'Binding', ->
         assertParser 'this.list[0]',
             hash: 'this.list[0]'
             connections: [['this', 'list'], '0']
+
+    it 'omits array literals', ->
+        assertParser '(this.dict ? this.dict.list : [])',
+            hash: '(this.dict ? this.dict.list : [])'
+            connections: [['this', 'dict'], 'list']
