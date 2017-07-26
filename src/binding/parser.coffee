@@ -40,9 +40,9 @@ exports.parse = (val, isPublicId, opts = 0, objOpts = {}, isVariableId) ->
             isArrayIndexer = false
             continue
 
-        isCurrenrArrayIndexer = not isString and isArrayElementIndexer(val, i)
-        if (char is '.' and lastBinding) or isCurrenrArrayIndexer
-            isArrayIndexer = isCurrenrArrayIndexer
+        isCurrentArrayIndexer = not isString and isArrayElementIndexer(val, i)
+        if (char is '.' or isCurrentArrayIndexer) and lastBinding
+            isArrayIndexer = isCurrentArrayIndexer
             lastBinding.push ''
             continue
 
