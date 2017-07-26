@@ -55,7 +55,7 @@ describe 'Document <state />', ->
                 visible: false
         assert.is view.inputState.a, 2
 
-        view.inputProps.set 'visible', true
+        view.inputProps._set 'visible', true
         assert.is view.inputState.a, 1
 
     it 'value is set after defaultState', ->

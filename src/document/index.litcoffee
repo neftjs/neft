@@ -11,6 +11,7 @@
     Dict = require 'src/dict'
     List = require 'src/list'
     Schema = require 'src/schema'
+    ImmutableInputDict = require './input/immutableDict'
 
     assert = assert.scope 'View'
     log = log.scope 'View'
@@ -310,8 +311,8 @@ Corresponding node handler: *n-onRevert=""*.
             @propsToSet = []
             @logs = []
             @styles = []
-            @inputRefs = new Dict
-            @inputProps = new Dict
+            @inputRefs = new ImmutableInputDict @, 'refs'
+            @inputProps = new ImmutableInputDict @, 'props'
             @inputState = new EventLoopDict
             @inputArgs = [@inputRefs, @inputProps, @inputState]
 
@@ -345,7 +346,7 @@ Corresponding node handler: *n-onRevert=""*.
         ###
         _setInputProp: (key, val) ->
             if val isnt undefined and not isInternalProp(key)
-                @inputProps.set key, val
+                @inputProps._set key, val
             return
 
         _updateInputPropsKey: (key) ->
@@ -365,7 +366,7 @@ Corresponding node handler: *n-onRevert=""*.
                     val = viewProps[key]
 
             if val is undefined
-                @inputProps.pop key
+                @inputProps._pop key
             else
                 @_setInputProp key, val
             return
@@ -412,7 +413,7 @@ Corresponding node handler: *n-onRevert=""*.
                     source.node.onPropsChange @_updateInputPropsKey, @
                     for prop, val of inputProps
                         if viewProps[prop] is props[prop] is sourceProps[prop] is undefined
-                            inputProps.pop prop
+                            inputProps._pop prop
                     for prop, val of viewProps
                         if props[prop] is sourceProps[prop] is undefined
                             @_setInputProp prop, val
@@ -426,7 +427,7 @@ Corresponding node handler: *n-onRevert=""*.
                     viewProps = @node.props
                     for prop, val of inputProps
                         if viewProps[prop] is props[prop] is undefined
-                            inputProps.pop prop
+                            inputProps._pop prop
                     for prop, val of viewProps
                         if props[prop] is undefined
                             @_setInputProp prop, val
@@ -438,12 +439,12 @@ Corresponding node handler: *n-onRevert=""*.
                     viewRefs = @refs
                     for prop, val of inputRefs
                         if viewRefs[prop] is undefined and refs[prop] is undefined
-                            inputRefs.pop prop
+                            inputRefs._pop prop
                     for prop, val of refs
                         if viewRefs[prop] is undefined
-                            inputRefs.set prop, val
+                            inputRefs._set prop, val
                     for prop, val of viewRefs
-                        inputRefs.set prop, val
+                        inputRefs._set prop, val
 
                 # propsSchema
                 validateProps @
@@ -624,7 +625,8 @@ Corresponding node handler: *n-onReplaceByUse=""*.
             # refs
             for ref, node of @refs
                 clone.refs[ref] = @node.getCopiedElement node, clone.node
-            clone.inputRefs.extend clone.refs
+            for key, val of clone.refs
+                clone.inputRefs._set key, val
 
             # inputs
             for input in @inputs
