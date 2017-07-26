@@ -81,6 +81,18 @@ describe 'Document string interpolation', ->
             componentA.props.set 'x', undefined
             assert.is view.node.stringify(), '2'
 
+        it 'does not contain internal properties', ->
+            source = createView '''
+                <component name="a" x="2">
+                    ${Object.keys(props).sort()}
+                </component>
+                <use component="a" y="1" n-style="renderer:Rectangle" />
+            '''
+            view = source.clone()
+
+            renderParse view
+            assert.is view.node.stringify(), 'x,y'
+
     describe '`refs`', ->
         it 'refers to nodes', ->
             source = createView '''
