@@ -7,6 +7,7 @@
     log = require 'src/log'
     signal = require 'src/signal'
     eventLoop = require 'src/eventLoop'
+    EventLoopDict = require 'src/eventLoop/dict'
     Dict = require 'src/dict'
     List = require 'src/list'
     Schema = require 'src/schema'
@@ -311,7 +312,7 @@ Corresponding node handler: *n-onRevert=""*.
             @styles = []
             @inputRefs = new Dict
             @inputProps = new Dict
-            @inputState = new Dict
+            @inputState = new EventLoopDict
             @inputArgs = [@inputRefs, @inputProps, @inputState]
 
             @node.onPropsChange @_updateInputPropsKey, @
@@ -613,7 +614,7 @@ Corresponding node handler: *n-onReplaceByUse=""*.
             {propsToParse} = @
             for propNode, i in propsToParse by 2
                 propNode = @node.getCopiedElement propNode, clone.node
-                propName = propsToParse[i+1]
+                propName = propsToParse[i + 1]
                 propNode.props.set propName, parseProp(propNode.props[propName])
 
             # stateChanges
