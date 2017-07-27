@@ -146,7 +146,7 @@ module.exports = (File) -> class Use
 
         # ref
         if @refName
-            @file.inputRefs.set @refName, usedComponent.scope
+            @file.inputRefs._set @refName, usedComponent.scope
 
         return
 
@@ -155,7 +155,7 @@ module.exports = (File) -> class Use
 
         # ref
         if @refName
-            @file.inputRefs.set @refName, @file.refs[@refName]
+            @file.inputRefs._set @refName, @file.refs[@refName]
 
         # destroy used component
         if @usedComponent
