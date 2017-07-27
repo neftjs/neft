@@ -15,11 +15,19 @@ module.exports = (File) -> (file) ->
         if file.components[node.name]
             component = node.name
             node.name = 'use'
-            node.props['component'] = component
+            node.props['n-component'] = component
 
         # get uses
         if node.name is 'use'
+            # support 'n-component' as 'component'
+            if node.props.component
+                node.props['n-component'] = node.props.component
+                delete node.props.component
+
+            # mark tag as internal
             node.name = 'blank'
+
+            # add into component
             uses.push new File.Use file, node
 
     forNode file.node

@@ -315,7 +315,8 @@ Corresponding node handler: *n-onRevert=""*.
             @inputArgs = [@inputRefs, @inputProps, @inputState]
 
             @node.onPropsChange @_updateInputPropsKey, @
-            @inputProps.extend @node.props
+            for key, val of @node.props
+                @_setInputProp key, val
 
             `//<development>`
             if @constructor is Document
@@ -333,8 +334,21 @@ Corresponding node handler: *n-onRevert=""*.
                 eventLoop.release()
                 result
 
+        isInternalProp = (prop) ->
+            prop[0] is 'n' and prop[1] is '-'
+
+        ###
+        Sets or updates component props field.
+        Undefined value is omitted.
+        Internal props (started with 'n-') are omitted.
+        ###
+        _setInputProp: (key, val) ->
+            if val isnt undefined and not isInternalProp(key)
+                @inputProps.set key, val
+            return
+
         _updateInputPropsKey: (key) ->
-            {inputProps, source, props} = @
+            {source, props} = @
             viewProps = @node.props
 
             if source
@@ -350,9 +364,9 @@ Corresponding node handler: *n-onRevert=""*.
                     val = viewProps[key]
 
             if val is undefined
-                inputProps.pop key
+                @inputProps.pop key
             else
-                inputProps.set key, val
+                @_setInputProp key, val
             return
 
         _warnPropSchema: (error) ->
@@ -400,15 +414,12 @@ Corresponding node handler: *n-onRevert=""*.
                             inputProps.pop prop
                     for prop, val of viewProps
                         if props[prop] is sourceProps[prop] is undefined
-                            if val isnt undefined
-                                inputProps.set prop, val
+                            @_setInputProp prop, val
                     for prop, val of props
                         if sourceProps[prop] is undefined
-                            if val isnt undefined
-                                inputProps.set prop, val
+                            @_setInputProp prop, val
                     for prop, val of sourceProps
-                        if val isnt undefined
-                            inputProps.set prop, val
+                        @_setInputProp prop, val
                 else
                     # props
                     viewProps = @node.props
@@ -417,11 +428,9 @@ Corresponding node handler: *n-onRevert=""*.
                             inputProps.pop prop
                     for prop, val of viewProps
                         if props[prop] is undefined
-                            if val isnt undefined
-                                inputProps.set prop, val
+                            @_setInputProp prop, val
                     for prop, val of props
-                        if val isnt undefined
-                            inputProps.set prop, val
+                        @_setInputProp prop, val
 
                 # refs
                 if refs

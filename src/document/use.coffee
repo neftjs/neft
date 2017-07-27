@@ -35,8 +35,8 @@ module.exports = (File) -> class Use
         return
 
     propsChangeListener = (name) ->
-        if name is 'component'
-            @name = @node.props['component']
+        if name is 'n-component'
+            @name = @node.props['n-component']
 
             if @isRendered
                 @revert()
@@ -63,7 +63,7 @@ module.exports = (File) -> class Use
         assert.instanceOf @file, File
         assert.instanceOf @node, File.Element
 
-        @name = @node.props.component
+        @name = @node.props['n-component']
         @refName = @node.props.ref
         @usedComponent = null
         @isRendered = false
