@@ -13,7 +13,6 @@ realpath = fs.realpathSync '.'
 JOBS = [
     require('./jobs/source-to-links'),
     require('./jobs/api-headings'),
-    require('./jobs/toc'),
     require('./jobs/breadcrumb'),
 ]
 

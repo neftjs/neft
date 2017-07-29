@@ -1,11 +1,18 @@
 start =
     features:features? __ returns:type? __ name:name parameters:parameters? textPrefix:__ extend:extend? __ defaults:defaults? __ text:text? __ tags:tags? {
         var publicName = name.name + (text ? textPrefix + text.trimRight() : '');
-        if (name.namespace) {
-            publicName = name.namespace + '.' + publicName;
-        }
-        if (parameters) {
-            publicName += '()';
+        if (name.namespace || name.parent || parameters) {
+            publicName = `**${publicName}**`;
+            if (name.namespace) {
+                publicName = name.namespace + '.' + publicName;
+            }
+            if (name.parent) {
+                publicName = name.parent + '::' + publicName;
+            }
+            if (parameters) {
+                var paramNames = parameters.map(param => `*${param.name}*`);
+                publicName += '(' + paramNames.join(', ') + ')';
+            }
         }
         return {
             namespace: name.namespace || '',
@@ -30,7 +37,7 @@ text =
     arr:$(d:$[a-zA-Z0-9-|_$:/{}*]+ " "? { return d })+ { return arr }
 
 name =
-    namespace:$(word ".")? parent:(d:word "::" { return d })? name:$("**Class**"? __? $(word "."?)+) {
+    namespace:$(word ".")* parent:(d:word "::" { return d })? name:$("**Class**"? __? $(word "."?)+) {
         namespace = namespace.slice(0, -1);
         return {namespace: namespace, parent: parent, name: name};
     }

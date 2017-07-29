@@ -1344,7 +1344,7 @@ utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}})
             else
                 return compareFunc a, b
 
-## *String* snakeToCamel(*String* value)
+## *String* utils.snakeToCamel(*String* value)
 
     exports.snakeToCamel = do ->
         regex = /(_\w)/g
@@ -1359,7 +1359,7 @@ utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}})
 
             value.replace regex, replacer
 
-## *String* kebabToCamel(*String* value)
+## *String* utils.kebabToCamel(*String* value)
 
     exports.kebabToCamel = do ->
         regex = /(\-\w)/g
@@ -1374,7 +1374,7 @@ utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}})
 
             value.replace regex, replacer
 
-## *String* camelToKebab(*String* value)
+## *String* utils.camelToKebab(*String* value)
 
     exports.camelToKebab = do ->
         regex = /([a-z])([A-Z])/g

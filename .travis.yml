@@ -109,3 +109,18 @@ matrix:
             before_install:
                 - HOMEBREW_NO_AUTO_UPDATE=1 brew install imagemagick
                 - HOMEBREW_NO_AUTO_UPDATE=1 brew install lcdf-typetools
+
+        # Generate docs on master
+        -
+            stage: deploy
+            if: branch = master
+            deploy:
+                provider: pages
+                skip-cleanup: true
+                github-token: $GITHUB_TOKEN
+                keep-history: true
+                local-dir: build/docs
+                fqdn: neft.io
+            script:
+                - npm run update-api-docs
+                - npm run generate-docs
