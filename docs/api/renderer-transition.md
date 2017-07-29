@@ -20,7 +20,7 @@ Rectangle {
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/transition.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f4dd8ed10c9266d2a20258fe8083198d5a80e033/src/renderer/types/extensions/transition.litcoffee)
 
 
 * * * 
@@ -30,7 +30,7 @@ Rectangle {
 <dl><dt>Static method of</dt><dd><i>Transition</i></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Transition</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/transition.litcoffee#transition-transitionnewobject-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/f4dd8ed10c9266d2a20258fe8083198d5a80e033/src/renderer/types/extensions/transition.litcoffee#transition-transitionnewobject-options)
 
 
 * * * 
@@ -40,24 +40,24 @@ Rectangle {
 <dl><dt>Extends</dt><dd><i>Renderer.Extension</i></dd><dt>Returns</dt><dd><i>Transition</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/transition.litcoffee#transition-transitionconstructor--rendererextension)
+> [`Source`](https://github.com/Neft-io/neft/blob/f4dd8ed10c9266d2a20258fe8083198d5a80e033/src/renderer/types/extensions/transition.litcoffee#transition-transitionconstructor--rendererextension)
 
 
 * * * 
 
 ### `animation`
 
-<dl><dt>Type</dt><dd><i>Animation</i></dd></dl>
+<dl><dt>Type</dt><dd><i>PropertyAnimation</i></dd></dl>
 
 
 * * * 
 
 ### `onAnimationChange()`
 
-<dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Animation</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>PropertyAnimation</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/transition.litcoffee#signal-transitiononanimationchangeanimation-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/f4dd8ed10c9266d2a20258fe8083198d5a80e033/src/renderer/types/extensions/transition.litcoffee#signal-transitiononanimationchangepropertyanimation-oldvalue)
 
 
 * * * 
@@ -74,5 +74,5 @@ Rectangle {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/transition.litcoffee#signal-transitiononpropertychangestring-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/f4dd8ed10c9266d2a20258fe8083198d5a80e033/src/renderer/types/extensions/transition.litcoffee#signal-transitiononpropertychangestring-oldvalue)
 
