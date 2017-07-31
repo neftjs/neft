@@ -4,6 +4,8 @@
 stack = require './stack'
 logger = require './logger'
 
+ASYNC_TEST_TIMEOUT = 5000
+
 class Scope
     constructor: ->
         @parent = null
@@ -97,6 +99,9 @@ class Test
             stack.callFunction @testFunction, @context
             @onEnd()
         else
+            setTimeout =>
+                @onEnd new Error 'Test time out'
+            , ASYNC_TEST_TIMEOUT
             stack.callFunction @testFunction, @context, [@onEnd]
 
         return
