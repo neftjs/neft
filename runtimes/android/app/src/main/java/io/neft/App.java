@@ -122,7 +122,6 @@ public class App extends Thread {
     public void run() {
         System.loadLibrary("neft");
 
-        customApp = new CustomApp();
         new Http();
         new Timers();
         client = new Client();
@@ -141,6 +140,7 @@ public class App extends Thread {
             initExtensions.run();
         }
 
+        customApp = new CustomApp();
         loadCode();
 
         activity.runOnUiThread(new Runnable() {

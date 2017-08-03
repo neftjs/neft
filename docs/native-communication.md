@@ -53,14 +53,15 @@ Create a `native/android/CustomApp.java` file in your main application folder.
 ```java
 package io.neft.customapp;
 
-import io.neft.Client.CustomFunction;
+import io.neft.App;
+import io.neft.utils.Consumer;
 
 public class CustomApp {
     public CustomApp() {
-        App.getApp().client.pushEvent("eventName", "arg1", "arg2", 2.4f, null);
-        App.getApp().client.addCustomFunction("functionName", new CustomFunction() {
+        App.getInstance().getClient().pushEvent("eventName", "arg1", "arg2", 2.4f, null);
+        App.getInstance().getClient().addCustomFunction("functionName", new Consumer<Object[]>() {
             @Override
-            public void work(Object[] args) {}
+            public void accept(Object[] args) {}
         });
     }
 }
