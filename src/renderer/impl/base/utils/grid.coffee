@@ -15,9 +15,9 @@ queue = queues[queueIndex]
 pending = false
 
 visibleChildren = new TypedArray.Uint8 64
-columnsSizes = new TypedArray.Uint32 64
+columnsSizes = new TypedArray.Float64 64
 columnsFills = new TypedArray.Uint8 64
-rowsSizes = new TypedArray.Uint32 64
+rowsSizes = new TypedArray.Float64 64
 rowsFills = new TypedArray.Uint8 64
 unusedFills = new TypedArray.Uint8 64
 
@@ -58,8 +58,8 @@ updateItem = (item) ->
     columnSpacing = rowSpacing = 0
 
     if layout = effectItem._layout
-        autoWidth &&= !layout._fillWidth
-        autoHeight &&= !layout._fillHeight
+        autoWidth and= not layout._fillWidth
+        autoHeight and= not layout._fillHeight
 
     if gridType is ALL
         columnsLen = item.columns
@@ -187,8 +187,8 @@ updateItem = (item) ->
     if not autoWidth
         freeWidthSpace = effectItem._width - columnSpacing * lastColumn - leftPadding - rightPadding - gridWidth
         if freeWidthSpace > 0 and columnsFillsSum > 0
-            unusedFills = getCleanArray unusedFills, lastColumn+1
-            length = lastColumn+1
+            unusedFills = getCleanArray unusedFills, lastColumn + 1
+            length = lastColumn + 1
             perCell = (gridWidth + freeWidthSpace) / length
 
             update = true

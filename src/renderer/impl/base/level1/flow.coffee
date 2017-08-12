@@ -41,12 +41,12 @@ queues = [[], []]
 queue = queues[queueIndex]
 pending = false
 
-rowsWidth = new TypedArray.Uint32 64
-rowsHeight = new TypedArray.Uint32 64
-elementsX = new TypedArray.Uint32 64
-elementsY = new TypedArray.Uint32 64
-elementsRow = new TypedArray.Uint32 64
-elementsBottomMargin = new TypedArray.Uint32 64
+rowsWidth = new TypedArray.Float64 64
+rowsHeight = new TypedArray.Float64 64
+elementsX = new TypedArray.Float64 64
+elementsY = new TypedArray.Float64 64
+elementsRow = new TypedArray.Float64 64
+elementsBottomMargin = new TypedArray.Float64 64
 rowsFills = new TypedArray.Uint8 64
 unusedFills = new TypedArray.Uint8 64
 

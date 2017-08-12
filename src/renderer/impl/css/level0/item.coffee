@@ -55,8 +55,6 @@ module.exports = (impl) ->
             return
         , LAYER_GC_DELAY
 
-    {round} = Math
-
     updateTransforms = (data) ->
         transform = ''
 
@@ -151,12 +149,12 @@ module.exports = (impl) ->
         return
 
     setItemX: (val) ->
-        @_impl.x = round val
+        @_impl.x = val
         updateTransforms @_impl
         return
 
     setItemY: (val) ->
-        @_impl.y = round val
+        @_impl.y = val
         updateTransforms @_impl
         return
 
