@@ -161,7 +161,7 @@ class NativeItem: Item {
 
     init(itemView: UIView = UIView()) {
         self.itemView = itemView
-        super.init()
+        super.init(view: UIView())
         view.addSubview(itemView)
     }
 
