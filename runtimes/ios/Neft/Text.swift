@@ -4,6 +4,14 @@ class Text: Item {
     static var fonts: [String: String] = Dictionary()
     static var defaultFont = "Helvetica"
 
+    fileprivate class UITextView: UIView {
+        override public class var layerClass: Swift.AnyClass {
+            get {
+                return CATextLayer.self
+            }
+        }
+    }
+
     override class func register() {
         onAction(.createText) {
             save(item: Text())
@@ -11,7 +19,7 @@ class Text: Item {
 
         onAction(.setText) {
             (item: Text, val: String) in
-            item.labelView.text = val
+            item.textLayer.string = val
         }
 
         onAction(.setTextWrap) {
@@ -25,8 +33,8 @@ class Text: Item {
         }
 
         onAction(.setTextColor) {
-            (item: Text, val: UIColor) in
-            item.labelView.textColor = val
+            (item: Text, val: CGColor) in
+            item.textLayer.foregroundColor = val
         }
 
         onAction(.setTextLineHeight) {
@@ -56,11 +64,11 @@ class Text: Item {
             (item: Text, val: String) in
             switch val {
             case "center":
-                item.labelView.textAlignment = .center
+                item.textLayer.alignmentMode = "center"
             case "right":
-                item.labelView.textAlignment = .right
+                item.textLayer.alignmentMode = "right"
             default:
-                item.labelView.textAlignment = .left
+                item.textLayer.alignmentMode = "left"
             }
         }
 
@@ -94,35 +102,22 @@ class Text: Item {
         }
     }
 
-    override var width: CGFloat {
-        didSet {
-            updateFrame()
-        }
+    var textLayer: CATextLayer {
+        return view.layer as! CATextLayer
     }
 
-    override var height: CGFloat {
-        didSet {
-            updateFrame()
-        }
-    }
-
-    let labelView: UILabel
-
-    override init() {
-        labelView = UILabel()
-        super.init()
-        view.addSubview(labelView)
-        labelView.lineBreakMode = .byWordWrapping
-        labelView.numberOfLines = 0
+    override init(view: UIView = UITextView()) {
+        super.init(view: view)
+        view.isOpaque = false
+        textLayer.isWrapped = true
+        textLayer.allowsFontSubpixelQuantization = true
+        textLayer.contentsScale = UIScreen.main.scale
         updateFont()
     }
 
-    private func updateFrame() {
-        labelView.frame = CGRect(x: 0, y: 0, width: width, height: height)
-    }
-
     private func updateFont() {
-        labelView.font = UIFont(name: fontFamily, size: fontPixelSize)
+        textLayer.font = fontFamily as CFTypeRef
+        textLayer.fontSize = fontPixelSize
     }
 
     static func loadFont(name: String, source: String) {
@@ -136,22 +131,27 @@ class Text: Item {
     }
 
     private func pushContentSize() {
-        let text = labelView.text
+        let text = textLayer.string as? String
         var size: CGSize
         if text == nil || text!.isEmpty {
             size = CGSize(width: 0, height: 0)
         } else {
+            var font = UIFont(name: fontFamily, size: fontPixelSize)
+            if font == nil {
+                font = UIFont(name: Text.defaultFont, size: fontPixelSize)
+            }
             let attributes: [String : Any] = [
-                NSFontAttributeName: labelView.font,
-                "lineBreakMode": labelView.lineBreakMode
+                NSFontAttributeName: font as Any
             ]
-            if wrap {
+            if font == nil {
+                size = CGSize(width: 0, height: 0)
+            } else if wrap {
                 size = (text! as NSString).boundingRect(
                     with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude),
                     options: NSStringDrawingOptions.usesLineFragmentOrigin,
                     attributes: attributes,
                     context: nil
-                ).size
+                    ).size
             } else {
                 size = (text! as NSString).size(attributes: attributes)
             }

@@ -3,7 +3,6 @@ import UIKit
 class Image: Item {
     static var cache: [String: UIImage] = Dictionary()
     static var loadingHandlers: [String: [(_ result: UIImage?) -> Void]] = Dictionary()
-    // static let svgToImageJs = Js(name: "svgToImage")
 
     override class func register() {
         onAction(.createImage) {
@@ -14,42 +13,15 @@ class Image: Item {
             (item: Image, val: String) in
             item.setSource(val)
         }
-
-        // Image.svgToImageJs.runScript("svgToImage")
     }
 
-    // var modelImage: CGImage?
-    // var image: CGImage?
     private var image: UIImage? {
         didSet {
-            imageView.image = image
-        }
-    }
-
-    override var width: CGFloat {
-        didSet {
-            updateFrame()
-        }
-    }
-
-    override var height: CGFloat {
-        didSet {
-            updateFrame()
+            view.layer.contents = image?.cgImage
         }
     }
 
     var source: String?
-    let imageView: UIImageView
-
-    override init() {
-        imageView = UIImageView()
-        super.init()
-        view.addSubview(imageView)
-    }
-
-    private func updateFrame() {
-        imageView.frame = CGRect(x: 0, y: 0, width: width, height: height)
-    }
 
     static private func loadSvgData(_ svg: NSString, completion: (_ data: Data?) -> Void) {
         // TODO

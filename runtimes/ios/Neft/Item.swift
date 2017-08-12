@@ -218,14 +218,15 @@ class Item {
         item.didSave()
     }
 
-    init() {
-        self.view = UIView()
+    init(view: UIView = UIView()) {
+        self.view = view
     }
 
     func didSave() {}
 
     private func updateFrame() {
         view.frame = CGRect(x: x, y: y, width: width, height: height)
+        view.layer.bounds = CGRect(x: 0, y: 0, width: width, height: height)
     }
 
     private func updateTransform() {
@@ -253,7 +254,8 @@ class Item {
         }
 
         // save
-        view.transform = CGAffineTransform(a: a, b: b, c: c, d: d, tx: 0, ty: 0)
+        let transform = CGAffineTransform(a: a, b: b, c: c, d: d, tx: 0, ty: 0)
+        view.layer.setAffineTransform(transform)
     }
 
     func pushAction(_ action: OutAction, _ args: Any...) {
