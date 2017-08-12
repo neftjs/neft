@@ -19,13 +19,13 @@ do =>
         ios.log getMessage('LOG', arguments)
         _super arguments...
     console.info = do (_super = console.info) -> ->
-        ios.info getMessage('INFO', arguments)
+        ios.log getMessage('INFO', arguments)
         _super arguments...
     console.warn = do (_super = console.warn) -> ->
-        ios.warn getMessage('WARN', arguments)
+        ios.log getMessage('WARN', arguments)
         _super arguments...
     console.error = do (_super = console.error) -> ->
-        ios.error getMessage('ERROR', arguments)
+        ios.log getMessage('ERROR', arguments)
         _super arguments...
 
 ###
