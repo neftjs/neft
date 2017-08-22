@@ -9,11 +9,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
-import android.os.Build;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGParseException;
@@ -26,9 +22,11 @@ import java.util.HashMap;
 
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
-import io.neft.client.annotation.OnAction;
+import io.neft.client.handlers.NoArgsActionHandler;
+import io.neft.renderer.handlers.StringItemActionHandler;
 import io.neft.utils.Consumer;
 import io.neft.utils.StringUtils;
+import io.neft.utils.ViewUtils;
 
 public class Image extends Item {
     private static class ImageDrawable extends Drawable {
@@ -77,26 +75,27 @@ public class Image extends Item {
 
     private String source;
 
-    @OnAction(InAction.CREATE_IMAGE)
-    public static void create() {
-        new Image();
+    public static void register() {
+        onAction(InAction.CREATE_IMAGE, new NoArgsActionHandler() {
+            @Override
+            public void accept() {
+                new Image();
+            }
+        });
+
+        onAction(InAction.SET_IMAGE_SOURCE, new StringItemActionHandler<Image>() {
+            @Override
+            public void accept(Image item, String value) {
+                item.setSource(value);
+            }
+        });
     }
 
     private final ImageDrawable shape = new ImageDrawable();
 
     private Image() {
         super();
-        View imageView = new View(APP.getActivity().getApplicationContext());
-        imageView.setLayoutParams(new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        ));
-        view.addView(imageView);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            imageView.setBackground(shape);
-        } else {
-            imageView.setBackgroundDrawable(shape);
-        }
+        ViewUtils.setBackground(view, shape);
     }
 
     private void onLoad() {
@@ -242,7 +241,6 @@ public class Image extends Item {
         thread.start();
     }
 
-    @OnAction(InAction.SET_IMAGE_SOURCE)
     public void setSource(final String val) {
         final Image self = this;
         this.source = val;

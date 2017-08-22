@@ -1,37 +1,146 @@
 package io.neft.renderer;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
 import io.neft.client.Reader;
-import io.neft.client.annotation.OnAction;
+import io.neft.client.handlers.NoArgsActionHandler;
+import io.neft.client.handlers.ReaderActionHandler;
+import io.neft.renderer.handlers.BooleanItemActionHandler;
+import io.neft.renderer.handlers.ColorItemActionHandler;
+import io.neft.renderer.handlers.FloatItemActionHandler;
+import io.neft.renderer.handlers.NoArgsItemActionHandler;
+import io.neft.renderer.handlers.StringItemActionHandler;
 import io.neft.utils.ColorValue;
+import io.neft.utils.ViewUtils;
 
 public class Text extends Item {
+    private static final String DEFAULT_FONT_FAMILY = "";
     private static final int DEFAULT_FONT_PIXEL_SIZE = 14;
     private static final int DEFAULT_COLOR = Color.BLACK;
+    private static final String WORDS_REGEX = " ";
     private static final HashMap<String, Typeface> FONTS = new HashMap<>();
+    private static final Paint.FontMetrics FONT_METRICS = new Paint.FontMetrics();
+    private static final HashMap<String, Float> ALIGNMENT;
 
-    @OnAction(InAction.CREATE_TEXT)
-    public static void create() {
-        new Text();
+    static {
+        ALIGNMENT = new HashMap<>();
+        ALIGNMENT.put("top", 0f);
+        ALIGNMENT.put("center", 0.5f);
+        ALIGNMENT.put("bottom", 1f);
+        ALIGNMENT.put("left", 0f);
+        ALIGNMENT.put("right", 1f);
+    };
+
+    public static void register() {
+        onAction(InAction.CREATE_TEXT, new NoArgsActionHandler() {
+            @Override
+            public void accept() {
+                new Text();
+            }
+        });
+
+        onAction(InAction.LOAD_FONT, new ReaderActionHandler() {
+            @Override
+            public void accept(Reader reader) {
+                loadFont(reader);
+            }
+        });
+
+        onAction(InAction.SET_TEXT, new StringItemActionHandler<Text>() {
+            @Override
+            public void accept(Text item, String value) {
+                item.setText(value);
+            }
+        });
+
+        onAction(InAction.SET_TEXT_WRAP, new BooleanItemActionHandler<Text>() {
+            @Override
+            public void accept(Text item, boolean value) {
+                item.setWrap(value);
+            }
+        });
+
+        onAction(InAction.SET_TEXT_COLOR, new ColorItemActionHandler<Text>() {
+            @Override
+            public void accept(Text item, ColorValue value) {
+                item.setColor(value);
+            }
+        });
+
+        onAction(InAction.SET_TEXT_LINE_HEIGHT, new FloatItemActionHandler<Text>() {
+            @Override
+            public void accept(Text item, float value) {
+                item.setLineHeight(value);
+            }
+        });
+
+        onAction(InAction.SET_TEXT_FONT_FAMILY, new StringItemActionHandler<Text>() {
+            @Override
+            public void accept(Text item, String value) {
+                item.setFontFamily(value);
+            }
+        });
+
+        onAction(InAction.SET_TEXT_FONT_PIXEL_SIZE, new FloatItemActionHandler<Text>() {
+            @Override
+            public void accept(Text item, float value) {
+                item.setFontPixelSize(value);
+            }
+        });
+
+        onAction(InAction.SET_TEXT_FONT_WORD_SPACING, new FloatItemActionHandler<Text>() {
+            @Override
+            public void accept(Text item, float value) {
+                item.setFontWordSpacing(value);
+            }
+        });
+
+        onAction(InAction.SET_TEXT_FONT_LETTER_SPACING, new FloatItemActionHandler<Text>() {
+            @Override
+            public void accept(Text item, float value) {
+                item.setFontLetterSpacing(value);
+            }
+        });
+
+        onAction(InAction.SET_TEXT_ALIGNMENT_HORIZONTAL, new StringItemActionHandler<Text>() {
+            @Override
+            public void accept(Text item, String value) {
+                item.setAlignmentHorizontal(value);
+            }
+        });
+
+        onAction(InAction.SET_TEXT_ALIGNMENT_VERTICAL, new StringItemActionHandler<Text>() {
+            @Override
+            public void accept(Text item, String value) {
+                item.setAlignmentVertical(value);
+            }
+        });
+
+        onAction(InAction.UPDATE_TEXT_CONTENT_SIZE, new NoArgsItemActionHandler<Text>() {
+            @Override
+            public void accept(Text item) {
+                item.updateContentSize();
+            }
+        });
     }
 
-    @OnAction(InAction.LOAD_FONT)
     public static void loadFont(Reader reader) {
         final String name = reader.getString();
         final String source = reader.getString();
-        final Thread thread = new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 boolean success;
@@ -49,103 +158,191 @@ public class Text extends Item {
         thread.start();
     }
 
-    private final TextView textView = new TextView(APP.getActivity().getApplicationContext());
+    private static class Line {
+        private int textStart;
+        private int textEnd;
+        private float width;
+        private float y;
+    }
+
+    private class TextDrawable extends Drawable {
+
+        @Override
+        public void draw(Canvas canvas) {
+            if (contentWidth <= 0 || contentHeight <= 0) {
+                return;
+            }
+
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            float shiftY = (layoutParams.height - contentHeight) * alignmentVertical;
+
+            for (int i = 0; i < linesLength; i++) {
+                Line line = lines.get(i);
+
+                canvas.drawText(
+                        linesText,
+                        line.textStart, line.textEnd,
+                        (layoutParams.width - line.width) * alignmentHorizontal, line.y + shiftY,
+                        paint
+                );
+            }
+        }
+
+        @Override
+        public void setAlpha(int i) {
+            paint.setAlpha(i);
+        }
+
+        @Override
+        public void setColorFilter(ColorFilter colorFilter) {
+            paint.setColorFilter(colorFilter);
+        }
+
+        @Override
+        public int getOpacity() {
+            return PixelFormat.TRANSLUCENT;
+        }
+    }
+
+    private final TextDrawable shape = new TextDrawable();
+    private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    private float fontPixelSize;
     private boolean wrap = false;
+    private float lineHeight = 1;
+    private float alignmentHorizontal = ALIGNMENT.get("left");
+    private float alignmentVertical = ALIGNMENT.get("top");
+    private float contentWidth = 0;
+    private float contentHeight = 0;
+
+    private String text;
+    private String[] words;
+    private String linesText = "";
+    private ArrayList<Line> lines = new ArrayList<>();
+    private int linesLength;
 
     private Text() {
         super();
-        textView.setLayoutParams(new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
-        view.addView(textView);
-        textView.setTextSize(DEFAULT_FONT_PIXEL_SIZE);
-        textView.setTextColor(DEFAULT_COLOR);
+        ViewUtils.setBackground(view, shape);
+        paint.setColor(DEFAULT_COLOR);
+        setFontFamily(DEFAULT_FONT_FAMILY);
+        setFontPixelSize(DEFAULT_FONT_PIXEL_SIZE);
     }
 
-    private void updateMaxWidth() {
-        textView.setMaxWidth(view.getLayoutParams().width);
-    }
-
-    @Override
-    public void setWidth(float val) {
-        super.setWidth(val);
-        if (wrap) {
-            updateMaxWidth();
-        }
-    }
-
-    @OnAction(InAction.SET_TEXT)
     public void setText(String val) {
-        textView.setText(val);
+        text = val;
+        words = val.isEmpty() ? null : val.split(WORDS_REGEX);
     }
 
-    @OnAction(InAction.SET_TEXT_WRAP)
     public void setWrap(boolean val) {
         wrap = val;
-        if (wrap) {
-            updateMaxWidth();
+    }
+
+    public void setColor(ColorValue val) {
+        paint.setColor(val.getColor());
+    }
+
+    public void setLineHeight(float val) {
+        lineHeight = val;
+    }
+
+    public void setFontFamily(String val) {
+        Typeface font = FONTS.get(val);
+        if (font != null) {
+            paint.setTypeface(font);
         } else {
-            textView.setMaxWidth(-1);
+            paint.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL));
         }
     }
 
-    @OnAction(InAction.SET_TEXT_COLOR)
-    public void setColor(ColorValue val) {
-        textView.setTextColor(val.getColor());
-    }
-
-    @OnAction(InAction.SET_TEXT_LINE_HEIGHT)
-    public void setLineHeight(float val) {
-        textView.setLineSpacing(0, val);
-    }
-
-    @OnAction(InAction.SET_TEXT_FONT_FAMILY)
-    public void setFontFamily(String val) {
-        textView.setTypeface(FONTS.get(val));
-    }
-
-    @OnAction(InAction.SET_TEXT_FONT_PIXEL_SIZE)
     public void setFontPixelSize(float val) {
-        textView.setTextSize(val);
+        float pxVal = dpToPx(val);
+        fontPixelSize = pxVal;
+        paint.setTextSize(pxVal);
     }
 
-    @OnAction(InAction.SET_TEXT_FONT_WORD_SPACING)
     public void setFontWordSpacing(float val) {
         // TODO
     }
 
-    @OnAction(InAction.SET_TEXT_FONT_LETTER_SPACING)
     public void setFontLetterSpacing(float val) {
         // TODO
     }
 
-    @OnAction(InAction.SET_TEXT_ALIGNMENT_HORIZONTAL)
     public void setAlignmentHorizontal(String val) {
-        int gravity;
-        switch (val) {
-            case "right":
-                gravity = Gravity.END;
-                break;
-            case "center":
-                gravity = Gravity.CENTER;
-                break;
-            default:
-                gravity = Gravity.START;
-        }
-        textView.setGravity(gravity);
+        alignmentHorizontal = ALIGNMENT.get(val);
     }
 
-    @OnAction(InAction.SET_TEXT_ALIGNMENT_VERTICAL)
     public void setAlignmentVertical(String val) {
-        // TODO
+        alignmentVertical = ALIGNMENT.get(val);
     }
 
-    @OnAction(InAction.UPDATE_TEXT_CONTENT_SIZE)
     public void updateContentSize() {
-        textView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        float width = pxToDp(textView.getMeasuredWidth());
-        float height = pxToDp(textView.getMeasuredHeight());
-        pushAction(OutAction.TEXT_SIZE, width, height);
+        linesLength = 0;
+        linesText = text;
+
+        if (words == null) {
+            contentWidth = contentHeight = 0;
+        } else {
+            paint.getFontMetrics(FONT_METRICS);
+
+            int linesArrayLength = lines.size();
+            int wordsLength = words.length;
+            int width = view.getLayoutParams().width;
+            float lineHeightPx = lineHeight * fontPixelSize;
+            float spaceWidth = paint.measureText(" ");
+            float fontTop = lineHeightPx - FONT_METRICS.descent / 3;
+            float x = 0, textWidth = 0, textHeight = 0;
+            int textPointer = 0, lineStart = 0, lineLength = 0;
+
+            for (int i = 0; i <= wordsLength; i++) {
+                String word = i < wordsLength ? words[i] : null;
+                int wordLength = word != null ? word.length() : 0;
+                float wordWidth = word != null ? paint.measureText(word) : 0;
+
+                if (i > 0 && (i == wordsLength || (wrap && x + wordWidth > width))) {
+                    // get line object
+                    Line line;
+                    if (linesArrayLength <= linesLength){
+                        line = new Line();
+                        lines.add(line);
+                    } else {
+                        line = lines.get(linesLength);
+                    }
+                    linesLength++;
+
+                    // fill line
+                    line.textStart = lineStart;
+                    line.textEnd = lineStart + lineLength - 1;
+                    line.width = x - spaceWidth;
+                    line.y = textHeight + fontTop;
+
+                    // clear
+                    lineStart = textPointer;
+                    lineLength = 0;
+                    x = 0;
+
+                    // next line
+                    textHeight += lineHeightPx;
+                }
+
+                x += wordWidth;
+                textPointer += wordLength + 1;
+                lineLength += wordLength + 1;
+
+                if (x > textWidth) {
+                    textWidth = x;
+                }
+
+                x += spaceWidth;
+            }
+
+            contentWidth = textWidth;
+            contentHeight = textHeight;
+        }
+
+        shape.invalidateSelf();
+
+        pushAction(OutAction.TEXT_SIZE, pxToDp(contentWidth), pxToDp(contentHeight));
     }
 }

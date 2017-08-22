@@ -7,17 +7,22 @@ class Timers extends Timer {
     private int lastId = 0;
 
     Timers() {
-        Native.timers_init(this);
+        Native.Bridge.initTimers(this);
     }
 
     public int shot(final int delay) {
-        final int id = lastId;
+        final int id = lastId++;
         TimerTask task = new TimerTask(){
             public void run() {
-                Native.timers_callback(id);
+                App.getInstance().getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Native.Bridge.callbackTimer(id);
+                    }
+                });
             }
         };
         schedule(task, delay);
-        return lastId++;
+        return id;
     }
 }

@@ -20,8 +20,8 @@ public class Renderer {
         return px / device.getPixelRatio();
     }
 
-    public float dpToPx(float dp) {
-        return dp * device.getPixelRatio();
+    public int dpToPx(float dp) {
+        return Math.round(dp * device.getPixelRatio());
     }
 
     synchronized int registerItem(Item item) {
