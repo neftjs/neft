@@ -153,7 +153,7 @@ module.exports = (impl) ->
                 child = target.firstChild
                 while child
                     if child._visible
-                        tmp = child._width
+                        tmp = child._x + child._width
                         if tmp > size
                             size = tmp
                     child = child.nextSibling
@@ -169,7 +169,7 @@ module.exports = (impl) ->
                 child = target.firstChild
                 while child
                     if child._visible
-                        tmp = child._height
+                        tmp = child._y + child._height
                         if tmp > size
                             size = tmp
                     child = child.nextSibling
@@ -234,8 +234,10 @@ module.exports = (impl) ->
     onChildInsert = (child) ->
         child.onVisibleChange update, @
         if @source is 'fillWidthSize'
+            child.onXChange update, @
             child.onWidthChange update, @
         if @source is 'fillHeightSize'
+            child.onYChange update, @
             child.onHeightChange update, @
 
         update.call @
@@ -244,8 +246,10 @@ module.exports = (impl) ->
     onChildPop = (child) ->
         child.onVisibleChange.disconnect update, @
         if @source is 'fillWidthSize'
+            child.onXChange.disconnect update, @
             child.onWidthChange.disconnect update, @
         if @source is 'fillHeightSize'
+            child.onYChange.disconnect update, @
             child.onHeightChange.disconnect update, @
 
         update.call @
