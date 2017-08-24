@@ -14,8 +14,8 @@ public class MainActivity extends io.neft.MainActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
-        this.view = (WindowView) findViewById(R.id.layout);
+        this.view = new WindowView(getApplicationContext());
+        setContentView(this.view);
 
         Runnable initExtensions = new Runnable() {
             @Override

@@ -11,7 +11,21 @@ class Http {
     private int lastId = 0;
 
     Http() {
-        Native.http_init(this);
+        Native.Bridge.initHttp(this);
+    }
+
+    private static class Response {
+        final String error;
+        final int code;
+        final String data;
+        final String cookies;
+
+        Response(String error, int code, String data, String cookies) {
+            this.error = error;
+            this.code = code;
+            this.data = data;
+            this.cookies = cookies;
+        }
     }
 
     static String getStringFromInputStream(InputStream stream) throws IOException {
@@ -26,7 +40,7 @@ class Http {
         return byteStream.toString();
     }
 
-    private void doRequestSync(int id, String path, String method, String[] headers, String data) {
+    private Response doRequestSync(String path, String method, String[] headers, String data) {
         try {
             URL url = new URL(path);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -48,16 +62,15 @@ class Http {
                     out.write(data.getBytes());
                 }
 
-                // get response code
+                // get data code
                 int respCode = conn.getResponseCode();
 
-                // end of wrong response code
+                // end of wrong data code
                 if (respCode >= 400 && respCode < 500){
-                    Native.http_onResponse(id, "", respCode, "", "");
-                    return;
+                    return new Response("", respCode, "", "");
                 }
 
-                // read response
+                // read data
                 String resp = getStringFromInputStream(conn.getInputStream());
 
                 // get cookies
@@ -66,23 +79,36 @@ class Http {
                     cookies = "";
                 }
 
-                Native.http_onResponse(id, "", respCode, resp, cookies);
+                return new Response("", respCode, resp, cookies);
             } finally {
                 conn.disconnect();
             }
         } catch (IOException e) {
-            Native.http_onResponse(id, e.toString(), 0, "", "");
+            return new Response(e.toString(), 0, "", "");
         }
+    }
+
+    private void sendResponse(int id, Response response) {
+        Native.Bridge.onHttpResponse(id, response.error, response.code, response.data, response.cookies);
     }
 
     public int request(final String path, final String method, final String[] headers, final String data) {
         final int id = lastId++;
 
-        (new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             public void run() {
-                doRequestSync(id, path, method, headers, data);
+                final Response response = doRequestSync(path, method, headers, data);
+                App.getInstance().getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        sendResponse(id, response);
+                    }
+                });
             }
-        })).start();
+        });
+
+        thread.setName("Http request " + id);
+        thread.start();
 
         return id;
     }

@@ -1,6 +1,5 @@
 package io.neft.renderer;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -21,7 +20,8 @@ import android.widget.EditText;
 import io.neft.App;
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
-import io.neft.client.annotation.OnAction;
+import io.neft.client.handlers.NoArgsActionHandler;
+import io.neft.client.handlers.StringActionHandler;
 import lombok.Getter;
 
 public final class Device {
@@ -360,6 +360,29 @@ public final class Device {
         }
     }
 
+    public static void register() {
+        APP.getClient().onAction(InAction.DEVICE_LOG, new StringActionHandler() {
+            @Override
+            public void accept(String value) {
+                APP.getRenderer().getDevice().log(value);
+            }
+        });
+
+        APP.getClient().onAction(InAction.DEVICE_SHOW_KEYBOARD, new NoArgsActionHandler() {
+            @Override
+            public void accept() {
+                APP.getRenderer().getDevice().showKeyboard();
+            }
+        });
+
+        APP.getClient().onAction(InAction.DEVICE_HIDE_KEYBOARD, new NoArgsActionHandler() {
+            @Override
+            public void accept() {
+                APP.getRenderer().getDevice().hideKeyboard();
+            }
+        });
+    }
+
     @Getter private float pixelRatio;
     private boolean isPhone;
     private boolean keyboardVisible = false;
@@ -369,7 +392,7 @@ public final class Device {
     static void init(final Device device) {
         // create EditText to handle KeyInput
         device.keyboardText = new KeyboardText(APP.getActivity().getApplicationContext());
-        final Window window = ((Activity) APP.getWindowView().getContext()).getWindow();
+        final Window window = APP.getActivity().getWindow();
         APP.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -395,12 +418,10 @@ public final class Device {
         APP.getClient().pushAction(OutAction.DEVICE_IS_PHONE, device.isPhone);
     }
 
-    @OnAction(InAction.DEVICE_LOG)
     void log(String val){
         Log.i("Neft", val);
     }
 
-    @OnAction(InAction.DEVICE_SHOW_KEYBOARD)
     void showKeyboard(){
         APP.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -415,7 +436,6 @@ public final class Device {
         APP.getClient().pushAction(OutAction.DEVICE_KEYBOARD_SHOW);
     }
 
-    @OnAction(InAction.DEVICE_HIDE_KEYBOARD)
     private void hideKeyboard(){
         APP.getActivity().runOnUiThread(new Runnable() {
             @Override

@@ -37,6 +37,11 @@ public class TileImageItem extends NativeItem {
     }
 
     private void setBitmap(Bitmap bitmap) {
+        if (bitmap == null) {
+            itemView.setBackground(null);
+            return;
+        }
+
         float pixelRatio = APP.getRenderer().getDevice().getPixelRatio();
         if (resolution != pixelRatio) {
             float width = bitmap.getWidth() / resolution * pixelRatio;

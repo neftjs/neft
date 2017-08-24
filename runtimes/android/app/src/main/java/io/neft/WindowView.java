@@ -1,27 +1,41 @@
 package io.neft;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import io.neft.client.InAction;
 import io.neft.client.Reader;
-import io.neft.client.annotation.OnAction;
+import io.neft.client.handlers.ReaderActionHandler;
 import io.neft.renderer.Item;
+import io.neft.renderer.ItemView;
+import io.neft.renderer.Rectangle;
+import io.neft.utils.ColorValue;
 
-public class WindowView extends RelativeLayout {
+public class WindowView extends ItemView {
     private static final App APP = App.getInstance();
+    Item windowItem;
 
-    @OnAction(InAction.SET_WINDOW)
-    public static void setWindow(Reader reader) {
-        Item item = APP.getRenderer().getItemFromReader(reader);
-        APP.getWindowView().addView(item.view);
+    public static void register() {
+        APP.getClient().onAction(InAction.SET_WINDOW, new ReaderActionHandler() {
+            @Override
+            public void accept(Reader reader) {
+                setWindow(APP.getRenderer().getItemFromReader(reader));
+            }
+        });
     }
 
-    public WindowView(Context context, AttributeSet attrs){
-        super(context, attrs);
+    public static void setWindow(Item item) {
+        WindowView windowView = APP.getWindowView();
+        windowView.windowItem = item;
+        windowView.addView(item.view);
+    }
 
+    public WindowView(Context context){
+        super(context);
         this.requestFocus();
     }
 

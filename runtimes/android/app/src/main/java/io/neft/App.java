@@ -12,12 +12,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 
 import io.neft.client.Client;
-import io.neft.client.annotation.Parser;
 import io.neft.customapp.CustomApp;
 import io.neft.renderer.Image;
 import io.neft.renderer.Item;
@@ -28,7 +24,7 @@ import io.neft.renderer.Text;
 import lombok.Getter;
 import lombok.NonNull;
 
-public class App extends Thread {
+public class App {
     private abstract class UrlResponse implements Runnable {
         public abstract void run(String response);
         public void run() {}
@@ -47,25 +43,17 @@ public class App extends Thread {
     private static final String TAG = "Neft";
     private static final String ASSET_FILE_PATH = "javascript/neft.js";
     private static final App INSTANCE = new App();
+    private static final Choreographer CHOREOGRAPHER = Choreographer.getInstance();
     @Getter private MainActivity activity;
     @Getter private WindowView windowView;
     private String codeWatchChangesUrl;
     private CustomApp customApp;
     @Getter private Client client;
     @Getter private Renderer renderer;
-    private final Choreographer.FrameCallback frameCallback;
-    private final ExecutorService threadExecutor = Executors.newSingleThreadExecutor(
-            new ThreadFactory() {
-                @Override
-                public Thread newThread(Runnable runnable) {
-                    return new Thread(runnable, "javascript");
-                }
-            }
-    );
+    private final UiThreadFrame uiThreadFrame;
+    private final FrameCallback frameCallback;
     private Runnable initExtensions;
     private Runnable restart;
-    private boolean framePending;
-    private final Runnable animationFrameRunnable;
     private final List<MotionEvent> touchEvents = new ArrayList<>();
     private final List<FullKeyEvent> keyEvents = new ArrayList<>();
 
@@ -73,23 +61,26 @@ public class App extends Thread {
         return INSTANCE;
     }
 
-    private App() {
-        setName("APP");
-        frameCallback = new Choreographer.FrameCallback() {
-            @Override
-            public void doFrame(long frameTimeNanos) {
-                onFrame();
-            }
-        };
-        animationFrameRunnable = new Runnable() {
-            @Override
-            public void run() {
-                onAnimationFrame();
-            }
-        };
+    private class UiThreadFrame implements Runnable {
+        @Override
+        public void run() {
+            CHOREOGRAPHER.postFrameCallback(frameCallback);
+            onAnimationFrame();
+        }
     }
 
-    // PoolThread
+    private class FrameCallback implements Choreographer.FrameCallback {
+        @Override
+        public void doFrame(long frameTimeNanos) {
+            uiThreadFrame.run();
+        }
+    }
+
+    private App() {
+        uiThreadFrame = new UiThreadFrame();
+        frameCallback = new FrameCallback();
+    }
+
     private void onAnimationFrame() {
         synchronized (touchEvents) {
             while (!touchEvents.isEmpty()) {
@@ -105,20 +96,11 @@ public class App extends Thread {
             }
         }
         client.sendData();
-        Native.renderer_callAnimationFrame();
-        framePending = false;
+        Native.Bridge.callRendererAnimationFrame();
+        windowView.windowItem.measure();
+        Item.onAnimationFrame();
     }
 
-    // UiThread
-    private void onFrame() {
-        Choreographer.getInstance().postFrameCallback(frameCallback);
-        if (!framePending) {
-            framePending = true;
-            threadExecutor.submit(animationFrameRunnable);
-        }
-    }
-
-    @Override
     public void run() {
         System.loadLibrary("neft");
 
@@ -128,12 +110,12 @@ public class App extends Thread {
         renderer = new Renderer();
         Db.register();
 
-        Parser.registerHandlers(WindowView.class);
-        Parser.registerHandlers(Item.class);
-        Parser.registerHandlers(Rectangle.class);
-        Parser.registerHandlers(Image.class);
-        Parser.registerHandlers(Text.class);
-        Parser.registerHandlers(NativeItem.class);
+        WindowView.register();
+        Item.register();
+        Rectangle.register();
+        Image.register();
+        Text.register();
+        NativeItem.register();
 
         renderer.init();
         if (initExtensions != null) {
@@ -143,12 +125,7 @@ public class App extends Thread {
         customApp = new CustomApp();
         loadCode();
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                onFrame();
-            }
-        });
+        activity.runOnUiThread(uiThreadFrame);
     }
 
     public void attach(
@@ -157,9 +134,6 @@ public class App extends Thread {
             Runnable initExtensions,
             Runnable restart
     ) {
-        if (isAlive()) {
-            throw new IllegalStateException("Attach needs to be called before starting APP thread");
-        }
         if (this.activity != null) {
             throw new IllegalStateException("App thread cannot be attached multiple times");
         }
@@ -197,7 +171,7 @@ public class App extends Thread {
             @Override
             public void onGlobalLayout() {
                 windowView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                start();
+                run();
             }
         });
     }
@@ -205,15 +179,31 @@ public class App extends Thread {
     private void loadCode() {
         if (codeWatchChangesUrl == null) {
             String code = getAssetFile(ASSET_FILE_PATH);
-            Native.init(code);
+            Native.Bridge.init(code);
         } else {
-            String code = getUrlData(codeWatchChangesUrl + "/bundle/android");
-            if (code == null) {
-                code = getAssetFile(ASSET_FILE_PATH);
-            }
-            Native.init(code);
-            watchOnBundleChange(codeWatchChangesUrl + "/onNewBundle/android");
+            loadRemoteCode();
         }
+    }
+
+    private void loadRemoteCode() {
+        final String[] codeArray = {null};
+        Thread reqThread = getUrlDataAsync(codeWatchChangesUrl + "/bundle/android", new UrlResponse() {
+            @Override
+            public void run(String response) {
+                codeArray[0] = response;
+            }
+        });
+        try {
+            reqThread.join();
+        } catch (InterruptedException error) {
+            error.printStackTrace();
+        }
+        String code = codeArray[0];
+        if (code == null) {
+            code = getAssetFile(ASSET_FILE_PATH);
+        }
+        Native.Bridge.init(code);
+        watchOnBundleChange(codeWatchChangesUrl + "/onNewBundle/android");
     }
 
     private String getAssetFile(String path) {
@@ -226,20 +216,7 @@ public class App extends Thread {
         return "";
     }
 
-    private String getUrlData(String path) {
-        String resp = null;
-        try {
-            URL url = new URL(path);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setUseCaches(false);
-            resp = Http.getStringFromInputStream(conn.getInputStream());
-        } catch (IOException err) {
-            Log.w(TAG, "Watch mode does not work; cannot connect to " + path);
-        }
-        return resp;
-    }
-
-    private void getUrlDataAsync(final String path, final UrlResponse onResponse) {
+    private Thread getUrlDataAsync(final String path, final UrlResponse onResponse) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -248,37 +225,39 @@ public class App extends Thread {
                     URL url = new URL(path);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setUseCaches(false);
+                    conn.setConnectTimeout(1000);
                     resp = Http.getStringFromInputStream(conn.getInputStream());
                 } catch (IOException err) {
                     Log.w(TAG, "Watch mode does not work; cannot connect to " + path);
                 }
-                final String finalResp = resp;
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        onResponse.run(finalResp);
-                    }
-                });
+                onResponse.run(resp);
             }
         });
 
         thread.start();
+
+        return thread;
     }
 
     private void watchOnBundleChange(final String path) {
         getUrlDataAsync(path, new UrlResponse() {
             @Override
-            public void run(String response) {
-                if (response != null) {
-                    restart.run();
-                    return;
-                }
-                new Handler().postDelayed(new Runnable() {
+            public void run(final String response) {
+                activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        watchOnBundleChange(path);
+                        if (response != null) {
+                            restart.run();
+                            return;
+                        }
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                watchOnBundleChange(path);
+                            }
+                        }, 30000);
                     }
-                }, 30000);
+                });
             }
         });
     }

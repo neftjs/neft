@@ -2,8 +2,6 @@ package io.neft.renderer;
 
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import java.util.HashMap;
 
@@ -11,8 +9,9 @@ import io.neft.client.InAction;
 import io.neft.client.OutAction;
 import io.neft.client.Reader;
 import io.neft.MainActivity;
-import io.neft.client.annotation.OnAction;
+import io.neft.client.handlers.StringActionHandler;
 import io.neft.renderer.annotation.Parser;
+import io.neft.renderer.handlers.ReaderItemActionHandler;
 import io.neft.utils.Consumer;
 import io.neft.utils.StringUtils;
 
@@ -20,20 +19,55 @@ public class NativeItem extends Item {
     public static final HashMap<String, Class<? extends NativeItem>> types = new HashMap<>();
     public static HashMap<Class<? extends NativeItem>, String> classTypes = new HashMap<>();
 
+    public static void register() {
+        onAction(InAction.CREATE_NATIVE_ITEM, new StringActionHandler() {
+            @Override
+            public void accept(String value) {
+                createNativeItem(value);
+            }
+        });
+
+        onAction(InAction.ON_NATIVE_ITEM_POINTER_PRESS, new ReaderItemActionHandler<NativeItem>() {
+            @Override
+            public void accept(NativeItem item, Reader reader) {
+                item.onPointerPress(reader.getFloat(), reader.getFloat());
+            }
+        });
+
+        onAction(InAction.ON_NATIVE_ITEM_POINTER_RELEASE, new ReaderItemActionHandler<NativeItem>() {
+            @Override
+            public void accept(NativeItem item, Reader reader) {
+                item.onPointerRelease(reader.getFloat(), reader.getFloat());
+            }
+        });
+
+        onAction(InAction.ON_NATIVE_ITEM_POINTER_MOVE, new ReaderItemActionHandler<NativeItem>() {
+            @Override
+            public void accept(NativeItem item, Reader reader) {
+                item.onPointerMove(reader.getFloat(), reader.getFloat());
+            }
+        });
+    }
+
     public static void registerItem(Class<? extends NativeItem> clazz) {
         Parser.registerHandlers(clazz);
     }
 
-    @OnAction(InAction.CREATE_NATIVE_ITEM)
-    public static void createNativeItem(Reader reader)
-            throws IllegalAccessException, InstantiationException {
-        String type = reader.getString();
+    public static void createNativeItem(String type) {
         Class clazz = types.get(type);
         if (clazz == null) {
             Log.w("Neft", "Native Item '" + type + "' type not found");
             new NativeItem(null);
         } else {
-            clazz.newInstance();
+            try {
+                clazz.newInstance();
+            } catch (InstantiationException error) {
+                error.printStackTrace();
+                new NativeItem(null);
+            } catch (IllegalAccessException error) {
+                error.printStackTrace();
+                new NativeItem(null);
+            }
         }
     }
 
@@ -71,10 +105,6 @@ public class NativeItem extends Item {
         this.itemView = itemView;
         if (itemView != null) {
             view.addView(itemView);
-            itemView.setLayoutParams(new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-            ));
         }
         updateSize();
     }
@@ -138,21 +168,6 @@ public class NativeItem extends Item {
             super.setHeight(dpVal);
             pushAction(OutAction.NATIVE_ITEM_HEIGHT, dpVal);
         }
-    }
-
-    @OnAction(InAction.ON_NATIVE_ITEM_POINTER_PRESS)
-    public void onPointerPressHandler(Reader reader) {
-        this.onPointerPress(reader.getFloat(), reader.getFloat());
-    }
-
-    @OnAction(InAction.ON_NATIVE_ITEM_POINTER_RELEASE)
-    public void onPointerReleaseHandler(Reader reader) {
-        this.onPointerRelease(reader.getFloat(), reader.getFloat());
-    }
-
-    @OnAction(InAction.ON_NATIVE_ITEM_POINTER_MOVE)
-    public void onPointerMoveHandler(Reader reader) {
-        this.onPointerMove(reader.getFloat(), reader.getFloat());
     }
 
     protected void onPointerPress(float x, float y) {}

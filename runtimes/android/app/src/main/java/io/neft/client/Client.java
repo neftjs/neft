@@ -2,26 +2,16 @@ package io.neft.client;
 
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import io.neft.App;
 import io.neft.Native;
+import io.neft.client.handlers.ActionHandler;
+import io.neft.client.handlers.ReaderActionHandler;
 import io.neft.utils.Consumer;
 import lombok.Synchronized;
 
 public class Client {
-    private static class FullData {
-        final byte[] actions;
-        final Reader reader;
-
-        FullData(byte[] actions, Reader reader) {
-            this.actions = actions;
-            this.reader = reader;
-        }
-    }
-
     private static final App APP = App.getInstance();
     private static final int OUT_ARRAYS_VALUE = 64;
     private static final int OUT_ARRAYS_INCREASE_VALUE = 24;
@@ -45,12 +35,39 @@ public class Client {
     private int outFloatsIndex = 0;
     private int outStringsIndex = 0;
 
-    public final HashMap<InAction, Action> actions = new HashMap<>();
+    public final ActionHandler[] actions = new ActionHandler[InActionValues.length];
     private final HashMap<String, Consumer<Object[]>> customFunctions = new HashMap<>();
-    private final List<FullData> dataToProcess = new ArrayList<>();
-    private final Runnable processDataRunnable;
-    private boolean dataProcessPending;
     private final Object stackLock = new Object();
+
+    private final class CallFunctionAction extends ReaderActionHandler {
+        @Override
+        public void accept(Reader reader) {
+            final String name = reader.getString();
+            final Consumer<Object[]> func = customFunctions.get(name);
+
+            final int argsLength = reader.getInteger();
+            Object[] args = new Object[argsLength];
+
+            for (int i = 0; i < argsLength; i++) {
+                final int argType = reader.getInteger();
+                if (argType == EVENT_NULL_TYPE) {
+                    args[i] = null;
+                } else if (argType == EVENT_BOOLEAN_TYPE) {
+                    args[i] = reader.getBoolean();
+                } else if (argType == EVENT_FLOAT_TYPE) {
+                    args[i] = reader.getFloat();
+                } else if (argType == EVENT_STRING_TYPE) {
+                    args[i] = reader.getString();
+                }
+            }
+
+            if (func != null) {
+                func.accept(args);
+            } else {
+                Log.w("Neft", "Native function '" + name + "' not found");
+            }
+        }
+    }
 
     public Client() {
         this.outActions = new byte[OUT_ARRAYS_VALUE];
@@ -59,48 +76,13 @@ public class Client {
         this.outFloats = new float[OUT_ARRAYS_VALUE];
         this.outStrings = new String[OUT_ARRAYS_VALUE];
 
-        processDataRunnable = new Runnable() {
-            @Override
-            public void run() {
-                while (!dataToProcess.isEmpty()) {
-                    FullData fullData = dataToProcess.remove(0);
-                    processActions(fullData.actions, fullData.reader);
-                }
-                dataProcessPending = false;
-            }
-        };
+        onAction(InAction.CALL_FUNCTION, new CallFunctionAction());
 
-        actions.put(InAction.CALL_FUNCTION, new Action() {
-            @Override
-            public void work(Reader reader) {
-                final String name = reader.getString();
-                final Consumer<Object[]> func = customFunctions.get(name);
+        Native.Bridge.initClient(this);
+    }
 
-                final int argsLength = reader.getInteger();
-                Object[] args = new Object[argsLength];
-
-                for (int i = 0; i < argsLength; i++) {
-                    final int argType = reader.getInteger();
-                    if (argType == EVENT_NULL_TYPE) {
-                        args[i] = null;
-                    } else if (argType == EVENT_BOOLEAN_TYPE) {
-                        args[i] = reader.getBoolean();
-                    } else if (argType == EVENT_FLOAT_TYPE) {
-                        args[i] = reader.getFloat();
-                    } else if (argType == EVENT_STRING_TYPE) {
-                        args[i] = reader.getString();
-                    }
-                }
-
-                if (func != null) {
-                    func.accept(args);
-                } else {
-                    Log.w("Neft", "Native function '" + name + "' not found");
-                }
-            }
-        });
-
-        Native.client_init(this);
+    public void onAction(InAction action, ActionHandler handler) {
+        actions[action.ordinal()] = handler;
     }
 
     public void onData(
@@ -111,21 +93,17 @@ public class Client {
             String[] strings
     ) {
         Reader reader = new Reader(booleans, integers, floats, strings);
-        dataToProcess.add(new FullData(actions, reader));
-        if (!dataProcessPending) {
-            dataProcessPending = true;
-            APP.getActivity().runOnUiThread(processDataRunnable);
-        }
+        processActions(actions, reader);
+        sendData();
     }
 
     private void processActions(byte[] actionsArr, Reader reader) {
         for (byte actionIndex : actionsArr) {
-            InAction actionType = InActionValues[actionIndex];
-            Action action = this.actions.get(actionType);
+            ActionHandler action = this.actions[actionIndex];
             if (action != null) {
-                action.work(reader);
+                action.accept(reader);
             } else {
-                Log.e("Neft", "Native action '" + actionType + "' is not implemented");
+                Log.e("Neft", "Native action '" + InActionValues[actionIndex] + "' is not implemented");
             }
         }
     }
@@ -223,7 +201,7 @@ public class Client {
             } else if (arg instanceof String) {
                 pushString((String) arg);
             } else {
-                throw new RuntimeException("Action can be pushed with Boolean, Float or String, but '"+arg+"' given");
+                throw new RuntimeException("ActionHandler can be pushed with Boolean, Float or String, but '"+arg+"' given");
             }
         }
     }
@@ -256,7 +234,7 @@ public class Client {
         this.outIntegersIndex = 0;
         this.outFloatsIndex = 0;
         this.outStringsIndex = 0;
-        Native.client_sendData(
+        Native.Bridge.sendClientData(
                 outActions, outActionsIndex,
                 outBooleans, outBooleansIndex,
                 outIntegers, outIntegersIndex,
