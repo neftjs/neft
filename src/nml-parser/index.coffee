@@ -1,7 +1,6 @@
 'use strict'
 
-try
-    babel = require 'babel-core'
+babel = require 'babel-core'
 bundle = require './bundle'
 parser = require './parser'
 bindingParser = require 'src/binding/parser'
@@ -18,6 +17,12 @@ ATTRIBUTE = 'attribute'
 ids = idsKeys = itemsKeys = extensions = queries = requires = null
 itemsDeclarations = afterItemCode = null
 fileUid = 0
+
+transformByBabel = (body) ->
+    body = "(function(){#{body}})"
+    body = babel.transform(body, presets: ['es2015']).code
+    body = /{([^]*)}/m.exec(body)?[1]
+    body
 
 isAnchor = (obj) ->
     assert obj.type is ATTRIBUTE, "isAnchor: type must be an attribute"
@@ -105,20 +110,12 @@ stringify =
     function: (elem) ->
         # arguments
         args = ''
-        if args and elem.params+''
+        if args and String(elem.params)
             args += ","
-        args += elem.params+''
+        args += String(elem.params)
 
         # body
-        {body} = elem
-        if babel
-            body = "(function(){#{body}})"
-            body = babel.transform(body, presets: ['es2015']).code
-            body = /{([^]*)}/m.exec(body)?[1]
-        else
-            log.warn.once 'NML functions do not support EcmaScript 6, ' +
-                'because babel is not installed'
-
+        body = transformByBabel elem.body
         "function(#{args}){#{body}}"
     object: (elem) ->
         json = {}
@@ -310,7 +307,7 @@ exports = module.exports = (file, filename, opts) ->
         itemsKeys = []
         code = 'var _c = {};'
         if elem.type is 'code'
-            bootstrap += elem.body
+            bootstrap += transformByBabel elem.body
             continue
         if typeof stringify[elem.type] isnt 'function'
             console.error "Unexpected block type '#{elem.type}'"
