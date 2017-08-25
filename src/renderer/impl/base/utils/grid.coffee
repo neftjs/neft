@@ -365,16 +365,16 @@ onHeightChange = (oldVal) ->
 
 enableChild = (child) ->
     child.onVisibleChange update, @
-    child.onWidthChange update, @
-    child.onHeightChange update, @
+    child.onWidthChange updateSize, @
+    child.onHeightChange updateSize, @
     child.onMarginChange update, @
     child.onAnchorsChange update, @
     child.onLayoutChange update, @
 
 disableChild = (child) ->
     child.onVisibleChange.disconnect update, @
-    child.onWidthChange.disconnect update, @
-    child.onHeightChange.disconnect update, @
+    child.onWidthChange.disconnect updateSize, @
+    child.onHeightChange.disconnect updateSize, @
     child.onMarginChange.disconnect update, @
     child.onAnchorsChange.disconnect update, @
     child.onLayoutChange.disconnect update, @
