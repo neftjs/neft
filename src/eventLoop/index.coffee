@@ -12,7 +12,7 @@ exports.release = ->
     pending -= 1
     if pending is 0 and immediate.length > 0
         exports.lock()
-        for i in [0...immediate.length] by 1
+        while immediate.length > 0
             immediate.shift()()
         exports.release()
     return

@@ -228,8 +228,8 @@ updateItem = (item) ->
     # expand filled rows
     freeHeightSpace = effectItem._height - topPadding - bottomPadding - flowHeight
     if freeHeightSpace > 0 and rowsFillsSum > 0
-        unusedFills = getCleanArray unusedFills, currentRow+1
-        length = currentRow+1
+        length = currentRow + 1
+        unusedFills = getCleanArray unusedFills, length
         perCell = (flowHeight + freeHeightSpace) / length
 
         update = true
@@ -244,10 +244,14 @@ updateItem = (item) ->
 
         yShift = currentYShift = 0
         nextChild = firstChild
+        row = -1
         i = -1
         while child = nextChild
             i += 1
             nextChild = child.nextSibling
+            # omit not visible
+            if not child._visible
+                continue
             if elementsRow[i] is row + 1 and unusedFills[row] is 0
                 yShift += currentYShift
                 currentYShift = 0
@@ -374,16 +378,16 @@ onHeightChange = (oldVal) ->
 
 enableChild = (child) ->
     child.onVisibleChange update, @
-    child.onWidthChange update, @
-    child.onHeightChange update, @
+    child.onWidthChange updateSize, @
+    child.onHeightChange updateSize, @
     child.onMarginChange update, @
     child.onAnchorsChange update, @
     child.onLayoutChange update, @
 
 disableChild = (child) ->
     child.onVisibleChange.disconnect update, @
-    child.onWidthChange.disconnect update, @
-    child.onHeightChange.disconnect update, @
+    child.onWidthChange.disconnect updateSize, @
+    child.onHeightChange.disconnect updateSize, @
     child.onMarginChange.disconnect update, @
     child.onAnchorsChange.disconnect update, @
     child.onLayoutChange.disconnect update, @
