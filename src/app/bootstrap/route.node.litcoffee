@@ -72,8 +72,10 @@
 Returns the application javascript file.
 
         `//<production>`
-        try appFile = fs.readFileSync JS_HTML_BUNDLE_FILE_PATH, 'utf-8'
-        try appWebglFile = fs.readFileSync JS_WEBGL_BUNDLE_FILE_PATH, 'utf-8'
+        appFile = appWebglFile = ''
+        loadAppFiles = ->
+            try appFile = fs.readFileSync JS_HTML_BUNDLE_FILE_PATH, 'utf-8'
+            try appWebglFile = fs.readFileSync JS_WEBGL_BUNDLE_FILE_PATH, 'utf-8'
         `//</production>`
         new app.Route
             uri: APP_JS_URI
@@ -87,10 +89,12 @@ Returns the application javascript file.
                     fs.readFile JS_HTML_BUNDLE_FILE_PATH, 'utf-8', callback
                 `//</development>`
                 `//<production>`
+                if not appWebglFile or not appFile
+                    loadAppFiles()
                 if isGameType
-                    callback null, appFile
-                else
                     callback null, appWebglFile
+                else
+                    callback null, appFile
                 `//</production>`
 
 ## neft.js
