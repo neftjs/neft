@@ -164,7 +164,6 @@ module.exports = (impl) ->
 
     DATA =
         progress: 0
-        internalPropertyName: ''
         propertySetter: null
         isIntegerProperty: false
         easing: null
@@ -182,7 +181,6 @@ module.exports = (impl) ->
     setPropertyAnimationTarget: (val) ->
 
     setPropertyAnimationProperty: (val) ->
-        @_impl.internalPropertyName = "_#{val}"
         @_impl.propertySetter = impl.utils.SETTER_METHODS_NAMES[val]
         @_impl.isIntegerProperty = !!impl.utils.INTEGER_PROPERTIES[val]
         return
@@ -200,8 +198,6 @@ module.exports = (impl) ->
 
     setPropertyAnimationTo: (val) ->
         @_impl.to = val
-
-    setPropertyAnimationUpdateData: (val) ->
 
     setPropertyAnimationUpdateProperty: (val) ->
 

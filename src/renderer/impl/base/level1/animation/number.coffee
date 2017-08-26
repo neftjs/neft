@@ -5,7 +5,7 @@ assert = require 'src/assert'
 eventLoop = require 'src/eventLoop'
 
 module.exports = (impl) ->
-    {Types} = impl
+    {Types, Renderer} = impl
     {now} = Date
     {round} = Math
 
@@ -13,36 +13,35 @@ module.exports = (impl) ->
     nowTime = now()
 
     vsync = ->
-        eventLoop.lock()
-        requestAnimationFrame vsync
         nowTime = now()
 
+        eventLoop.lock()
         i = 0; n = pending.length
         while i < n
             anim = pending[i]
 
             if anim._running and not anim._paused
-                updateAnimation anim
+                updateAnimation anim, Renderer.PropertyAnimation.ON_PENDING
                 i++
             else
                 # remove element in not ordered list
                 # this array may change due loop
                 pending[i] = pending[n - 1]
-                pending[n - 1] = pending[pending.length - 1]
                 pending.pop()
                 anim._impl.pending = false
                 n--
         eventLoop.release()
-        return
-    requestAnimationFrame? vsync
 
-    updateAnimation = (anim) ->
+        if pending.length > 0
+            requestAnimationFrame vsync
+        return
+
+    updateAnimation = (anim, stateFlags) ->
         data = anim._impl
 
         progress = (nowTime - data.startTime) / anim._duration
         if progress < 0
-            data.progress = 0
-            return
+            progress = 0
         else if progress > 1
             progress = 1
         data.progress = progress
@@ -60,21 +59,20 @@ module.exports = (impl) ->
                 (toVal - fromVal),
                 anim._duration
             )
-        target = anim._target
 
-        if val is val and target and (property = anim._property) # isNaN hack
-            if not running or anim._updateProperty or not data.propertySetter
+        target = anim._target
+        property = anim._property
+
+        if progress is 1
+            stateFlags |= Renderer.PropertyAnimation.ON_STOP
+
+        if val is val and target and property # isNaN hack
+            if (anim._updateProperty & stateFlags) > 0 or not data.propertySetter
                 anim._updatePending = true
                 target[property] = val
                 anim._updatePending = false
-
-                # force impl update, because setter won't update if nothing change in data
-                if progress is 1 and data.propertySetter and target[property] is val
-                    impl[data.propertySetter].call target, val
             else
                 impl[data.propertySetter].call target, val
-                if anim._updateData
-                    target[data.internalPropertyName] = val
 
         if progress is 1
             if running
@@ -82,6 +80,15 @@ module.exports = (impl) ->
             else
                 data.startTime = 0
                 anim.running = false
+        return
+
+    addAnimationIntoPending = (anim) ->
+        data = anim._impl
+        unless data.pending
+            if pending.length is 0
+                requestAnimationFrame vsync
+            pending.push anim
+            data.pending = true
         return
 
     DATA =
@@ -105,12 +112,10 @@ module.exports = (impl) ->
             data = @_impl
             data.from = @_from
             data.to = @_to
-            unless data.pending
-                pending.push @
-                data.pending = true
+            addAnimationIntoPending @
 
-            data.startTime = nowTime
-            updateAnimation @
+            data.startTime = now()
+            updateAnimation @, Renderer.PropertyAnimation.ON_START
 
             data.startTime += @_startDelay
         return
@@ -119,17 +124,15 @@ module.exports = (impl) ->
         _super.call @
         data = @_impl
         if data.type is 'number' and data.startTime isnt 0
+            updateAnimation @, Renderer.PropertyAnimation.ON_STOP
             data.startTime = 0
-            updateAnimation @
         return
 
     resumeAnimation: do (_super = impl.resumeAnimation) -> ->
         _super.call @
         if @_impl.type is 'number'
             data = @_impl
-            unless data.pending
-                pending.push @
-                data.pending = true
+            addAnimationIntoPending @
 
             data.startTime += Date.now() - data.pauseTime
             data.pauseTime = 0

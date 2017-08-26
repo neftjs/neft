@@ -14,6 +14,13 @@ ATTRIBUTE = 'attribute'
 # options
 {BINDING_THIS_TO_TARGET_OPTS} = bindingParser
 
+bindingParserOpts =
+    modifyBindingPart: (elem) ->
+        # Prefix all Renderer.* direct access by the namespace accessible in style file
+        if Renderer[elem[0]]
+            elem.unshift 'Renderer'
+        elem
+
 ids = idsKeys = itemsKeys = extensions = queries = requires = null
 itemsDeclarations = afterItemCode = null
 fileUid = 0
@@ -101,7 +108,9 @@ isPublicBindingId = (id) ->
     id is 'this' or isVariableBindingId(id) or id is 'windowItem' or Renderer[id]?
 
 bindingAttributeToString = (obj) ->
-    binding = bindingParser.parse obj.value, isPublicBindingId, obj._parserOptions, null, isVariableBindingId
+    binding = bindingParser.parse(
+        obj.value, isPublicBindingId, obj._parserOptions, bindingParserOpts, isVariableBindingId
+    )
     func = "function(){return #{binding.hash}}"
 
     "[#{func}, [#{binding.connections}]]"
