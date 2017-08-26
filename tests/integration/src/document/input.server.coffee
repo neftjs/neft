@@ -453,3 +453,31 @@ describe 'Document string interpolation', ->
 
             storage.set 'a', 2
             assert.is view.node.stringify(), '2'
+
+    describe 'global object', ->
+        beforeEach ->
+            global.abc = 123
+
+        afterEach ->
+            delete global.abc
+
+        it 'is accessible', ->
+            source = createView '${global.abc}'
+            view = source.clone()
+
+            renderParse view
+            assert.is view.node.stringify(), '123'
+
+        it 'contains Neft object', ->
+            source = createView '${typeof global.Neft.utils.NOP}'
+            view = source.clone()
+
+            renderParse view
+            assert.is view.node.stringify(), 'function'
+
+        it 'accesses Neft object directly', ->
+            source = createView '${typeof Neft.utils.NOP}'
+            view = source.clone()
+
+            renderParse view
+            assert.is view.node.stringify(), 'function'
