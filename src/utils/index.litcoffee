@@ -1221,7 +1221,7 @@ console.log(bindFunc('a'));
             else
                 -> func.apply ctx, arguments
 
-## *Object* utils.errorToObject(*Error* error)
+## *Object* utils.errorToObject(*Object* error)
 
 Returns a plain object with the given error name, message and other custom properties.
 
@@ -1236,8 +1236,8 @@ console.log(utils.errorToObject(error));
     exports.errorToObject = (error) ->
         null
         `//<development>`
-        unless error instanceof Error
-            throw new Error 'utils.errorToObject error must be an Error instance'
+        unless isObject(error)
+            throw new Error 'utils.errorToObject error must be an object'
         `//</development>`
 
         result =

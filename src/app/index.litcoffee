@@ -34,6 +34,7 @@
         type: 'app'
 
     exports = module.exports = (opts = {}, extraOpts = {}) ->
+        null;
         `//<development>`
         log.ok "Welcome! Neft.io v#{pkg.version}; Feedback appreciated"
         log.warn "Use this bundle only in development; type --release when it's ready"

@@ -41,7 +41,6 @@
     "form-data": "1.0.0-rc4",
     "fs-extra": "0.30.0",
     "glob": "7.0.3",
-    "groundskeeper": "0.1.12",
     "htmlparser2": "3.9.0",
     "http-server": "0.9.0",
     "jimp": "0.2.27",

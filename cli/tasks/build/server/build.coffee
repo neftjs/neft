@@ -43,7 +43,10 @@ module.exports = (platform, options, callback) ->
     # run
     stack.runAll (err) ->
         if err
-            log.error err?.stack or err
+            if err?.message then log.error err.message
+            if err?.stack then log.error err.stack
+            if not err?.message and not err?.stack
+                log.error err
             log.error platform
         else
             log.ok platform
