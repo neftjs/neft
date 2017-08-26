@@ -41,21 +41,22 @@ Rectangle {
             super()
             @_animation = null
             @_property = ''
-            @_to = 0
+            @_animationClass = Renderer.Class.New
+                priority: -2
+                changes:
+                    updateProperty: Renderer.PropertyAnimation.NEVER
 
         listener = (oldVal) ->
             {animation} = @
             to = @_target[@property]
-            if not animation or not @running or animation.updatePending or not utils.isFloat(oldVal) or not utils.isFloat(to)
+            shouldRun = animation and @running and not animation.updatePending
+            shouldRun and= utils.isFloat(oldVal) and utils.isFloat(to)
+            unless shouldRun
                 return
-
-            @_to = to
 
             animation.stop()
             animation.from = oldVal
-            animation.to = @_to
-
-            animation.target ?= @target
+            animation.to = to
             animation.start()
             return
 
@@ -74,8 +75,8 @@ Rectangle {
                 {animation, property} = @
 
                 if animation
-                    animation.target = val
                     animation.stop()
+                    animation.target = val
 
                 _super.call @, val
 
@@ -93,8 +94,6 @@ Rectangle {
                 if item
                     item._extensions.push @
                     @_running = true
-                    # else
-                    #   item.onReady onTargetReady, @
 
                 if property
                     handlerName = itemUtils.getPropHandlerName property
@@ -126,11 +125,14 @@ Rectangle {
                 _super.call @, val
 
                 if oldVal
+                    @_animationClass.disable()
                     oldVal.target = null
                     oldVal.stop()
 
                 if val
-                    val.target = null
+                    @_animationClass.target = val
+                    @_animationClass.enable()
+                    val.target = @target
                     val.property = @property
                 return
 
@@ -168,10 +170,10 @@ Rectangle {
 
                 if target
                     if oldVal
-                        handlerName = "on#{utils.capitalize(oldVal)}Change"
+                        handlerName = itemUtils.getPropHandlerName oldVal
                         target[handlerName].disconnect listener, @
 
                     if val
-                        handlerName = "on#{utils.capitalize(val)}Change"
+                        handlerName = itemUtils.getPropHandlerName val
                         target[handlerName] listener, @
                 return

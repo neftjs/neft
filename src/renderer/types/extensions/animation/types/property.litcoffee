@@ -11,6 +11,14 @@
     module.exports = (Renderer, Impl, itemUtils) -> class PropertyAnimation extends Renderer.Animation
         @__name__ = 'PropertyAnimation'
 
+        do (i = 0) =>
+            @NEVER = 0
+            @ON_START = 1 << i++
+            @ON_STOP = 1 << i++
+            @ON_PENDING = 1 << i++
+            @ALWAYS = (1 << i) - 1
+            @ON_END = -1 # often mistaken as ON_STOP
+
 ## *PropertyAnimation* PropertyAnimation::constructor() : *Animation*
 
         constructor: ->
@@ -20,8 +28,7 @@
             @_duration = 250
             @_startDelay = 0
             @_loopDelay = 0
-            @_updateData = false
-            @_updateProperty = false
+            @_updateProperty = PropertyAnimation.ON_START | PropertyAnimation.ON_STOP
             @_easing = null
             @_updatePending = false
 
@@ -126,38 +133,25 @@
                 _super.call @, val
                 return
 
-## *Boolean* PropertyAnimation::updateData = `false`
+## *Integer* PropertyAnimation::updateProperty = `PropertyAnimation.ON_START | PropertyAnimation.ON_STOP`
 
-## *Signal* PropertyAnimation::onUpdateDataChange(*Boolean* oldValue)
-
-        itemUtils.defineProperty
-            constructor: @
-            name: 'updateData'
-            defaultValue: false
-            implementation: Impl.setPropertyAnimationUpdateData
-            developmentSetter: (val) ->
-                assert.isBoolean val
-            setter: (_super) -> (val) ->
-                unless val
-                    @updateProperty = false
-                _super.call @, val
-                return
-
-## *Boolean* PropertyAnimation::updateProperty = `false`
-
-## *Signal* PropertyAnimation::onUpdatePropertyChange(*Boolean* oldValue)
+## *Signal* PropertyAnimation::onUpdatePropertyChange(*Integer* oldValue)
 
         itemUtils.defineProperty
             constructor: @
             name: 'updateProperty'
-            defaultValue: false
+            defaultValue: PropertyAnimation.ON_START | PropertyAnimation.ON_STOP
             implementation: Impl.setPropertyAnimationUpdateProperty
             developmentSetter: (val) ->
-                assert.isBoolean val
-            setter: (_super) -> (val) ->
-                @updateData = true
-                _super.call @, val
-                return
+                msg = """
+                    PropertyAnimation::updateProperty needs to be a bitmask of \
+                    PropertyAnimation.ON_START, PropertyAnimation.ON_STOP, \
+                    PropertyAnimation.ON_PENDING or PropertyAnimation.NEVER, \
+                    PropertyAnimation.ALWAYS
+                """
+                assert.isInteger val, msg
+                assert.operator val, '>=', PropertyAnimation.NEVER, msg
+                assert.operator val, '<=', PropertyAnimation.ALWAYS, msg
 
 ## *Any* PropertyAnimation::from
 

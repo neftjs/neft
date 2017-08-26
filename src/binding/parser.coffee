@@ -65,9 +65,6 @@ exports.parse = (val, isPublicId, opts = 0, objOpts = {}, isVariableId) ->
     for elem, i in binding when typeof elem isnt 'string'
         elem = objOpts.modifyBindingPart?(elem) or elem
         [id] = elem
-        if id is 'Renderer'
-            elem.shift()
-            [id] = elem
         if id is 'parent' or id is 'nextSibling' or id is 'previousSibling' or id is 'target' or objOpts.globalIdToThis?[id]
             elem.unshift "this"
         else if opts & BINDING_THIS_TO_TARGET_OPTS and id is 'this'
