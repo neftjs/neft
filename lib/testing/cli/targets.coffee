@@ -37,6 +37,8 @@ exports.getEnvHandler = (env) ->
             require '../env/android'
         when 'ios'
             require '../env/ios'
+        when 'macos'
+            require '../env/macos'
         else
             throw new Error "Unsupported environment '#{env.platform}'"
 

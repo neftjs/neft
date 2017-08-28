@@ -69,6 +69,8 @@ impl = switch true
         require './impl/android/bridge'
     when utils.isIOS
         require './impl/ios/bridge'
+    when utils.isMacOS
+        require './impl/macos/bridge'
 if impl?
     utils.merge exports, impl(exports)
 

@@ -51,9 +51,11 @@ const { utils } = Neft;
 
 ## ReadOnly *Boolean* utils.isIOS
 
+## ReadOnly *Boolean* utils.isMacOS
+
     exports.isNode = exports.isServer = exports.isClient =
     exports.isNative = exports.isBrowser = exports.isWebGL = exports.isQt =
-    exports.isAndroid = exports.isIOS = false
+    exports.isAndroid = exports.isIOS = exports.isMacOS = false
 
     switch true
 
@@ -65,6 +67,9 @@ const { utils } = Neft;
 
         when ios?
             exports.isClient = exports.isNative = exports.isIOS = true
+
+        when __macos__?
+            exports.isClient = exports.isNative = exports.isMacOS = true
 
         when process.env.NEFT_PLATFORM is 'webgl'
             exports.isClient = exports.isWebGL = true

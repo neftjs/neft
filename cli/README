@@ -16,6 +16,7 @@ Platforms:
   webgl
   android
   ios
+  macos
 
 Options:
   --release          used to build and run release version of your application

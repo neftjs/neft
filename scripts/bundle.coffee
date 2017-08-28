@@ -58,6 +58,7 @@ TYPES = [
     {platform: 'webgl', template: 'browser'},
     {platform: 'android'},
     {platform: 'ios'},
+    {platform: 'macos'},
 ]
 
 do ->

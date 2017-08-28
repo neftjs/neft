@@ -78,6 +78,12 @@ exports.isPlatformFilePath = do ->
             ios: true
             client: true
             native: true
+            apple: true
+        macos:
+            macos: true
+            client: true
+            native: true
+            apple: true
 
     SPECIAL_EXTS = do ->
         r = {}

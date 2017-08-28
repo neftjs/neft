@@ -31,6 +31,7 @@ PLATFORMS =
     webgl: true
     android: true
     ios: true
+    macos: true
 
 DEFAULT_OPTIONS_VALUES =
     out: 'build'
