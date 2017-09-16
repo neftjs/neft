@@ -19,6 +19,7 @@ Image {
     signal = require 'src/signal'
     log = require 'src/log'
     utils = require 'src/utils'
+    Resources = require 'src/resources'
 
     log = log.scope 'Renderer', 'Image'
 
@@ -157,11 +158,17 @@ The image source URL or data URI.
                     itemUtils.setPropertyValue @, 'sourceWidth', 0
                     itemUtils.setPropertyValue @, 'sourceHeight', 0
                     itemUtils.setPropertyValue @, 'resolution', 1
-                    if val
+                    if Resources.testUri(val)
                         if res = Impl.resources?.getResource(val)
-                            RESOURCE_REQUEST.resolution = Renderer.Device.pixelRatio * Image.pixelRatio
+                            resolution = Renderer.Device.pixelRatio * Image.pixelRatio
+                            RESOURCE_REQUEST.resolution = resolution
                             val = res.resolve RESOURCE_REQUEST
+
                             setSize.call @, res
+                        else
+                            log.warn "Unknown resource given '#{val}'"
+                            val = ''
+                    if val
                         Impl.setImageSource.call @, val, loadCallback
                     else
                         Impl.setImageSource.call @, null, null
