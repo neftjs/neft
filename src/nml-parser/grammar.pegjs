@@ -1,11 +1,9 @@
 {
     var RESERVED_ATTRIBUTES = {id: true};
-    var warnings = [];
-    var ids = {};
 
     function warning(msg) {
         var startLocation = location().start;
-        warnings.push({
+        options.warnings.push({
             message: msg,
             line: startLocation.line,
             column: startLocation.column
@@ -34,40 +32,15 @@
 
         return arr;
     }
-
-    function extractArray(arr, step){
-        for (var i = 0, n = arr.length; i < n; i++){
-            arr[i] = arr[i][step];
-        }
-
-        return arr;
-    }
-
-    function uid(){
-        return Math.random().toString(16).slice(2);
-    }
-
-    function setParentRec(arr, val){
-        for (var i = 0; i < arr.length; i++){
-            var elem = arr[i];
-            if (elem.type && !elem.parent){
-                elem.parent = val;
-                if (elem.body){
-                    setParentRec(elem.body, val);
-                } else if (Array.isArray(elem.value)){
-                    setParentRec(elem.value, val);
-                } else if (typeof elem.value === 'object'){
-                    elem.value.parent = val;
-                }
-            }
-        }
-    }
 }
 
 Start
-    = d:(Code / MainType)* {
-        d.warnings = warnings;
-        return d;
+    = imports:Import* constants:Constant* objects:MainType* {
+        return {
+            imports: imports,
+            constants: constants,
+            objects: objects
+        };
     }
 
 /* HELPERS */
@@ -227,23 +200,44 @@ Attribute "attribute"
 PropertyToken
     = "property"
 
-Property "custom property"
-    = PropertyToken WhiteSpace attribute:(Attribute / (d:AttributeName AttributeEnds {return d})) {
-        var name = attribute.name || attribute;
-        if (name.indexOf('$.') !== 0) { error('Properties can be created only in the \'$\' object. Use \'property $.'+name+'\' instead'); }
+PropertyValue
+    = Function
+    / Attribute
+    / d:AttributeName AttributeEnds {return d}
+
+FullProperty
+    = PropertyToken WhiteSpace+ value:PropertyValue {
+        var name = value.name || value;
         var obj = { type: 'property', name: name.slice(2) };
-        return typeof attribute === 'string' ? obj : [obj, attribute];
+        return typeof value === 'string' ? obj : [obj, value];
     }
+
+FunctionProperty
+    = d:NamedFunction {
+        return [
+            { type: 'property', name: d.name },
+            d
+        ];
+    }
+
+Property "custom property"
+    = FullProperty
+    / FunctionProperty
 
 /* SIGNAL */
 
 SignalToken
     = "signal"
 
-Signal "signal"
-    = SignalToken WhiteSpace name:(Reference / Variable) AttributeEnds {
-        if (name.indexOf('$.') !== 0) { error('Signals can be created only in the \'$\' object. Use \'signal $.'+name+'\' instead'); }
-        return { type: 'signal', name: name.slice(2) };
+SignalValue
+    = Function
+    / d:AttributeName AttributeEnds {return d}
+
+Signal "custom signal"
+    = SignalToken WhiteSpace+ value:SignalValue {
+        var name = value.name || value;
+        var obj = { type: 'signal', name: name.slice(2) };
+        return typeof value === 'string' ? obj : [obj, value];
     }
 
 /* ID */
@@ -253,32 +247,52 @@ IdToken
 
 Id "id declaration"
     = IdToken ":" WhiteSpace* value:Variable AttributeEnds {
-        if (ids[value]){
-            error("this id has been already defined");
+        if (options.ids[value]) {
+            error("Id '" + value + "' is already defined");
         }
-        ids[value] = true;
+        options.ids[value] = true;
         return { type: 'id', value: value };
     }
 
 /* FUNCTION */
 
+FunctionToken
+    = "function"
+
 FunctionBody "function brackets"
-    = "{" (!"}" FunctionBodyText)* "}"
+    = "{" FunctionInnerBody "}"
+
+FunctionInnerBody "function brackets"
+    = (!"}" FunctionBodyText)*
 
 FunctionBodyText "function code"
     = StringLiteral / Comment / FunctionBody / SourceCharacter
 
 FunctionParams "function parameters"
     = "(" first:Variable? rest:(WhiteSpace* "," WhiteSpace* d:Variable { return d })* ")" {
-        return flattenArray([first, rest])
+        return first ? flattenArray([first, rest]) : [];
     }
 
 FunctionName "function name"
-    = (Variable ".")* "on" Variable
+    = (Variable ".")* Variable
 
 Function "function"
-    = name:$FunctionName (":" WhiteSpace* "function")? WhiteSpace* params:FunctionParams WhiteSpace* body:$FunctionBody AttributeEnds {
-        return { type: 'function', name: name, params: params, body: body };
+    = name:$FunctionName (":" WhiteSpace* FunctionToken)? WhiteSpace* params:FunctionParams WhiteSpace* "{" body:$FunctionInnerBody "}" AttributeEnds {
+        return { type: 'function', name: name, params: params, code: body };
+    }
+
+/* NAMED FUNCTION */
+
+NamedFunction "function with name"
+    = FunctionToken WhiteSpace+ name:$FunctionName WhiteSpace* params:FunctionParams WhiteSpace* "{" body:$FunctionInnerBody "}" AttributeEnds {
+        return { type: 'function', name: name, params: params, code: body };
+    }
+
+/* ANONYMOUS FUNCTION */
+
+AnonymousFunction "anonymous function"
+    = FunctionToken WhiteSpace* params:FunctionParams WhiteSpace* "{" body:$FunctionInnerBody "}" AttributeEnds {
+        return { type: 'function', name: '', params: params, code: body };
     }
 
 /* DECLARATION */
@@ -289,7 +303,7 @@ Declaration
     }
 
 Declarations
-    = d:(Declaration / IfStatement / SelectStatement)* { return flattenArray(d) }
+    = d:(Declaration / ConditionStatement / SelectStatement)* { return flattenArray(d) }
 
 /* TYPE */
 
@@ -320,41 +334,66 @@ Type "renderer type"
             obj.id = elem.value;
         });
 
-        setParentRec(body, obj);
+        if (!obj.id) {
+            obj.id = "_i" + options.lastUid++;
+        }
 
         return obj;
     }
 
 MainType
-    = d:(Type / IfStatement / SelectStatement) {
-        ids = {};
-        return d;
+    = Type
+
+/* CONDITION STATEMENT */
+
+ConditionToken
+    = "if"
+
+ConditionStatement "condition statement"
+    = __ ConditionToken WhiteSpace* "(" WhiteSpace* cond:$(!")" d:($StringLiteral/$InlineBrackets/SourceCharacter) {return d})+ WhiteSpace* ")" WhiteSpace* "{" body:TypeBody "}" __ {
+        return { type: 'condition', condition: cond, body: body };
     }
 
-/* IF STATEMENT */
+/* SELECT STATEMENT */
 
-IfStatement "if statement"
-    = __ "if" WhiteSpace* "(" WhiteSpace* cond:$(!")" d:($StringLiteral/$InlineBrackets/SourceCharacter) {return d})+ WhiteSpace* ")" WhiteSpace* "{" body:TypeBody "}" __ {
-        var obj = { type: 'if', condition: cond, body: body };
-        setParentRec(body, obj);
-        return obj;
-    }
-
-/* FOR STATEMENT */
+SelectToken
+    = "select"
+    / "for"
 
 SelectStatement "select statement"
-    = __ type:("select" / "for") WhiteSpace* "(" WhiteSpace* cond:$(!")" d:($StringLiteral) {return d})+ WhiteSpace* ")" WhiteSpace* "{" body:TypeBody "}" __ {
+    = __ type:SelectToken WhiteSpace* "(" WhiteSpace* cond:$(!")" d:($StringLiteral) {return d})+ WhiteSpace* ")" WhiteSpace* "{" body:TypeBody "}" __ {
         if (type === "for") {
             warning("'for' statement has been renamed to 'select'");
         }
-        var obj = { type: 'select', query: cond, body: body };
-        setParentRec(body, obj);
-        return obj;
+        return { type: 'select', query: cond, body: body };
     }
 
-/* CODE */
+/* IMPORT */
 
-Code "code"
-    = "`" d:$((!"`" FunctionBodyText)*) "`" {
-        return { type: 'code', body: d }
+ImportToken
+    = "import"
+
+Import "import statement"
+    = __ ImportToken WhiteSpace+ path:Reference WhiteSpace* AttributeEnds* __ {
+        return path.split('.');
+    }
+
+/* CONSTANT */
+
+ConstantToken
+    = "const"
+
+ConstantValue "constant value"
+    = $NamedFunction
+    / $AnonymousFunction
+    / $StringLiteral
+    / $FunctionBody
+    / d:$(!AttributeEnds SourceCharacter)+ AttributeEnds {return d}
+
+Constant "constant value"
+    = __ ConstantToken WhiteSpace+ name:Variable WhiteSpace+ "=" WhiteSpace+ value:ConstantValue AttributeEnds? __ {
+        return {
+            name: name,
+            value: value
+        };
     }

@@ -1387,3 +1387,31 @@ utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}})
                 forObjects a, b, compareFunc, maxDeep
             else
                 return compareFunc a, b
+
+## *String* kebabToCamel(*String* value)
+
+    exports.kebabToCamel = do ->
+        regex = /(\-\w)/g
+        replacer = (matches) ->
+            matches[1].toUpperCase()
+
+        (value) ->
+            `//<development>`
+            if typeof value isnt 'string'
+                throw new Error 'utils.kebabToCamel value must be a string'
+            `//</development>`
+
+            value.replace regex, replacer
+
+## *String* camelToKebab(*String* value)
+
+    exports.camelToKebab = do ->
+        regex = /([a-z])([A-Z])/g
+
+        (value) ->
+            `//<development>`
+            if typeof value isnt 'string'
+                throw new Error 'utils.camelToKebab value must be a string'
+            `//</development>`
+
+            value.replace(regex, '$1-$2').toLowerCase()

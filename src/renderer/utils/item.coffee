@@ -16,7 +16,13 @@ module.exports = (Renderer, Impl) ->
     NOP = ->
 
     getObjAsString = (item) ->
-        "(#{item.constructor.__name__}):#{item.id}"
+        ctorName = item.constructor.__name__
+        attrs = []
+        if item.id
+            attrs.push "id=#{item.id}"
+        if item._path
+            attrs.push "file=#{item._path}"
+        "#{ctorName}(#{attrs.join(', ')})"
 
     getObjFile = (item) ->
         path = ''
@@ -135,7 +141,7 @@ module.exports = (Renderer, Impl) ->
                 initObject.call object, opts
             else
                 setOpts.call object, opts
-            return
+            object
 
         @initialize = (object, opts) ->
             Object.seal object
@@ -148,6 +154,9 @@ module.exports = (Renderer, Impl) ->
             Emitter.call @
 
             @id = ''
+            `//<development>`
+            @_path = ''
+            `//</development>`
             @_impl = null
             @_bindings = null
             unless @ instanceof Renderer.Class
@@ -179,20 +188,6 @@ module.exports = (Renderer, Impl) ->
                 bindings[prop] = val
                 Impl.setItemBinding.call @, prop, val, ctx
             return
-
-        clone: (opts) ->
-            clone = @constructor.New()
-            if @id
-                clone.id = @id
-
-            if @_$
-                clone._$ = Object.create @_$
-                MutableDeepObject.call clone._$, clone
-
-            if opts
-                setOpts.call clone, opts
-
-            clone
 
         toString: ->
             getObjAsString @

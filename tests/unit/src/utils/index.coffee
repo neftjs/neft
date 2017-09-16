@@ -295,3 +295,11 @@ describe 'utils', ->
         it 'maxDeep specifies how deep objects should be tested', ->
             assert.is utils.isEqual({a: [{b: 1}]}, {a: [{b: 2}]}, 2), true
             assert.is utils.isEqual({a: [{b: 1}]}, {a: [{b: 2}]}, 3), false
+
+    describe 'kebabToCamel()', ->
+        it 'returns given string as camel case', ->
+            assert.is utils.kebabToCamel('ab-cd-23-efg'), 'abCd23Efg'
+
+    describe 'camelToKebab()', ->
+        it 'returns given string as kebab case', ->
+            assert.is utils.camelToKebab('abCd23EfgAbc'), 'ab-cd23efg-abc'
