@@ -1,5 +1,7 @@
-const { Renderer, assert, utils } = Neft;
+const { Renderer, assert, utils, Resources } = Neft;
 const { Impl } = Renderer;
+
+const log = Neft.log.scope('Extensions', 'TileImage');
 
 class TileImage extends Renderer.Native {}
 
@@ -33,11 +35,16 @@ TileImage.defineProperty({
             });
         }
         return function (val) {
-            const res = Renderer.getResource(val);
-            if (res) {
-                const path = res.resolve(RESOURCE_REQUEST);
-                this.set('resolution', getResourceResolutionByPath(res, path));
-                return path;
+            if (Resources.testUri(val)) {
+                const res = Renderer.getResource(val);
+                if (res) {
+                    const path = res.resolve(RESOURCE_REQUEST);
+                    this.set('resolution', getResourceResolutionByPath(res, path));
+                    return path;
+                } else {
+                    log.warn(`Unknown resource given '${val}'`);
+                    return '';
+                }
             }
             return val;
         }
