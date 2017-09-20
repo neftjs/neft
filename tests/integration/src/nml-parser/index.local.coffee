@@ -13,13 +13,13 @@ describe 'nml-parser', ->
             }
         '''
         expected = '''
-            _setOpts = Neft.Renderer.itemUtils.Object.setOpts
+            _RendererObject = Neft.Renderer.itemUtils.Object
             Class = Neft.Renderer.Class
             Item = Neft.Renderer.Item
             windowItem = undefined
             exports._i0 = ({document}) ->
                 _i0 = Item.New()
-                _setOpts(_i0, {"query": 'any-item'})
+                _RendererObject.setOpts(_i0, {"query": 'any-item'})
                 _i0.onReady.emit()
                 objects: {"_i0": _i0}
                 item: _i0
@@ -28,6 +28,7 @@ describe 'nml-parser', ->
                 return
             exports._main = exports._i0
             exports._mainLink = '_i0'
+            exports.New = () -> exports._main({}).item
             exports._queries = {"any-item":"_i0"}
         '''
         assert.is result, expected
@@ -39,7 +40,7 @@ describe 'nml-parser', ->
             TileImage {}
         '''
         expected = '''
-            _setOpts = Neft.Renderer.itemUtils.Object.setOpts
+            _RendererObject = Neft.Renderer.itemUtils.Object
             TileImage = require "extensions/tileImage/renderer/tileImage"
             CustomStyle = require "styles/ChildNamespace/CustomStyle"
             Class = Neft.Renderer.Class
@@ -54,6 +55,7 @@ describe 'nml-parser', ->
                 return
             exports._main = exports._i0
             exports._mainLink = '_i0'
+            exports.New = () -> exports._main({}).item
             exports._queries = {}
         '''
         assert.is result, expected
@@ -65,7 +67,7 @@ describe 'nml-parser', ->
             Item {}
         '''
         expected = '''
-            _setOpts = Neft.Renderer.itemUtils.Object.setOpts
+            _RendererObject = Neft.Renderer.itemUtils.Object
             Class = Neft.Renderer.Class
             Item = Neft.Renderer.Item
             abc = `1`
@@ -82,6 +84,7 @@ describe 'nml-parser', ->
                 return
             exports._main = exports._i0
             exports._mainLink = '_i0'
+            exports.New = () -> exports._main({}).item
             exports._queries = {}
         '''
         assert.is result, expected

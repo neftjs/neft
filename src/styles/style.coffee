@@ -135,9 +135,7 @@ module.exports = (File, data) -> class Style
         assert.isDefined item
         assert.notOk @textProp
 
-        if ($ = item._$) and 'text' of $
-            "#{PROP_PREFIX}$:text"
-        else if @node instanceof Text or 'text' of item
+        if @node instanceof Text or 'text' of item
             "#{PROP_PREFIX}text"
         else
             ''

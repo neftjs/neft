@@ -208,7 +208,7 @@ PropertyValue
 FullProperty
     = PropertyToken WhiteSpace+ value:PropertyValue {
         var name = value.name || value;
-        var obj = { type: 'property', name: name.slice(2) };
+        var obj = { type: 'property', name: name };
         return typeof value === 'string' ? obj : [obj, value];
     }
 
@@ -236,7 +236,7 @@ SignalValue
 Signal "custom signal"
     = SignalToken WhiteSpace+ value:SignalValue {
         var name = value.name || value;
-        var obj = { type: 'signal', name: name.slice(2) };
+        var obj = { type: 'signal', name: name };
         return typeof value === 'string' ? obj : [obj, value];
     }
 

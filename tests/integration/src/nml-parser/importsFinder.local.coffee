@@ -30,6 +30,16 @@ describe 'nml-parser imports', ->
         ]
         assert.isEqual getImports(code), expected
 
+    it 'styles', ->
+        code = '''
+        import Styles.Header.VerticalText
+        '''
+        expected = [
+            {name: 'VerticalText', value: 'require "styles/Header/VerticalText"'},
+            {name: 'Class', value: 'Neft.Renderer.Class'},
+        ]
+        assert.isEqual getImports(code), expected
+
     it 'modules', ->
         code = '''
         import Modules.VerticalText

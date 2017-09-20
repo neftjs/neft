@@ -15,6 +15,6 @@ exports.Checker = class Checker
     registerAll: ->
         for item of @styles
             do (item) =>
-                if item[0] isnt '_'
+                if item[0] isnt '_' and item isnt 'New'
                     it item, => @test item
         return

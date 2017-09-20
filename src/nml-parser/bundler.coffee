@@ -43,7 +43,8 @@ getMainObject = (objects) ->
         return ''
     """
     exports._main = exports.#{objects[0].id}
-    exports._mainLink = '#{objects[0].id}'\n
+    exports._mainLink = '#{objects[0].id}'
+    exports.New = () -> exports._main({}).item\n
     """
 
 getQueries = (queries) ->
@@ -51,7 +52,7 @@ getQueries = (queries) ->
 
 exports.bundle = ({imports, constants, objects, objectCodes, queries}) ->
     result = '''
-    _setOpts = Neft.Renderer.itemUtils.Object.setOpts\n
+    _RendererObject = Neft.Renderer.itemUtils.Object\n
     '''
     result += getImports imports
     result += getConstants constants

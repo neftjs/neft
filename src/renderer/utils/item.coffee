@@ -69,12 +69,6 @@ module.exports = (Renderer, Impl) ->
         setOpts = (opts) ->
             if typeof opts.id is 'string'
                 @id = opts.id
-            if Array.isArray(opts.properties)
-                for property in opts.properties
-                    createProperty @, property
-            if Array.isArray(opts.signals)
-                for signalName in opts.signals
-                    createSignal @, signalName
             if Array.isArray(opts.children)
                 for child in opts.children
                     if child instanceof Renderer.Item
@@ -102,34 +96,30 @@ module.exports = (Renderer, Impl) ->
 
             {changes} = classElem
             for prop, val of opts
-                if typeof val is 'function'
-                    changes.setFunction prop, val
-                else if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
+                if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
                     changes.setBinding prop, val
                 else if not CHANGES_OMIT_ATTRIBUTES[prop]
                     changes.setAttribute prop, val
 
             classElem
 
-        @createProperty = createProperty = (object, name) ->
-            assert.isString name
-            assert.notLengthOf name, 0
-
-            if name of object.$
-                return
+        @createProperty = (object, name) ->
+            assert.isString name, "Property must be a string, but '#{name}' given"
+            assert.notLengthOf name, 0, "Property cannot be an empty string"
+            assert.notOk name of object, "#{object} already has a property '#{name}'"
 
             exports.defineProperty
-                object: object.$
+                object: object
                 name: name
-                namespace: '$'
 
             return
 
-        createSignal = (object, name) ->
+        @createSignal = (object, name) ->
             assert.isString name
             assert.notLengthOf name, 0
+            assert.notOk name of object, "#{object} already has a signal '#{name}'"
 
-            signal.Emitter.createSignalOnObject object.$, name
+            signal.Emitter.createSignalOnObject object, name
 
             return
 
@@ -144,7 +134,6 @@ module.exports = (Renderer, Impl) ->
             object
 
         @initialize = (object, opts) ->
-            Object.seal object
             Impl.initializeObject object, object.constructor.__name__
             if opts
                 UtilsObject.setOpts object, opts

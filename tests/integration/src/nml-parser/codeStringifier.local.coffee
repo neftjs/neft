@@ -40,7 +40,7 @@ describe 'nml-parser', ->
         '''
         expected = '''
             abc123 = Item.New()
-            _setOpts(abc123, {"id": "abc123"})
+            _RendererObject.setOpts(abc123, {"id": "abc123"})
             abc123.onReady.emit()
             objects: {"abc123": abc123}
             item: abc123
@@ -50,13 +50,14 @@ describe 'nml-parser', ->
     it 'sets item properties', ->
         code = '''
             Item {
-                property $.prop1
-                property $.customProp
+                property prop1
+                property customProp
             }
         '''
         expected = '''
             _i0 = Item.New()
-            _setOpts(_i0, {"properties": ["prop1","customProp"]})
+            _RendererObject.createProperty(_i0, "prop1")
+            _RendererObject.createProperty(_i0, "customProp")
             _i0.onReady.emit()
             objects: {"_i0": _i0}
             item: _i0
@@ -66,13 +67,14 @@ describe 'nml-parser', ->
     it 'sets item signals', ->
         code = '''
             Item {
-                signal $.signal1
-                signal $.customSignal
+                signal signal1
+                signal customSignal
             }
         '''
         expected = '''
             _i0 = Item.New()
-            _setOpts(_i0, {"signals": ["signal1","customSignal"]})
+            _RendererObject.createSignal(_i0, "signal1")
+            _RendererObject.createSignal(_i0, "customSignal")
             _i0.onReady.emit()
             objects: {"_i0": _i0}
             item: _i0
@@ -87,7 +89,7 @@ describe 'nml-parser', ->
         '''
         expected = '''
             _i0 = Item.New()
-            _setOpts(_i0, {"prop1": 123})
+            _RendererObject.setOpts(_i0, {"prop1": 123})
             _i0.onReady.emit()
             objects: {"_i0": _i0}
             item: _i0
@@ -105,7 +107,7 @@ describe 'nml-parser', ->
         expected = '''
             _i1 = Item.New()
             _i0 = Rectangle.New()
-            _setOpts(_i1, {"prop1": _setOpts(_i0, {"color": 'red'})})
+            _RendererObject.setOpts(_i1, {"prop1": _RendererObject.setOpts(_i0, {"color": 'red'})})
             _i1.onReady.emit()
             _i0.onReady.emit()
             objects: {"_i1": _i1, "_i0": _i0}
@@ -124,7 +126,7 @@ describe 'nml-parser', ->
         expected = '''
             _i1 = Item.New()
             _i0 = Rectangle.New()
-            _setOpts(_i1, {"children": [_setOpts(_i0, {"color": 'red'})]})
+            _RendererObject.setOpts(_i1, {"children": [_RendererObject.setOpts(_i0, {"color": 'red'})]})
             _i1.onReady.emit()
             _i0.onReady.emit()
             objects: {"_i1": _i1, "_i0": _i0}
@@ -142,7 +144,7 @@ describe 'nml-parser', ->
         '''
         expected = '''
             _i0 = Item.New()
-            _setOpts(_i0, {"onEvent": `function(param1,param2){
+            _RendererObject.setOpts(_i0, {"onEvent": `function(param1,param2){
                     return param1 + param2;
             }`})
             _i0.onReady.emit()
@@ -162,7 +164,7 @@ describe 'nml-parser', ->
         '''
         expected = '''
             _i0 = Item.New()
-            _setOpts(_i0, {"onEvent": `function(){
+            _RendererObject.setOpts(_i0, {"onEvent": `function(){
                     var ab = 2;
                     return { ab: ab };
             }`})
@@ -185,8 +187,8 @@ describe 'nml-parser', ->
         expected = '''
             _i0 = Item.New()
             child = Rectangle.New()
-            _setOpts(_i0, {"width": [`function(){return child.width}`, [[child, 'width']]], \
-            "children": [_setOpts(child, {"id": "child"})]})
+            _RendererObject.setOpts(_i0, {"width": [`function(){return child.width}`, [[child, 'width']]], \
+            "children": [_RendererObject.setOpts(child, {"id": "child"})]})
             _i0.onReady.emit()
             child.onReady.emit()
             objects: {"_i0": _i0, "child": child}
@@ -204,7 +206,7 @@ describe 'nml-parser', ->
         '''
         expected = '''
             _i0 = Class.New()
-            _setOpts(_i0, {"changes": {"width": [\
+            _RendererObject.setOpts(_i0, {"changes": {"width": [\
             `function(){return document.width}`, [[document, 'width']]]}})
             objects: {"_i0": _i0}
             item: _i0
@@ -219,7 +221,7 @@ describe 'nml-parser', ->
         '''
         expected = '''
             _i0 = NumberAnimation.New()
-            _setOpts(_i0, {"updateProperty": [`function(){\
+            _RendererObject.setOpts(_i0, {"updateProperty": [`function(){\
             return Neft.Renderer.PropertyAnimation.ALWAYS}`, []]})
             objects: {"_i0": _i0}
             item: _i0
@@ -234,7 +236,7 @@ describe 'nml-parser', ->
         '''
         expected = '''
             _i0 = Item.New()
-            _setOpts(_i0, {"anchors.left": ["previousSibling","horizontalCenter"]})
+            _RendererObject.setOpts(_i0, {"anchors.left": ["previousSibling","horizontalCenter"]})
             _i0.onReady.emit()
             objects: {"_i0": _i0}
             item: _i0
@@ -252,8 +254,8 @@ describe 'nml-parser', ->
         expected = '''
             _i0 = Item.New()
             _r0 = Class.New()
-            _setOpts(_i0, {"children": [\
-            _setOpts(_r0, {\
+            _RendererObject.setOpts(_i0, {"children": [\
+            _RendererObject.setOpts(_r0, {\
             "when": [`function(){return this.target.width > 50}`, \
             [[['this', 'target'], 'width']]], \
             "changes": {"height": [`function(){return document.width}`, [[document, 'width']]]}\
@@ -276,8 +278,8 @@ describe 'nml-parser', ->
         expected = '''
             _i0 = Item.New()
             _r0 = Class.New()
-            _setOpts(_i0, {"children": [\
-            _setOpts(_r0, {\
+            _RendererObject.setOpts(_i0, {"children": [\
+            _RendererObject.setOpts(_r0, {\
             "when": [`function(){return document.props.hover}`, \
             [[[document, 'props'], 'hover']]], \
             "changes": {"height": 100}\
@@ -300,8 +302,8 @@ describe 'nml-parser', ->
         expected = '''
             _i0 = Item.New()
             _r0 = Class.New()
-            _setOpts(_i0, {"children": [\
-            _setOpts(_r0, {\
+            _RendererObject.setOpts(_i0, {"children": [\
+            _RendererObject.setOpts(_r0, {\
             "document.query": 'a > b', \
             "changes": {"color": 'red'}\
             })\
