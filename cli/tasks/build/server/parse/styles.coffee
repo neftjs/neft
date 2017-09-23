@@ -116,7 +116,9 @@ module.exports = (platform, app, callback) ->
             if file.data?
                 compileLogtime = log.time "Compile '#{file.path}'"
                 try
-                    createBundle file
+                    bundle = createBundle nml: file.data, path: file.filename
+                    file.data = bundle.bundle
+                    file.queries = bundle.queries
                 catch err
                     log.error "\u001b[1mError in `#{file.path}`\u001b[22m\n\n#{err.message or err}"
                     log.end compileLogtime

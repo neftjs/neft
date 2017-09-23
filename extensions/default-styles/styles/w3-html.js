@@ -12,6 +12,7 @@ Flow {
 
     select ('#text'){
         font.pixelSize: 28
+        font.weight: 0.7
     }
 }
 
@@ -22,6 +23,7 @@ Flow {
 
     select ('#text'){
         font.pixelSize: 21
+        font.weight: 0.7
     }
 }
 
@@ -32,6 +34,7 @@ Flow {
 
     select ('#text'){
         font.pixelSize: 16.38
+        font.weight: 0.7
     }
 }
 
@@ -39,6 +42,10 @@ Flow {
     query: 'h4, p, fieldset, form, dl'
     padding.vertical: 31.36
     layout.fillWidth: true
+
+    select ('#text'){
+        font.weight: 0.7
+    }
 }
 
 Flow {
@@ -48,6 +55,7 @@ Flow {
 
     select ('#text'){
         font.pixelSize: 11.62
+        font.weight: 0.7
     }
 }
 
@@ -58,10 +66,13 @@ Flow {
 
     select ('#text'){
         font.pixelSize: 10.5
+        font.weight: 0.7
     }
 }
 
-select ('h1, h2, h3, h4, h5, h6, b, strong'){
+Flow {
+    query: 'b, strong'
+
     select ('#text'){
         font.weight: 0.7
     }
@@ -73,13 +84,17 @@ Flow {
     layout.fillWidth: true
 }
 
-select ('i, cite, em, var, address'){
+Flow {
+    query: 'i, cite, em, var, address'
+
     select ('#text'){
         font.italic: true
     }
 }
 
-select ('pre, tt, code, kbd, samp'){
+Flow {
+    query: 'pre, tt, code, kbd, samp'
+
     select ('#text'){
         font.family: 'monospace'
     }
