@@ -113,7 +113,7 @@ getModulesInit = (modules, paths, indexes, opts) ->
         name = name.replace /\\/g, '\\\\'
 
         switch pathUtils.extname name
-            when '.json'
+            when '.json', '.yaml', '.yml', '.txt'
                 func = "module.exports = #{func};"
 
         module = moduleScope
