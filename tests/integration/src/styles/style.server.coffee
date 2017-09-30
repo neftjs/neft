@@ -129,46 +129,6 @@ describe 'styles', ->
             iNode.props.set 'visible', true
             assert.is item.text, bNode.stringifyChildren()
 
-    describe 'Renderer.Item::$.text', ->
-        it 'is always equal stringified node children', ->
-            doc = render
-                html: '<b n-style="styles:file">ab<i>c</i></b>'
-                styles:
-                    file:
-                        _main: ->
-                            item = Renderer.Item.New()
-                            item.$.text = 'debug'
-                            item: item
-
-            node = doc.node.query 'b'
-            item = doc.styles[0].item
-
-            assert.is item.$.text, node.stringifyChildren()
-
-            node.children[0].text = '123'
-            assert.is item.$.text, node.stringifyChildren()
-
-        it 'is more important than ::text property', ->
-            doc = render
-                html: '<b n-style="styles:file">ab<i>c</i></b>'
-                styles:
-                    file:
-                        _main: ->
-                            item = Renderer.Text.New()
-                            item.$.text = 'debug'
-                            item: item
-
-            node = doc.node.query 'b'
-            item = doc.styles[0].item
-
-            assert.is item.text, ''
-            assert.is item.$.text, node.stringifyChildren()
-
-            node.children[0].text = '123'
-
-            assert.is item.text, ''
-            assert.is item.$.text, node.stringifyChildren()
-
     describe 'Element.Text', ->
         it 'is rendered as Renderer.Text', ->
             doc = render

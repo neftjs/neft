@@ -16,18 +16,11 @@
     module.exports = (Renderer, Impl, itemUtils) ->
         class ChangesObject
             constructor: ->
-                @_attributes = {}
-                @_functions = []
-                @_bindings = {}
+                @_attributes = Object.create null
+                @_bindings = Object.create null
 
             setAttribute: (prop, val) ->
                 @_attributes[prop] = val
-                return
-
-            setFunction: (prop, val) ->
-                boundFunc = (arg1, arg2) ->
-                    val.call @_target, arg1, arg2
-                @_functions.push prop, boundFunc
                 return
 
             setBinding: (prop, val) ->
@@ -149,9 +142,7 @@ It accepts bindings and listeners as well.
 
                 {changes} = @
                 for prop, val of obj
-                    if typeof val is 'function'
-                        changes.setFunction prop, val
-                    else if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
+                    if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
                         changes.setBinding prop, val
                     else
                         changes.setAttribute prop, val
@@ -469,31 +460,20 @@ Grid {
 
             attributes = changes._attributes
             bindings = changes._bindings
-            functions = changes._functions
-
-            # functions
-            for attr, i in functions by 2
-                path = splitAttribute attr
-                object = getObjectByPath item, path
-                `//<development>`
-                if not object or typeof object?[path[path.length - 1]] isnt 'function'
-                    log.error "Handler '#{attr}' doesn't exist in '#{item.toString()}', from '#{classElem.toString()}'"
-                `//</development>`
-                object?[path[path.length - 1]]? functions[i+1], classElem
 
             # attributes
             for attr, val of attributes
                 path = null
                 writeAttr = true
                 alias = ''
-                for i in [classListIndex-1..0] by -1
+                for i in [classListIndex - 1..0] by -1
                     if getContainedAttributeOrAlias(classList[i], attr)
                         writeAttr = false
                         break
 
                 if writeAttr
                     # unset alias
-                    for i in [classListIndex+1...classListLength] by 1
+                    for i in [classListIndex + 1...classListLength] by 1
                         if (alias = getContainedAttributeOrAlias(classList[i], attr)) and alias isnt attr
                             path = splitAttribute alias
                             object = getObjectByPath item, path
@@ -513,20 +493,20 @@ Grid {
                         lastPath = path[path.length - 1]
                         object = getObjectByPath item, path
 
-                    # create property on demand
-                    if object instanceof itemUtils.CustomObject and not (lastPath of object)
-                        itemUtils.Object.createProperty object._ref, lastPath
-                    else
-                        `//<development>`
-                        if not object or not (lastPath of object)
-                            log.error "Attribute '#{attr}' doesn't exist in '#{item.toString()}', from '#{classElem.toString()}'"
-                            continue
-                        `//</development>`
-                        unless object
-                            continue
+                    `//<development>`
+                    if not object or not (lastPath of object)
+                        log.error """
+                            Attribute '#{attr}' doesn't exist in '#{item}'
+                        """
+                        continue
+                    `//</development>`
+                    unless object
+                        continue
 
                     if bindings[attr]
                         object.createBinding lastPath, val, item
+                    else if typeof val is 'function' and object[lastPath]?.connect
+                        object[lastPath].connect val, item
                     else
                         if object._bindings?[lastPath]
                             object.createBinding lastPath, null, item
@@ -549,20 +529,13 @@ Grid {
 
             attributes = changes._attributes
             bindings = changes._bindings
-            functions = changes._functions
-
-            # functions
-            for attr, i in functions by 2
-                path = splitAttribute attr
-                object = getObjectByPath item, path
-                object?[path[path.length - 1]]?.disconnect functions[i+1], classElem
 
             # attributes
             for attr, val of attributes
                 path = null
                 restoreDefault = true
                 alias = ''
-                for i in [classListIndex-1..0] by -1
+                for i in [classListIndex - 1..0] by -1
                     # BUG: undefined on QML (potential Array::sort bug)
                     unless classList[i]
                         continue
@@ -575,7 +548,7 @@ Grid {
                     # get default value
                     defaultValue = undefined
                     defaultIsBinding = false
-                    for i in [classListIndex+1...classListLength] by 1
+                    for i in [classListIndex + 1...classListLength] by 1
                         if alias = getContainedAttributeOrAlias(classList[i], attr)
                             defaultValue = classList[i].changes._attributes[alias]
                             defaultIsBinding = !!classList[i].changes._bindings[alias]
@@ -604,6 +577,8 @@ Grid {
                     `//</development>`
                     if defaultIsBinding
                         object.createBinding lastPath, defaultValue, item
+                    else if typeof val is 'function' and object[lastPath]?.connect
+                        object[lastPath].disconnect val, item
                     else
                         if defaultValue is undefined
                             defaultValue = getPropertyDefaultValue object, lastPath

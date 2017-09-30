@@ -17,6 +17,10 @@ PUBLIC_BINDING_IDS =
     __proto__: null
     windowItem: true
 
+RESERVED_MAIN_IDS =
+    __proto__: null
+    New: true
+
 {BINDING_THIS_TO_TARGET_OPTS} = bindingParser
 
 BINDING_PARSER_OPTS =
@@ -160,8 +164,6 @@ class Stringifier
 
     getObjectOpts: (ast) ->
         ids = []
-        properties = []
-        signals = []
         attributes = []
         functions = []
         children = []
@@ -170,16 +172,14 @@ class Stringifier
             switch child.type
                 when nmlAst.ID_TYPE
                     ids.push child
-                when nmlAst.PROPERTY_TYPE
-                    properties.push child
-                when nmlAst.SIGNAL_TYPE
-                    signals.push child
                 when nmlAst.ATTRIBUTE_TYPE
                     attributes.push child
                 when nmlAst.FUNCTION_TYPE
                     functions.push child
                 when nmlAst.OBJECT_TYPE, nmlAst.CONDITION_TYPE, nmlAst.SELECT_TYPE
                     children.push child
+                when nmlAst.PROPERTY_TYPE, nmlAst.SIGNAL_TYPE
+                    null
                 else
                     throw new Error "Unknown object type '#{child.type}'"
 
@@ -190,16 +190,6 @@ class Stringifier
                 type: PRIMITIVE_TYPE
                 name: 'id'
                 value: "\"#{elem.value}\""
-        unless utils.isEmpty(properties)
-            opts.push
-                type: PRIMITIVE_TYPE
-                name: 'properties'
-                value: JSON.stringify properties.map (elem) -> elem.name
-        unless utils.isEmpty(signals)
-            opts.push
-                type: PRIMITIVE_TYPE
-                name: 'signals'
-                value: JSON.stringify signals.map (elem) -> elem.name
         unless utils.isEmpty(attributes)
             opts.push attributes...
         unless utils.isEmpty(functions)
@@ -211,7 +201,7 @@ class Stringifier
                 value: children
 
         unless utils.isEmpty(opts)
-            "_setOpts(#{ast.id}, #{@stringifyOpts opts})"
+            "_RendererObject.setOpts(#{ast.id}, #{@stringifyOpts opts})"
 
     bindingToString: (value, opts = 0) ->
         binding = bindingParser.parse value, @isBindingPublicId, opts,
@@ -235,15 +225,41 @@ class Stringifier
         results = ("\"#{opt.name}\": #{@stringifyAnyObject opt}" for opt in opts)
         "{#{results.join ', '}}"
 
-    stringify: ->
+    getItemsCreator: ->
         result = ""
-        itemCode = @getObjectOpts @ast
-
-        # create items
         for child in @objects
             result += "#{child.id} = #{child.name}.New()\n"
             if @path
                 result += "#{child.id}._path = \"#{@path}\"\n"
+        result
+
+    getItemsProperties: ->
+        result = ""
+        for child in @objects
+            properties = nmlAst.forEachLeaf ast: child, onlyType: nmlAst.PROPERTY_TYPE
+            for property in properties
+                result += "_RendererObject.createProperty(#{child.id}, \"#{property.name}\")\n"
+        result
+
+    getItemsSignals: ->
+        result = ""
+        for child in @objects
+            signals = nmlAst.forEachLeaf ast: child, onlyType: nmlAst.SIGNAL_TYPE
+            for signal in signals
+                result += "_RendererObject.createSignal(#{child.id}, \"#{signal.name}\")\n"
+        result
+
+    stringify: ->
+        if RESERVED_MAIN_IDS[@ast.id]
+            throw new Error "Reserved NML id '#{@ast.id}'"
+
+        result = ""
+        itemCode = @getObjectOpts @ast
+
+        # create items
+        result += @getItemsCreator()
+        result += @getItemsProperties()
+        result += @getItemsSignals()
 
         # put main item
         if itemCode

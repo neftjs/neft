@@ -34,7 +34,6 @@ This is a base class for everything which is visible.
             assert.instanceOf @, Item
 
             super()
-            @_$ = null
             @_parent = null
             @_children = null
             @_previousSibling = null
@@ -66,9 +65,9 @@ This is a base class for everything which is visible.
 ```nml
 Item {
     id: main
-    property $.currentLife: 0.8
+    property currentLife: 0.8
     Text {
-        text: "Life: " + main.$.currentLife
+        text: "Life: " + main.currentLife
     }
 }
 ```
@@ -77,19 +76,12 @@ Item {
 
 ```nml
 Item {
-    signal $.onPlayerCollision
-    $.onPlayerCollision: function(){
+    signal onPlayerCollision
+    onPlayerCollision(){
         // boom!
     }
 }
 ```
-
-## *Signal* Item::on$Change(*String* property, *Any* oldValue)
-
-        itemUtils.defineProperty
-            constructor: @
-            name: '$'
-            valueConstructor: itemUtils.CustomObject
 
 ## ReadOnly *String* Item::query
 

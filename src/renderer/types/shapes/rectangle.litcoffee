@@ -15,8 +15,26 @@ Rectangle {
 
     assert = require 'src/assert'
     utils = require 'src/utils'
+    log = require 'src/log'
+    Resources = require 'src/resources'
+
+    log = log.scope 'Renderer', 'Rectangle'
 
     module.exports = (Renderer, Impl, itemUtils) ->
+
+        DEFAULT_COLOR = 'transparent'
+
+        getColor = do ->
+            RESOURCE_REQUEST =
+                property: 'color'
+            (val) ->
+                if Resources.testUri(val)
+                    if rscVal = Impl.resources?.resolve(val, RESOURCE_REQUEST)
+                        return rscVal
+                    else
+                        log.warn "Unknown resource given '#{val}'"
+                        return DEFAULT_COLOR
+                val
 
         class Rectangle extends Renderer.Item
             @__name__ = 'Rectangle'
@@ -33,7 +51,7 @@ Rectangle {
 
             constructor: ->
                 super()
-                @_color = 'transparent'
+                @_color = DEFAULT_COLOR
                 @_radius = 0
                 @_border = null
 
@@ -44,13 +62,9 @@ Rectangle {
             itemUtils.defineProperty
                 constructor: @
                 name: 'color'
-                defaultValue: 'transparent'
+                defaultValue: DEFAULT_COLOR
                 implementation: Impl.setRectangleColor
-                implementationValue: do ->
-                    RESOURCE_REQUEST =
-                        property: 'color'
-                    (val) ->
-                        Impl.resources?.resolve(val, RESOURCE_REQUEST) or val
+                implementationValue: getColor
                 developmentSetter: (val) ->
                     assert.isString val, "Rectangle.color needs to be a string, but #{val} given"
 
@@ -88,7 +102,7 @@ Rectangle {
 
             constructor: (ref) ->
                 @_width = 0
-                @_color = 'transparent'
+                @_color = DEFAULT_COLOR
                 super ref
 
 ## *Float* Rectangle::border.width = `0`
@@ -114,15 +128,11 @@ Rectangle {
             itemUtils.defineProperty
                 constructor: @
                 name: 'color'
-                defaultValue: 'transparent'
+                defaultValue: DEFAULT_COLOR
                 namespace: 'border'
                 parentConstructor: Rectangle
                 implementation: Impl.setRectangleBorderColor
-                implementationValue: do ->
-                    RESOURCE_REQUEST =
-                        property: 'color'
-                    (val) ->
-                        Impl.resources?.resolve(val, RESOURCE_REQUEST) or val
+                implementationValue: getColor
                 developmentSetter: (val) ->
                     assert.isString val, """
                         Rectangle.border.color needs to be a string, but #{val} given
