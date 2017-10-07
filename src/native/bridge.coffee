@@ -16,12 +16,36 @@ reader =
     strings: null
     stringsIndex: 0
     getBoolean: ->
+        `//<development>`
+        if @booleansIndex >= @booleans.length
+            throw new Error """
+                Index #{@booleansIndex} out of range for native booleans array
+            """
+        `//</development>`
         @booleans[@booleansIndex++]
     getInteger: ->
+        `//<development>`
+        if @integersIndex >= @integers.length
+            throw new Error """
+                Index #{@booleansIndex} out of range for native integers array
+            """
+        `//</development>`
         @integers[@integersIndex++]
     getFloat: ->
+        `//<development>`
+        if @floatsIndex >= @floats.length
+            throw new Error """
+                Index #{@booleansIndex} out of range for native floats array
+            """
+        `//</development>`
         @floats[@floatsIndex++]
     getString: ->
+        `//<development>`
+        if @stringsIndex >= @strings.length
+            throw new Error """
+                Index #{@booleansIndex} out of range for native strings array
+            """
+        `//</development>`
         @strings[@stringsIndex++]
 Object.preventExtensions reader
 

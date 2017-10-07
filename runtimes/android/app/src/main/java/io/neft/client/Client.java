@@ -118,7 +118,6 @@ public class Client {
         outActions[outActionsIndex++] = (byte) val.ordinal();
     }
 
-    @Synchronized("stackLock")
     private void pushBoolean(boolean val) {
         if (outBooleansIndex == outBooleans.length){
             final boolean[] newArray = new boolean[outBooleansIndex + OUT_ARRAYS_INCREASE_VALUE];
@@ -128,7 +127,6 @@ public class Client {
         outBooleans[outBooleansIndex++] = val;
     }
 
-    @Synchronized("stackLock")
     private void pushInteger(int val) {
         if (outIntegersIndex == outIntegers.length){
             final int[] newArray = new int[outIntegersIndex + OUT_ARRAYS_INCREASE_VALUE];
@@ -138,7 +136,6 @@ public class Client {
         outIntegers[outIntegersIndex++] = val;
     }
 
-    @Synchronized("stackLock")
     private void pushFloat(float val) {
         if (outFloatsIndex == outFloats.length){
             final float[] newArray = new float[outFloatsIndex + OUT_ARRAYS_INCREASE_VALUE];
@@ -148,7 +145,6 @@ public class Client {
         outFloats[outFloatsIndex++] = val;
     }
 
-    @Synchronized("stackLock")
     private void pushString(String val) {
         if (outStringsIndex == outStrings.length){
             final String[] newArray = new String[outStringsIndex + OUT_ARRAYS_INCREASE_VALUE];
@@ -220,6 +216,7 @@ public class Client {
         customFunctions.put(name, func);
     }
 
+    @Synchronized("stackLock")
     public void sendData() {
         if (outActionsIndex <= 0) {
             return;

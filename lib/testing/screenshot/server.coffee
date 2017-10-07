@@ -94,6 +94,10 @@ server.onInitializeScreenshots (opts) ->
     unless driver
         throw new Error "Screenshots on this platform are not supported"
 
+    if opts.env
+        handler = targets.getEnvHandler(opts.env)
+        handler.onInitializeScreenshots? opts.env
+
     opts.path = INITIALIZATION_FILE_PATH
     tryNo = 0
     while not rect and tryNo++ < INITIALIZATION_TRIES

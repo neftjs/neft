@@ -39,6 +39,8 @@
                     args[i] = reader.getFloat()
                 when EVENT_STRING_TYPE
                     args[i] = reader.getString()
+                else
+                    throw new Error "Unexpected native event argument type"
         if arr = listeners[name]
             for func in arr
                 func.apply null, args

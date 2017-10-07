@@ -4,7 +4,7 @@
 stack = require './stack'
 logger = require './logger'
 
-ASYNC_TEST_TIMEOUT = 5000
+ASYNC_TEST_TIMEOUT = 8000
 
 class Scope
     constructor: ->

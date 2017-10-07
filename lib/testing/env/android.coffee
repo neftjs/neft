@@ -104,9 +104,9 @@ getEmulatorName = (env) ->
     name
 
 isDeviceAvailable = (deviceSerialNumber) ->
-    cmd = "#{ADB} -s #{deviceSerialNumber} shell service check mount"
+    cmd = "#{ADB} -s #{deviceSerialNumber} shell getprop sys.boot_completed"
     output = try childProcess.execSync cmd, cwd: SDK_DIR, stdio: 'pipe'
-    utils.has String(output), ': found'
+    String(output).trim() is '1'
 
 createEmulator = (env, logsReader, callback) ->
     name = getEmulatorName env
@@ -174,10 +174,17 @@ runEmulator = (env, logsReader, callback) ->
         finishWhenReady()
     return
 
+closeProcessNotRespondingPopup = (deviceSerialNumber) ->
+    # close any popup
+    # in most cases on slow machines you will see prompt wait/ok
+    # this command emulates ENTER key two times to focus CLOSE APP and click it
+    childProcess.execSync """
+        #{ADB} -s #{deviceSerialNumber} shell input keyevent 66 66 &
+    """, cwd: SDK_DIR
+
 runTests = (env, logsReader, callback) ->
     logsReader.log "Running android tests on #{env.deviceSerialNumber}"
     createdSerialNumbersByName[env.emulatorName] = env.deviceSerialNumber
-    firstLog = true
     androidProcess = androidRun
         release: false
         deviceSerialNumber: env.deviceSerialNumber
@@ -187,30 +194,27 @@ runTests = (env, logsReader, callback) ->
             if logsReader.terminated
                 androidProcess.kill()
                 return
-
-            if firstLog
-                # close any popup
-                # in most cases on slow machines you will see prompt wait/ok
-                # this command emulates ENTER key two times to focus WAIT and click it
-                childProcess.execSync """
-                    #{ADB} -s #{env.deviceSerialNumber} shell input keyevent 66 66 &
-                """, cwd: SDK_DIR
-            firstLog = false
     , (err) ->
         callback err or logsReader.error
     return
 
-exports.takeScreenshot = ({env, path}) ->
+exports.onInitializeScreenshots = (env) ->
     name = getEmulatorName env
-    serialNumber = createdSerialNumbersByName[name]
-    adbPath = "#{pathUtils.join(SDK_DIR, ADB)} -s #{serialNumber}"
-    childProcess.execSync "
-        #{adbPath} shell screencap -p | \
-        perl -pe 's/\\x0D\\x0A/\\x0A/g' \
-        > screen.png
-    ", stdio: 'pipe'
-    fs.renameSync './screen.png', path
-    return
+    deviceSerialNumber = createdSerialNumbersByName[name]
+    closeProcessNotRespondingPopup deviceSerialNumber
+
+# FIXME
+# exports.takeScreenshot = ({env, path}) ->
+#     name = getEmulatorName env
+#     serialNumber = createdSerialNumbersByName[name]
+#     adbPath = "#{pathUtils.join(SDK_DIR, ADB)} -s #{serialNumber}"
+#     childProcess.execSync "
+#         #{adbPath} shell screencap -p | \
+#         perl -pe 's/\\x0D\\x0A/\\x0A/g' \
+#         > screen.png
+#     ", stdio: 'pipe'
+#     fs.renameSync './screen.png', path
+#     return
 
 exports.getName = (env) ->
     "#{utils.capitalize env.target} on #{env.abi} tests"
