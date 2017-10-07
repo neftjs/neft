@@ -164,7 +164,6 @@ runEmulator = (env, logsReader, callback) ->
         cmd = EMULATOR
         cmd += " -port #{port}"
         cmd += " -avd #{env.emulatorName}"
-        cmd += " -no-audio"
         log.debug "> #{cmd}" if CI
         emulatorProcess = childProcess.exec cmd, cwd: SDK_DIR, (err, stdout, stderr) ->
             if (err or stderr) and pending

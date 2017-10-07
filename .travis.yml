@@ -84,7 +84,7 @@ matrix:
 
                 # create and run emulator to speed up tests
                 - echo no | $ANDROID_HOME/tools/android create avd --force -n neft-android-24-default_armeabi-v7a-200x250 -t android-24 --abi default/armeabi-v7a --skin 200x250
-                - $ANDROID_HOME/tools/emulator -port 5554 -avd neft-android-24-default_armeabi-v7a-200x250 -no-audio &
+                - $ANDROID_HOME/tools/emulator -port 5554 -avd neft-android-24-default_armeabi-v7a-200x250 &
 
         # OSX Node
         -
