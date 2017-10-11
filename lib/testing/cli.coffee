@@ -20,6 +20,7 @@ reportAndExit = (err) ->
 
     # result
     if err
+        log.error err
         log.error '\nAll tests ended: FAILURE\n'
         process.exit 1
     else
