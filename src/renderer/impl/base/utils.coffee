@@ -22,7 +22,7 @@ module.exports = (impl) ->
         'sourceWidth': 'setImageSourceWidth'
         'sourceHeight': 'setImageSourceHeight'
 
-    grid: require './utils/grid'
+    grid: require('./utils/grid') impl
 
     createDataCloner: (extend, base) ->
         ->

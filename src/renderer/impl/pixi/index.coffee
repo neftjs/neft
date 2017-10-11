@@ -158,11 +158,7 @@ module.exports = (impl) ->
         requestAnimationFrame vsync
 
     window.addEventListener 'resize', resize = ->
-        item = impl.windowItem
-        return unless item
-
-        item.width = innerWidth
-        item.height = innerHeight
+        impl.setWindowSize innerWidth, innerHeight
 
     Types:
         Item: require './level0/item'

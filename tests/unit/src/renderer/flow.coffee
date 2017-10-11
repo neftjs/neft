@@ -30,8 +30,14 @@ describe 'renderer Flow', ->
             item.parent = flow
         [item1, item2, item3] = items
 
+    setClass = (changes) ->
+        classExt = Renderer.Class.New()
+        classExt.changes = changes
+        classExt.target = flow
+        classExt.enable()
+
     it '1', ->
-        flow.collapseMargins = true
+        setClass collapseMargins: true
         setSize item1, 50, 50
         setSize item2, 50, 50
         setSize item3, 50, 50
@@ -42,8 +48,7 @@ describe 'renderer Flow', ->
         expectPosition item3, 100, 0
 
     it '2', ->
-        flow.width = 100
-        flow.collapseMargins = true
+        setClass width: 100, collapseMargins: true
         setSize item1, 50, 50
         setSize item2, 50, 50
         setSize item3, 50, 50
@@ -54,8 +59,7 @@ describe 'renderer Flow', ->
         expectPosition item3, 0, 50
 
     it '3', ->
-        flow.height = 20
-        flow.collapseMargins = true
+        setClass height: 20, collapseMargins: true
         setSize item1, 50, 50
         setSize item2, 50, 50
         setSize item3, 50, 50
@@ -66,8 +70,7 @@ describe 'renderer Flow', ->
         expectPosition item3, 100, 0
 
     it '4', ->
-        flow.width = 120
-        flow.collapseMargins = true
+        setClass width: 120, collapseMargins: true
         setSize item1, 50, 50
         item1.margin = '10 20'
         setSize item2, 50, 50
@@ -80,9 +83,7 @@ describe 'renderer Flow', ->
         expectPosition item3, 0, 70
 
     it '5', ->
-        flow.width = 140
-        flow.collapseMargins = true
-        flow.includeBorderMargins = true
+        setClass width: 140, collapseMargins: true, includeBorderMargins: true
         setSize item1, 50, 50
         item1.margin = '10 20'
         setSize item2, 50, 50
@@ -109,7 +110,7 @@ describe 'renderer Flow', ->
         expectPosition item3, 160, 20
 
     it '7', ->
-        flow.width = 120
+        setClass width: 120
         setSize item1, 50, 50
         item1.margin = '10 20'
         setSize item2, 50, 50
@@ -122,7 +123,7 @@ describe 'renderer Flow', ->
         expectPosition item3, 0, 80
 
     it '8', ->
-        flow.width = 160
+        setClass width: 160
         flow.includeBorderMargins = true
         setSize item1, 50, 50
         item1.margin = '10 20'
@@ -136,7 +137,7 @@ describe 'renderer Flow', ->
         expectPosition item3, 20, 90
 
     it '9', ->
-        flow.width = 100
+        setClass width: 100
         flow.collapseMargins = true
         setSize item1, 50, 50
         setSize item2, 0, 50
@@ -150,7 +151,7 @@ describe 'renderer Flow', ->
         expectPosition item3, 0, 100
 
     it '10', ->
-        flow.width = 100
+        setClass width: 100
         flow.collapseMargins = true
         setSize item1, 50, 50
         setSize item2, 0, 50
@@ -165,7 +166,7 @@ describe 'renderer Flow', ->
         expectPosition item3, 0, 120
 
     it '11', ->
-        flow.width = 100
+        setClass width: 100
         flow.collapseMargins = true
         flow.includeBorderMargins = true
         setSize item1, 50, 50
@@ -181,8 +182,7 @@ describe 'renderer Flow', ->
         expectPosition item3, 0, 120
 
     it '12', ->
-        flow.width = 110
-        flow.height = 200
+        setClass width: 110, height: 200
         flow.collapseMargins = true
         setSize item1, 50, 50
         setSize item2, 50, 0

@@ -9,6 +9,10 @@ TypedArray = require 'src/typed-array'
 
 log = log.scope 'Renderer'
 
+COLUMN = 1<<0
+ROW = 1<<1
+ALL = (1<<2) - 1
+
 queueIndex = 0
 queues = [[], []]
 queue = queues[queueIndex]
@@ -353,88 +357,87 @@ updateSize = ->
         update.call @
     return
 
-onWidthChange = (oldVal) ->
-    if @_effectItem and not @_impl.updatePending and (not (layout = @_effectItem._layout) or not layout._fillWidth)
-        @_impl.autoWidth = @_effectItem._width is 0 and oldVal isnt -1
-    updateSize.call @
+module.exports = (impl) ->
+    onWidthChange = (oldVal) ->
+        @_impl.autoWidth = impl.Renderer.sizeUtils.isAutoWidth @
+        updateSize.call @
 
-onHeightChange = (oldVal) ->
-    if @_effectItem and not @_impl.updatePending and (not (layout = @_effectItem._layout) or not layout._fillHeight)
-        @_impl.autoHeight = @_effectItem._height is 0 and oldVal isnt -1
-    updateSize.call @
+    onHeightChange = (oldVal) ->
+        @_impl.autoHeight = impl.Renderer.sizeUtils.isAutoHeight @
+        updateSize.call @
 
-enableChild = (child) ->
-    child.onVisibleChange update, @
-    child.onWidthChange updateSize, @
-    child.onHeightChange updateSize, @
-    child.onMarginChange update, @
-    child.onAnchorsChange update, @
-    child.onLayoutChange update, @
+    enableChild = (child) ->
+        child.onVisibleChange update, @
+        child.onWidthChange updateSize, @
+        child.onHeightChange updateSize, @
+        child.onMarginChange update, @
+        child.onAnchorsChange update, @
+        child.onLayoutChange update, @
 
-disableChild = (child) ->
-    child.onVisibleChange.disconnect update, @
-    child.onWidthChange.disconnect updateSize, @
-    child.onHeightChange.disconnect updateSize, @
-    child.onMarginChange.disconnect update, @
-    child.onAnchorsChange.disconnect update, @
-    child.onLayoutChange.disconnect update, @
+    disableChild = (child) ->
+        child.onVisibleChange.disconnect update, @
+        child.onWidthChange.disconnect updateSize, @
+        child.onHeightChange.disconnect updateSize, @
+        child.onMarginChange.disconnect update, @
+        child.onAnchorsChange.disconnect update, @
+        child.onLayoutChange.disconnect update, @
 
-onChildrenChange = (added, removed) ->
-    if added
-        enableChild.call @, added
-    if removed
-        disableChild.call @, removed
-    update.call @
-
-COLUMN = exports.COLUMN = 1<<0
-ROW = exports.ROW = 1<<1
-ALL = exports.ALL = (1<<2) - 1
-
-exports.DATA =
-    pending: false
-    updatePending: false
-    gridType: 0
-    gridUpdateLoops: 0
-    autoWidth: true
-    autoHeight: true
-
-exports.create = (item, type) ->
-    item._impl.gridType = type
-    item.onAlignmentChange updateSize
-    item.onPaddingChange updateSize
-
-exports.update = update
-
-exports.setEffectItem = (item, oldItem) ->
-    if oldItem
-        oldItem.onVisibleChange.disconnect update, @
-        oldItem.onChildrenChange.disconnect onChildrenChange, @
-        oldItem.onLayoutChange.disconnect update, @
-        oldItem.onWidthChange.disconnect onWidthChange, @
-        oldItem.onHeightChange.disconnect onHeightChange, @
-
-        child = oldItem.children.firstChild
-        while child
-            disableChild.call @, child
-            child = child.nextSibling
-
-    if item
-        if @_impl.autoWidth = item.width is 0
-            item.width = -1
-        if @_impl.autoHeight = item.height is 0
-            item.height = -1
-
-        item.onVisibleChange update, @
-        item.onChildrenChange onChildrenChange, @
-        item.onLayoutChange update, @
-        item.onWidthChange onWidthChange, @
-        item.onHeightChange onHeightChange, @
-
-        child = item.children.firstChild
-        while child
-            enableChild.call @, child
-            child = child.nextSibling
-
+    onChildrenChange = (added, removed) ->
+        if added
+            enableChild.call @, added
+        if removed
+            disableChild.call @, removed
         update.call @
 
-    return
+    COLUMN: COLUMN
+    ROW: ROW
+    ALL: ALL
+
+    DATA:
+        pending: false
+        updatePending: false
+        gridType: 0
+        gridUpdateLoops: 0
+        autoWidth: true
+        autoHeight: true
+
+    create: (item, type) ->
+        item._impl.gridType = type
+        item.onAlignmentChange updateSize
+        item.onPaddingChange updateSize
+
+    update: update
+
+    setEffectItem: (item, oldItem) ->
+        if oldItem
+            oldItem.onVisibleChange.disconnect update, @
+            oldItem.onChildrenChange.disconnect onChildrenChange, @
+            oldItem.onLayoutChange.disconnect update, @
+            oldItem.onWidthChange.disconnect onWidthChange, @
+            oldItem.onHeightChange.disconnect onHeightChange, @
+
+            child = oldItem.children.firstChild
+            while child
+                disableChild.call @, child
+                child = child.nextSibling
+
+        if item
+            if @_impl.autoWidth = item.width is 0
+                item.width = -1
+            if @_impl.autoHeight = item.height is 0
+                item.height = -1
+
+            item.onVisibleChange update, @
+            item.onChildrenChange onChildrenChange, @
+            item.onLayoutChange update, @
+            item.onWidthChange onWidthChange, @
+            item.onHeightChange onHeightChange, @
+
+            child = item.children.firstChild
+            while child
+                enableChild.call @, child
+                child = child.nextSibling
+
+            update.call @
+
+        return

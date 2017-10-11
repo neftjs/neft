@@ -18,6 +18,7 @@
         utils: Impl.utils,
 
     exports.itemUtils = itemUtils = require('./utils/item') exports, Impl
+    exports.sizeUtils = require('./utils/size') exports
     exports.colorUtils = require './utils/color'
 
     exports.Screen = require('./types/namespace/screen') exports, Impl, itemUtils

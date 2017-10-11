@@ -103,8 +103,8 @@ matrix:
             before_script:
                 - npm run bundle -- --node --ios
             before_install:
-                - brew install imagemagick
-                - brew install lcdf-typetools
+                - HOMEBREW_NO_AUTO_UPDATE=1 brew install imagemagick
+                - HOMEBREW_NO_AUTO_UPDATE=1 brew install lcdf-typetools
 
         # OSX MacOS
         -
@@ -115,5 +115,5 @@ matrix:
             before_script:
                 - npm run bundle -- --node --macos
             before_install:
-                - brew install imagemagick
-                - brew install lcdf-typetools
+                - HOMEBREW_NO_AUTO_UPDATE=1 brew install imagemagick
+                - HOMEBREW_NO_AUTO_UPDATE=1 brew install lcdf-typetools
