@@ -1,7 +1,7 @@
 {eventLoop} = Neft
 
 describe 'src/eventLoop', ->
-    it 'calls setImmediate callback when all locks will be released', ->
+    it 'calls setImmediate callback when all locks are released', ->
         called = false
         callback = -> called = true
         eventLoop.lock()
@@ -23,3 +23,12 @@ describe 'src/eventLoop', ->
         callback = -> called = true
         eventLoop.setImmediate callback
         assert.ok called
+
+    it 'locks automatically called callback', ->
+        order = []
+        callback1 = ->
+            eventLoop.setImmediate callback2
+            order.push 1
+        callback2 = -> order.push 2
+        eventLoop.setImmediate callback1
+        assert.isEqual order, [1, 2]
