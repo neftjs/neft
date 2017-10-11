@@ -24,7 +24,9 @@ exports.setImmediate = (callback) ->
         eventLoop.setImmediate callback must be a function, but #{callback} given
     """
     if pending is 0
+        exports.lock()
         callback()
+        exports.release()
     else
         immediate.push callback
     return

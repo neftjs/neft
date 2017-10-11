@@ -57,9 +57,7 @@ May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape.
 
         screen = new Screen
         Impl.initScreenNamespace.call screen, ->
-            if Impl.windowItem
-                Impl.windowItem.width = screen.width
-                Impl.windowItem.height = screen.height
+            Impl.setWindowSize screen.width, screen.height
             return
 
         screen

@@ -4,6 +4,7 @@
 
 utils = require 'src/utils'
 signal = require 'src/signal'
+eventLoop = require 'src/eventLoop'
 
 module.exports = (Renderer) ->
     impl = abstractImpl = require './impl/base'
@@ -79,12 +80,27 @@ module.exports = (Renderer) ->
 
             impl.Types[type]?.create?.call object, object._impl
 
+    windowItemClass = null
+
     impl.setWindow = do (_super = impl.setWindow) -> (item) ->
         utils.defineProperty impl, 'windowItem', utils.ENUMERABLE, item
+
+        windowItemClass = Renderer.Class.New()
+        windowItemClass.target = item
+        windowItemClass.enable()
+
         _super.call impl, item
         impl.onWindowItemReady.emit item
         item.keys.focus = true
         return
+
+    impl.setWindowSize = (width, height) ->
+        return unless impl.windowItem
+        eventLoop.lock()
+        windowItemClass.disable()
+        windowItemClass.changes = width: width, height: height
+        windowItemClass.enable()
+        eventLoop.release()
 
     impl.addTypeImplementation = (type, methods) ->
         impl.Types[type] = methods

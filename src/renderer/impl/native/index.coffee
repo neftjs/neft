@@ -16,9 +16,7 @@ module.exports = (impl) ->
     bridge.listen bridge.inActions.WINDOW_RESIZE, (reader) ->
         width = reader.getFloat()
         height = reader.getFloat()
-        if item = impl.windowItem
-            item.width = width
-            item.height = height
+        impl.setWindowSize width, height
         return
 
     exports =

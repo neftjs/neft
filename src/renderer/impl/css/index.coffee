@@ -123,17 +123,12 @@ module.exports = (impl) ->
     utils.merge impl.utils, require('./utils')
 
     window.addEventListener 'resize', resize = ->
-        item = impl.windowItem
-        return unless item
-
         pixelRatio = window.devicePixelRatio or 1
 
         if pixelRatio % 1 isnt 0
-            item.width = innerWidth + 1
-            item.height = innerHeight + 1
+            impl.setWindowSize innerWidth + 1, innerHeight + 1
         else
-            item.width = innerWidth
-            item.height = innerHeight
+            impl.setWindowSize innerWidth, innerHeight
         return
 
     body.addEventListener 'scroll', ->

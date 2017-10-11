@@ -366,40 +366,38 @@ updateSize = ->
         update.call @
     return
 
-onWidthChange = (oldVal) ->
-    if @_effectItem and not @_impl.updatePending and (not (layout = @_effectItem._layout) or not layout._fillWidth)
-        @_impl.autoWidth = @_effectItem._width is 0 and oldVal isnt -1
-    updateSize.call @
-
-onHeightChange = (oldVal) ->
-    if @_effectItem and not @_impl.updatePending and (not (layout = @_effectItem._layout) or not layout._fillHeight)
-        @_impl.autoHeight = @_effectItem._height is 0 and oldVal isnt -1
-    updateSize.call @
-
-enableChild = (child) ->
-    child.onVisibleChange update, @
-    child.onWidthChange updateSize, @
-    child.onHeightChange updateSize, @
-    child.onMarginChange update, @
-    child.onAnchorsChange update, @
-    child.onLayoutChange update, @
-
-disableChild = (child) ->
-    child.onVisibleChange.disconnect update, @
-    child.onWidthChange.disconnect updateSize, @
-    child.onHeightChange.disconnect updateSize, @
-    child.onMarginChange.disconnect update, @
-    child.onAnchorsChange.disconnect update, @
-    child.onLayoutChange.disconnect update, @
-
-onChildrenChange = (added, removed) ->
-    if added
-        enableChild.call @, added
-    if removed
-        disableChild.call @, removed
-    update.call @
-
 module.exports = (impl) ->
+    onWidthChange = (oldVal) ->
+        @_impl.autoWidth = impl.Renderer.sizeUtils.isAutoWidth @
+        updateSize.call @
+
+    onHeightChange = (oldVal) ->
+        @_impl.autoHeight = impl.Renderer.sizeUtils.isAutoHeight @
+        updateSize.call @
+
+    enableChild = (child) ->
+        child.onVisibleChange update, @
+        child.onWidthChange updateSize, @
+        child.onHeightChange updateSize, @
+        child.onMarginChange update, @
+        child.onAnchorsChange update, @
+        child.onLayoutChange update, @
+
+    disableChild = (child) ->
+        child.onVisibleChange.disconnect update, @
+        child.onWidthChange.disconnect updateSize, @
+        child.onHeightChange.disconnect updateSize, @
+        child.onMarginChange.disconnect update, @
+        child.onAnchorsChange.disconnect update, @
+        child.onLayoutChange.disconnect update, @
+
+    onChildrenChange = (added, removed) ->
+        if added
+            enableChild.call @, added
+        if removed
+            disableChild.call @, removed
+        update.call @
+
     DATA =
         loops: 0
         pending: false
