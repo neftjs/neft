@@ -94,6 +94,17 @@ matrix:
             before_script:
                 - npm run bundle -- --node
 
+        # OSX HTML & WebGL
+        -
+            os: osx
+            env:
+                - TEST_CHROME=1
+            before_script:
+                - npm run bundle -- --node --browser --webgl
+            before_install:
+                - brew install imagemagick
+                - brew cask install chromium
+
         # OSX iOS
         -
             os: osx

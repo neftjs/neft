@@ -17,14 +17,24 @@ environments:
         platform: browser
         browser: chrome
         enabled: $TEST_CHROME
-        width: 200
-        height: 200
+        width: 240
+        height: 260
+        view:
+            x: 20
+            y: 20
+            width: 200
+            height: 200
     -
         platform: webgl
         browser: chrome
         enabled: $TEST_CHROME
-        width: 200
-        height: 200
+        width: 240
+        height: 260
+        view:
+            x: 20
+            y: 20
+            width: 200
+            height: 200
     -
         platform: android
         target: android-24
