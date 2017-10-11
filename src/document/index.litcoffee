@@ -447,7 +447,8 @@ Corresponding node handler: *n-onRevert=""*.
                         inputRefs._set prop, val
 
                 # propsSchema
-                validateProps @
+                if isScopeRender
+                    validateProps @
 
                 Document.onBeforeRender.emit @
                 emitNodeSignal @, 'n-onBeforeRender'
