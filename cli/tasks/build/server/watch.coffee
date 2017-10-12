@@ -15,6 +15,7 @@ module.exports = (platform, options, onBuild) ->
     files = Object.create null
 
     ignored = '^(?:build|index\\.js|local\\.json|node_modules)'
+    ignored += '|(^|[\\/\\\\])\\..' # hidden paths
     if options.out
         ignored += "|^#{options.out}"
 
@@ -52,10 +53,6 @@ module.exports = (platform, options, onBuild) ->
     chokidar.watch('.', chokidarOptions).on 'all', (event, path) ->
         # do nothing on internal watcher error
         if event is 'error'
-            return
-
-        # omit hidden files
-        if path[0] is '.'
             return
 
         # always rebuild on directory changes
