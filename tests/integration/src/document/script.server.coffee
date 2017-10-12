@@ -256,8 +256,29 @@ describe 'Document script', ->
         ]
 
     describe 'propsSchema', ->
+        N_EACH_HTML = """
+            <blank n-each="[1, 2]">
+                ${props.item}
+            </blank>
+            <script>
+                this.propsSchema = {
+                    id: {
+                        type: 'string'
+                    }
+                };
+            </script>
+        """
+
+        warnPropSchema = Document::_warnPropSchema
+
         beforeEach ->
-            @view = createView """
+            @prepareView = (html) ->
+                @view = createView(html).clone()
+
+                @errors = []
+                Document::_warnPropSchema = (error) => @errors.push error
+
+            @prepareView """
                 <script>
                     this.propsSchema = {
                         id: {
@@ -266,10 +287,9 @@ describe 'Document script', ->
                     };
                 </script>
             """
-            @view = Object.create @view.clone()
 
-            @errors = []
-            @view._warnPropSchema = (error) => @errors.push error
+        afterEach ->
+            Document::_warnPropSchema = warnPropSchema
 
         it 'passes on valid props', ->
             @view.render id: 'abc'
@@ -282,6 +302,11 @@ describe 'Document script', ->
         it 'fails on unknown prop', ->
             @view.render()
             assert.lengthOf @errors, 1
+
+        it 'passes on valid props in n-each', ->
+            @prepareView N_EACH_HTML
+            @view.render id: 'abc'
+            assert.lengthOf @errors, 0
 
     describe 'defaultState', ->
         beforeEach ->
