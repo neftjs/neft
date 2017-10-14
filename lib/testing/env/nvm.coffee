@@ -29,8 +29,7 @@ exports.execCommand = (nodeVersion, command, logsReader, callback) ->
         if logsReader?.terminated
             nvmProcess.kill()
     nvmProcess.stderr.on 'data', (data) ->
-        mainErr ?= String data
-        log.error data
+        log.error String(data).trim()
     nvmProcess.on 'exit', ->
         unless logsReader?.terminated
             mainErr ||= "NVM tests terminated before ending"

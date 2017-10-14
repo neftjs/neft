@@ -24,8 +24,7 @@ runTestsInProcess = (logsReader, callback) ->
         if logsReader.terminated
             nodeProcess.kill()
     nodeProcess.stderr.on 'data', (data) ->
-        mainErr ?= String(data)
-        log.error data
+        log.error String(data).trim()
     nodeProcess.on 'exit', ->
         unless logsReader.terminated
             mainErr ?= "Local tests terminated before all tests ended"
