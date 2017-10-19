@@ -42,9 +42,9 @@ runServer = ->
         watchers[platform] = watch platform, options, (buildOptions, onBuilt) ->
             buildsStack.add (callback) ->
                 buildOptions = prepareBuildOptions buildOptions
-                build platform, buildOptions, (err) ->
-                    watchHandler.send platform
-                    onBuilt null
+                build platform, buildOptions, (err, result) ->
+                    watchHandler.send platform, result
+                    onBuilt result
                     callback err
             unless buildsStack.pending
                 buildsStack.runAll utils.NOP
@@ -83,13 +83,14 @@ runServer = ->
             for platform in data.platforms
                 stack.add build, null, [platform, data]
             buildsStack.add (callback) ->
-                stack.runAll (err) ->
+                stack.runAll (err, result) ->
                     callback err
                     if err
                         res.send 500, utils.errorToObject(err)
                     else
                         res.send 200
                     if data.watch
+                        data.lastResult = result
                         startWatchers data
             unless buildsStack.pending
                 buildsStack.runAll utils.NOP

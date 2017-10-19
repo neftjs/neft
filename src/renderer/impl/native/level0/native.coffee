@@ -40,7 +40,7 @@ module.exports = (impl) ->
     createData: impl.utils.createDataCloner 'Item', DATA
 
     create: (data) ->
-        if data.id is 0
+        if data.id is -1
             pushAction outActions.CREATE_NATIVE_ITEM
             pushString @constructor.__name__
             data.id = bridge.getId @

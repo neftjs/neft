@@ -3,6 +3,8 @@
 utils = require 'src/utils'
 assert = require 'src/assert'
 
+{max} = Math
+
 module.exports = (impl) ->
     {bridge} = impl
     {outActions, pushAction, pushItem, pushBoolean, pushInteger, pushFloat, pushString} = bridge
@@ -10,7 +12,7 @@ module.exports = (impl) ->
     NOP = ->
 
     DATA = utils.merge
-        id: 0
+        id: -1
         bindings: null
         anchors: null
         linkUri: ''
@@ -22,9 +24,9 @@ module.exports = (impl) ->
     createData: impl.utils.createDataCloner DATA
 
     create: (data) ->
-        if data.id is 0
+        if data.id is -1
             pushAction outActions.CREATE_ITEM
-            data.id = bridge.getId this
+            data.id = bridge.getId @
         return
 
     setItemParent: (val) ->
@@ -54,13 +56,13 @@ module.exports = (impl) ->
     setItemWidth: (val) ->
         pushAction outActions.SET_ITEM_WIDTH
         pushItem @
-        pushFloat val
+        pushFloat max 0, val
         return
 
     setItemHeight: (val) ->
         pushAction outActions.SET_ITEM_HEIGHT
         pushItem @
-        pushFloat val
+        pushFloat max 0, val
         return
 
     setItemX: (val) ->

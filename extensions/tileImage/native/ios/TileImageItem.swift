@@ -31,9 +31,10 @@ extension Extension.TileImage {
 
         func setSource(val: String) {
             self.source = val
-            Image.getImageFromSource(val) {
-                (img: UIImage?) in
-                if self.source != val {
+            Image.getImageFromSource(val) { (img: UIImage?) in
+                guard self.source == val else { return }
+                if img == nil {
+                    self.itemView.backgroundColor = nil
                     return
                 }
                 let scaledImg = UIImage(

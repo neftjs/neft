@@ -34,7 +34,10 @@ module.exports = (File) -> class Scripts
     @__name__ = 'Scripts'
     @__path__ = 'File.Scripts'
 
-    @scripts = {}
+    _scripts = {}
+    @initialize = (scripts) ->
+        _scripts = scripts
+        Scripts.initialize = ->
 
     JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(Scripts) - 1
 
@@ -59,7 +62,7 @@ module.exports = (File) -> class Scripts
     createScope: (file) ->
         ctx = new FileContext file
         for name in @names
-            Scripts.scripts[name].call ctx
+            _scripts[name].call ctx
         ctx
 
     createCloneScope: (file) ->

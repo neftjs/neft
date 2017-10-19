@@ -21,9 +21,15 @@ class ViewController: NSViewController, NSWindowDelegate {
         self.view = ItemView()
     }
 
+    private func pushWindowSize() {
+        let size = view.window?.contentView?.frame.size
+        if size != nil {
+            client.pushAction(.windowResize, size!.width, size!.height)
+        }
+    }
+
     func windowDidResize(_ notification: Notification) {
-        let size = view.window!.contentView!.frame.size
-        client.pushAction(.windowResize, size.width, size.height)
+        pushWindowSize()
     }
 
     private func initClient() {
@@ -64,7 +70,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
         // watch on js bundle file change
         {{#buildServerUrl}}
-        watchOnBundleChange(url: "{{&buildServerUrl}}/newBundle/ios")
+        watchOnBundleChange("{{&buildServerUrl}}/onNewBundle/macos", "{{&buildServerUrl}}/bundle/macos")
         {{/buildServerUrl}}
     }
 
@@ -78,24 +84,39 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
 
-    private func watchOnBundleChange(url: String) {
-        var req = URLRequest(url: URL(string: url)!)
+    private func watchOnBundleChange(_ onChangeUrl: String, _ bundleUrl: String) {
+        var req = URLRequest(url: URL(string: onChangeUrl)!)
         let session = URLSession.shared
         req.timeoutInterval = 0
 
         let task = session.dataTask(with: req, completionHandler: {
             (data, response, error) in
-            let js = data != nil ? NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! : ""
-            if (js != "") {
-                DispatchQueue.main.async {
-                    self.runJsBundle(code: js as String)
-                    self.watchOnBundleChange(url: url)
-                }
-            } else {
+            // try again
+            if data == nil {
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(1000))) {
-                    self.watchOnBundleChange(url: url)
+                    self.watchOnBundleChange(onChangeUrl, bundleUrl)
                 }
+                return
             }
+
+            // reload app
+            let resp = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!
+            if resp == "" {
+                let subtask = session.dataTask(with: URLRequest(url: URL(string: bundleUrl)!)) {
+                    (data, response, error) in
+                    let js = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!
+                    DispatchQueue.main.async {
+                        self.runJsBundle(code: js as String)
+                        self.watchOnBundleChange(onChangeUrl, bundleUrl)
+                    }
+                }
+                subtask.resume()
+                return
+            }
+
+            // hotReloads
+            self.client.pushEvent("__neftHotReload", args: [resp])
+            self.watchOnBundleChange(onChangeUrl, bundleUrl)
         })
 
         task.resume()
@@ -125,6 +146,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     override func viewDidAppear() {
         self.view.window!.delegate = self
+        pushWindowSize()
     }
 
     override var representedObject: Any? {

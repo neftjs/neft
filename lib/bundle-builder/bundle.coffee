@@ -8,9 +8,7 @@ moduleCache = require 'lib/module-cache'
 
 {stringify} = JSON
 
-STRING_FILES =
-    '.pegjs': true
-    '.txt': true
+REALPATH = fs.realpathSync '.'
 
 replaceStr = (str, oldStr, newStr) ->
     i = str.indexOf oldStr
@@ -22,18 +20,10 @@ replaceStr = (str, oldStr, newStr) ->
 
     r
 
-getFile = (path, opts) ->
-    unless extname = pathUtils.extname(path)
-        return
+relativePath = (path) ->
+    pathUtils.relative REALPATH, path
 
-    file = moduleCache.getFile path
-
-    if STRING_FILES[extname]
-        file = "module.exports = #{JSON.stringify(file)}"
-
-    file
-
-fileScope = """(function(){
+FILE_SCOPE = """(function(){
     {{before}}
     var __modules = {{init}};
 
@@ -78,7 +68,7 @@ fileScope = """(function(){
     }
 })();"""
 
-moduleScope = '''function(exports){
+MODULE_SCOPE = '''function(exports){
     var module = {exports: exports};
     var require = __createRequire({{paths}});
     var exports = module.exports;
@@ -97,33 +87,52 @@ getDeclarations = (modules) ->
     r
 
 getModulesInit = (modules, paths, indexes, opts) ->
-    inits = []
+    inits = if opts.release then [] else {}
 
     for name in modules
-        index = indexes[name]
+        index = if opts.release then indexes[name]
         modulePaths = paths[name]
 
         pathRefs = {}
         for req of modulePaths
-            pathRefs[req] = indexes[modulePaths[req]]
+            modulePath = modulePaths[req]
+            pathRefs[req] = if opts.release then indexes[modulePath] else relativePath modulePath
 
-        unless func = getFile(name, opts)
+        unless pathUtils.extname(name)
             continue
 
-        name = name.replace /\\/g, '\\\\'
+        func = moduleCache.getFile(name)
+        safeName = name.replace /\\/g, '\\\\'
 
-        switch pathUtils.extname name
-            when '.json', '.yaml', '.yml', '.txt'
+        switch pathUtils.extname(name)
+            when '.txt', '.pegjs'
+                func = "module.exports = #{JSON.stringify func};"
+            when '.json', '.yaml', '.yml', '.txt', '.pegjs'
                 func = "module.exports = #{func};"
 
-        module = moduleScope
-        module = replaceStr module, '{{name}}', name
+        module = MODULE_SCOPE
+        module = replaceStr module, '{{name}}', safeName
         module = replaceStr module, '{{paths}}', stringify pathRefs
         module = replaceStr module, '{{file}}', func
 
-        inits[index] = module
+        if opts.release
+            inits[index] = module
+        else
+            inits[relativePath name] = module
 
-    "[#{inits}]"
+    if opts.release
+        "[#{inits}]"
+    else if opts.onlyIndex
+        result = ""
+        for name, func of inits
+            result += "module.exports = (#{func})(module.exports);\n"
+        result
+    else
+        result = ""
+        for name, func of inits
+            result += JSON.stringify(name)
+            result += ": #{func},\n"
+        "{#{result.slice(0, -2)}}"
 
 getModulesByPaths = (paths) ->
     modules = []
@@ -146,10 +155,18 @@ getIndexes = (modules) ->
 
 module.exports = (processData, opts, callback) ->
     {paths} = processData
-    modules = getModulesByPaths paths
-    indexes = getIndexes modules
+    modules = do ->
+        if opts.onlyIndex
+            [opts.path]
+        else
+            getModulesByPaths paths
+    indexes = if opts.release then getIndexes(modules)
     declarations = getDeclarations modules
     init = getModulesInit modules, paths, indexes, opts
+
+    if opts.onlyIndex
+        callback null, init
+        return
 
     # before
     before = ''
@@ -162,9 +179,11 @@ module.exports = (processData, opts, callback) ->
             val = JSON.stringify val
             before += "var #{key} = #{val};\n"
 
-    r = fileScope
+    mainIndex = if opts.release then indexes[opts.path] else JSON.stringify(relativePath(opts.path))
+
+    r = FILE_SCOPE
     r = replaceStr r, '{{before}}', before
-    r = replaceStr r, '{{index}}', indexes[opts.path]
+    r = replaceStr r, '{{index}}', mainIndex
     r = replaceStr r, '{{declarations}}', stringify declarations
     r = replaceStr r, '{{init}}', init
 

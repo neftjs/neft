@@ -8,6 +8,8 @@ glob = require 'glob'
 utils = require 'src/utils'
 log = require 'src/log'
 
+HOT_RELOADER_FILE_PATH = pathUtils.join __dirname, '../appHotReloader'
+
 CONFIG_LINKS_TO_REQUIRE =
     components: true
     styles: true
@@ -64,7 +66,6 @@ module.exports = (platform, app, options) ->
     file = ''
     file += "Neft.eventLoop.lock()\n"
     file += "var opts = #{config};\n"
-    file += 'opts.modules = typeof modules !== \'undefined\' ? modules : {};\n'
 
     if fs.existsSync(options.initFile)
         initFilePath = options.initFile
@@ -74,6 +75,8 @@ module.exports = (platform, app, options) ->
         file += 'module.exports = init(Neft.bind(null, opts));\n'
     else
         file += 'module.exports = Neft(opts);\n'
+    if options.watch
+        file += "require('#{HOT_RELOADER_FILE_PATH}')(module.exports);\n"
     file += "Neft.eventLoop.release();\n"
 
     file

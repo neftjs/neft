@@ -8,10 +8,11 @@ utils = require 'src/utils'
 moduleCache = require 'lib/module-cache'
 
 module.exports = (platform, options, onBuild) ->
-    changedFiles = []
+    srcChangedFiles = []
     isWaiting = false
     isPending = false
     shouldBuildAgain = false
+    {lastResult} = options
     files = Object.create null
 
     ignored = '^(?:build|index\\.js|local\\.json|node_modules)'
@@ -26,6 +27,7 @@ module.exports = (platform, options, onBuild) ->
             return
 
         # add build files into changed files
+        changedFiles = [srcChangedFiles...]
         for buildFilePath in glob.sync('./build/*(styles|components)/**/*')
             changedFiles.push fs.realpathSync buildFilePath
 
@@ -37,11 +39,14 @@ module.exports = (platform, options, onBuild) ->
         # run build
         isPending = true
         buildOptions = utils.mergeAll {}, options,
+            srcChangedFiles: srcChangedFiles
             changedFiles: changedFiles
             buildBundleOnly: true
-        changedFiles = []
-        onBuild buildOptions, ->
+            lastResult: lastResult
+        srcChangedFiles = []
+        onBuild buildOptions, (result) ->
             isPending = false
+            lastResult = result
 
             if shouldBuildAgain
                 shouldBuildAgain = false
@@ -69,7 +74,7 @@ module.exports = (platform, options, onBuild) ->
 
         # add to changed files
         if event is 'change'
-            changedFiles.push fs.realpathSync path
+            srcChangedFiles.push fs.realpathSync path
 
         # request build
         unless isWaiting

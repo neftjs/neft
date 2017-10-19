@@ -20,8 +20,13 @@
     {emitSignal} = Emitter
 
     module.exports = class Document extends Emitter
-        files = @_files = {}
+        files = {}
         pool = Object.create null
+
+        `//<development>`
+        @_files = files
+        @_pool = pool
+        `//</development>`
 
         getFromPool = (path) ->
             pool[path]?.pop()
@@ -678,7 +683,7 @@ Corresponding node handler: *n-onReplaceByUse=""*.
                 elem.toJSON()
 
             (key, arr) ->
-                if @isClone and original = Document._files[@path]
+                if @isClone and original = files[@path]
                     return original.toJSON key, arr
 
                 unless arr

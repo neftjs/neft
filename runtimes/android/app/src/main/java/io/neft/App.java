@@ -246,16 +246,21 @@ public class App {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (response != null) {
+                        if (response == null) {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    watchOnBundleChange(path);
+                                }
+                            }, 30000);
+                            return;
+                        }
+                        if (response.isEmpty()) {
                             restart.run();
                             return;
                         }
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                watchOnBundleChange(path);
-                            }
-                        }, 30000);
+                        client.pushEvent("__neftHotReload", response);
+                        watchOnBundleChange(path);
                     }
                 });
             }

@@ -4,6 +4,7 @@ fs = require 'fs-extra'
 pathUtils = require 'path'
 coffee = require 'coffee-script'
 
+moduleCache = require 'lib/module-cache'
 cliUtils = require 'cli/utils'
 utils = require 'src/utils'
 log = require 'src/log'
@@ -14,7 +15,7 @@ signal = require 'src/signal'
 IN_DIR = 'components'
 OUT_DIR = 'build'
 SCRIPTS_DIR = './build/scripts'
-STYLES_DIR = './build/styles/_components'
+STYLES_DIR = './build/styles'
 
 Document.FILES_PATH = IN_DIR
 Document.SCRIPTS_PATH = SCRIPTS_DIR
@@ -70,7 +71,7 @@ module.exports = (platform, app, callback) ->
 
     parseFile = (path) ->
         try
-            html = fs.readFileSync path, 'utf-8'
+            html = moduleCache.getFile path
         catch
             log.error "File `#{path}` doesn't exist"
             return
@@ -78,7 +79,7 @@ module.exports = (platform, app, callback) ->
         try
             Document.parse file
         catch error
-            msg = "Cannot parse file '#{path}'\n#{error.message}"
+            msg = "Cannot parse file '#{path}'\n#{error.stack}"
             parsingError = new DocumentParseError msg, parsingError
             return
         file
