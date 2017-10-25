@@ -9,7 +9,6 @@ log = require 'src/log'
 
 FOLDERS = [
     {name: 'routes', dir: 'routes'},
-    {name: 'models', dir: 'models'},
     {name: 'scripts', dir: 'build/scripts'}
 ]
 
