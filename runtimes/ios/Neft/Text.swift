@@ -112,6 +112,7 @@ class Text: Item {
         textLayer.isWrapped = true
         textLayer.allowsFontSubpixelQuantization = true
         textLayer.contentsScale = UIScreen.main.scale
+        textLayer.foregroundColor = UIColor.black.cgColor
         updateFont()
     }
 

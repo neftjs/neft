@@ -103,6 +103,7 @@ class Text: Item {
         textLayer.isWrapped = true
         textLayer.allowsFontSubpixelQuantization = true
         textLayer.contentsScale = NSScreen.main()!.backingScaleFactor
+        textLayer.foregroundColor = CGColor.black
         updateFont()
     }
 
