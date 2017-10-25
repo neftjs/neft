@@ -199,6 +199,7 @@ module.exports = (File, data) -> class Style
 
             # get object
             obj = @item
+            return unless obj
             for i in [0...parts.length - 1] by 1
                 unless obj = obj[parts[i]]
                     log.warn "Attribute '#{prop}' doesn't exist in item '#{@item}'"
@@ -239,31 +240,26 @@ module.exports = (File, data) -> class Style
         {classes} = item
 
         if typeof val is 'string' and val isnt ''
-            newClasses = val.split(' ')
-
-        # check removed values
+            newClasses = val.split ' '
         if typeof oldVal is 'string' and oldVal isnt ''
             oldClasses = oldVal.split ' '
-            for name in oldClasses when name isnt ''
-                if not newClasses or not utils.has(newClasses, name)
+
+        # remove all
+        if oldClasses
+            for name in oldClasses
+                if classes.has(name)
+                    classes.remove name
+        if newClasses
+            for name in newClasses
+                if classes.has(name)
                     classes.remove name
 
         # add new classes
         if newClasses
-            prevIndex = -1
             for name, i in newClasses when name isnt ''
-                index = classes.index name
-                if prevIndex is -1 and index is -1
-                    index = classes.length
-                    classes.append name
-                else if index isnt prevIndex + 1
-                    if index isnt -1
-                        classes.pop index
-                        if prevIndex > index
-                            prevIndex--
-                    index = prevIndex + 1
-                    classes.insert index, name
-                prevIndex = index
+                if newClasses.indexOf(name, i + 1) isnt -1
+                    continue
+                classes.append name
 
         return
 
@@ -368,7 +364,7 @@ module.exports = (File, data) -> class Style
                 loop
                     if parent and parent.node.props[STYLE_ID_PROP] is parentId
                         scope = parent.scope
-                        @item = scope.objects[subid]
+                        @item = scope?.objects[subid]
                     else if not parent?.scope and file in ['windowItem', '__windowItem__']
                         @item = windowStyle.objects[subid]
 

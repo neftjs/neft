@@ -14,6 +14,8 @@ module.exports = (options, callback) ->
     unless cliUtils.verifyNeftProject('./')
         return
 
+    options.cwd = fs.realpathSync '.'
+
     local.normalizeLocalFile()
     LOCAL = local.getLocal()
 

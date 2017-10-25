@@ -29,9 +29,10 @@ extension Extension.TileImage {
 
         func setSource(val: String) {
             self.source = val
-            Image.getImageFromSource(val) {
-                (img: NSImage?) in
-                if self.source != val {
+            Image.getImageFromSource(val) { (img: NSImage?) in
+                guard self.source == val else { return }
+                if img == nil {
+                    self.layer.backgroundColor = nil
                     return
                 }
                 var imgRect = CGRect(x: 0, y: 0, width: img!.size.width, height: img!.size.height)

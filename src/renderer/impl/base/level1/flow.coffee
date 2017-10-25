@@ -433,11 +433,6 @@ module.exports = (impl) ->
                 child = child.nextSibling
 
         if item
-            if @_impl.autoWidth = item.width is 0
-                item.width = -1
-            if @_impl.autoHeight = item.height is 0
-                item.height = -1
-
             item.onVisibleChange update, @
             item.onChildrenChange onChildrenChange, @
             item.onLayoutChange update, @

@@ -7,6 +7,7 @@ notify = require './notify'
 parseApp = require './parse'
 createBundle = require './bundle'
 saveBundle = require './saveBundle'
+hotReloader = require './hotReloader'
 
 log = log.scope 'build'
 Log = Neft.log.constructor
@@ -18,7 +19,11 @@ module.exports = (platform, options, callback) ->
     fs.ensureDirSync './build'
 
     stack = new utils.async.Stack
-    args = [platform, options, null]
+    result =
+        stats: {}
+        destChangedFiles: []
+        hotReloads: null
+    args = [platform, options, null, result]
 
     # create temporary 'index.js' file
     stack.add ((platform, options, callback) ->
@@ -27,18 +32,36 @@ module.exports = (platform, options, callback) ->
             callback err
     ), null, args
 
-    # create bundle files
-    stack.add createBundle, null, args
+    # build or hot reload
+    stack.add ((platform, options, app, result, callback) ->
+        hotReloader.prepare options, result, (err) ->
+            if err
+                return callback err
 
-    # save output if needed
-    if options.out
-        stack.add saveBundle, null, args
+            if options.watch and hotReloader.canUse(platform, options, result)
+                result.hotReloads = []
+                hotReloader.resolve platform, options, result, callback
+            else
+                substack = new utils.async.Stack
+
+                # create bundle files
+                substack.add createBundle, null, args
+
+                # save output if needed
+                if options.out
+                    substack.add saveBundle, null, args
+
+                substack.runAll callback
+    ), null, args
 
     # notify
     callback = do (callback) -> (err) ->
         if options.notify or err?
             notify err
-        callback err
+        if err?
+            callback err, options.lastResult
+        else
+            callback null, result
 
     # run
     stack.runAll (err) ->

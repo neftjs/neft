@@ -8,6 +8,7 @@ signal = require 'src/signal'
 PLATFORM_BUNDLE_PATH =
     browser: './build/app-browser-develop.js'
     ios: './build/ios/neft.js'
+    macos: './build/macos/neft.js'
     android: './build/android/app/src/main/assets/javascript/neft.js'
 
 getFileBundle = (platform) ->
@@ -18,39 +19,30 @@ exports.start = (networking) ->
     onBundleSignals =
         browser: signal.create()
         ios: signal.create()
+        macos: signal.create()
         android: signal.create()
-    onSend = (platform) ->
+    onSend = (platform, result) ->
         unless onBundleSignals[platform]
             return
-        onBundleSignals[platform].emit()
+        onBundleSignals[platform].emit result.hotReloads
         onBundleSignals[platform].disconnectAll()
-
-    ###
-    Request: newBundle
-    Responses with bundle code when build change.
-    ###
-    networking.createHandler
-        method: 'get'
-        uri: 'newBundle/{platform}'
-        callback: (req, res, next) ->
-            {platform} = req.params
-            onBundleSignals[platform].connect ->
-                if res.pending
-                    res.send 200, getFileBundle(req.params.platform)
 
 
     ###
     Request: onNewBundle
-    Responses with no data when build change.
+    Responses with no data when build change or an object with hotReloads.
     ###
     networking.createHandler
         method: 'get'
         uri: 'onNewBundle/{platform}'
         callback: (req, res, next) ->
             {platform} = req.params
-            onBundleSignals[platform].connect ->
+            onBundleSignals[platform].connect (hotReloads) ->
                 if res.pending
-                    res.send 200, ''
+                    if hotReloads
+                        res.send 200, JSON.stringify hotReloads: hotReloads
+                    else
+                        res.send 200, ''
 
     ###
     Request: bundle
@@ -63,5 +55,4 @@ exports.start = (networking) ->
             res.send 200, getFileBundle(req.params.platform)
 
     # exported API
-    send: (platform) ->
-        onSend platform
+    send: onSend

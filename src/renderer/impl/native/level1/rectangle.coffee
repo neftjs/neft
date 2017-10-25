@@ -13,9 +13,9 @@ module.exports = (impl) ->
     createData: impl.utils.createDataCloner 'Item', DATA
 
     create: (data) ->
-        if data.id is 0
+        if data.id is -1
             pushAction outActions.CREATE_RECTANGLE
-            data.id = bridge.getId this
+            data.id = bridge.getId @
 
         impl.Types.Item.create.call @, data
         return

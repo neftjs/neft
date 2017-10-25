@@ -11,7 +11,12 @@
             var xhr = new XMLHttpRequest;
             xhr.open("get", "{{&buildServerUrl}}/onNewBundle/browser", true);
             xhr.onload = function () {
-                location.href = location.href;
+                if (this.responseText == '') {
+                    location.href = location.href;
+                    return;
+                }
+                watchOnBundle();
+                app.reload(JSON.parse(this.responseText).hotReloads);
             };
             xhr.onerror = function () {
                 setTimeout(watchOnBundle, 1000);

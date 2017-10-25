@@ -225,9 +225,10 @@ app.cookies.onChange(function(key){
                 method: Networking.Request.GET
                 type: Networking.Request.HTML_TYPE
                 uri: uri
-        Document.Scripts.scripts = utils.arrayToObject opts.scripts,
+        app.documentScripts = utils.arrayToObject opts.scripts,
             (index, elem) -> elem.name,
             (index, elem) -> elem.file
+        Document.Scripts.initialize app.documentScripts
 
         # set styles window item
         if opts.styles?

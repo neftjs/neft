@@ -20,7 +20,7 @@
         else
             templates = Object.create null
 
-        lastClientHTMLRoute = null
+        @lastClientRoute = null
 
 ## *Document* Route.getTemplateComponent(*String* componentName)
 
@@ -156,8 +156,8 @@ Acceptable syntaxes:
         destroyRoute = (route) ->
             assert.instanceOf route, Route
 
-            if lastClientHTMLRoute is route
-                lastClientHTMLRoute = null
+            if Route.lastClientRoute is route
+                Route.lastClientRoute = null
 
             route.response.onSend.disconnect onResponseSent, route
             pendingRoutes[route.__hash__] = false
@@ -254,9 +254,9 @@ Acceptable syntaxes:
             assert.notOk pendingRoutes[hash]
 
             if utils.isClient
-                if lastClientHTMLRoute
-                    destroyRoute lastClientHTMLRoute
-                lastClientHTMLRoute = route
+                if Route.lastClientRoute
+                    destroyRoute Route.lastClientRoute
+                Route.lastClientRoute = route
 
             route.request = req
             route.response = res
