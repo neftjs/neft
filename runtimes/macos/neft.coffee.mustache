@@ -44,7 +44,7 @@ setImmediate = do ->
         for i in [0...length] by 2
             func = queue.shift()
             args = queue.shift()
-            func.apply null, args
+            Neft.tryCatch.tryCall func, null, args
         return
 
     update = do ->

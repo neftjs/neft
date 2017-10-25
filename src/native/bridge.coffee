@@ -4,6 +4,7 @@ utils = require 'src/utils'
 log = require 'src/log'
 assert = require 'src/assert'
 eventLoop = require 'src/eventLoop'
+{tryCall} = require 'src/tryCatch'
 
 listeners = Object.create null
 
@@ -49,6 +50,7 @@ reader =
         `//</development>`
         @strings[@stringsIndex++]
 Object.preventExtensions reader
+readerArgs = [reader]
 
 exports.onData = (actions, booleans, integers, floats, strings) ->
     reader.booleans = booleans
@@ -64,7 +66,7 @@ exports.onData = (actions, booleans, integers, floats, strings) ->
     for action in actions
         func = listeners[action]
         assert.isFunction func, "unknown native action got '#{action}'"
-        func reader
+        tryCall func, null, readerArgs
     eventLoop.release()
 
     exports.sendData()

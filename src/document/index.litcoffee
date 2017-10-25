@@ -339,10 +339,7 @@ Corresponding node handler: *n-onRevert=""*.
             unless @isClone
                 @clone().render props, context, source, refs
             else
-                eventLoop.lock()
-                result = @_render(props, context, source, refs)
-                eventLoop.release()
-                result
+                @_render(props, context, source, refs)
 
         isInternalProp = (prop) ->
             prop[0] is 'n' and prop[1] is '-'
@@ -397,7 +394,7 @@ Corresponding node handler: *n-onRevert=""*.
         _render: do ->
             renderTarget = require('./file/render/parse/target') Document
 
-            (props = true, context = null, source, refs) ->
+            eventLoop.bindInLock (props = true, context = null, source, refs) ->
                 assert.notOk @isRendered
 
                 @props = props
