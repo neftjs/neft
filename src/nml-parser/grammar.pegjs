@@ -175,6 +175,7 @@ AttributeName "attribute name"
 
 AttributeEnds
     = ";"
+    / ","
     / LineTerminator
     / Comment
 
