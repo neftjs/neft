@@ -101,30 +101,6 @@ HTTP protocol is used by default with the data specified in the *package.json*.
             url: config.url
             language: config.language
 
-## *Object* app.models = `{}`
-
-Files from the *models* folder with objects returned by their exported functions.
-
-```javascript
-// models/user/permission.js
-module.exports = function(app) {
-    return {
-        getPermission: function(id){}
-    };
-};
-// controllers/user.js
-module.exports = function(app) {
-    return {
-        get: function(req, res, callback) {
-            var data = app.models['user/permission'].getPermission(req.params.userId);
-            callback(null, data);
-        }
-    }
-};
-```
-
-        app.models = {}
-
 ## *Object* app.routes = `{}`
 
 Files from the *routes* folder with objects returned by their exported functions.
@@ -295,7 +271,6 @@ app.cookies.onChange(function(key){
             app.components[component.name] = Document.fromJSON component.file
 
         # load files
-        init opts.models, app.models
         init opts.routes, app.routes
 
         for path, obj of app.routes

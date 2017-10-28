@@ -13,7 +13,6 @@ HOT_RELOADER_FILE_PATH = pathUtils.join __dirname, '../appHotReloader'
 CONFIG_LINKS_TO_REQUIRE =
     components: true
     styles: true
-    models: true
     routes: true
     scripts: true
 

@@ -26,7 +26,6 @@ module.exports = (platform, options, callback) ->
         package: JSON.parse fs.readFileSync('./package.json')
         allExtensions: []
         extensions: []
-        models: []
         routes: []
         components: []
         styles: []
