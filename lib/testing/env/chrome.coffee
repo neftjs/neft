@@ -32,7 +32,7 @@ CHROME_LOG_RE = ///
     # declaration
     ^\[
         # pid, date, severity
-        (?:[0-9A-Z/]*:){4}
+        (?:[0-9A-Z/.]*:){4}
         # type
         (.*?)
         \([0-9]*\)
@@ -79,10 +79,19 @@ Runs the given URI in Chrome
 ###
 runOnPathWithUri = (env, uri, callback) ->
     args = utils.clone CHROME_ARGS
-    args.push "--app=#{uri}"
 
     if env.width? and env.height?
         args.push "--window-size=#{env.width},#{env.height}"
+
+    args.push "--app=#{uri}"
+
+    onProcessData = (data) ->
+        console.log String data
+        for logMsg in getConsoleLogs(data)
+            onLog.emit logMsg
+        return
+
+    console.log "#{env.path} #{args.join(' ')}"
 
     chrome = childProcess.spawn env.path, args, env: config.getProcessEnv()
 
@@ -91,10 +100,8 @@ runOnPathWithUri = (env, uri, callback) ->
         fs.removeSync USER_DATA_DIR
         callback()
 
-    chrome.stderr.on 'data', (data) ->
-        for logMsg in getConsoleLogs(data)
-            onLog.emit logMsg
-        return
+    chrome.stdout.on 'data', onProcessData
+    chrome.stderr.on 'data', onProcessData
 
     process.once 'SIGINT', ->
         chrome.kill()

@@ -1,0 +1,82 @@
+references:
+    workspace_root: &workspace_root
+        ~/neft
+    node_dependencies_cache_key: &node_dependencies_cache_key "\
+        node-dependency-cache-\
+        {{ checksum \"package-lock.json\" }}"
+    attach_workspace: &attach_workspace
+        attach_workspace:
+            at: *workspace_root
+    run_tests: &run_tests
+        run: npm test -- --verbose
+
+defaults: &defaults
+    working_directory: *workspace_root
+    docker:
+        - image: circleci/node:8.8.1
+
+version: 2
+jobs:
+    build:
+        <<: *defaults
+        steps:
+            - checkout
+            - restore_cache:
+                key: *node_dependencies_cache_key
+            - run: npm install
+            - save_cache:
+                key: *node_dependencies_cache_key
+                paths:
+                    - node_modules
+            - run: npm run bundle -- --node --html --webgl --android --ios --macos
+            - persist_to_workspace:
+                root: *workspace_root
+                paths:
+                    - .
+    test_linux_node:
+        <<: *defaults
+        environment:
+            - TEST_NODE: 1
+        steps:
+            - *attach_workspace
+            - *run_tests
+    test_linux_chrome:
+        <<: *defaults
+        docker:
+            - image: neftio/linux-chrome
+        environment:
+            - TEST_CHROME: 1
+            - DISPLAY: :99.0
+        steps:
+            - *attach_workspace
+            - run: sh -e .circleci/xvfb.sh start
+            - *run_tests
+    test_linux_android:
+        <<: *defaults
+        docker:
+            - image: circleci/android:api-23-node8-alpha
+        environment:
+            - TEST_ANDROID_ARM: 1
+            - DISPLAY: :99.0
+        steps:
+            - *attach_workspace
+            - run: sudo apt-get install -y imagemagick xvfb net-tools
+            - run: export DISPLAY=:99.0
+            - run: sudo Xvfb $DISPLAY &
+            # - run: echo no | $ANDROID_HOME/tools/android create avd --force -n neft-android-24-default_armeabi-v7a-200x250 -t android-24 --abi default/armeabi-v7a --skin 200x250
+            # - run: $ANDROID_HOME/tools/emulator -port 5554 -avd neft-android-24-default_armeabi-v7a-200x250 &
+            - *run_tests
+workflows:
+    version: 2
+    build_and_test:
+        jobs:
+            - build
+            - test_linux_node:
+                requires:
+                    - build
+            - test_linux_chrome:
+                requires:
+                    - build
+            - test_linux_android:
+                requires:
+                    - build
