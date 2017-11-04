@@ -104,7 +104,7 @@ module.exports = (File) -> class Input extends signal.Emitter
         RE.lastIndex = 0
         RE.test str
 
-    if utils.isServer
+    if process.env.NEFT_PLATFORM is 'node'
         @parse = require('./input/parser').parse
 
     initBindingConfig = (cfg) ->

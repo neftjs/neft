@@ -50,9 +50,10 @@ module.exports = (platform, app, callback) ->
     utils.clear Document._files
     mainPaths = Object.create null
 
-    Document.onError onErrorListener = (path) ->
-        mainPaths[path] = true
-        parseFile path
+    Document.onError onErrorListener = (error) ->
+        if error instanceof Document.LoadError
+            mainPaths[error.path] = true
+            parseFile error.path
 
     Document.onBeforeParse onBeforeParseListener = (file) ->
         if mainPaths[file.path]
@@ -70,8 +71,9 @@ module.exports = (platform, app, callback) ->
         return
 
     parseFile = (path) ->
+        log.show "Parse document '#{path}'"
         try
-            html = moduleCache.getFile path
+            html = moduleCache.getFileSync path
         catch
             log.error "File `#{path}` doesn't exist"
             return

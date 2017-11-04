@@ -36,8 +36,9 @@ module.exports = (File) -> class Scripts
 
     _scripts = {}
     @initialize = (scripts) ->
-        _scripts = scripts
+        _scripts = scripts or {}
         Scripts.initialize = ->
+            throw new Error "Document.Scripts has been already initialized"
 
     JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(Scripts) - 1
 
@@ -62,7 +63,10 @@ module.exports = (File) -> class Scripts
     createScope: (file) ->
         ctx = new FileContext file
         for name in @names
-            _scripts[name].call ctx
+            if typeof _scripts[name] is 'function'
+                _scripts[name].call ctx
+            else
+                log.error "Cannot find document script '#{name}'"
         ctx
 
     createCloneScope: (file) ->

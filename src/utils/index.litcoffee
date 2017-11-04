@@ -5,7 +5,6 @@ Access it with:
 const { utils } = Neft;
 ```
 
-    # coffeelint: disable=no_debugger
     'use strict'
 
     {toString} = Object::
@@ -27,58 +26,13 @@ const { utils } = Neft;
     require('./stringifying') exports
     require('./async') exports
 
-## ReadOnly *Boolean* utils.isNode
+    ['isNode', 'isServer', 'isClient', 'isBrowser',
+    'isWebGL', 'isAndroid', 'isIOS', 'isMacOS'].forEach (prop) ->
+        Object.defineProperty exports, prop,
+            get: -> throw new Error "utils.#{prop} is replaced by process.env.NEFT_PLATFORM"
 
-`true` if the application is running in the node.js environment.
-
-## ReadOnly *Boolean* utils.isServer
-
-`utils.isNode` link.
-
-## ReadOnly *Boolean* utils.isClient
-
-`utils.isNode` inverse.
-
-## ReadOnly *Boolean* utils.isNative
-
-## ReadOnly *Boolean* utils.isBrowser
-
-## ReadOnly *Boolean* utils.isWebGL
-
-## ReadOnly *Boolean* utils.isQt
-
-## ReadOnly *Boolean* utils.isAndroid
-
-## ReadOnly *Boolean* utils.isIOS
-
-## ReadOnly *Boolean* utils.isMacOS
-
-    exports.isNode = exports.isServer = exports.isClient =
-    exports.isNative = exports.isBrowser = exports.isWebGL = exports.isQt =
-    exports.isAndroid = exports.isIOS = exports.isMacOS = false
-
-    switch true
-
-        when Qt?.include?
-            exports.isClient = exports.isQt = true
-
-        when android?
-            exports.isClient = exports.isNative = exports.isAndroid = true
-
-        when ios?
-            exports.isClient = exports.isNative = exports.isIOS = true
-
-        when __macos__?
-            exports.isClient = exports.isNative = exports.isMacOS = true
-
-        when process.env.NEFT_PLATFORM is 'webgl'
-            exports.isClient = exports.isWebGL = true
-
-        when window?.document?
-            exports.isClient = exports.isBrowser = true
-
-        when process.env.NEFT_PLATFORM is 'node'
-            exports.isNode = exports.isServer = true
+    Object.defineProperty exports, 'isNative',
+        get: -> throw new Error "utils.isNative is replaced by process.env.NEFT_NATIVE"
 
 ## *Function* utils.NOP
 
@@ -1415,3 +1369,5 @@ utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}})
             `//</development>`
 
             value.replace(regex, '$1-$2').toLowerCase()
+
+    Object.freeze(exports)

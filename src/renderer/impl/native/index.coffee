@@ -1,16 +1,14 @@
+`// when=NEFT_NATIVE`
+
 'use strict'
 
 utils = require 'src/utils'
 assert = require 'src/assert'
 
 module.exports = (impl) ->
-
-    platform = do ->
-        switch true
-            when utils.isAndroid
-                require('./android') impl
-            when utils.isIOS or utils.isMacOS
-                require('./apple') impl
+    platform = try require('./android') impl
+    platform or= try require('./apple') impl
+    platform or= try require('./android') impl
     {bridge} = platform
 
     bridge.listen bridge.inActions.WINDOW_RESIZE, (reader) ->

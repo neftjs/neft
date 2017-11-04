@@ -13,9 +13,12 @@
 
     log = log.scope 'App', 'Route'
 
+    IS_NODE = process.env.NEFT_NODE
+    IS_CLIENT = not IS_NODE
+
     module.exports = (app) -> class Route
 
-        if utils.isNode
+        if IS_NODE
             usedTemplates = []
         else
             templates = Object.create null
@@ -25,7 +28,7 @@
 ## *Document* Route.getTemplateComponent(*String* componentName)
 
         @getTemplateComponent = do ->
-            if utils.isNode
+            if IS_NODE
                 (name) ->
                     scope = app: app, routes: new Dict
                     tmpl = app.components[name].render null, scope
@@ -221,10 +224,10 @@ Acceptable syntaxes:
                 response.data = ''
 
         onResponseSent = ->
-            if utils.isNode or @request.type isnt 'html'
+            if IS_NODE or @request.type isnt 'html'
                 destroyRoute @
 
-                if utils.isNode and utils.has(usedTemplates, @response.data)
+                if IS_NODE and utils.has(usedTemplates, @response.data)
                     @response.data.destroy()
                     utils.remove usedTemplates, @response.data
             return
@@ -253,7 +256,7 @@ Acceptable syntaxes:
             hash = route.__hash__
             assert.notOk pendingRoutes[hash]
 
-            if utils.isClient
+            if IS_CLIENT
                 if Route.lastClientRoute
                     destroyRoute Route.lastClientRoute
                 Route.lastClientRoute = route

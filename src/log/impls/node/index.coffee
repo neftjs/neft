@@ -1,7 +1,11 @@
+`// when=NEFT_NODE`
+
 'use strict'
 
-writeStdout = process.stdout.write.bind process.stdout
-writeStderr = process.stderr.write.bind process.stderr
+readline = require 'readline'
+{stdout, stderr} = process
+
+showedMessage = ''
 
 module.exports = (Log) -> class LogNode extends Log
     @MARKERS =
@@ -19,7 +23,25 @@ module.exports = (Log) -> class LogNode extends Log
         (diff[0] * 1e9 + diff[1]) / 1e6
 
     _write: (msg) ->
-        writeStdout msg + '\n'
+        if showedMessage
+            readline.clearLine stdout, 0
+            readline.cursorTo stdout, 0
+        stdout.write msg + '\n'
+        if showedMessage
+            stdout.write showedMessage
 
     _writeError: (msg) ->
-        writeStderr msg + '\n'
+        stderr.write msg + '\n'
+
+    _show: (msg) ->
+        if process.env.CI
+            stdout.write msg + '\n'
+        else
+            showedMessage = msg
+            readline.clearLine stdout, 0
+            readline.cursorTo stdout, 0
+            stdout.write msg
+
+    _commit: ->
+        showedMessage = ''
+        stdout.write '\n'

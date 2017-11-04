@@ -1,10 +1,14 @@
 # coffeelint: disable=no_debugger
 
+util = require 'util'
 fs = require 'fs-extra'
+pathUtils = require 'path'
 Mustache = require 'mustache'
 coffee = require 'coffee-script'
 bundle = require 'lib/bundle-builder'
 moduleCache = require 'lib/module-cache'
+cliUtils = require 'cli/utils'
+log = require 'src/log'
 
 moduleCache.registerCoffeeScript()
 moduleCache.registerYaml()
@@ -13,21 +17,20 @@ moduleCache.registerTxt(['.txt', '.pegjs'])
 fs.ensureDir './cli/bundle'
 
 createBundle = (opts, callback) ->
-    console.log "Create Neft bundle file for #{opts.platform} platform"
-    process.env.NEFT_PLATFORM = opts.platform
-    env =
-        NEFT_PLATFORM: opts.platform
+    log "Create Neft bundle file for #{opts.platform} platform"
+    env = cliUtils.getProcessEnvForPlatform opts.platform
+    console.log "Use process.env = #{util.inspect env}"
     bundle {
-        platform: opts.platform
         release: opts.release
         removeLogs: opts.release
         minify: opts.release
         verbose: true
-        path: 'index.coffee'
+        path: pathUtils.join(fs.realpathSync('.'), './index.coffee')
+        basepath: fs.realpathSync('.')
         env: env
-        test: (req) ->
-            /^(?:src\/|\.|package\.json)/.test(req)
     }, (err, bundle) ->
+        log.show ''
+
         if err
             return callback err
 
@@ -52,14 +55,11 @@ createBundle = (opts, callback) ->
 
         callback()
 
-TYPES = [
-    {platform: 'node'},
-    {platform: 'browser'},
-    {platform: 'webgl', template: 'browser'},
-    {platform: 'android'},
-    {platform: 'ios'},
-    {platform: 'macos'},
-]
+TYPES = for platform, opts of cliUtils.platforms
+    platform: platform
+    template: switch platform
+        when 'html', 'webgl' then 'browser'
+        else platform
 
 do ->
     stack = []
@@ -80,7 +80,8 @@ do ->
     index = -1
     callback = (err) ->
         if err?
-            throw err
+            console.error err
+            return
         index += 1
         if index < stack.length
             stack[index] callback

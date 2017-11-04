@@ -1,3 +1,5 @@
+`// when=NEFT_BROWSER`
+
 'use strict'
 
 performance = do ->

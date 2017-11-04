@@ -51,7 +51,7 @@ TileImage.defineProperty({
     }())
 });
 
-if (utils.isBrowser) {
+if (process.env.NEFT_PLATFORM === 'browser') {
     Impl.addTypeImplementation('TileImage', require('./impl/css/tileImage'));
 }
 

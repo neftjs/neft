@@ -6,7 +6,7 @@
 npm install neft -g
 neft create MyApp
 cd MyApp
-neft run node browser --watch
+neft run node html --watch
 ```
 
 ... and play with `MyApp/views/index.html`;
@@ -40,12 +40,12 @@ This command creates folder (e.g. *MyAppName*) with main view (`views/index.html
 ## Running app
 
 Each time you change the code of your application, you need to build the bundle.
-You can do this by typing `neft build browser`.
-In place of `browser` provide a platform you want to support. You can choose from `node`, `browser`, `ios` and `android`.
+You can do this by typing `neft build html`.
+In place of `html` provide a platform you want to support. You can choose from `node`, `html`, `webgl`, `ios`, `macos` and `android`.
 
 By typing, for instance, `neft run ios` you will automatically build and run the application.
 
-If you want to run your application in a browser (`neft run browser`), make sure you firstly run *node* server (`neft run node`) which serves all needed files for the browser.
+If you want to run your application in a browser (`neft run html`), make sure you firstly run *node* server (`neft run node`) which serves all needed files for the browser.
 
 Server hostname and port are defined in the `package.json` file. It's `localhost:3000` by default.
 

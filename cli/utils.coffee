@@ -9,6 +9,30 @@ utils = require 'src/utils'
 log = require 'src/log'
 assert = require 'src/assert'
 
+exports.platforms =
+    node:
+        groups: ['server']
+    html:
+        groups: ['client', 'browser']
+    webgl:
+        groups: ['client', 'browser']
+    android:
+        groups: ['client', 'native']
+    ios:
+        groups: ['client', 'native', 'apple']
+    macos:
+        groups: ['client', 'native', 'apple']
+
+exports.getProcessEnvForPlatform = (platform) ->
+    config = exports.platforms[platform]
+    assert.ok config, "Unknown platform #{platform} given"
+    env =
+        NEFT_PLATFORM: platform
+    for group in config.groups
+        env["NEFT_#{group.toUpperCase()}"] = "1"
+    env["NEFT_#{platform.toUpperCase()}"] = "1"
+    env
+
 exports.verifyNeftProject = (path) ->
     src = pathUtils.resolve path, './package.json'
     unless fs.existsSync(src)
@@ -60,16 +84,14 @@ exports.isPlatformFilePath = do ->
         node:
             node: true
             server: true
-        browser:
+        html:
+            html: true
             browser: true
             client: true
         webgl:
             webgl: true
+            browser: true
             client: true
-        qt:
-            qt: true
-            client: true
-            native: true
         android:
             android: true
             client: true

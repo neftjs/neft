@@ -1,3 +1,5 @@
+`// when=NEFT_MACOS`
+
 'use strict'
 
 utils = require 'src/utils'

@@ -1,12 +1,11 @@
 version: '{build}-{branch}'
 platform: x64
 environment:
-    nodejs_version: "6.2"
+    nodejs_version: "8.0"
     TEST_NODE: 1
 install:
     - ps: Install-Product node $env:nodejs_version
     - npm install
-    - cd tests && npm install
     - npm run bundle -- --node
 test_script:
     - node --version

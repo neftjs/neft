@@ -1,3 +1,5 @@
+`// when=NEFT_IOS`
+
 'use strict'
 
 utils = require 'src/utils'

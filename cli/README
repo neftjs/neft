@@ -12,7 +12,7 @@ Commands:
 
 Platforms:
   node
-  browser
+  html
   webgl
   android
   ios

@@ -4,9 +4,7 @@
 # DO NOT INCLUDE THIS FILE INTO PRODUCTION BUILDS
 
 {log, utils, Document} = Neft
-
-if utils.isNative
-    {onNativeEvent} = Neft.native
+try {onNativeEvent} = Neft.native
 
 log = log.scope 'HotReloader'
 
@@ -47,7 +45,7 @@ module.exports = (app) ->
             if lastRespData.path is name
                 lastRespData.revert().destroy()
                 delete Document._pool[name]
-                app.windowItem.node = app.components[name].render null, lastResp
+                app.windowItem.node = app.components[name].render(null, lastResp).node
             else
                 reloadDocumentDeeply lastRespData, name
 
@@ -110,6 +108,6 @@ module.exports = (app) ->
                 else
                     throw new Error "Unsupported hot reload destination #{hotReload.destination}"
 
-    if utils.isNative
+    if process.env.NEFT_NATIVE
         onNativeEvent NATIVE_EVENT, (data) ->
             reload JSON.parse(data).hotReloads

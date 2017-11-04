@@ -18,11 +18,11 @@ module.exports = (options, callback) ->
     stack.add fs.remove, fs, ["#{out}/(neft-*|app-*|build|static)"]
 
     mode = if options.release then 'release' else 'develop'
-    neftFilePath = "build/neft-browser-#{mode}.js"
-    appFilePath = "build/app-browser-#{mode}.js"
+    neftFilePath = "build/neft-html-#{mode}.js"
+    appFilePath = "build/app-html-#{mode}.js"
 
     # index file
-    indexFilePath = pathUtils.join __dirname, './browser/index.mustache'
+    indexFilePath = pathUtils.join __dirname, './html/index.mustache'
     indexFile = fs.readFileSync indexFilePath, 'utf-8'
     indexFile = mustache.render indexFile,
         neftFilePath: neftFilePath

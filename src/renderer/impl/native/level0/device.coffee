@@ -69,16 +69,18 @@ module.exports = (impl) ->
         return
 
     initDeviceNamespace: ->
-        device = this
+        device = @
         pointer = @pointer
         keyboard = @keyboard
 
         @_desktop = false
-        @_platform = switch true
-            when utils.isAndroid
+        @_platform = switch process.env.NEFT_PLATFORM
+            when 'android'
                 'Android'
-            when utils.isIOS
+            when 'ios'
                 'iOS'
+            when 'macos'
+                'MacOS'
         return
 
     logDevice: (msg) ->

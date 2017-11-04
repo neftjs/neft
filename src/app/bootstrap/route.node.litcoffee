@@ -1,3 +1,5 @@
+    `// when=NEFT_NODE`
+
 # Standard routes
 
     'use strict'
@@ -35,18 +37,18 @@
     module.exports = (app) ->
         APP_JS_URI = '/app.js'
         NEFT_JS_URI = '/neft.js'
-        JS_NEFT_HTML_FILE_PATH = './build/neft-browser-release.js'
+        JS_NEFT_HTML_FILE_PATH = './build/neft-html-release.js'
         JS_NEFT_WEBGL_FILE_PATH = './build/neft-webgl-release.js'
-        JS_HTML_BUNDLE_FILE_PATH = './build/app-browser-release.js'
+        JS_HTML_BUNDLE_FILE_PATH = './build/app-html-release.js'
         JS_WEBGL_BUNDLE_FILE_PATH = './build/app-webgl-release.js'
         VIEW_NAME = '_app_bootstrap'
         TEXT_MODE_URI_PREFIX = '/neft-type=text'
         TYPE_COOKIE_NAME = 'neft-type'
 
         `//<development>`
-        JS_NEFT_HTML_FILE_PATH = './build/neft-browser-develop.js'
+        JS_NEFT_HTML_FILE_PATH = './build/neft-html-develop.js'
         JS_NEFT_WEBGL_FILE_PATH = './build/neft-webgl-develop.js'
-        JS_HTML_BUNDLE_FILE_PATH = './build/app-browser-develop.js'
+        JS_HTML_BUNDLE_FILE_PATH = './build/app-html-develop.js'
         JS_WEBGL_BUNDLE_FILE_PATH = './build/app-webgl-develop.js'
         `//</development>`
 

@@ -1,3 +1,5 @@
+`// when=NEFT_SERVER`
+
 'use strict'
 
 astParser = require './astParser'

@@ -4,19 +4,11 @@ utils = require 'src/utils'
 assert = require 'src/assert'
 
 # platform specified
-PlatformImpl = switch true
-    when utils.isNode
-        require './impl/node/index'
-    when utils.isBrowser or utils.isWebGL
-        require './impl/browser/index'
-    when utils.isIOS
-        require './impl/ios/index'
-    when utils.isQt
-        require './impl/qt/index'
-    when utils.isAndroid
-        require './impl/android/index'
-    when utils.isMacOS
-        require './impl/macos/index'
+PlatformImpl = try require './impl/node/index'
+PlatformImpl or= try require './impl/browser/index'
+PlatformImpl or= try require './impl/ios/index'
+PlatformImpl or= try require './impl/android/index'
+PlatformImpl or= try require './impl/macos/index'
 
 assert PlatformImpl
 , "No networking implementation found"

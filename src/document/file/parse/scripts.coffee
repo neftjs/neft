@@ -11,9 +11,6 @@ DEFAULT_FILE_EXT = '.js'
 isCoffee = (path) -> /\.(?:coffee|litcoffee|coffee\.md)$/.test(path)
 
 module.exports = (File) ->
-    docScripts = {}
-    File.Scripts.initialize docScripts
-
     (file) ->
         if file instanceof File.Iterator
             return
@@ -57,7 +54,7 @@ module.exports = (File) ->
             extname = (filename and pathUtils.extname(filename)) or DEFAULT_FILE_EXT
             path = pathUtils.join File.SCRIPTS_PATH, name + extname
             fs.outputFileSync path, script
-            docScripts[name] = require path
+            File.onScript.emit name: name, path: path
             scripts.push name
 
         file.scripts = new File.Scripts file, scripts

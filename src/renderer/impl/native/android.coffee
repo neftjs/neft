@@ -1,3 +1,5 @@
+`// when=NEFT_ANDROID`
+
 'use strict'
 
 assert = require 'src/assert'

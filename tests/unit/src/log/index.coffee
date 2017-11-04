@@ -1,9 +1,18 @@
 'use strict'
 
 {log} = Neft
-{spy} = require 'sinon'
 
 Log = log.constructor
+
+spy = (func) ->
+    wrapper = (args...) ->
+        wrapper.calls.push args
+        func.apply @, args
+    wrapper.calls = []
+    Object.defineProperty wrapper, 'calledOnce', get: -> wrapper.calls.length is 1
+    Object.defineProperty wrapper, 'calledTwice', get: -> wrapper.calls.length is 2
+    Object.defineProperty wrapper, 'firstCall', get: -> args: wrapper.calls[0]
+    wrapper
 
 describe 'Log', ->
     testLog = null

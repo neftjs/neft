@@ -91,13 +91,9 @@ exports.pushFloat = (val) ->
 exports.pushString = (val) ->
 
 
-impl = switch true
-    when utils.isAndroid
-        require './impl/android/bridge'
-    when utils.isIOS
-        require './impl/ios/bridge'
-    when utils.isMacOS
-        require './impl/macos/bridge'
+impl = try require './impl/android/bridge'
+impl or= try require './impl/ios/bridge'
+impl or= try require './impl/macos/bridge'
 if impl?
     utils.merge exports, impl(exports)
 

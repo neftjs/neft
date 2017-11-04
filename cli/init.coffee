@@ -1,23 +1,15 @@
 'use strict'
 
-semver = require 'semver'
 fs = require 'fs'
 pathUtils = require 'path'
 global.Neft = require './bundle/neft-node-develop'
 moduleCache = require 'lib/module-cache'
+cliUtils = require './utils'
 
 moduleCache.registerBabel()
 moduleCache.registerNml()
 
 {log, utils} = Neft
-
-# warning for legacy node version
-do ->
-    currentVersion = process.version
-    expectedVersion = require('../package.json').engines.node
-    unless semver.satisfies(currentVersion, expectedVersion)
-        log.error "Node version '#{currentVersion}' " +
-            "is lower than expected '#{expectedVersion}'"
 
 # parse arguments
 ARGS_WITH_COMMANDS =
@@ -25,13 +17,8 @@ ARGS_WITH_COMMANDS =
     build: true
     run: true
 
-PLATFORMS =
-    node: true
-    browser: true
-    webgl: true
-    android: true
-    ios: true
-    macos: true
+PLATFORMS = {}
+PLATFORMS[platform] = true for platform of cliUtils.platforms
 
 DEFAULT_OPTIONS_VALUES =
     out: 'build'

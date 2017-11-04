@@ -24,7 +24,7 @@ TextInput.defineProperty({
     name: 'textColor'
 });
 
-if (utils.isBrowser) {
+if (process.env.NEFT_PLATFORM === 'browser') {
     Impl.addTypeImplementation('TextInput', require('./impl/css/textInput'));
 }
 

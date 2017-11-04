@@ -108,10 +108,7 @@ It's internally called by the `createRequest()`.
                 if err? and err isnt true
                     errMsg = err
                     if errMsg.stack?
-                        if utils.isQt
-                            errMsg = "#{err.message}\n#{err.stack}"
-                        else
-                            errMsg = err.stack
+                        errMsg = err.stack
                     else if utils.isObject(errMsg)
                         errMsg = utils.tryFunction JSON.stringify, null, [errMsg], errMsg
                 if errMsg

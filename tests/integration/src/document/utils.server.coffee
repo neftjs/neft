@@ -7,6 +7,9 @@ Document.STYLES_PATH = 'build/styles'
 
 exports.uid = do (i = 0) -> -> "index_#{i++}.html"
 
+Document.onScript ({name, path}) ->
+    app.documentScripts[name] = require path
+
 exports.createView = (html, viewUid = exports.uid()) ->
     # omit fromJSON cache by detecting differences
     files = utils.clone Document._files
