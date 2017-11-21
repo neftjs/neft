@@ -1,3 +1,5 @@
+`// when=NEFT_NODE`
+
 'use strict'
 
 utils = require 'src/utils'

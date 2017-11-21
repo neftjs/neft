@@ -9,7 +9,7 @@ httpServer = require './httpServer'
 {log} = Neft
 
 HTTP_BASED_PLATFORMS =
-    browser: true
+    html: true
     webgl: true
 
 getEnvTarget = (env) ->
@@ -27,7 +27,7 @@ exports.getEnvHandler = (env) ->
                 require '../env/node'
             else
                 require '../env/nvm'
-        when 'browser', 'webgl'
+        when 'html', 'webgl'
             switch env.browser
                 when 'chrome'
                     require '../env/chrome'

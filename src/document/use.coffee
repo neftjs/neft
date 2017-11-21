@@ -107,7 +107,7 @@ module.exports = (File) -> class Use
 
         @isRendered = true
 
-        useAsync = utils.isClient
+        useAsync = process.env.NEFT_PLATFORM isnt 'node'
         useAsync &&= @node.props.has 'n-async'
         useAsync &&= @node.props['n-async'] isnt false
         if useAsync

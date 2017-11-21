@@ -10,17 +10,15 @@ cache:
     directories:
         - $HOME/.nvm
         - node_modules
-        - tests/node_modules
 install:
     # install nvm
     - if test ! -e ~/.nvm ; then curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash ; fi
     - export NVM_DIR="$HOME/.nvm"
     - "[ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\""
-    - nvm install 7.0.0
+    - nvm install 8.0.0
 
     # install project dependencies
     - npm install
-    - (cd tests && npm install)
 script:
     - npm test
 env:
@@ -46,7 +44,7 @@ matrix:
                         - imagemagick
                         - chromium-browser
             before_script:
-                - npm run bundle -- --node --browser --webgl
+                - npm run bundle -- --node --html --webgl
             before_install:
                 # run xvfb
                 - export DISPLAY=:99.0

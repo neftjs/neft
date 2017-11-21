@@ -32,6 +32,7 @@ reportAndExit = (err) ->
         log.ok '\nAll tests ended: SUCCESS\n'
         process.exit 0
 
+log.show ''
 server.startServer()
 targets.runEnvs (err) ->
     reportAndExit err

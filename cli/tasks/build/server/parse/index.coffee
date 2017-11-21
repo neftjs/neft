@@ -64,15 +64,16 @@ module.exports = (platform, app, options) ->
     # create file
     file = ''
     file += "Neft.eventLoop.lock()\n"
-    file += "var opts = #{config};\n"
 
     if fs.existsSync(options.initFile)
         initFilePath = options.initFile
         unless pathUtils.isAbsolute(initFilePath)
             initFilePath = pathUtils.join '../', initFilePath
         file += "var init = require('#{initFilePath}');\n"
+        file += "var opts = #{config};\n"
         file += 'module.exports = init(Neft.bind(null, opts));\n'
     else
+        file += "var opts = #{config};\n"
         file += 'module.exports = Neft(opts);\n'
     if options.watch
         file += "require('#{HOT_RELOADER_FILE_PATH}')(module.exports);\n"

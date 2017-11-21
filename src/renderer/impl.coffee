@@ -24,17 +24,10 @@ module.exports = (Renderer) ->
         'Class': true
         'Transition': true
 
-    platformImpl = do ->
-        r = null
-        if utils.isWebGL
-            r ?= require('./impl/pixi') impl
-        if utils.isBrowser
-            r ?= require('./impl/css') impl
-        if utils.isQt
-            r ?= require('./impl/qt') impl
-        if utils.isNative
-            r ?= require('./impl/native') impl
-        r
+    if process.env.NEFT_CLIENT
+        platformImpl = try require('./impl/pixi') impl
+        platformImpl or= try require('./impl/css') impl
+        platformImpl or= try require('./impl/native') impl
 
     # merge types
     for name in TYPES

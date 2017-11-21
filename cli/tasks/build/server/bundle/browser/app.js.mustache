@@ -9,7 +9,7 @@
     (function(){
         function watchOnBundle() {
             var xhr = new XMLHttpRequest;
-            xhr.open("get", "{{&buildServerUrl}}/onNewBundle/browser", true);
+            xhr.open("get", "{{&buildServerUrl}}/onNewBundle/html", true);
             xhr.onload = function () {
                 if (this.responseText == '') {
                     location.href = location.href;

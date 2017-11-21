@@ -65,6 +65,8 @@ module.exports = (platform, options, callback) ->
 
     # run
     stack.runAll (err) ->
+        log.show ''
+
         if err
             if err?.message then log.error err.message
             if err?.stack then log.error err.stack

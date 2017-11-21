@@ -60,17 +60,20 @@ exports.prepare = (options, result, callback) ->
         {stats} = result
         if err
             return callback err
-        for path in paths
-            stats[path] = moduleCache.fileHash path
+        promises = paths.map (path) ->
+            moduleCache.fileHash(path)
+                .then((hash) -> stats[path] = hash)
+                .catch(callback)
 
-        if options.lastResult
-            {destChangedFiles} = result
-            lastStats = options.lastResult.stats
-            for key, val of stats
-                if val isnt lastStats[key]
-                    destChangedFiles.push key
+        Promise.all(promises).then ->
+            if options.lastResult
+                {destChangedFiles} = result
+                lastStats = options.lastResult.stats
+                for key, val of stats
+                    if val isnt lastStats[key]
+                        destChangedFiles.push key
 
-        callback()
+            callback()
 
 exports.resolve = (platform, options, result, callback) ->
     {hotReloads} = result
@@ -80,12 +83,13 @@ exports.resolve = (platform, options, result, callback) ->
         relPath = getRelativePath options, path
         folder = getPathFolder relPath
         name = relPath.slice folder.length + 1, relPath.lastIndexOf('.')
-        file = moduleCache.getFile path
+        file = moduleCache.getFileSync path
 
         if FOLDERS_WITH_REQUIRES[folder]
             appBundleBuilder
                 platform: platform
                 path: path
+                basepath: options.cwd
                 watch: true
                 changedFiles: options.changedFiles
                 onlyIndex: true

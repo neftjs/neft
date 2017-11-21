@@ -1,3 +1,5 @@
+`// when=NEFT_NATIVE`
+
 'use strict'
 
 utils = require 'src/utils'

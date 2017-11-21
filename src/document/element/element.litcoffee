@@ -28,7 +28,7 @@
         @fromHTML = (html) ->
             assert.isString html
 
-            unless utils.isNode
+            unless process.env.NEFT_PLATFORM is 'node'
                 throw new Error 'Creating Views from HTML files is allowed only on a server'
 
             Element.parser.parse html
@@ -276,7 +276,7 @@
             arr[JSON_VISIBLE] = if @visible then 1 else 0
             arr
 
-        if utils.isNode
+        if process.env.NEFT_PLATFORM is 'node'
             @parser = require('./element/parser') Element
 
     module.exports = Element

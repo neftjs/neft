@@ -67,7 +67,7 @@ module.exports = (platform, options, onBuild) ->
                 delete files[path]
             else
                 # do nothing when file has not been modified
-                file = moduleCache.getFile path
+                file = moduleCache.getFileSync path
                 if files[path] is file
                     return
                 files[path] = file

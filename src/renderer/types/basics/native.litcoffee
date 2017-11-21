@@ -7,10 +7,8 @@
     assert = require 'src/assert'
     colorUtils = require 'src/renderer/utils/color'
 
-    IS_NATIVE = utils.isNative
-
-    if IS_NATIVE
-        {callNativeFunction, onNativeEvent} = require 'src/native'
+    IS_NATIVE = process.env.NEFT_NATIVE
+    try {callNativeFunction, onNativeEvent} = require 'src/native'
 
     module.exports = (Renderer, Impl, itemUtils) ->
 

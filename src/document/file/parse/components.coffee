@@ -13,7 +13,10 @@ module.exports = (File) ->
         links = parseLinks file
         for link in links
             namespace = if link.namespace then "#{link.namespace}:" else ''
-            linkView = File.factory link.path
+
+            unless link.path of File._files
+                File.onError.emit new File.LoadError link.path
+            linkView = File._files[link.path]
 
             # link required file
             if link.namespace
@@ -22,8 +25,6 @@ module.exports = (File) ->
             # link required file components
             for name, component of linkView.components
                 components[namespace + name] = component
-
-            linkView.destroy()
 
         # find components in file
         forEachNodeRec = (node) ->

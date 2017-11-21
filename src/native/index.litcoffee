@@ -1,3 +1,5 @@
+    `// when=NEFT_NATIVE`
+
 # Native
 
     'use strict'
@@ -6,11 +8,8 @@
     assert = require 'src/assert'
     log = require 'src/log'
 
-    assert.notOk utils.isServer, '''
-        native module is not supported on a server
-    '''
-    assert.notOk utils.isBrowser, '''
-        native module is not supported in a browser
+    assert process.env.NEFT_NATIVE, '''
+        native module is supported only in a native environment
     '''
 
     actions = require './actions'

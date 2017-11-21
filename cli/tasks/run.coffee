@@ -7,4 +7,6 @@ cp = require 'child_process'
 {log} = Neft
 
 module.exports = (platform, options) ->
-    require("./run/#{platform}") options
+    platformRun = require "./run/#{platform}"
+    log.show ''
+    platformRun options

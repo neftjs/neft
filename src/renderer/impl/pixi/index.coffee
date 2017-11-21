@@ -1,3 +1,5 @@
+`// when=NEFT_WEBGL`
+
 'use strict'
 
 utils = require 'src/utils'

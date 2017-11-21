@@ -114,16 +114,14 @@ module.exports = (platform, app, callback) ->
 
         for file in files
             if file.data?
-                compileLogtime = log.time "Compile '#{file.path}'"
+                log.show "Compile '#{file.path}'"
                 try
                     bundle = createBundle nml: file.data, path: file.filename
                     file.data = bundle.bundle
                     file.queries = bundle.queries
                 catch err
                     log.error "\u001b[1mError in `#{file.path}`\u001b[22m\n\n#{err.message or err}"
-                    log.end compileLogtime
                     return callback new Error "Cannot parse #{file.path} style file"
-                log.end compileLogtime
                 newQueries[file.filename] = file.queries
                 stack.add writeFile, null, [file.destPath, file.data]
 

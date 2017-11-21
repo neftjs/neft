@@ -16,9 +16,5 @@ exports.assert = require 'src/assert'
 exports.db = require 'src/db'
 exports.eventLoop = require 'src/eventLoop'
 exports.Binding = require 'src/binding'
-
-if exports.utils.isNative
-    exports.native = require 'src/native'
-
-if exports.utils.isNode
-    exports.nmlParser = require 'src/nml-parser'
+exports.native = try require 'src/native'
+exports.nmlParser = try require 'src/nml-parser'

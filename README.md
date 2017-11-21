@@ -91,7 +91,7 @@ npm install -g neft
 ```
 neft create MyApp
 cd MyApp
-neft run node browser --watch
+neft run node html --watch
 ```
 
 ... and play with `MyApp/views/index.html`.

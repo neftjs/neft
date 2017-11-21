@@ -59,11 +59,18 @@
         @SCRIPTS_PATH = ''
         @STYLES_PATH = ''
 
+        @LoadError = class DocumentLoadError extends Error
+            constructor: (@path) ->
+                @name = 'DocumentLoadError'
+                @message = "Cannot load '#{@path}'"
+                @stack = (new Error).stack
+
         signal.create @, 'onCreate'
         signal.create @, 'onError'
         signal.create @, 'onBeforeParse'
         signal.create @, 'onParse'
         signal.create @, 'onStyle'
+        signal.create @, 'onScript'
 
 ## *Signal* Document.onBeforeRender(*Document* file)
 
@@ -102,7 +109,7 @@ Corresponding node handler: *n-onRevert=""*.
 ## *Document* Document.fromHTML(*String* path, *String* html)
 
         @fromHTML = do ->
-            unless utils.isNode
+            unless process.env.NEFT_PLATFORM is 'node'
                 return (path, html) ->
                     throw new Error 'Document.fromHTML is available only on the server'
 
@@ -209,7 +216,7 @@ Corresponding node handler: *n-onRevert=""*.
 ## Document.parse(*Document* file)
 
         @parse = do ->
-            unless utils.isNode
+            unless process.env.NEFT_PLATFORM is 'node'
                 return (file) ->
                     throw new Error "Document.parse() is available only on the server"
 
@@ -261,10 +268,6 @@ Corresponding node handler: *n-onRevert=""*.
 ## *Document* Document.factory(*String* path)
 
         @factory = (path) ->
-            unless files.hasOwnProperty path
-                # TODO: trigger here instance of `LoadError` class
-                Document.onError.emit path
-
             assert.isString path, "path is not a string"
             assert.ok files[path]?, "the given file path '#{path}' doesn't exist"
 

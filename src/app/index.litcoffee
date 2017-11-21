@@ -17,8 +17,7 @@
 
     AppRoute = require './route'
 
-    if utils.isNode
-        bootstrapRoute = require './bootstrap/route.node'
+    bootstrapRoute = try require './bootstrap/route.node'
 
     `//<development>`
     pkg = require 'package.json'
@@ -34,7 +33,7 @@
         type: 'app'
 
     exports = module.exports = (opts = {}, extraOpts = {}) ->
-        null;
+        null
         `//<development>`
         log.ok "Welcome! Neft.io v#{pkg.version}; Feedback appreciated"
         log.warn "Use this bundle only in development; type --release when it's ready"
@@ -162,16 +161,17 @@ app.cookies.onChange(function(key){
 
         # cookies
         COOKIES_KEY = '__neft_cookies'
+        IS_CLIENT = not process.env.NEFT_SERVER
         app.cookies = Dict()
         onCookiesReady = (dict) ->
             app.cookies = dict
-            if utils.isClient
+            if IS_CLIENT
                 dict.set 'sessionId', utils.uid(16)
         db.get COOKIES_KEY, db.OBSERVABLE, (err, dict) ->
             if dict
                 onCookiesReady dict
             else
-                if utils.isClient
+                if IS_CLIENT
                     cookies = {clientId: utils.uid(16)}
                 else
                     cookies = {}
@@ -180,12 +180,12 @@ app.cookies.onChange(function(key){
                         if dict
                             onCookiesReady dict
         app.networking.onRequest (req, res) ->
-            if utils.isClient
+            if IS_CLIENT
                 utils.merge req.cookies, app.cookies
             else
                 utils.merge res.cookies, app.cookies
             req.onLoadEnd.listeners.unshift ->
-                if utils.isClient
+                if IS_CLIENT
                     for key, val of res.cookies
                         unless utils.isEqual(app.cookies[key], val)
                             app.cookies.set key, val
@@ -236,8 +236,7 @@ app.cookies.onChange(function(key){
             resources: app.resources
 
         # load bootstrap
-        if utils.isNode
-            bootstrapRoute app
+        bootstrapRoute? app
 
         # loading files helper
         init = (files, target) ->

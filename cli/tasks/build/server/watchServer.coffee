@@ -6,7 +6,7 @@ utils = require 'src/utils'
 signal = require 'src/signal'
 
 PLATFORM_BUNDLE_PATH =
-    browser: './build/app-browser-develop.js'
+    html: './build/app-html-develop.js'
     ios: './build/ios/neft.js'
     macos: './build/macos/neft.js'
     android: './build/android/app/src/main/assets/javascript/neft.js'
@@ -17,7 +17,7 @@ getFileBundle = (platform) ->
 exports.start = (networking) ->
     # manage listeners
     onBundleSignals =
-        browser: signal.create()
+        html: signal.create()
         ios: signal.create()
         macos: signal.create()
         android: signal.create()

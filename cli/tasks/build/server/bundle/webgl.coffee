@@ -1,3 +1,3 @@
 'use strict'
 
-module.exports = require './browser'
+module.exports = require './html'

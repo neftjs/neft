@@ -1,4 +1,4 @@
-'use strict'
+# coffeelint: disable=no_debugger
 
 fs = require 'fs-extra'
 crypto = require 'crypto'
@@ -73,7 +73,9 @@ MODULE_SCOPE = '''function(exports){
     var require = __createRequire({{paths}});
     var exports = module.exports;
 
-    {{file}}
+    (function(){
+        {{file}}
+    }());
 
     return module.exports;
 }'''
@@ -94,14 +96,13 @@ getModulesInit = (modules, paths, indexes, opts) ->
         modulePaths = paths[name]
 
         pathRefs = {}
-        for req of modulePaths
-            modulePath = modulePaths[req]
+        for req, modulePath of modulePaths
             pathRefs[req] = if opts.release then indexes[modulePath] else relativePath modulePath
 
         unless pathUtils.extname(name)
             continue
 
-        func = moduleCache.getFile(name)
+        func = moduleCache.getFileSync(name)
         safeName = name.replace /\\/g, '\\\\'
 
         switch pathUtils.extname(name)
@@ -135,17 +136,7 @@ getModulesInit = (modules, paths, indexes, opts) ->
         "{#{result.slice(0, -2)}}"
 
 getModulesByPaths = (paths) ->
-    modules = []
-    modulesByPaths = Object.create null
-    for parentPath of paths
-        parentPaths = paths[parentPath]
-        for req of parentPaths
-            path = parentPaths[req]
-            if modulesByPaths[path]
-                continue
-            modulesByPaths[path] = true
-            modules.push path
-    modules
+    modules = Object.keys paths
 
 getIndexes = (modules) ->
     indexes = Object.create null
@@ -153,13 +144,15 @@ getIndexes = (modules) ->
         indexes[module] = i
     indexes
 
-module.exports = (processData, opts, callback) ->
-    {paths} = processData
+module.exports = (paths, opts, callback) ->
     modules = do ->
         if opts.onlyIndex
             [opts.path]
         else
             getModulesByPaths paths
+    if opts.verbose
+        for module in modules.sort()
+            console.log "Append file '#{module}'"
     indexes = if opts.release then getIndexes(modules)
     declarations = getDeclarations modules
     init = getModulesInit modules, paths, indexes, opts

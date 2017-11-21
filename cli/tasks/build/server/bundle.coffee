@@ -25,12 +25,12 @@ module.exports = (platform, options, app, callback) ->
     appBundleBuilder
         platform: platform
         path: INDEX_PATH
-        verbose: true
         release: options.release
         minify: options.release
         removeLogs: options.release
         watch: options.watch
         changedFiles: changedFiles
+        basepath: options.cwd
         , (err, file) ->
             log.end logtime
 
@@ -43,7 +43,7 @@ module.exports = (platform, options, app, callback) ->
             config =
                 platform: platform
                 release: options.release
-                debug: !options.release
+                debug: not options.release
                 app: app
                 mode: mode
                 neftFileName: neftFileName
@@ -57,4 +57,6 @@ module.exports = (platform, options, app, callback) ->
                 buildBundleOnly: !!options.buildBundleOnly
                 buildServerUrl: options.buildServerUrl
 
-            require("./bundle/#{platform}") config, callback
+            platformBundle = require "./bundle/#{platform}"
+            log.show ''
+            platformBundle config, callback

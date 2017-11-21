@@ -48,6 +48,7 @@ getImageSize = do ->
         if cache[path] and mtime < Date.now() - 1000
             callback null, cache[path]
             return
+        log.show "Get resource image size '#{path}'"
         Jimp.read path, (err, image) ->
             if err
                 return callback err
@@ -64,6 +65,7 @@ supportImageResource = (path, rsc) ->
     mtime = new Date stats.mtime
 
     resizeImage = (path, width, height, output, callback) ->
+        log.show "Resize resources image file '#{path}'"
         Jimp.read path, (err, image) ->
             if err
                 return callback err
@@ -145,6 +147,8 @@ parseResourcesArray = (arr, dirPath, config) ->
     parseResourcesObject obj, dirPath, config
 
 parseResourceFile = (path, config) ->
+    log.show "Parse resources file '#{path}'"
+
     dirPath = pathUtils.dirname path
     name = pathUtils.basename path
     name = Resources.Resource.parseFileName(name)

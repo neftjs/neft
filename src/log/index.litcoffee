@@ -39,7 +39,7 @@ const { log } = Neft;
             @ arguments...
 
     class Log
-        @LOGS_METHODS = ['log', 'debug', 'info', 'warn', 'error', 'time', 'ok']
+        @LOGS_METHODS = ['log', 'debug', 'info', 'warn', 'error', 'time', 'ok', 'show', 'commit']
 
         @MARKERS =
             white: (str) -> "LOG: #{str}"
@@ -78,6 +78,8 @@ const { log } = Neft;
 
         _write: console?['lo' + 'g'].bind(console) or (->)
         _writeError: console?['erro' + 'r'].bind(console) or (->)
+        _show: ->
+        _commit: ->
 
 ## *Integer* log.LOG
 
@@ -242,12 +244,15 @@ log("hello");
 
             new @constructor args, @
 
+        show: ->
+            @_show arguments[arguments.length - 1] and fromArgs arguments
+
+        commit: ->
+            @_commit()
+
     # implementation
-    impl = switch true
-        when utils.isNode
-            require './impls/node/index.coffee'
-        when utils.isBrowser
-            require './impls/browser/index.coffee'
+    impl = try require './impls/node/index.coffee'
+    impl or= try require './impls/browser/index.coffee'
 
     LogImpl = if typeof impl is 'function' then impl Log else Log
     exports = module.exports = new LogImpl

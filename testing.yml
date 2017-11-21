@@ -14,7 +14,7 @@ environments:
         version: current
         enabled: $TEST_NODE
     -
-        platform: browser
+        platform: html
         browser: chrome
         enabled: $TEST_CHROME
         width: 200

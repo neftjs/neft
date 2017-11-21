@@ -24,7 +24,7 @@
   },
   "bugs": "https://github.com/Neft-io/neft/issues",
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=8.0.0"
   },
   "scripts": {
     "bundle": "cross-env NODE_PATH=./ coffee --nodejs --harmony scripts/bundle.coffee",
@@ -33,6 +33,7 @@
     "prepublishOnly": "npm run bundle"
   },
   "dependencies": {
+    "acorn": "^5.2.1",
     "babel-core": "6.22.1",
     "babel-preset-es2015": "6.22.0",
     "chokidar": "1.5.1",
