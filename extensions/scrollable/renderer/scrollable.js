@@ -70,11 +70,11 @@ Scrollable.defineProperty({
     defaultValue: 0
 });
 
-if (process.env.NEFT_PLATFORM === 'browser') {
+if (process.env.NEFT_HTML) {
     Impl.addTypeImplementation('Scrollable', require('./impl/css/scrollable'));
 }
 
-if (process.env.NEFT_PLATFORM === 'webgl') {
+if (process.env.NEFT_WEBGL) {
     Impl.addTypeImplementation('Scrollable', require('./impl/base/scrollable'));
 }
 
