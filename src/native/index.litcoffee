@@ -14,6 +14,7 @@
 
     actions = require './actions'
     bridge = require './bridge'
+    {tryCall} = require 'src/tryCatch'
 
     {CALL_FUNCTION, CALL_FUNCTION_WITH_CALLBACK} = actions.out
 
@@ -42,7 +43,7 @@
                     throw new Error "Unexpected native event argument type"
         if arr = listeners[name]
             for func in arr
-                func.apply null, args
+                tryCall func, null, args
         else
             log.warn "No listeners added for the native event '#{name}'"
         return

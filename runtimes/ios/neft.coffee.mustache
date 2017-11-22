@@ -71,7 +71,7 @@ do ->
                     func.apply null, args
 
         id = ios.timerShot delay
-        shots[id] = callFunc
+        shots[id] = -> Neft.tryCatch.tryCall callFunc
         id
 
     setImmediate = (func, arg1, arg2, arg3) ->
@@ -98,7 +98,7 @@ do ->
                 callFunc = ->
                     func.apply null, args
 
-        ios.immediate callFunc
+        ios.immediate -> Neft.tryCatch.tryCall callFunc
 
         -1
 
@@ -115,7 +115,7 @@ do ->
 
     ios.animationFrameCallback = ->
         for i in [0...queue.length]
-            queue.shift()()
+            Neft.tryCatch.tryCall queue.shift()
         return
 
     requestAnimationFrame = (func) ->

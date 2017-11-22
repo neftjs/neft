@@ -25,6 +25,9 @@ HOT_RELOADS_ORDER =
     styles: 2
     scripts: 0
 
+DISABLED_FILES =
+    'styles/__windowItem__.js': true
+
 getRelativePath = (options, path) ->
     buildCwd = pathUtils.join options.cwd, './build'
     pathUtils.relative buildCwd, path
@@ -49,6 +52,8 @@ exports.canUse = (platform, options, result) ->
         relPath = getRelativePath options, path
         folder = getPathFolder relPath
         unless SUPPORTED_FOLDERS[folder]
+            return false
+        if DISABLED_FILES[relPath]
             return false
 
     true

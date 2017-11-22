@@ -72,7 +72,7 @@ do ->
                     func.apply null, args
 
         id = _neft.timers.shot delay
-        shots[id] = callFunc
+        shots[id] = -> Neft.tryCatch.tryCall callFunc
         id
 
     setImmediate = (func, arg1, arg2, arg3) ->
@@ -99,7 +99,7 @@ do ->
                 callFunc = ->
                     func.apply null, args
 
-        _neft.timers.immediate callFunc
+        _neft.timers.immediate -> Neft.tryCatch.tryCall callFunc
 
         -1
 

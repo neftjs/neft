@@ -130,7 +130,7 @@ module.exports = (impl) ->
                         return STOP_PROPAGATION
                 getEventStatus()
 
-            (e) ->
+            eventLoop.bindInLock (e) ->
                 event._stopPropagation = false
                 event._checkSiblings = false
                 event._preventClick = false
@@ -156,8 +156,7 @@ module.exports = (impl) ->
                         return STOP_PROPAGATION
                 getEventStatus()
 
-            (e) ->
-                eventLoop.lock()
+            eventLoop.bindInLock (e) ->
                 event._stopPropagation = false
                 event._checkSiblings = false
 
@@ -181,7 +180,6 @@ module.exports = (impl) ->
                 utils.clear itemsToRelease
                 utils.clear itemsToMove
                 utils.clear pressedItems
-                eventLoop.release()
                 return
 
         # support move, enter and exit events
@@ -204,8 +202,7 @@ module.exports = (impl) ->
                         return STOP_PROPAGATION
                 getEventStatus()
 
-            (e) ->
-                eventLoop.lock()
+            eventLoop.bindInLock (e) ->
                 event._stopPropagation = false
                 event._checkSiblings = false
                 flag = (flag % 2) + 1
@@ -231,8 +228,6 @@ module.exports = (impl) ->
                     data = item._impl
                     if data.pointerMoveFlag isnt flag
                         data.pointerMoveFlag = flag
-
-                eventLoop.release()
                 return
 
         # support wheel event
@@ -246,11 +241,9 @@ module.exports = (impl) ->
                             return STOP_PROPAGATION
                 getEventStatus()
 
-            (e) ->
-                eventLoop.lock()
+            eventLoop.bindInLock (e) ->
                 event._checkSiblings = false
                 captureItems impl.windowItem, e._x, e._y, onItem
-                eventLoop.release()
                 return
 
     i = 0
