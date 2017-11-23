@@ -38,13 +38,10 @@ var Networking = require('networking');
 
             opts.uri = if opts.uri then opts.uri + '' else ''
 
-            # create a request
-            if opts instanceof Networking.Request
-                req = opts
-            else
-                req = new Networking.Request opts
+            # create request
+            req = new Networking.Request opts
 
-            # create a response
+            # create response
             resOpts = if utils.isObject(opts.response) then opts.response else {}
             resOpts.request = req
             res = new Networking.Response resOpts
@@ -186,24 +183,23 @@ The given options object corresponds to the *Networking.Request* properties.
             assert.instanceOf @, Networking
             assert.isObject opts, '::createRequest options argument ...'
 
-            opts.uri = if opts.uri then opts.uri+'' else ''
+            opts.uri = if opts.uri then String(opts.uri) else ''
 
             unless EXTERNAL_URL_RE.test(opts.uri)
                 if opts.uri[0] isnt '/'
                     opts.uri = "/#{opts.uri}"
                 opts.uri = "#{@url}#{opts.uri}"
 
-            # create a request
-            if opts instanceof Networking.Request
-                req = opts
-            else
-                req = new Networking.Request opts
+            # create request
+            req = new Networking.Request opts
             logtime = log.time utils.capitalize("#{req}")
-            req.onLoadEnd =>
+            onLoadEnd = ->
                 @pendingRequests.remove req
+                req.onLoadEnd.disconnect onLoadEnd, @
                 log.end logtime
+            req.onLoadEnd.connect onLoadEnd, @
 
-            # create a response
+            # create response
             resOpts = if utils.isObject(opts.response) then opts.response else {}
             resOpts.request = req
             res = new Networking.Response resOpts
@@ -353,15 +349,14 @@ app.networking.createRequest({
             assert.instanceOf @, Networking
             assert.isObject opts, '::createLocalRequest options argument ...'
 
-            # create a request
-            if opts instanceof Networking.Request
-                req = opts
-            else
-                req = new Networking.Request opts
-            req.onLoadEnd =>
+            # create request
+            req = new Networking.Request opts
+            onLoadEnd = ->
                 @pendingRequests.remove req
+                req.onLoadEnd.disconnect onLoadEnd, @
+            req.onLoadEnd.connect onLoadEnd, @
 
-            # create a response
+            # create response
             resOpts = if utils.isObject(opts.response) then opts.response else {}
             resOpts.request = req
             res = new Networking.Response resOpts

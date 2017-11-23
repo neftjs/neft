@@ -35,19 +35,27 @@ reloadDocumentDeeply = (doc, reloadCompPath) ->
                 reloadDocumentDeeply child, reloadCompPath
     return
 
+reloadRouteDocument = (app, route, reloadCompPath) ->
+    onLoadEnd = ->
+        app.Route.onLastClientRouteChange.disconnect onLoadEnd
+        delete Document._pool[reloadCompPath]
+
+    app.Route.onLastClientRouteChange.connect onLoadEnd
+    app.networking.createLocalRequest route.request.toJSON()
+
+    return
+
 module.exports = (app) ->
 
     reloadVisibleComponent = (name) ->
         delete Document._pool[name]
-        lastResp = app.Route.lastClientRoute?.response
-        lastRespData = lastResp.data
+        lastRespData = app.Route.lastClientRoute?.response.data
         if lastRespData instanceof Document
             if lastRespData.path is name
-                lastRespData.revert().destroy()
-                delete Document._pool[name]
-                app.windowItem.node = app.components[name].render(null, lastResp).node
+                reloadRouteDocument app, app.Route.lastClientRoute, name
             else
                 reloadDocumentDeeply lastRespData, name
+        return
 
     reloadComponent = (name, fileStr) ->
         log.debug "Reload component #{name}"
@@ -55,7 +63,6 @@ module.exports = (app) ->
         funcModules = exports: {}
         name = "components/#{name}"
         delete Document._files[name]
-        delete Document._pool[name]
         func funcModules
         app.components[name] = Document.fromJSON funcModules.exports
         reloadVisibleComponent name
