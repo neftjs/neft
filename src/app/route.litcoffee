@@ -3,6 +3,7 @@
     'use strict'
 
     utils = require 'src/utils'
+    signal = require 'src/signal'
     assert = require 'src/assert'
     log = require 'src/log'
     Schema = require 'src/schema'
@@ -24,6 +25,7 @@
             templates = Object.create null
 
         @lastClientRoute = null
+        @onLastClientRouteChange = signal.create()
 
 ## *Document* Route.getTemplateComponent(*String* componentName)
 
@@ -159,11 +161,8 @@ Acceptable syntaxes:
         destroyRoute = (route) ->
             assert.instanceOf route, Route
 
-            if Route.lastClientRoute is route
-                Route.lastClientRoute = null
-
             route.response.onSend.disconnect onResponseSent, route
-            pendingRoutes[route.__hash__] = false
+            delete pendingRoutes[route.__hash__]
             route.destroy?()
             if route._dataPrepared
                 switch route.request.type
@@ -173,9 +172,17 @@ Acceptable syntaxes:
                         route.destroyJSON?()
                     when 'html'
                         route.destroyHTML?()
+
             if route._destroyComponentOnEnd
                 route.response.data.destroy()
+
             routesCache[route.__id__].push Object.getPrototypeOf(route)
+
+            if Route.lastClientRoute is route
+                Route.lastClientRoute = null
+                Route.onLastClientRouteChange.emit route
+
+            return
 
         resolveSyncGetDataFunc = (route) ->
             assert.instanceOf route, Route
@@ -234,7 +241,7 @@ Acceptable syntaxes:
 
         finishRequest = (route) ->
             assert.instanceOf route, Route
-            if route.response.data instanceof Document
+            if IS_CLIENT and route.response.data instanceof Document
                 app.windowItem.node = route.response.data.node
             if route.response.pending
                 route.response.send()
@@ -259,7 +266,9 @@ Acceptable syntaxes:
             if IS_CLIENT
                 if Route.lastClientRoute
                     destroyRoute Route.lastClientRoute
+                {lastClientRoute} = Route
                 Route.lastClientRoute = route
+                Route.onLastClientRouteChange.emit lastClientRoute
 
             route.request = req
             route.response = res

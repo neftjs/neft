@@ -28,7 +28,7 @@ module.exports = (File) -> class Use
         value = not oldValue
         isHidden = if value then -1 else 1
         @hiddenDepth += isHidden
-        if @file.isRendered and not @isRendered
+        if not @isRendered
             @renderImmediate()
         if @file.isRendered and @isRendered and @hiddenDepth > 0
             @revert()

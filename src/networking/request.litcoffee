@@ -202,6 +202,14 @@ console.log(req.toString);
         toString: ->
             "#{@method} #{@uri} as #{@type}"
 
+        toJSON: ->
+            type: @type
+            data: @data
+            method: @method
+            headers: @headers
+            cookies: @cookies
+            uri: @uri
+
         destroy: ->
             assert @pending
 

@@ -26,7 +26,7 @@ module.exports = (File) -> class Condition
             @update()
         return
 
-    constructor: (@file, @node, @elseNode=null) ->
+    constructor: (@file, @node, @elseNode = null) ->
         assert.instanceOf @file, File
         assert.instanceOf @node, File.Element
         if elseNode?

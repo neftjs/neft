@@ -27,6 +27,7 @@ HOT_RELOADS_ORDER =
 
 DISABLED_FILES =
     'styles/__windowItem__.js': true
+    'styles/windowItem.js': true
 
 getRelativePath = (options, path) ->
     buildCwd = pathUtils.join options.cwd, './build'
