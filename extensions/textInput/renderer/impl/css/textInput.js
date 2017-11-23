@@ -1,3 +1,5 @@
+// when=NEFT_HTML
+
 const { utils } = Neft;
 const { setPropertyValue } = Neft.Renderer.itemUtils;
 const { Item } = Neft.Renderer.Impl.Types;

@@ -15,7 +15,7 @@ Button.defineProperty({
     name: 'textColor'
 });
 
-if (process.env.NEFT_PLATFORM === 'browser') {
+if (process.env.NEFT_HTML) {
     Impl.addTypeImplementation('Button', require('./impl/css/button'));
 }
 

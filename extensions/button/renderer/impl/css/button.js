@@ -1,3 +1,5 @@
+// when=NEFT_HTML
+
 const { Item, Native } = Neft.Renderer.Impl.Types;
 
 exports.create = function (data) {

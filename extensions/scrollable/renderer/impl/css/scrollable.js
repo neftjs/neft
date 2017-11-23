@@ -1,3 +1,5 @@
+// when=NEFT_HTML
+
 const { utils } = Neft;
 const { Impl } = Neft.Renderer;
 const { Item } = Impl.Types;
