@@ -6,7 +6,6 @@ global.Neft = require './bundle/neft-node-develop'
 moduleCache = require 'lib/module-cache'
 cliUtils = require './utils'
 
-moduleCache.registerBabel()
 moduleCache.registerNml()
 
 {log, utils} = Neft
