@@ -5,6 +5,7 @@ utils = require 'src/utils'
 bindingParser = require 'src/binding/parser'
 Renderer = require 'src/renderer'
 nmlAst = require './nmlAst'
+{BABEL_OPTIONS} = require 'lib/module-cache'
 
 PRIMITIVE_TYPE = 'primitive'
 
@@ -32,7 +33,7 @@ BINDING_PARSER_OPTS =
 
 transformByBabel = (body) ->
     body = "(function(){#{body}})"
-    body = babel.transform(body, presets: ['es2015']).code
+    body = babel.transform(body, BABEL_OPTIONS).code
     body = /{([^]*)}/m.exec(body)?[1]
     body
 
