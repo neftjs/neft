@@ -68,22 +68,20 @@ matrix:
                 components:
                     - tools
                     - platform-tools
-                    # build
-                    - build-tools-27.0.3
-                    - android-25
-                    # emulators
-                    - android-24
-                    - sys-img-armeabi-v7a-android-24
             before_script:
                 - npm run bundle -- --node --android
             before_install:
                 # run xvfb
                 - export DISPLAY=:99.0
                 - sh -e /etc/init.d/xvfb start
-
+                # install android
+                - yes | sdkmanager "platforms;android-27"
+                - yes | sdkmanager "system-images;android-24;default;armeabi-v7a"
+                - yes | sdkmanager "build-tools;27.0.3"
+                - yes | sdkmanager tools
                 # create and run emulator to speed up tests
-                - echo no | $ANDROID_HOME/tools/android create avd --force -n neft-android-24-default_armeabi-v7a-200x250 -t android-24 --abi default/armeabi-v7a --skin 200x250
-                - $ANDROID_HOME/tools/emulator -port 5554 -avd neft-android-24-default_armeabi-v7a-200x250 &
+                - echo no | $ANDROID_HOME/tools/bin/avdmanager create avd --force -n neft-android-27-default_armeabi-v7a -k "system-images;android-24;default;armeabi-v7a"
+                - $ANDROID_HOME/tools/emulator -port 5554 -avd neft-android-27-default_armeabi-v7a -skin 200x250 &
 
         # OSX iOS
         -

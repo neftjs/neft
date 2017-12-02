@@ -83,6 +83,7 @@ do ->
     callback = (err) ->
         if err?
             log.error err
+            process.exit 1
             return
         index += 1
         if index < stack.length

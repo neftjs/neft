@@ -27,8 +27,8 @@ environments:
         height: 200
     -
         platform: android
-        target: android-24
-        abi: default/armeabi-v7a
+        target: android-27
+        abi: armeabi-v7a
         enabled: $TEST_ANDROID_ARM
         width: 200
         height: 250
@@ -38,8 +38,8 @@ environments:
             height: 200
     -
         platform: android
-        target: android-24
-        abi: default/x86
+        target: android-27
+        abi: x86
         enabled: $TEST_ANDROID_X86
         width: 200
         height: 250

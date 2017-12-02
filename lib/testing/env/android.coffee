@@ -11,7 +11,7 @@ log = log.scope('testing').scope 'android'
 
 ADB = 'platform-tools/adb'
 EMULATOR = 'tools/emulator'
-ANDROID = 'tools/android'
+AVDMANAGER = 'tools/bin/avdmanager'
 DEVICE_RUN_TRY_DELAY = 1000
 DEFAULT_PORT = 5554
 SDK_DIR = ''
@@ -100,7 +100,7 @@ getFreeDevicePort = ->
     port
 
 getEmulatorName = (env) ->
-    name = "neft-#{env.target}-#{env.abi}-#{env.width}x#{env.height}"
+    name = "neft-#{env.target}-#{env.abi}"
     name = name.replace /[^a-zA-Z0-9._\-]/g, '_'
     name
 
@@ -120,13 +120,13 @@ createEmulator = (env, callback) ->
         return callback null
 
     log.debug "Creating android emulator"
-    cmd = "echo no | #{ANDROID} create avd --force -n #{name} "
-    cmd += "-t #{env.target} --abi #{env.abi} --skin #{env.width}x#{env.height}"
+    cmd = "echo no | #{AVDMANAGER} create avd --force -n #{name} "
+    cmd += "-k \"system-images;#{env.target};default;#{env.abi}\""
     log.debug "> #{cmd}" if CI
     androidProcess = childProcess.exec cmd, cwd: SDK_DIR, (err, stdout, stderr) ->
         if err
             log.error err
-            log.error childProcess.execSync "#{ANDROID} list targets", cwd: SDK_DIR
+            log.error childProcess.execSync "#{AVDMANAGER} list target", cwd: SDK_DIR
 
         callback err
     androidProcess.stdout.pipe process.stdout
@@ -165,6 +165,7 @@ runEmulator = (env, callback) ->
         cmd = EMULATOR
         cmd += " -port #{port}"
         cmd += " -avd #{env.emulatorName}"
+        cmd += " -skin #{env.width}x#{env.height}"
         log.debug "> #{cmd}" if CI
         emulatorProcess = childProcess.exec cmd, cwd: SDK_DIR, (err, stdout, stderr) ->
             if (err or stderr) and pending

@@ -2,6 +2,6 @@ package: io.neft.tests
 versionCode: 1
 versionName: '1.0'
 label: Neft.io Tests
-compileSdkVersion: 25
-targetSdkVersion: 25
-buildToolsVersion: '25.0.0'
+compileSdkVersion: 27
+targetSdkVersion: 27
+buildToolsVersion: '27.0.3'
