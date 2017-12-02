@@ -49,12 +49,12 @@ module.exports = (File, Input) -> class InputProp extends Input
         @node.props.set @propName, val
 
     createHandlerFunc = (input) ->
-        (arg1, arg2) ->
+        ->
             unless input.file.isRendered
                 return
             r = input.bindingConfig.func.apply input, input.file.inputArgs
             if typeof r is 'function'
-                r.call @, arg1, arg2
+                r.apply @, arguments
             return
 
     clone: (original, file) ->
