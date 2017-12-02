@@ -96,6 +96,8 @@ if utils.has(process.argv, 'build') or utils.has(process.argv, 'run')
             args.help = true
     options.platforms = platforms
 
+log.show ''
+
 # commands
 if args.help
     helpFilePath = pathUtils.resolve(__dirname, './README')
