@@ -3,7 +3,7 @@
 {Dict, List} = Neft
 {createView, renderParse} = require './utils.server'
 
-describe 'Document attributes', ->
+describe 'Document properties', ->
     it 'are parsed to objects', ->
         data = a: 1
         json = JSON.stringify data
@@ -35,3 +35,21 @@ describe 'Document attributes', ->
         attrValue = view.render().node.children[0].props.data
         assert.instanceOf attrValue, List
         assert.isEqual attrValue, data
+
+    it 'are parsed to numbers', ->
+        view = createView "<a data='-123.1' />"
+
+        attrValue = view.render().node.children[0].props.data
+        assert.is attrValue, -123.1
+
+    it 'math operations are not parsed', ->
+        view = createView "<a data='1 + 2' />"
+
+        attrValue = view.render().node.children[0].props.data
+        assert.is attrValue, '1 + 2'
+
+    it 'plus number is not parsed', ->
+        view = createView "<a data='+2' />"
+
+        attrValue = view.render().node.children[0].props.data
+        assert.is attrValue, '+2'

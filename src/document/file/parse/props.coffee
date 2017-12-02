@@ -14,8 +14,12 @@ module.exports = (File) -> (file) ->
         for name, val of elem.props when elem.props.hasOwnProperty(name)
             jsVal = evalFunc val, Dict, List
             if utils.isObject(jsVal)
+                # create object each time the component is rendered
                 propsToParse.push elem, name
-            else if jsVal isnt undefined
+            else if jsVal isnt undefined and String(jsVal).length is val.length
+                # save parsed string values as literals;
+                # e.g. 'true' -> true or '-2' -> -2
+                # '+2' will not be parsed into 2 because both objects have different string length
                 elem.props.set name, jsVal
 
         for child in elem.children
