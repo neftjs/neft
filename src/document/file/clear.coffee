@@ -6,9 +6,20 @@ module.exports = (File) ->
 
     checkNode = (node) ->
         if node instanceof Text
-            # trim
-            node.text = node.text.replace /^[\s\uFEFF\xA0]+/g, ''
-            node.text = node.text.replace /([^\r\n]+)(?:[\s\uFEFF\xA0]*)$/g, '$1'
+            # skip single line texts
+            if node.text.indexOf('\n') is -1
+                return
+
+            # remove lines with only white spaces
+            node.text = node.text.replace /^\s+$/gm, ''
+
+            # remove new lines from the start and end of the text
+            node.text = node.text.replace /^[\n\r]|[\n\r]$/g, ''
+
+            # remove indentation
+            minIndent = Math.min node.text.match(/^( *)/gm).map((str) -> str.length)...
+            if minIndent > 0
+                node.text = node.text.replace new RegExp("^ {#{minIndent}}", 'gm'), ''
 
             # remove empty texts
             if node.text.length is 0

@@ -8,8 +8,8 @@ describe 'Document View', ->
         view = createView '<b></b>'
         assert.instanceOf view, Document
 
-    it 'clears got HTML', ->
-        view = createView '<!--comment--><div>   </div>'
+    it 'removes comments', ->
+        view = createView '<!--comment--><div />'
         assert.is view.node.stringify(), '<div></div>'
 
     it 'finds components', ->
