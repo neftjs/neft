@@ -18,6 +18,7 @@ install:
     - nvm install 8.0.0
 
     # install project dependencies
+    - rm package-lock.json
     - npm install
 script:
     - npm test
