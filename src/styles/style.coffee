@@ -162,9 +162,9 @@ module.exports = (File, data) -> class Style
 
         {propsClass} = @
 
-        propsClass.disable()
+        propsClass.running = false
         propsClass.changes.setAttribute attr, val
-        propsClass.enable()
+        propsClass.running = true
 
         return
 

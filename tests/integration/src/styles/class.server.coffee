@@ -4,13 +4,13 @@
 {render} = require './utils.server'
 
 describe 'Renderer.Class', ->
-    it '\'when\' signal handler properly enables class', ->
+    it '\'running\' property enables class', ->
         doc = render
             html: '''
                 <style>
                 Rectangle {
                     Class {
-                        when: target.pointer.pressed
+                        running: target.pointer.pressed
                         changes: {
                             color: 'red'
                         }

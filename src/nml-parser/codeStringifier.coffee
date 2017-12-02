@@ -129,7 +129,7 @@ class Stringifier
         object = @createClass ast
         object.body.unshift
             type: nmlAst.ATTRIBUTE_TYPE
-            name: 'when'
+            name: 'running'
             value:
                 type: PRIMITIVE_TYPE
                 value: @bindingToString ast.condition, BINDING_THIS_TO_TARGET_OPTS

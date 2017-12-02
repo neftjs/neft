@@ -43,7 +43,7 @@
             lastUid = 0
             constructor: ->
                 super()
-                @_classUid = (lastUid++)+''
+                @_classUid = String(lastUid++)
                 @_priority = 0
                 @_inheritsPriority = 0
                 @_nestingPriority = 0
@@ -73,7 +73,7 @@ to identify various classes.
 
                     if target
                         if target.classes.has(name)
-                            @disable()
+                            @running = false
                         target._classExtensions[name] = null
                         target._classExtensions[val] = @
 
@@ -84,7 +84,7 @@ to identify various classes.
                             target._classExtensions ?= {}
 
                         if target._classes?.has(val)
-                            @enable()
+                            @running = true
                     return
 
 ## *Item* Class::target
@@ -108,7 +108,10 @@ If state is created inside the *Item*, this property is set automatically.
                     if oldVal is val
                         return
 
-                    @disable()
+                    isRunning = @_running
+
+                    if isRunning
+                        @running = false
 
                     if oldVal
                         utils.remove oldVal._extensions, @
@@ -125,27 +128,46 @@ If state is created inside the *Item*, this property is set automatically.
 
                     if val
                         val._extensions.push @
-                        if val._classes?.has(name) or @_when or (@_priority isnt -1 and !@_name and !@_bindings?.when and !@_document?._query)
-                            @enable()
+                        if val._classes?.has(name) or (@_priority isnt -1 and !@_name and !@_bindings?.running and !@_document?._query)
+                            @running = true
+
+                    if isRunning
+                        @running = true
                     return
 
 ## *Object* Class::changes
 
 This objects contains all properties to change on the target item.
 
-It accepts bindings and listeners as well.
+            CHANGES_OMIT_ATTRIBUTES =
+                __proto__: null
+                id: true
+                properties: true
+                signals: true
+                children: true
 
             utils.defineProperty @::, 'changes', null, ->
                 @_changes ||= new ChangesObject
-            , (obj) ->
+            , (obj = {}) ->
                 assert.isObject obj
 
-                {changes} = @
+                isRunning = @_running and !!@_target
+
+                if isRunning
+                    updateTargetClass disableClass, @_target, @
+
+                @_changes = new ChangesObject
+                changes = @_changes
+
                 for prop, val of obj
                     if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
                         changes.setBinding prop, val
-                    else
+                    else if not CHANGES_OMIT_ATTRIBUTES[prop]
                         changes.setAttribute prop, val
+
+                if isRunning
+                    updateTargetClass enableClass, @_target, @
+
                 return
 
 ## *Integer* Class::priority = `0`
@@ -163,7 +185,7 @@ It accepts bindings and listeners as well.
                     updatePriorities @
                     return
 
-## *Boolean* Class::when
+## *Boolean* Class::running
 
 Indicates whether the class is active or not.
 
@@ -177,7 +199,7 @@ Grid {
     columns: 2
     // reduce to one column if the view width is lower than 500 pixels
     Class {
-        when: windowItem.width < 500
+        running: windowItem.width < 500
         changes: {
             columns: 1
         }
@@ -185,17 +207,18 @@ Grid {
 }
 ```
 
-## *Signal* Class::onWhenChange(*Boolean* oldValue)
+## *Signal* Class::onRunningChange(*Boolean* oldValue)
 
-            enable: ->
+            _enable: ->
+                assert.ok @_running
+
                 docQuery = @_document?._query
-                if @_running or not @_target or docQuery
+                if not @_target or docQuery
                     if docQuery
                         for classElem in @_document._classesInUse
-                            classElem.enable()
+                            classElem.running = true
                     return
 
-                super()
                 updateTargetClass saveAndEnableClass, @_target, @
 
                 unless @_document?._query
@@ -203,14 +226,14 @@ Grid {
 
                 return
 
-            disable: ->
-                if not @_running or not @_target
+            _disable: ->
+                assert.notOk @_running
+
+                if not @_target
                     if @_document and @_document._query
                         for classElem in @_document._classesInUse
-                            classElem.disable()
+                            classElem.running = false
                     return
-
-                super()
 
                 unless @_document?._query
                     unloadObjects @, @_target
@@ -261,7 +284,7 @@ Grid {
 
 ## *Object* Class::children.pop(*Integer* index)
 
-                pop: (i=@length-1) ->
+                pop: (i = @length - 1) ->
                     assert.operator i, '>=', 0
                     assert.operator i, '<', @length
 
@@ -337,7 +360,8 @@ Grid {
             return
 
         ifClassListWillChange = (classElem) ->
-            target = classElem._target
+            unless target = classElem._target
+                return false
             classList = target._classList
             index = classList.indexOf classElem
 
@@ -388,12 +412,14 @@ Grid {
             return
 
         saveAndEnableClass = (item, classElem) ->
+            assert.notOk utils.has(item._classList, classElem)
             item._classList.unshift classElem
             if ifClassListWillChange(classElem)
                 updateClassList item
             enableClass item, classElem
 
         saveAndDisableClass = (item, classElem) ->
+            assert.ok utils.has(item._classList, classElem)
             disableClass item, classElem
             utils.remove item._classList, classElem
 
@@ -536,10 +562,6 @@ Grid {
                 restoreDefault = true
                 alias = ''
                 for i in [classListIndex - 1..0] by -1
-                    # BUG: undefined on QML (potential Array::sort bug)
-                    unless classList[i]
-                        continue
-
                     if getContainedAttributeOrAlias(classList[i], attr)
                         restoreDefault = false
                         break
@@ -555,7 +577,7 @@ Grid {
                             break
                     alias ||= attr
 
-                    # restore attribute
+                    # restore binding
                     if !!bindings[attr]
                         path = splitAttribute attr
                         object = getObjectByPath item, path
@@ -571,10 +593,7 @@ Grid {
                         lastPath = path[path.length - 1]
                         unless object
                             continue
-                    `//<development>`
-                    unless lastPath of object
-                        continue
-                    `//</development>`
+
                     if defaultIsBinding
                         object.createBinding lastPath, defaultValue, item
                     else if typeof val is 'function' and object[lastPath]?.connect
@@ -718,8 +737,8 @@ Grid {
                 classElem.target = style
 
                 # run if needed
-                if not classElem._bindings?.when
-                    classElem.enable()
+                if not classElem._bindings?.running
+                    classElem.running = true
                 return
 
             disconnectNodeStyle = (style) ->
@@ -825,13 +844,13 @@ This property has a setter, which accepts a string and an array of strings.
                         return
 
                     onInsert = (val, index) ->
-                        @_classExtensions[val]?.enable()
+                        @_classExtensions[val]?.running = true
                         @onClassesChange.emit val
                         return
 
                     onPop = (oldVal, index) ->
                         unless @_classes.has(oldVal)
-                            @_classExtensions[oldVal]?.disable()
+                            @_classExtensions[oldVal]?.running = false
                         @onClassesChange.emit null, oldVal
                         return
 
