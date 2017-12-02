@@ -177,7 +177,7 @@ The given test function can contains optional *callback* argument.
 
     onTestsEnd = (result) ->
         code = if result.status is 'success' then 0 else 1
-        if utils.isServer
+        if process.env.NEFT_NODE
             # give logs some time to be printed int stdout
             setTimeout ->
                 process.exit code
