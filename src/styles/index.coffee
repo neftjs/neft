@@ -3,7 +3,6 @@
 utils = require 'src/utils'
 Document = require 'src/document'
 
-require('./file/styles') Document
 require('./file/element') Document
 Style = require('./style')
 

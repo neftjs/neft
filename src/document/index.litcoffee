@@ -497,6 +497,10 @@ Corresponding node handler: *n-onRevert=""*.
                 # source
                 renderTarget @, source
 
+                # styles
+                for style in @styles
+                    style.render()
+
                 # logs
                 `//<development>`
                 for log in @logs
@@ -552,6 +556,10 @@ Corresponding node handler: *n-onRevert=""*.
 
                 # target
                 target @, @source
+
+                # styles
+                for style in @styles
+                    style.revert()
 
                 @props = null
                 @source = null
@@ -661,6 +669,10 @@ Corresponding node handler: *n-onReplaceByUse=""*.
             # scope
             if @scripts
                 clone.scope = @scripts.createCloneScope clone
+
+            # styles
+            for style in @styles
+                clone.styles.push style.clone @, clone
 
             clone
 

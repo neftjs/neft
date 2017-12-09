@@ -57,6 +57,18 @@ module.exports = (app) ->
                 reloadDocumentDeeply lastRespData, name
         return
 
+    reloadDocStyleDeeply = (doc, style, stylesToReload) ->
+        unless style.node instanceof Document.Element.Tag
+            return
+        styleId = style.node.props[Document.Style.STYLE_ID_PROP]
+        styleIdParts = styleId.split ':'
+        if styleIdParts[0] is 'styles' and stylesToReload[styleIdParts[1]]
+            reloadVisibleComponent doc.path
+            return
+        for substyle in style.children
+            reloadDocStyleDeeply doc, substyle, stylesToReload
+        return
+
     reloadComponent = (name, fileStr) ->
         log.debug "Reload component #{name}"
         func = new Function 'module', fileStr
@@ -70,22 +82,39 @@ module.exports = (app) ->
     reloadStyle = (name, fileStr) ->
         log.debug "Reload style #{name}"
 
+        # evaluate new file
         styleModule = do (module, exports = {}) ->
             module = exports: exports
             eval fileStr
             module
 
+        # initialize and save new style
         styleModule.exports._init windowItem: app.windowItem
         app.styles[name] = styleModule.exports
 
+        # get styles to reload
+        stylesToReload = "#{name}": true
+        fullName = "styles/#{name}"
+        for styleName, style of app.styles
+            if style._imports[fullName]
+                stylesToReload[styleName] = true
+
+        # reload current style in modules
+        __require.initModule styleModule.exports._path, styleModule.exports
+
+        # reload modules
+        for styleName of stylesToReload
+            if styleName is name
+                continue
+            path = app.styles[styleName]._path
+            __require.reloadModule path
+            app.styles[styleName] = require path
+            app.styles[styleName]._init windowItem: app.windowItem
+
+        # reload documents
         for path, file of Document._files
             for style in file.styles
-                if style.node instanceof Document.Element.Tag
-                    styleId = style.node.props[Document.Style.STYLE_ID_PROP]
-                    styleIdParts = styleId.split ':'
-                    if styleIdParts[0] is 'styles' and styleIdParts[1] is name
-                        reloadVisibleComponent path
-                        break
+                reloadDocStyleDeeply file, style, stylesToReload
 
         return
 

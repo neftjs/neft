@@ -114,6 +114,7 @@ module.exports = (File, data) -> class Style
         @parent = null
         @children = []
         @isAutoParent = true
+        @usesWindowItem = false
         @item = null
         @scope = null
         @textProp = ''
@@ -365,7 +366,8 @@ module.exports = (File, data) -> class Style
                     if parent and parent.node.props[STYLE_ID_PROP] is parentId
                         scope = parent.scope
                         @item = scope?.objects[subid]
-                    else if not parent?.scope and file in ['windowItem', '__windowItem__']
+                    else if not parent?.scope and file is '__windowItem__'
+                        @usesWindowItem = true
                         @item = windowStyle.objects[subid]
 
                     if @item or not parent
@@ -527,6 +529,22 @@ module.exports = (File, data) -> class Style
                     item.nextSibling = targetChild
                     return true
         return false
+
+    render: ->
+        # manually remove and add elements of __windowItem__
+        # as this is the main Item which is not under Document management
+        if @usesWindowItem
+            for style in @children
+                continue if style.item?.parent
+                style.findItemParent()
+                style.findItemIndex()
+        return
+
+    revert: ->
+        if @usesWindowItem
+            for style in @children
+                style.item?.parent = null
+        return
 
     clone: (originalFile, file) ->
         clone = new Style

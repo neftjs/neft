@@ -1,5 +1,7 @@
 'use strict'
 
+fs = require 'fs'
+pathUtils = require 'path'
 nmlParser = require 'src/nml-parser'
 
 bundle = (nml) ->
@@ -30,6 +32,8 @@ describe 'nml-parser', ->
             exports._mainLink = '_i0'
             exports.New = () -> exports._main({}).item
             exports._queries = {"any-item":"_i0"}
+            exports._imports = {}
+
         '''
         assert.is result, expected
 
@@ -57,6 +61,9 @@ describe 'nml-parser', ->
             exports._mainLink = '_i0'
             exports.New = () -> exports._main({}).item
             exports._queries = {}
+            exports._imports = {"extensions/tileImage/renderer/tileImage":true,\
+            "styles/ChildNamespace/CustomStyle":true}
+
         '''
         assert.is result, expected
 
@@ -86,5 +93,41 @@ describe 'nml-parser', ->
             exports._mainLink = '_i0'
             exports.New = () -> exports._main({}).item
             exports._queries = {}
+            exports._imports = {}
+
         '''
+        assert.is result, expected
+
+    it 'adds relative path', ->
+        result = bundle nml: '', path: './testPath.nml'
+        expected = '''
+            _RendererObject = Neft.Renderer.itemUtils.Object
+            Class = Neft.Renderer.Class
+            windowItem = undefined
+            exports._init = (opts) ->
+                windowItem = opts.windowItem
+                return
+            exports._queries = {}
+            exports._imports = {}
+            exports._path = "./testPath.nml"
+
+        '''
+        assert.is result, expected
+
+    it 'adds absolute path', ->
+        path = '/home/neft/testPath.nml'
+        result = bundle nml: '', path: path
+        expected = pathUtils.relative fs.realpathSync('.'), path
+        expected = """
+            _RendererObject = Neft.Renderer.itemUtils.Object
+            Class = Neft.Renderer.Class
+            windowItem = undefined
+            exports._init = (opts) ->
+                windowItem = opts.windowItem
+                return
+            exports._queries = {}
+            exports._imports = {}
+            exports._path = "#{expected}"
+
+        """
         assert.is result, expected

@@ -30,6 +30,7 @@ exports.bundle = ({nml, path}) ->
     queries = exports.getQueries ast.objects
     imports = exports.getImports ast
     bundle = bundler.bundle
+        path: path
         imports: imports
         constants: ast.constants
         objects: ast.objects

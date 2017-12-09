@@ -209,7 +209,7 @@ app.cookies.onChange(function(key){
         # set styles window item
         if opts.styles?
             for style in opts.styles
-                if style.name in ['windowItem', '__windowItem__']
+                if style.name is '__windowItem__'
                     style.file._init windowItem: null
                     windowStyle = style.file._main document: null
                     break
@@ -224,7 +224,7 @@ app.cookies.onChange(function(key){
 
             # initialize styles
             for style in opts.styles when style.name?
-                if style.name isnt 'windowItem'
+                if style.name isnt '__windowItem__'
                     style.file._init stylesInitObject
                 app.styles[style.name] = style.file
 
