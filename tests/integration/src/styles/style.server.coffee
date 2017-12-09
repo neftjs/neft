@@ -68,9 +68,9 @@ describe 'styles', ->
             assert.instanceOf bNode.style, Renderer.Rectangle
             assert.instanceOf iNode.style, Renderer.Text
 
-        it "accepts 'styles:windowItem:style:subid' syntax", ->
+        it "accepts 'styles:__windowItem__:style:subid' syntax", ->
             doc = render
-                html: '<b n-style="styles:windowItem:style:subid" />'
+                html: '<b n-style="styles:__windowItem__:style:subid" />'
                 windowStyle:
                     objects:
                         subid: Renderer.Text.New()

@@ -6,10 +6,9 @@ utils = require 'src/utils'
 moduleCache = require 'lib/module-cache'
 appBundleBuilder = require './appBundleBuilder'
 
-STAT_FOLDERS =
-    components: true
-    scripts: true
-    styles: true
+MAIN_STAT_FOLDERS = ['styles']
+
+BUILD_STAT_FOLDERS = ['components', 'scripts', 'styles']
 
 SUPPORTED_FOLDERS =
     components: true
@@ -26,15 +25,19 @@ HOT_RELOADS_ORDER =
     scripts: 0
 
 DISABLED_FILES =
-    'styles/__windowItem__.js': true
-    'styles/windowItem.js': true
+    'styles/__windowItem__.nml': true
 
 getRelativePath = (options, path) ->
-    buildCwd = pathUtils.join options.cwd, './build'
-    pathUtils.relative buildCwd, path
+    rel = pathUtils.relative options.cwd, path
+    if rel.startsWith('build')
+        rel = pathUtils.relative './build', rel
+    rel
 
 getPathFolder = (path) ->
     path.slice 0, path.indexOf(pathUtils.sep)
+
+getStatPath = (cwd, folders, dir = '') ->
+    pathUtils.join(cwd, dir, "*(#{folders.join('|')})", '**/*.?(js|nml)')
 
 exports.canUse = (platform, options, result) ->
     # srcChangedFiles
@@ -60,8 +63,10 @@ exports.canUse = (platform, options, result) ->
     true
 
 exports.prepare = (options, result, callback) ->
-    folders = Object.keys(STAT_FOLDERS).join('|')
-    globPath = pathUtils.join(options.cwd, 'build', "*(#{folders})", '**/*.?(js|nml)')
+    buildGlob = getStatPath(options.cwd, BUILD_STAT_FOLDERS, 'build')
+    mainGlob = getStatPath(options.cwd, MAIN_STAT_FOLDERS)
+
+    globPath = "{#{buildGlob},#{mainGlob}}"
     glob globPath, (err, paths) ->
         {stats} = result
         if err

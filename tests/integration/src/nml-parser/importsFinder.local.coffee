@@ -14,9 +14,9 @@ describe 'nml-parser imports', ->
         }
         '''
         expected = [
-            {name: 'Class', value: 'Neft.Renderer.Class'},
-            {name: 'Item', value: 'Neft.Renderer.Item'},
-            {name: 'PropertyAnimation', value: 'Neft.Renderer.PropertyAnimation'},
+            {name: 'Class', ref: 'Neft.Renderer.Class'},
+            {name: 'Item', ref: 'Neft.Renderer.Item'},
+            {name: 'PropertyAnimation', ref: 'Neft.Renderer.PropertyAnimation'},
         ]
         assert.isEqual getImports(code), expected
 
@@ -25,8 +25,8 @@ describe 'nml-parser imports', ->
         import Styles.Header.VerticalText
         '''
         expected = [
-            {name: 'VerticalText', value: 'require "styles/Header/VerticalText"'},
-            {name: 'Class', value: 'Neft.Renderer.Class'},
+            {name: 'VerticalText', path: 'styles/Header/VerticalText'},
+            {name: 'Class', ref: 'Neft.Renderer.Class'},
         ]
         assert.isEqual getImports(code), expected
 
@@ -35,8 +35,8 @@ describe 'nml-parser imports', ->
         import Styles.Header.VerticalText
         '''
         expected = [
-            {name: 'VerticalText', value: 'require "styles/Header/VerticalText"'},
-            {name: 'Class', value: 'Neft.Renderer.Class'},
+            {name: 'VerticalText', path: 'styles/Header/VerticalText'},
+            {name: 'Class', ref: 'Neft.Renderer.Class'},
         ]
         assert.isEqual getImports(code), expected
 
@@ -47,9 +47,9 @@ describe 'nml-parser imports', ->
         expected = [
             {
                 name: 'VerticalText',
-                value: 'require "node-modules/neft-vertical-text/renderer/verticalText"'
+                path: 'node-modules/neft-vertical-text/renderer/verticalText'
             },
-            {name: 'Class', value: 'Neft.Renderer.Class'},
+            {name: 'Class', ref: 'Neft.Renderer.Class'},
         ]
         assert.isEqual getImports(code), expected
 
@@ -60,9 +60,9 @@ describe 'nml-parser imports', ->
         expected = [
             {
                 name: 'Video',
-                value: 'require "extensions/video/renderer/video"'
+                path: 'extensions/video/renderer/video'
             },
-            {name: 'Class', value: 'Neft.Renderer.Class'},
+            {name: 'Class', ref: 'Neft.Renderer.Class'},
         ]
         assert.isEqual getImports(code), expected
 
@@ -73,8 +73,8 @@ describe 'nml-parser imports', ->
         expected = [
             {
                 name: 'Video',
-                value: 'require "extensions/video/renderer/video"'
+                path: 'extensions/video/renderer/video'
             },
-            {name: 'Class', value: 'Neft.Renderer.Class'},
+            {name: 'Class', ref: 'Neft.Renderer.Class'},
         ]
         assert.isEqual getImports(code), expected

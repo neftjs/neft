@@ -85,15 +85,6 @@ module.exports = (Document) ->
             true
 
     ###
-    Override Element::index setter.
-    ###
-    utils.overrideProperty Element::, 'index', null, (_super) ->
-        (val) ->
-            unless _super.call(@, val)
-                return false
-            true
-
-    ###
     Override Element::visible setter.
     ###
     utils.overrideProperty Element::, 'visible', null, (_super) ->

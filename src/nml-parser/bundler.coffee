@@ -1,15 +1,25 @@
 'use strict'
 
 utils = require 'src/utils'
+pathUtils = require 'path'
+fs = require 'fs'
 
 GLOBAL_VARIABLES = ['windowItem']
 OBJECT_VARIABLES = ['document']
 PADDING = '    '
 
+getImportValue = (cfg) ->
+    if cfg.ref
+        return cfg.ref
+    if cfg.path
+        return "require \"#{cfg.path}\""
+    throw new Error "Unsupported import config object '#{cfg}'"
+
 getImports = (imports) ->
     result = ""
     for importConfig in imports
-        result += "#{importConfig.name} = #{importConfig.value}\n"
+        value = getImportValue importConfig
+        result += "#{importConfig.name} = #{value}\n"
     result
 
 getConstants = (constants) ->
@@ -47,10 +57,22 @@ getMainObject = (objects) ->
     exports.New = () -> exports._main({}).item\n
     """
 
-getQueries = (queries) ->
-    "exports._queries = #{JSON.stringify queries}"
+getQueriesDict = (queries) ->
+    "exports._queries = #{JSON.stringify queries}\n"
 
-exports.bundle = ({imports, constants, objects, objectCodes, queries}) ->
+getImportsDict = (imports) ->
+    paths = {}
+    for {path} in imports
+        paths[path] = true if path?
+    "exports._imports = #{JSON.stringify paths}\n"
+
+getFileMeta = (path) ->
+    relPath = path
+    if pathUtils.isAbsolute(path)
+        relPath = pathUtils.relative fs.realpathSync('.'), path
+    "exports._path = \"#{relPath}\"\n"
+
+exports.bundle = ({path, imports, constants, objects, objectCodes, queries}) ->
     result = '''
     _RendererObject = Neft.Renderer.itemUtils.Object\n
     '''
@@ -60,5 +82,8 @@ exports.bundle = ({imports, constants, objects, objectCodes, queries}) ->
     result += getObjectsCode objectCodes
     result += getInitFunctionCode()
     result += getMainObject objectCodes
-    result += getQueries queries
+    result += getQueriesDict queries
+    result += getImportsDict imports
+    if path
+        result += getFileMeta path
     result

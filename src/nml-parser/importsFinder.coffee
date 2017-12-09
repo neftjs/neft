@@ -28,7 +28,7 @@ class ImportsFinder
                     path = importPath[1...].join '/'
                     result.push
                         name: name
-                        value: "require \"styles/#{path}\""
+                        path: "styles/#{path}"
                 when 'Modules'
                     if importPath.length > 2
                         throw new Error "Cannot import '#{importPath.join '.'}' (too much elements)"
@@ -37,7 +37,7 @@ class ImportsFinder
                     extName = name[0].toLowerCase() + name.slice(1)
                     result.push
                         name: name
-                        value: "require \"node-modules/#{path}/renderer/#{extName}\""
+                        path: "node-modules/#{path}/renderer/#{extName}"
                 when 'Neft'
                     if importPath[1] isnt 'Extensions'
                         throw new Error """
@@ -49,7 +49,7 @@ class ImportsFinder
                     extName = name[0].toLowerCase() + name.slice(1)
                     result.push
                         name: name
-                        value: "require \"extensions/#{extName}/renderer/#{extName}\""
+                        path: "extensions/#{extName}/renderer/#{extName}"
                 when 'Extensions'
                     if importPath.length > 2
                         throw new Error "Cannot import '#{importPath.join '.'}' (too much elements)"
@@ -57,7 +57,7 @@ class ImportsFinder
                     extName = name[0].toLowerCase() + name.slice(1)
                     result.push
                         name: name
-                        value: "require \"extensions/#{extName}/renderer/#{extName}\""
+                        path: "extensions/#{extName}/renderer/#{extName}"
                 else
                     throw new Error """
                         Unknown NML import namespace '#{importPath[0]}'; \
@@ -71,7 +71,7 @@ class ImportsFinder
             if Renderer[key]?
                 result.push
                     name: key
-                    value: "Neft.Renderer.#{key}"
+                    ref: "Neft.Renderer.#{key}"
         result
 
     validateNoMissedImports: (importedList) ->

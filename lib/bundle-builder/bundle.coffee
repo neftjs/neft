@@ -1,7 +1,6 @@
 # coffeelint: disable=no_debugger
 
 fs = require 'fs-extra'
-crypto = require 'crypto'
 pathUtils = require 'path'
 os = require 'os'
 moduleCache = require 'lib/module-cache'
@@ -31,8 +30,8 @@ FILE_SCOPE = """(function(){
         var exports = {{declarations}};
         var initialized = new Array(__modules.length);
 
-        return function (paths, name){
-            var path = paths[name];
+        function requireFunc(paths, name){
+            var path = paths[name] || name;
             var module = __modules[path];
             if (module) {
                 if (!initialized[path]) {
@@ -47,6 +46,23 @@ FILE_SCOPE = """(function(){
             }
             throw new Error("Cannot find module '"+name+"'");
         };
+
+        requireFunc.initModule = function (path, moduleExports) {
+            if (!__modules[path]) {
+                throw new Error('Cannot initialize unknown module ' + path)
+            }
+            initialized[path] = true;
+            exports[path] = moduleExports;
+        }
+
+        requireFunc.reloadModule = function (path) {
+            if (!__modules[path]) {
+                throw new Error('Cannot reload unknown module ' + path)
+            }
+            initialized[path] = false;
+        }
+
+        return requireFunc
     })();
 
     var __createRequire = function (paths){
