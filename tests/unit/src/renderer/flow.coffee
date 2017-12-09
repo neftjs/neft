@@ -34,7 +34,7 @@ describe 'renderer Flow', ->
         classExt = Renderer.Class.New()
         classExt.changes = changes
         classExt.target = flow
-        classExt.enable()
+        classExt.running = true
 
     it '1', (callback) ->
         setClass collapseMargins: true

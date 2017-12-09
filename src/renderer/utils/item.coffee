@@ -80,26 +80,15 @@ module.exports = (Renderer, Impl) ->
 
             classElem = createClass opts
             classElem.target = @
-            classElem.enable()
+            classElem.running = true
             return
 
-        CHANGES_OMIT_ATTRIBUTES =
-            __proto__: null
-            id: true
-            properties: true
-            signals: true
-            children: true
+
 
         createClass = (opts) ->
             classElem = Renderer.Class.New()
             classElem._priority = -1
-
-            {changes} = classElem
-            for prop, val of opts
-                if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
-                    changes.setBinding prop, val
-                else if not CHANGES_OMIT_ATTRIBUTES[prop]
-                    changes.setAttribute prop, val
+            classElem.changes = opts
 
             classElem
 

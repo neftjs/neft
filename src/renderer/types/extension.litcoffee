@@ -4,6 +4,7 @@
 
     utils = require 'src/utils'
     signal = require 'src/signal'
+    assert = require 'src/assert'
 
     module.exports = (Renderer, Impl, itemUtils) -> class Extension extends itemUtils.Object
         @__name__ = 'Extension'
@@ -12,41 +13,6 @@
             super()
             @_target = null
             @_running = false
-            @_when = false
-            @_whenHandler = null
-
-        signalListener = ->
-            unless @_when
-                @_when = true
-                @onWhenChange.emit false
-                unless @_running
-                    @enable()
-            return
-
-## *Boolean* Extension::when
-
-## *Signal* Extension::onWhenChange(*Boolean* oldValue)
-
-        itemUtils.defineProperty
-            constructor: @
-            name: 'when'
-            defaultValue: false
-            setter: (_super) -> (val) ->
-                if @_whenHandler
-                    @_whenHandler.disconnect signalListener, @
-                    @_whenHandler = null
-
-                if typeof val is 'function' and val.connect?
-                    val.connect signalListener, @
-                    @_whenHandler = val
-                else
-                    _super.call @, !!val
-
-                    if val and not @_running
-                        @enable()
-                    else if not val and @_running
-                        @disable()
-                return
 
 ## *Item* Extension::target
 
@@ -57,24 +23,25 @@
             name: 'target'
             defaultValue: null
 
-## ReadOnly *Boolean* Extension::running
+## *Boolean* Extension::running
 
 ## *Signal* Extension::onRunningChange(*Boolean* oldValue)
 
-        utils.defineProperty @::, 'running', utils.CONFIGURABLE, ->
-            @_running
-        , null
+        itemUtils.defineProperty
+            constructor: @
+            name: 'running'
+            defaultValue: false
+            setter: (_super) -> (val) ->
+                assert.isBoolean val
 
-        signal.Emitter.createSignal @, 'onRunningChange'
+                oldVal = @_running
+                _super.call @, val
+                if oldVal and not val
+                    @_disable()
+                if not oldVal and val
+                    @_enable()
+                return
 
-## Extension::enable()
+        _enable: ->
 
-        enable: ->
-            @_running = true
-            @onRunningChange.emit false
-
-## Extension::disable()
-
-        disable: ->
-            @_running = false
-            @onRunningChange.emit true
+        _disable: ->

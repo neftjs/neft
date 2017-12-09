@@ -80,7 +80,7 @@ module.exports = (Renderer) ->
 
         windowItemClass = Renderer.Class.New()
         windowItemClass.target = item
-        windowItemClass.enable()
+        windowItemClass.running = true
 
         _super.call impl, item
         impl.onWindowItemReady.emit item
@@ -90,9 +90,7 @@ module.exports = (Renderer) ->
     impl.setWindowSize = (width, height) ->
         return unless impl.windowItem
         eventLoop.lock()
-        windowItemClass.disable()
         windowItemClass.changes = width: width, height: height
-        windowItemClass.enable()
         eventLoop.release()
 
     impl.addTypeImplementation = (type, methods) ->

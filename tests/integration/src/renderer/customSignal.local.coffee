@@ -27,23 +27,6 @@ describe 'Item custom signal', ->
         item.calcResult.emit 1, 4
         assert.is item.result, 5
 
-    it 'can be used in bindings between items', ->
-        item = getItemFromNml '''
-            Item {
-                id: main
-                signal show
-
-                Item {
-                    if (main.show) {
-                        width: 100
-                    }
-                }
-            }
-        '''
-        assert.is item.children.firstChild.width, 0
-        item.show.emit()
-        assert.is item.children.firstChild.width, 100
-
     it 'cannot override other signals', ->
         try
             getItemFromNml '''

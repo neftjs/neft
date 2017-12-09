@@ -25,31 +25,6 @@
 
         signal.Emitter.createSignal @, 'onStop'
 
-        itemUtils.defineProperty
-            constructor: @
-            name: 'running'
-            developmentSetter: (val) ->
-                assert.isBoolean val
-            setter: (_super) -> (val) ->
-                @_when = val
-                oldVal = @_running
-                if oldVal is val
-                    return
-
-                _super.call @, val
-
-                if val
-                    Impl.startAnimation.call @
-                    @onStart.emit()
-                    if @_paused
-                        Impl.pauseAnimation.call @
-                else
-                    if @_paused
-                        @paused = false
-                    Impl.stopAnimation.call @
-                    @onStop.emit()
-                return
-
 ## *Boolean* Animation::paused
 
 ## *Signal* Animation::onPausedChange(*Boolean* oldValue)
@@ -119,8 +94,14 @@
             @paused = false
             @
 
-        enable: ->
-            @running = true
+        _enable: ->
+            Impl.startAnimation.call @
+            @onStart.emit()
+            if @_paused
+                Impl.pauseAnimation.call @
 
-        disable: ->
-            @running = false
+        _disable: ->
+            if @_paused
+                @paused = false
+            Impl.stopAnimation.call @
+            @onStop.emit()

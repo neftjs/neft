@@ -256,7 +256,7 @@ describe 'nml-parser', ->
             _r0 = Class.New()
             _RendererObject.setOpts(_i0, {"children": [\
             _RendererObject.setOpts(_r0, {\
-            "when": [`function(){return this.target.width > 50}`, \
+            "running": [`function(){return this.target.width > 50}`, \
             [[['this', 'target'], 'width']]], \
             "changes": {"height": [`function(){return document.width}`, [[document, 'width']]]}\
             })\
@@ -280,7 +280,7 @@ describe 'nml-parser', ->
             _r0 = Class.New()
             _RendererObject.setOpts(_i0, {"children": [\
             _RendererObject.setOpts(_r0, {\
-            "when": [`function(){return document.props.hover}`, \
+            "running": [`function(){return document.props.hover}`, \
             [[[document, 'props'], 'hover']]], \
             "changes": {"height": 100}\
             })\

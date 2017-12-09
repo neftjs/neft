@@ -131,7 +131,7 @@ Rectangle {
 
                 if val
                     @_animationClass.target = val
-                    @_animationClass.enable()
+                    @_animationClass.running = true
                     val.target = @target
                     val.property = @property
                 return
