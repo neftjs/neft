@@ -17,7 +17,7 @@ STATIC_DIR = './static'
 STATIC_OUT_DIR = "#{OUT_DIR}app/src/main/assets/static"
 JS_FILE_PATH = "app/src/main/assets/javascript/neft.coffee.mustache"
 BUNDLE_DIR = './build/android/'
-RUNTIME_PATH = pathUtils.resolve __dirname, '../../../../../runtimes/android'
+RUNTIME_PATH = pathUtils.resolve __dirname, '../../../../runtimes/android'
 
 mustacheFiles = []
 

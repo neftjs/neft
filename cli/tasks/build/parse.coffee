@@ -13,7 +13,7 @@ linkResources = require './parse/resources'
 createIndexFile = require './parse/index'
 
 NEFT_EXTENSIONS = do ->
-    extensionsPath = pathUtils.join __dirname, '../../../../extensions/'
+    extensionsPath = pathUtils.join __dirname, '../../../extensions/'
     paths = glob.sync "#{extensionsPath}*"
     for path, i in paths
         paths[i] = path.slice extensionsPath.length
@@ -42,7 +42,7 @@ module.exports = (platform, options, callback) ->
         packageExtensions = NEFT_EXTENSIONS
     if Array.isArray(packageExtensions)
         for ext in packageExtensions
-            path = pathUtils.resolve __dirname, "../../../../extensions/#{ext}"
+            path = pathUtils.resolve __dirname, "../../../extensions/#{ext}"
             unless fs.existsSync(path)
                 log.error "Neft extension #{ext} defined in package.json not found"
             extensionsByName[ext] = path

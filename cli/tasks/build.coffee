@@ -2,46 +2,60 @@
 
 fs = require 'fs-extra'
 cliUtils = require '../utils'
-chokidar = require 'chokidar'
-Networking = require 'src/networking'
-utils = require 'src/utils'
-log = require 'src/log'
 
 local = require './build/local'
-server = require './build/server'
+watchServer = require './build/watchServer'
+build = require './build/build'
+watch = require './build/watch'
+utils = require 'src/utils'
+log = require 'src/log'
+Networking = require 'src/networking'
+
+startWatcher = (watchHandler, buildsStack, platform, options) ->
+    watch platform, options, (buildOptions, onBuilt) ->
+        buildsStack.add (callback) ->
+            build platform, buildOptions, (err, result) ->
+                watchHandler.send platform, result
+                onBuilt result
+                callback err
+        unless buildsStack.pending
+            buildsStack.runAll utils.NOP
+
+startWatchers = (options) ->
+    networking = new Networking utils.merge
+        type: Networking.HTTP
+        language: 'en'
+        allowAllOrigins: true
+    , options.buildServer
+
+    watchHandler = watchServer.start networking
+    buildsStack = new utils.async.Stack
+
+    for platform in options.platforms
+        startWatcher watchHandler, buildsStack, platform, options
+    return
 
 module.exports = (options, callback) ->
     unless cliUtils.verifyNeftProject('./')
         return
 
-    options.cwd = fs.realpathSync '.'
+    data = utils.clone options
+    data.cwd = fs.realpathSync '.'
 
     local.normalizeLocalFile()
-    LOCAL = local.getLocal()
+    local = local.getLocal()
 
-    server.runIfNeeded ->
-        process.stdin.resume()
+    if data.watch
+        data.buildServer = local.buildServer
+        data.buildServerUrl = local.buildServer.url
 
-        Networking.createRequest
-            method: 'post'
-            uri: "#{LOCAL.buildServer.url}build"
-            data: options
-            onLoadEnd: callback
+    stack = new utils.async.Stack
 
-        Networking.createRequest
-            method: 'post'
-            uri: "#{LOCAL.buildServer.url}onTerminate"
-            onLoadEnd: (err) ->
-                log.warn 'Master CLI process stops running'
-                if err
-                    log.error err
-                unless options.isRunning
-                    process.exit()
+    for platform in data.platforms
+        stack.add build, null, [platform, data]
 
-        process.on 'SIGINT', ->
-            Networking.createRequest
-                method: 'post'
-                uri: "#{LOCAL.buildServer.url}stopBuild"
-                data: options
-                onLoadEnd: ->
-                    process.exit()
+    stack.runAll (err, result) ->
+        if data.watch
+            data.lastResult = result
+            startWatchers data
+        callback err

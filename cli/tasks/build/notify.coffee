@@ -3,7 +3,7 @@
 pathUtils = require 'path'
 notifier = require 'node-notifier'
 
-NOTIFY_ICON_PATH = pathUtils.join __dirname, '../../../../media/logo-white.png'
+NOTIFY_ICON_PATH = pathUtils.join __dirname, '../../../media/logo-white.png'
 
 module.exports = (err) ->
     notifier.notify

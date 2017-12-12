@@ -11,7 +11,7 @@ INDEX_ABS_PATH = pathUtils.resolve fs.realpathSync('.'), INDEX_PATH
 module.exports = (platform, options, app, callback) ->
     mode = if options.release then 'release' else 'develop'
     neftFileName = "neft-#{platform}-#{mode}.js"
-    neftFilePath = pathUtils.resolve __dirname, "../../../bundle/neft-#{platform}-#{mode}.js"
+    neftFilePath = pathUtils.resolve __dirname, "../../bundle/neft-#{platform}-#{mode}.js"
 
     logtime = log.time 'Resolve bundle modules'
 

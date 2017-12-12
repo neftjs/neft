@@ -8,15 +8,15 @@ cp = require 'child_process'
 pathUtils = require 'path'
 xcode = require 'xcode'
 
-OUT_DIR = './build/macos/'
-EXT_NATIVE_OUT_DIR = "#{OUT_DIR}io.neft.mac/Extension/"
-CUSTOM_NATIVE_DIR = './native/macos'
-CUSTOM_NATIVE_OUT_DIR = "#{OUT_DIR}io.neft.mac/"
+OUT_DIR = './build/ios/'
+EXT_NATIVE_OUT_DIR = "#{OUT_DIR}Neft/Extension/"
+CUSTOM_NATIVE_DIR = './native/ios'
+CUSTOM_NATIVE_OUT_DIR = "#{OUT_DIR}Neft/"
 STATIC_DIR = './static'
 STATIC_OUT_DIR = "#{OUT_DIR}static"
-ANDROID_BUNDLE_DIR = './build/macos/'
-XCODE_PROJECT_PATH = "#{OUT_DIR}io.neft.mac.xcodeproj/project.pbxproj"
-RUNTIME_PATH = pathUtils.resolve __dirname, '../../../../../runtimes/macos'
+ANDROID_BUNDLE_DIR = './build/ios/'
+XCODE_PROJECT_PATH = "#{OUT_DIR}Neft.xcodeproj/project.pbxproj"
+RUNTIME_PATH = pathUtils.resolve __dirname, '../../../../runtimes/ios'
 
 {utils, log} = Neft
 
@@ -24,7 +24,7 @@ mustacheFiles = []
 coffeeFiles = []
 
 prepareFiles = (config) ->
-    logtime = log.time 'Prepare macos files'
+    logtime = log.time 'Prepare ios files'
 
     for path in mustacheFiles
         # get file
@@ -69,7 +69,7 @@ module.exports = (config, callback) ->
         prepareFiles config
         return callback()
 
-    logtime = log.time "Copy macos files into '#{OUT_DIR}'"
+    logtime = log.time "Copy ios files into '#{OUT_DIR}'"
     if fs.existsSync(OUT_DIR)
         fs.removeSync OUT_DIR
     fs.copySync RUNTIME_PATH, OUT_DIR,
@@ -122,13 +122,13 @@ module.exports = (config, callback) ->
         fs.ensureDirSync STATIC_OUT_DIR
 
     logtime = log.time 'Copy extensions'
-    config.macosExtensions = []
+    config.iosExtensions = []
     for ext in config.allExtensions
-        nativeDirPath = "#{ext.path}/native/macos"
+        nativeDirPath = "#{ext.path}/native/ios"
         if fs.existsSync(nativeDirPath)
             name = utils.capitalize ext.name
             name = name.replace /(\-\w)/g, (m) -> m[1].toUpperCase()
-            config.macosExtensions.push
+            config.iosExtensions.push
                 name: name
                 path: nativeDirPath
                 bundlePath: bundlePath = "#{EXT_NATIVE_OUT_DIR}#{name}"
@@ -147,10 +147,10 @@ module.exports = (config, callback) ->
             callback new Error "Can't parse XCode file"
             return
 
-        mainGroupId = project.findPBXGroupKey path: 'io.neft.mac'
+        mainGroupId = project.findPBXGroupKey path: 'Neft'
 
         # add extensions
-        for ext in config.macosExtensions
+        for ext in config.iosExtensions
             baseExtDir = ext.bundlePath.slice OUT_DIR.length
             files = fs.readdirSync ext.path
             name = 'Extension' + ext.name
