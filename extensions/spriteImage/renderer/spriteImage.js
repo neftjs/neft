@@ -23,7 +23,7 @@ SpriteImage.New = (opts) => {
 itemUtils.defineProperty({
     constructor: SpriteImage,
     name: 'source',
-    implementation: Impl.setSpriteImageSource,
+    implementation: Impl.Types.SpriteImage.setSpriteImageSource,
     developmentSetter(val) {
         assert.isString(val);
     }
@@ -32,7 +32,7 @@ itemUtils.defineProperty({
 itemUtils.defineProperty({
     constructor: SpriteImage,
     name: 'frameCount',
-    implementation: Impl.setSpriteImageFrameCount,
+    implementation: Impl.Types.SpriteImage.setSpriteImageFrameCount,
     developmentSetter(val) {
         assert.isInteger(val);
         assert.operator(val, '>', 0);
