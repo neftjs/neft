@@ -37,6 +37,6 @@ exports.getLocal = ->
     local.buildServer.url = do ->
         "#{local.buildServer.protocol}://" +
         "#{local.buildServer.host}:" +
-        "#{local.buildServer.port}/"
+        "#{local.buildServer.port}"
 
     local
