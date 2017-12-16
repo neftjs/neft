@@ -54,7 +54,7 @@ getChromePath = (callback) ->
             if err
                 next()
             else
-                log "Chrome path resolved to #{resolvedPath}"
+                log.debug "Chrome path resolved to #{resolvedPath}"
                 callback null, resolvedPath
     , ->
         callback new Error 'Cannot resolve Chrome path'
@@ -87,7 +87,7 @@ runOnPathWithUri = (env, uri, callback) ->
     chrome = childProcess.spawn env.path, args, env: config.getProcessEnv()
 
     chrome.on 'exit', ->
-        log "Chrome terminated"
+        log.info "Chrome terminated"
         fs.removeSync USER_DATA_DIR
         callback()
 
@@ -108,7 +108,7 @@ runAndLog = (env, logsReader, callback) ->
     chromeProcess = runOnPathWithUri env, url, ->
         unless logsReader.terminated
             error = "Chrome tests terminated before all tests ended"
-        callback error or logsReader.error
+        callback error
     chromeProcess.onLog (msg) ->
         logsReader.log msg
         if logsReader.terminated

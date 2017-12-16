@@ -37,6 +37,7 @@ options =
     notify: false
     'init-file': './init.js'
     config: ''
+    verbose: false
 
 argOutput = ''
 for arg, i in process.argv when i > 1
@@ -49,7 +50,7 @@ for arg, i in process.argv when i > 1
             value = DEFAULT_OPTIONS_VALUES[name] or true
 
         if options[name] is undefined
-            log.error "Unexpected option '#{arg}'"
+            log.error "Unexpected option `#{arg}`"
             args.help = true
 
         options[name] = value
@@ -64,7 +65,7 @@ for arg, i in process.argv when i > 1
                 args[argOutput] += arg
         else
             if args[arg] is undefined
-                log.error "Unexpected command '#{arg}'"
+                log.error "Unexpected command `#{arg}`"
                 args.help = true
 
             args[arg] = true
@@ -92,20 +93,18 @@ if utils.has(process.argv, 'build') or utils.has(process.argv, 'run')
     else
         unsupportedPlatform = platforms.find (platform) -> not PLATFORMS[platform]
         if unsupportedPlatform
-            log.error "Unsupported platform #{unsupportedPlatform}"
+            log.error "Unsupported platform `#{unsupportedPlatform}`"
             args.help = true
     options.platforms = platforms
-
-log.show ''
 
 # commands
 if args.help
     helpFilePath = pathUtils.resolve(__dirname, './README')
     helpFile = fs.readFileSync(helpFilePath, 'utf-8')
-    log "\n#{helpFile}"
+    log.log "\n#{helpFile}"
 
 else if args.version
-    log require('../package.json').version
+    log.log require('../package.json').version
 
 else if args.create
     require('./tasks/create') args.create, options
@@ -120,4 +119,4 @@ else if platforms.length > 0
             process.exit()
 
 else if args.test
-    require 'lib/testing/cli'
+    require('lib/testing/cli') options

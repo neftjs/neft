@@ -3,14 +3,9 @@
 fs = require 'fs'
 parser = require './resources/parser'
 
-utils = require 'src/utils'
-log = require 'src/log'
-
 IN_DIR = './static'
 
 module.exports = (platform, app, callback) ->
-    logtime = log.time 'Parse resources'
-
     unless fs.existsSync(IN_DIR)
         return callback()
 
@@ -18,5 +13,4 @@ module.exports = (platform, app, callback) ->
         if err
             return callback err
         app.resources = data
-        log.end logtime
         callback null

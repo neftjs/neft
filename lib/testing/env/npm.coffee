@@ -37,7 +37,7 @@ installProjectOnNode = (env, logsReader, callback) ->
         cmd += " -g"
     childProcess.exec cmd, (err, stdout, stderr) ->
         log.error stderr
-        log stdout
+        log.log stdout
         fs.unlinkSync PACKAGE_FILENAME
         logsReader.log "npm package installed"
         callback null

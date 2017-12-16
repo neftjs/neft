@@ -9,30 +9,53 @@ server = require './server'
 targets = require './cli/targets'
 processLogs = require './cli/processLogs'
 
-{log} = Neft
+{log, utils} = Neft
+
+PROCESS_EXIT_DELAY = 1000 # 1s
+
+exitProcess = (code) ->
+    setTimeout ->
+        process.exit code
+    , PROCESS_EXIT_DELAY
 
 reportAndExit = (err) ->
     # log errors
-    do ->
+    if not utils.isEmpty(processLogs.errors)
+        log.log '''
+            \n**Test errors**
+            **-----------**
+        '''
         for name, text of processLogs.errors
-            log.error "\n✖ #{name}"
-            log.error text.replace /\n/g, '\n   '
+            log.log ''
+            log.log "**✖ #{name}**"
+            log.log text.replace /\n/g, '\n   '
+
+    log.log '''
+        \n**Test results**
+        **------------**
+    '''
+
+    # log statistics
+    log.log ''
+    for name, stat of processLogs.stats
+        log.log """
+            **#{stat.passed}** #{name.toLowerCase()} passed; \
+            **#{stat.passed + stat.failed}** total
+        """
 
     # result
-    if err
-        log.error err
-        log.error '\nAll tests ended: FAILURE\n'
-        process.exit 1
+    log.log ''
+    if err or not utils.isEmpty(processLogs.errors)
+        if err
+            log.error err
+        log.error 'All tests ended: **FAILURE**'
+        exitProcess 1
     else
-        # log statistics
-        log ''
-        for name, number of processLogs.passingTests
-            log.ok "#{number} #{name.toLowerCase()} passing"
+        log.ok 'All tests ended: **SUCCESS**'
+        exitProcess 0
 
-        log.ok '\nAll tests ended: SUCCESS\n'
-        process.exit 0
-
-log.show ''
-server.startServer()
-targets.runEnvs (err) ->
-    reportAndExit err
+module.exports = ({verbose}) ->
+    processLogs.verbose = verbose
+    server.startServer()
+    targets.runEnvs (err) ->
+        reportAndExit err

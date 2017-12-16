@@ -8,7 +8,7 @@
     signal = require 'src/signal'
 
     assert = assert.scope 'Networking.Response'
-    log = log.scope 'Networking', 'Response'
+    log = log.scope 'networking'
 
     module.exports = (Networking, Impl) -> class Response extends signal.Emitter
 
@@ -233,8 +233,8 @@ res.send(Networking.Response.OK, {user: 'Max', age: 43});
 
 ## Response::redirect(*Integer* status = `Response.FOUND`, *String* uri)
 
-The *Response.FOUND* status is typically used for the temporary redirection.
-The *Response.MOVED* for is a permanent redirection.
+The *Response.FOUND* status is typically used for temporary redirection.
+The *Response.MOVED* is a permanent redirection.
 
         redirect: (status, uri) ->
             if uri is undefined
@@ -245,7 +245,7 @@ The *Response.MOVED* for is a permanent redirection.
             assert.ok utils.has(Response.STATUSES, status)
             assert.isString uri
 
-            log "#{status} redirect to '#{uri}'"
+            log.debug "#{status} redirect to `#{uri}`"
 
             @status = status
             @setHeader 'Location', uri

@@ -503,8 +503,8 @@ Corresponding node handler: *n-onRevert=""*.
 
                 # logs
                 `//<development>`
-                for log in @logs
-                    log.render()
+                for logElem in @logs
+                    logElem.render()
                 `//</development>`
 
                 @isRendered = true
@@ -663,8 +663,8 @@ Corresponding node handler: *n-onReplaceByUse=""*.
                 clone.propsToSet.push propsToSet.clone @, clone
 
             # logs
-            for log in @logs
-                clone.logs.push log.clone @, clone
+            for logElem in @logs
+                clone.logs.push logElem.clone @, clone
 
             # scope
             if @scripts

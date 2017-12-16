@@ -1,5 +1,3 @@
-# coffeelint: disable=no_debugger
-
 util = require 'util'
 fs = require 'fs-extra'
 pathUtils = require 'path'
@@ -10,6 +8,8 @@ moduleCache = require 'lib/module-cache'
 cliUtils = require 'cli/utils'
 log = require 'src/log'
 
+log = log.scope 'bundle-script'
+
 moduleCache.registerCoffeeScript()
 moduleCache.registerYaml()
 moduleCache.registerTxt(['.txt', '.pegjs'])
@@ -17,9 +17,9 @@ moduleCache.registerTxt(['.txt', '.pegjs'])
 fs.ensureDir './cli/bundle'
 
 createBundle = (opts, callback) ->
-    log "Create Neft bundle file for #{opts.platform} platform"
+    log.info "Create Neft bundle file for **#{opts.platform}** platform"
     env = cliUtils.getProcessEnvForPlatform opts.platform
-    console.log "Use process.env = #{util.inspect env}"
+    log.debug "Use process.env = #{util.inspect env}"
     bundle {
         release: opts.release
         removeLogs: opts.release
@@ -29,7 +29,7 @@ createBundle = (opts, callback) ->
         basepath: fs.realpathSync('.')
         env: env
     }, (err, bundle) ->
-        log.show ''
+        log.debug 'Bundle created'
 
         if err
             return callback err
@@ -52,6 +52,8 @@ createBundle = (opts, callback) ->
         name = "#{opts.platform}-#{mode}"
 
         fs.writeFileSync "./cli/bundle/neft-#{name}.js", template
+
+        log.debug 'Bundle saved'
 
         callback()
 
@@ -80,7 +82,7 @@ do ->
     index = -1
     callback = (err) ->
         if err?
-            console.error err
+            log.error err
             return
         index += 1
         if index < stack.length

@@ -195,7 +195,7 @@ runTests = (env, logsReader, callback) ->
                 androidProcess.kill()
                 return
     , (err) ->
-        callback err or logsReader.error
+        callback err
     return
 
 exports.onInitializeScreenshots = (env) ->

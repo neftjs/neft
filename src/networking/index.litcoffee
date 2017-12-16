@@ -57,7 +57,7 @@ var Networking = require('networking');
 
         @_initServer = (networking) ->
             setImmediate -> Networking.Impl.init networking
-            log.info "Start as `#{networking.host}:#{networking.port}`"
+            log.info "Start `#{networking.type}` as `#{networking.host}:#{networking.port}`"
 
 ## Networking::constructor(*Object* options)
 
@@ -192,11 +192,11 @@ The given options object corresponds to the *Networking.Request* properties.
 
             # create request
             req = new Networking.Request opts
-            logtime = log.time utils.capitalize("#{req}")
+            logTime = log.timer()
             onLoadEnd = ->
                 @pendingRequests.remove req
                 req.onLoadEnd.disconnect onLoadEnd, @
-                log.end logtime
+                logTime.ok utils.capitalize("#{req}")
             req.onLoadEnd.connect onLoadEnd, @
 
             # create response
@@ -271,7 +271,7 @@ The given options object corresponds to the *Networking.Request* properties.
             assert.ok req.pending
             res = req.response
 
-            log "Resolve `#{req}` request"
+            log.info "Resolve `#{req}`"
 
             onError = (err) ->
                 unless req.pending
@@ -283,7 +283,7 @@ The given options object corresponds to the *Networking.Request* properties.
                     res.raise Networking.Response.Error.RequestResolve req
 
             noHandlersError = ->
-                log.warn "No handler found for request `#{req}`"
+                log.warn "No handler found for `#{req}`"
                 onError()
 
             handlers = @_handlers[req.method]

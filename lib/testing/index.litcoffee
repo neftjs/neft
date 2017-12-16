@@ -181,7 +181,7 @@ The given test function can contains optional *callback* argument.
             # give logs some time to be printed int stdout
             setTimeout ->
                 process.exit code
-            , 100
+            , 1000
 
     runAutomatically = do ->
         val = process?.env.RUN_TESTS

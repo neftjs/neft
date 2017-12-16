@@ -9,11 +9,10 @@ createBundle = require './bundle'
 saveBundle = require './saveBundle'
 hotReloader = require './hotReloader'
 
-log = log.scope 'build'
-Log = Neft.log.constructor
+log = log.scope 'cli', 'build'
 
 module.exports = (platform, options, callback) ->
-    log.info platform
+    logLine = log.line().timer().repeat().loading "Building **#{platform}**"
 
     # create build folder
     fs.ensureDirSync './build'
@@ -65,14 +64,13 @@ module.exports = (platform, options, callback) ->
 
     # run
     stack.runAll (err) ->
-        log.show ''
-
         if err
             if err?.message then log.error err.message
             if err?.stack then log.error err.stack
             if not err?.message and not err?.stack
                 log.error err
-            log.error platform
+            logLine.error "**Cannot build #{platform}**"
         else
-            log.ok platform
+            logLine.ok "**Built #{platform}**"
+        logLine.stop()
         callback err

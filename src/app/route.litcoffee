@@ -12,7 +12,7 @@
     Renderer = require 'src/renderer'
     Dict = require 'src/dict'
 
-    log = log.scope 'App', 'Route'
+    log = log.scope 'app', 'route'
 
     IS_NODE = process.env.NEFT_NODE
     IS_CLIENT = not IS_NODE
@@ -403,7 +403,7 @@ Can be also a function. May returns a *Networking.Uri*, any String or `undefined
             tmplName = opts?.template or componentName
             useName = opts?.use or 'body'
 
-            logtime = log.time 'Render'
+            logTime = log.timer()
             if componentName isnt tmplName
                 if tmpl = app.components[tmplName]
                     tmplComponent = Route.getTemplateComponent tmplName
@@ -428,7 +428,7 @@ Can be also a function. May returns a *Networking.Uri*, any String or `undefined
                 @_destroyComponentOnEnd = false
             else
                 @_destroyComponentOnEnd = true
-            log.end logtime
+            logTime.ok "Component `#{componentName}` rendered"
             r
 
         createToHTMLFromObject = (opts) ->

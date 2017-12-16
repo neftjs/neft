@@ -42,7 +42,7 @@ TileImage.defineProperty({
                     this.set('resolution', getResourceResolutionByPath(res, path));
                     return path;
                 } else {
-                    log.warn(`Unknown resource given '${val}'`);
+                    log.warn(`Unknown resource given \`${val}\``);
                     return '';
                 }
             }

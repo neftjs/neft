@@ -10,7 +10,7 @@ module.exports = (options, callback) ->
     copy = (src) ->
         stack.add fs.copy, fs, [src, "#{out}/#{src}", {}]
 
-    logtime = log.time 'Save bundle'
+    logLine = log.line().timer().repeat().loading 'Saving bundle...'
 
     {out} = options
     stack = new utils.async.Stack
@@ -40,5 +40,8 @@ module.exports = (options, callback) ->
     copy appFilePath
 
     stack.runAll (err) ->
-        log.end logtime
+        if err
+            logLine.error 'Cannot save bundle'
+        else
+            logLine.ok "Bundle saved into `#{out}`"
         callback err

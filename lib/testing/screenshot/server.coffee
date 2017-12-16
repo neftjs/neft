@@ -87,7 +87,7 @@ takeScreenshot = (opts) ->
     return
 
 server.onInitializeScreenshots (opts) ->
-    log "🎞  Initialize screenshots"
+    log.log "🎞  Initialize screenshots"
 
     fs.emptyDirSync DEST
 
@@ -104,7 +104,7 @@ server.onInitializeScreenshots (opts) ->
         takeScreenshot opts
         rect = findWindow opts
         unless rect
-            log "Cannot initialize screenshots; try #{tryNo} / #{INITIALIZATION_TRIES}"
+            log.log "Cannot initialize screenshots; try #{tryNo} / #{INITIALIZATION_TRIES}"
         childProcess.execSync "sleep #{INITIALIZATION_TRY_DELAY_SEC}"
 
     if LOG_SCREENSHOT_DATA_URI
@@ -117,7 +117,7 @@ server.onInitializeScreenshots (opts) ->
     return
 
 server.onScreenshot (opts) ->
-    log "🎞  Take screenshot"
+    log.log "🎞  Take screenshot"
     path = pathUtils.parse opts.expected
     opts.name ?= path.name
     opts.path = getPathWithBasename pathUtils.join(DEST, path.base), path.name

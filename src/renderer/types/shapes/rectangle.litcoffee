@@ -32,7 +32,7 @@ Rectangle {
                     if rscVal = Impl.resources?.resolve(val, RESOURCE_REQUEST)
                         return rscVal
                     else
-                        log.warn "Unknown resource given '#{val}'"
+                        log.warn "Unknown resource given `#{val}`"
                         return DEFAULT_COLOR
                 val
 

@@ -21,7 +21,7 @@ install:
     - rm package-lock.json
     - npm install
 script:
-    - npm test
+    - npm test -- --verbose
 env:
     global:
         - LOG_SCREENSHOT_DATA_URI=1

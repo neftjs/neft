@@ -19,6 +19,8 @@ const { utils } = Neft;
     defObjProp = Object.defineProperty
     {random} = Math
 
+    log = require 'src/log'
+
     ###
     Link subfiles
     ###
@@ -1233,7 +1235,7 @@ Returns a new function which warns once by default.
         warned = false
         deprecated = ->
             unless warned
-                console.warn msg
+                log.warn msg
                 warned = true
             func.apply @, arguments
         deprecated

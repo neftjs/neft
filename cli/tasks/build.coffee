@@ -11,6 +11,8 @@ utils = require 'src/utils'
 log = require 'src/log'
 Networking = require 'src/networking'
 
+log = log.scope 'cli', 'build'
+
 startWatcher = (watchHandler, buildsStack, platform, options) ->
     watch platform, options, (buildOptions, onBuilt) ->
         buildsStack.add (callback) ->
@@ -22,6 +24,8 @@ startWatcher = (watchHandler, buildsStack, platform, options) ->
             buildsStack.runAll utils.NOP
 
 startWatchers = (options) ->
+    log.info 'Starting HTTP server for watch mode'
+
     networking = new Networking utils.merge
         type: Networking.HTTP
         language: 'en'
