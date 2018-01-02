@@ -16,9 +16,9 @@ exports.create = function (data) {
     Item.setItemParent.call(data.image, this);
     data.image.onLoad(() => {
         exports.setSpriteImageFrameCount.call(this, this._impl.frameCount);
-        data.autoSizeClass.disable();
+        data.autoSizeClass.running = false;
         data.autoSizeClass.changes.setAttribute('height', data.image.height);
-        data.autoSizeClass.enable();
+        data.autoSizeClass.running = true;
     });
 
     // animation
@@ -46,7 +46,7 @@ exports.setSpriteImageFrameCount = function (val) {
     this.animation.easing.steps = val;
     this.animation.to = -width + width / val;
 
-    this._impl.autoSizeClass.disable();
+    this._impl.autoSizeClass.running = false;
     this._impl.autoSizeClass.changes.setAttribute('width', width / val);
-    this._impl.autoSizeClass.enable();
+    this._impl.autoSizeClass.running = true;
 };
