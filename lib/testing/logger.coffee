@@ -5,22 +5,16 @@
 stack = require './stack'
 errorUtils = require './error'
 
+exports.TEST_START = '[TEST_START] '
 exports.TEST = '[TEST] '
-exports.SCOPE = '[SCOPE] '
 exports.ERROR_TEST = '[ERROR_TEST] '
 exports.ERROR = '[ERROR] '
+exports.START = 'Tests are starting'
 exports.SUCCESS = 'Tests success'
-exports.FAILURE = 'Tests failure'
-
-scopeDeepness = 0
-
-getDeepnessPrefix = ->
-    r = ''
-    for i in [0...scopeDeepness] by 1
-        r += '   '
-    r
+exports.FAILURE = 'Tests failed'
 
 exports.onTestsStart = ->
+    console.log "#{exports.START} #{stack.testsAmount} in total"
 
 exports.onTestsEnd = ->
     # log result
@@ -31,21 +25,15 @@ exports.onTestsEnd = ->
     return
 
 exports.onScopeStart = (scope) ->
-    if scope.message
-        console.log exports.SCOPE + getDeepnessPrefix() + scope.message
-        scopeDeepness += 1
-    return
 
 exports.onScopeEnd = (scope) ->
-    if scope.message
-        scopeDeepness -= 1
-    return
 
 exports.onTestStart = (test) ->
+    console.log exports.TEST_START + test.getFullMessage()
 
 exports.onTestError = (test, error) ->
     if test.message
-        console.log exports.ERROR_TEST + getDeepnessPrefix() + test.message
+        console.log exports.ERROR_TEST + test.getFullMessage()
     msg = "Error in test: #{test.getFullMessage()}\n"
     msg += errorUtils.toString(error)
     console.log exports.ERROR + encodeURIComponent(msg)
@@ -53,5 +41,5 @@ exports.onTestError = (test, error) ->
 
 exports.onTestEnd = (test) ->
     if test.message and test.fulfilled
-        console.log exports.TEST + getDeepnessPrefix() + test.message
+        console.log exports.TEST + test.getFullMessage()
     return

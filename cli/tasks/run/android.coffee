@@ -12,7 +12,7 @@ module.exports = (options, callback = ->) ->
     callbackCalled = false
     mode = if options.release then 'release' else 'develop'
 
-    logtime = log.time 'Install APK'
+    logLine = log.line().timer().repeat().loading 'Installing APK...'
     packageFile = JSON.parse fs.readFileSync('./package.json', 'utf-8')
     local = JSON.parse fs.readFileSync('./local.json', 'utf-8')
 
@@ -30,10 +30,12 @@ module.exports = (options, callback = ->) ->
 
     cmd = "#{adbPath} install -r build/android/app/build/outputs/apk/#{apkFileName}"
     adb = cp.exec cmd, (err) ->
-        log.end logtime
         if err
-            log.error err
+            logLine.error 'Cannot install APK'
+            logLine.stop()
             return
+        logLine.ok 'APK installed'
+        logLine.stop()
 
         # get current device time
         deviceTime = 0
@@ -50,9 +52,10 @@ module.exports = (options, callback = ->) ->
             $
         ///gm
         LOG_LEVEL = /^(LOG|OK|INFO|WARN|ERROR):\s/
+        prefixLog = log.prefix 'android'
         logcat = do ->
             args = adbPath.split ' '
-            args.push 'logcat', '-v', 'time', 'Neft:v', '*:E'
+            args.push 'logcat', '-v', 'time', 'Neft:v', '*:E', '-T', '1'
             cmd = args.shift()
             cp.spawn cmd, args
         logcat.stdout.on 'data', (data) ->
@@ -75,22 +78,25 @@ module.exports = (options, callback = ->) ->
                 if options.onLog
                     options.onLog msg
                     continue
+                if level in ['D', 'LOG']
+                    level = msg.split('  ', 1)[0]
+                    if level in ['OK', 'INFO', 'WARN', 'ERROR']
+                        msg = msg.slice level.length + 2
                 switch level
-                    when 'D', 'LOG'
-                        log msg
                     when 'OK'
-                        log.ok msg
+                        prefixLog.ok msg
                     when 'I', 'INFO'
-                        log.info msg
+                        prefixLog.info msg
                     when 'W', 'WARN'
-                        log.warn msg
+                        prefixLog.warn msg
                     when 'E', 'F', 'ERROR'
-                        log.error msg
+                        prefixLog.error msg
                     else
-                        log.error "Unknown log level", level, msg
+                        prefixLog.log msg
             return
 
         # run app
+        logLine = log.line().timer().repeat().loading 'Running application...'
         runCmd = """
             #{adbPath} shell am start \
             -a android.intent.action.MAIN \
@@ -99,7 +105,15 @@ module.exports = (options, callback = ->) ->
         shell = cp.exec runCmd, (err) ->
             if err
                 logcat.kill()
-                log.error err
+                logLine.error "Cannot run application: #{err}"
+            else
+                logLine.ok 'Application run'
+            logLine.stop()
+
+            log.log '''
+                \n**Android logs below**
+                **------------------**
+            '''
 
     unless options.pipeOutput is false
         adb.stdout.pipe process.stdout
@@ -108,6 +122,7 @@ module.exports = (options, callback = ->) ->
     kill: ->
         if callbackCalled
             return
+        log.info "Closing Android application"
         callbackCalled = true
         adb.kill()
         logcat?.kill()

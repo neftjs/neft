@@ -19,7 +19,7 @@ updateViewConfig = ->
         for key, val of view
             str += "#{key}=#{val} "
         str.trim()
-    log "View properties updated to #{str}"
+    log.info "View properties updated to #{str}"
 
 getControlRect = do ->
     rect = null

@@ -24,7 +24,7 @@ mustacheFiles = []
 coffeeFiles = []
 
 prepareFiles = (config) ->
-    logtime = log.time 'Prepare ios files'
+    logLine = log.line().timer().repeat().loading 'Preparing iOS files...'
 
     for path in mustacheFiles
         # get file
@@ -62,14 +62,16 @@ prepareFiles = (config) ->
 
         # save file
         fs.writeFileSync pathUtils.join(OUT_DIR, relativePath), file, 'utf-8'
-    log.end logtime
+
+    logLine.ok 'iOS files prepared'
+    logLine.stop()
 
 module.exports = (config, callback) ->
     if config.buildBundleOnly
         prepareFiles config
         return callback()
 
-    logtime = log.time "Copy ios files into '#{OUT_DIR}'"
+    logLine = log.line().timer().repeat().loading "Copying iOS files into `#{OUT_DIR}`..."
     if fs.existsSync(OUT_DIR)
         fs.removeSync OUT_DIR
     fs.copySync RUNTIME_PATH, OUT_DIR,
@@ -83,12 +85,16 @@ module.exports = (config, callback) ->
                 mustacheFiles.push path
                 return false
             true
-    log.end logtime
+    logLine.ok "iOS files copied into `#{OUT_DIR}`"
+    logLine.stop()
 
     if fs.existsSync(CUSTOM_NATIVE_DIR)
-        logtime = log.time "Copy custom native files into `#{CUSTOM_NATIVE_OUT_DIR}`"
+        logLine = log.line().timer().repeat().loading """
+            Copying custom native files into `#{CUSTOM_NATIVE_OUT_DIR}`...
+        """
         fs.copySync CUSTOM_NATIVE_DIR, CUSTOM_NATIVE_OUT_DIR
-        log.end logtime
+        logLine.ok "Custom native files copied into `#{CUSTOM_NATIVE_OUT_DIR}`"
+        logLine.stop()
 
     # check whether otfinfo is installed
     checkFonts = false
@@ -97,14 +103,16 @@ module.exports = (config, callback) ->
         checkFonts = true
     catch
         log.error """
-            Custom fonts are not supported. \
-            Install 'lcdf-typetools'; \
-            e.g. brew install lcdf-typetools
+            Custom fonts are not supported; \
+            install `lcdf-typetools`; \
+            e.g. `brew install lcdf-typetools`
         """
 
     config.fonts = []
     if fs.existsSync(STATIC_DIR)
-        logtime = log.time "Copy static files into '#{STATIC_OUT_DIR}'"
+        logLine = log.line().timer().repeat().loading """
+            Copying static files into `#{STATIC_OUT_DIR}`
+        """
         fs.copySync STATIC_DIR, STATIC_OUT_DIR,
             filter: (path) ->
                 # get font PostScript name
@@ -117,11 +125,12 @@ module.exports = (config, callback) ->
                 true
         if fs.existsSync('./build/static')
             fs.copySync './build/static', STATIC_OUT_DIR
-        log.end logtime
+        logLine.ok "Static files copied into `#{STATIC_OUT_DIR}`"
+        logLine.stop()
     else
         fs.ensureDirSync STATIC_OUT_DIR
 
-    logtime = log.time 'Copy extensions'
+    logLine = log.line().timer().repeat().loading 'Copying extensions...'
     config.iosExtensions = []
     for ext in config.allExtensions
         nativeDirPath = "#{ext.path}/native/ios"
@@ -133,18 +142,19 @@ module.exports = (config, callback) ->
                 path: nativeDirPath
                 bundlePath: bundlePath = "#{EXT_NATIVE_OUT_DIR}#{name}"
             fs.copySync nativeDirPath, bundlePath
-    log.end logtime
+    logLine.ok 'Extensions copied'
+    logLine.stop()
 
     prepareFiles config
 
-    logtime = log.time 'Prepare XCode project'
+    logLine = log.line().timer().repeat().loading 'Preparing XCode project...'
     project = xcode.project XCODE_PROJECT_PATH
     project.parse (err) ->
         if err?
-            log.error "Can't parse XCode project"
+            logLine.error 'Cannot parse XCode project'
             log.error err?.stack or err
-            log.end logtime
-            callback new Error "Can't parse XCode file"
+            logLine.stop()
+            callback new Error "Cannot parse XCode file"
             return
 
         mainGroupId = project.findPBXGroupKey path: 'Neft'
@@ -162,5 +172,6 @@ module.exports = (config, callback) ->
                 project.addSourceFile file, null, extGroupId
 
         fs.writeFile XCODE_PROJECT_PATH, project.writeSync(), ->
-            log.end logtime
+            logLine.ok 'XCode project prepared'
+            logLine.stop()
             callback()

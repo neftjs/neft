@@ -10,6 +10,7 @@ PROCESS_OPTIONS =
     silent: true
     env: utils.mergeAll {}, process.env,
         NODE_CP_EXEC_PREFIX: ''
+        FORCE_COLOR: 1
 
 getInitPath = (env) ->
     path = config.getPlatformOutFolder 'node'
@@ -30,7 +31,7 @@ exports.execFile = (path, logsReader, callback) ->
     nodeProcess.on 'exit', ->
         unless logsReader.terminated
             mainErr ?= "Node tests terminated before all tests ended"
-        callback mainErr or logsReader.error
+        callback mainErr
 
 exports.run = (env, logsReader, callback) ->
     exports.execFile getInitPath(env), logsReader, callback

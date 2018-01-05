@@ -49,6 +49,8 @@ getInputDirs = (app) ->
     inputDirs
 
 module.exports = (platform, app, callback) ->
+    logLine = log.line().timer().loading 'Find styles'
+
     inputDirs = getInputDirs app
     filesToLoad = 0
     files = []
@@ -83,11 +85,11 @@ module.exports = (platform, app, callback) ->
                 onFilesReady()
 
     onFilesReady = ->
+        logLine.progress 'Parse styles', 0, files.length
+
         queries = {}
-        stack = new utils.async.Stack
 
         for file in files
-            log.show "Compile '#{file.path}'"
             try
                 bundle = require file.path
                 file.queries = bundle._queries
@@ -100,40 +102,37 @@ module.exports = (platform, app, callback) ->
                 name: file.filename
                 path: file.path
 
+            logLine.progress 'Parse styles', app.styles.length, files.length
+
         # queries
-        writeLogtime = log.time 'Save styles'
-        stack.runAllSimultaneously (err) ->
-            log.end writeLogtime
+        logLine.info 'Merge style queries'
+        mergeQueries = ->
+            for filename, fileQueries of queries
+                unless cliUtils.isPlatformFilePath(platform, filename)
+                    continue
 
-            if err
-                return callback err
+                dirPriority = do ->
+                    for dir, dirPriority of inputDirPriorities
+                        if filename.indexOf(dir) is 0
+                            return dirPriority
+                    return 0
 
-            mergeQueries = ->
-                for filename, fileQueries of queries
-                    unless cliUtils.isPlatformFilePath(platform, filename)
-                        continue
+                for query, val of fileQueries
+                    val = "styles:#{filename}:#{val}"
 
-                    dirPriority = do ->
-                        for dir, dirPriority of inputDirPriorities
-                            if filename.indexOf(dir) is 0
-                                return dirPriority
-                        return 0
+                    splitQuery = query.split ','
+                    for query in splitQuery
+                        app.styleQueries.push
+                            query: query
+                            style: val
+                            dirPriority: dirPriority
 
-                    for query, val of fileQueries
-                        val = "styles:#{filename}:#{val}"
+            # sort queries
+            app.styleQueries.sort queriesSortFunc
 
-                        splitQuery = query.split ','
-                        for query in splitQuery
-                            app.styleQueries.push
-                                query: query
-                                style: val
-                                dirPriority: dirPriority
+            queriesJson = JSON.stringify queries, null, 4
+            fs.outputFile QUERIES, queriesJson, callback
+            logLine.ok "Styles parsed _(#{files.length} files)_"
 
-                # sort queries
-                app.styleQueries.sort queriesSortFunc
-
-                queriesJson = JSON.stringify queries, null, 4
-                fs.outputFile QUERIES, queriesJson, callback
-
-            mergeQueries()
-            return
+        mergeQueries()
+        return

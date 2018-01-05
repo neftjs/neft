@@ -58,16 +58,18 @@ buildProject = (env, callback) ->
         callback null
 
 exports.runEnvs = (callback) ->
-    buildAndRun = (name, logsReader, envCfg) ->
+    buildAndRun = (name, envCfg) ->
         testsFile.saveBuildTestsFile envCfg.env.platform, (err) ->
             if err
                 return callback err
             buildProject envCfg.env, (err) ->
                 if err
                     return callback err
-                log.info "\n▶️  #{name}"
+                log.log ''
+                log.info "**#{name}**"
+                logsReader = new processLogs.LogsReader name
                 envCfg.handler.run envCfg.env, logsReader, (err) ->
-                    if err
+                    if err# or logsReader.errors.length > 0
                         return callback err
                     runNext()
 
@@ -76,15 +78,14 @@ exports.runEnvs = (callback) ->
             return callback null
         name = envCfg.handler.getName envCfg.env
         iconIndex = -1
-        logsReader = new processLogs.LogsReader name
 
         httpServer.closeServer()
 
         if HTTP_BASED_PLATFORMS[envCfg.env.platform]
             httpServer.runHttpServer envCfg.env.platform, ->
-                buildAndRun name, logsReader, envCfg
+                buildAndRun name, envCfg
         else
-            buildAndRun name, logsReader, envCfg
+            buildAndRun name, envCfg
 
         return
 

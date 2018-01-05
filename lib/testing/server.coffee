@@ -8,6 +8,8 @@ exports.onInitializeScreenshots = signal.create()
 exports.onScreenshot = signal.create()
 
 exports.startServer = ->
+    log.info "Starting HTTP server for tests"
+
     networking = new Networking utils.merge
         type: Networking.HTTP
         language: 'en'

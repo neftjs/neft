@@ -41,12 +41,17 @@ saveFolderLinks = (opts, target, callback) ->
         callback err
 
 module.exports = (platform, app, callback) ->
-    logtime = log.time 'Link files'
+    logLine = log.line().timer().loading 'Link files'
     stack = new utils.async.Stack
 
     for folder in FOLDERS
         stack.add saveFolderLinks, null, [folder, app]
 
     stack.runAllSimultaneously (err) ->
-        log.end logtime
+        if err
+            logLine.errr 'Cannot link files'
+        else
+            logLine.ok """
+                Files linked _(#{app.routes.length} routes and #{app.scripts.length} scripts)_
+            """
         callback err

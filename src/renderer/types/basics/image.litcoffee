@@ -166,7 +166,7 @@ The image source URL or data URI.
 
                             setSize.call @, res
                         else
-                            log.warn "Unknown resource given '#{val}'"
+                            log.warn "Unknown resource given `#{val}`"
                             val = ''
                     if val
                         Impl.setImageSource.call @, val, loadCallback

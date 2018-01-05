@@ -28,7 +28,7 @@ runTestsInProcess = (logsReader, callback) ->
     nodeProcess.on 'exit', ->
         unless logsReader.terminated
             mainErr ?= "Local tests terminated before all tests ended"
-        callback mainErr or logsReader.error
+        callback mainErr
 
 exports.getName = ->
     "Local tests"

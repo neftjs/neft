@@ -45,6 +45,7 @@ class Test
         @onEnd = utils.bindFunctionContext @onEnd, @
         @preventEnding = false
         @isOnly = false
+        stack.testsAmount += 1
         Object.seal @
 
     onEnd: (err) ->
@@ -60,7 +61,6 @@ class Test
             logger.onTestError @, err
             stack.fail err
 
-        stack.testsAmount += 1
         logger.onTestEnd @
 
         # call after functions

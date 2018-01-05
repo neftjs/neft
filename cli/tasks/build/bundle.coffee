@@ -13,7 +13,7 @@ module.exports = (platform, options, app, callback) ->
     neftFileName = "neft-#{platform}-#{mode}.js"
     neftFilePath = pathUtils.resolve __dirname, "../../bundle/neft-#{platform}-#{mode}.js"
 
-    logtime = log.time 'Resolve bundle modules'
+    logLine = log.line().timer().repeat().loading 'Creating bundle...'
 
     # prepare config
     if options.watch
@@ -32,9 +32,9 @@ module.exports = (platform, options, app, callback) ->
         changedFiles: changedFiles
         basepath: options.cwd
         , (err, file) ->
-            log.end logtime
-
             if err
+                logLine.error 'Cannot create bundle'
+                logLine.stop()
                 return callback err
 
             # make app object global in the file scope
@@ -58,5 +58,10 @@ module.exports = (platform, options, app, callback) ->
                 buildServerUrl: options.buildServerUrl
 
             platformBundle = require "./bundle/#{platform}"
-            log.show ''
-            platformBundle config, callback
+            platformBundle config, (err) ->
+                if err
+                    logLine.error 'Cannot create bundle'
+                else
+                    logLine.ok 'Bundle created'
+                logLine.stop()
+                callback err

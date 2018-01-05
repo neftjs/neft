@@ -22,6 +22,7 @@ BUILD_OPTIONS =
     silent: true
     env: utils.mergeAll {}, process.env,
         RUN_TESTS: false
+        FORCE_COLOR: 1
 
 ###
 Builds Neft app for the given target.
@@ -29,7 +30,8 @@ See `neft help` for available targets.
 Callback function is called when build is ready.
 ###
 exports.buildProject = (target, env, callback) ->
-    log.info "\n✏️  Building #{target}"
+    log.log ''
+    log.log "✏️  **Building #{target}**"
     args = utils.clone BUILD_ARGS
     args[1] = target # target
     args[3] += config.getPlatformOutFolder(target) # out

@@ -6,7 +6,7 @@
 {log, utils, Document} = Neft
 try {onNativeEvent} = Neft.native
 
-log = log.scope 'HotReloader'
+log = log.scope 'hot-reloader'
 
 NATIVE_EVENT = '__neftHotReload'
 

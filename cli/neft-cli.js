@@ -5,6 +5,8 @@ process.env.NEFT_NODE = '1';
 process.env.NEFT_SERVER = '1';
 
 const semver = require('semver');
+const pathUtils = require('path');
+const fs = require('fs');
 
 // warning for legacy node version
 const currentVersion = process.version;
@@ -14,18 +16,18 @@ if (!semver.satisfies(currentVersion, expectedVersion)) {
         "is lower than expected '#{expectedVersion}'");
 }
 
+const isFirstRun = !fs.existsSync(pathUtils.join(__dirname, '../build'))
 const moduleCache = require('lib/module-cache');
 moduleCache.registerFilenameResolver();
 moduleCache.registerCoffeeScript();
 moduleCache.registerYaml();
 moduleCache.registerTxt(['.txt', '.pegjs']);
-const log = require('src/log')
-const utils = require('src/utils')
 
-utils.overrideProperty(moduleCache, 'compileFile', (_super) => (file, filename) => {
-    log.show(`Compile file '${filename}'`)
-    return _super.call(this, file, filename)
-})
+if (isFirstRun) {
+    const log = require('src/log')
+    log.warn('Loading Neft for the first time may take a while')
+    log.log('')
+}
 
 require('./init.coffee');
 

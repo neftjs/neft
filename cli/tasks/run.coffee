@@ -8,5 +8,4 @@ cp = require 'child_process'
 
 module.exports = (platform, options) ->
     platformRun = require "./run/#{platform}"
-    log.show ''
     platformRun options

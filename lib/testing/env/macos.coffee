@@ -31,7 +31,7 @@ launchProject = (env, logsReader, callback) ->
     appProcess.on 'exit', ->
         unless logsReader.terminated
             mainErr ?= "MacOS tests terminated before all tests ended"
-        callback mainErr or logsReader.error
+        callback mainErr
 
 exports.getName = (env) ->
     "MacOS tests"

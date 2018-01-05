@@ -1,6 +1,6 @@
 'use strict'
 
-{utils, log} = Neft
+{utils} = Neft
 
 exports.onlyScopes = 0
 exports.onlyTests = 0

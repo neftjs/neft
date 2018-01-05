@@ -25,3 +25,4 @@ Options:
   --notify
   --init-file=PATH
   --config
+  --verbose          run test with verbose logging

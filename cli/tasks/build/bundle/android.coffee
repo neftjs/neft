@@ -52,10 +52,10 @@ module.exports = (config, callback) ->
     if config.local.android.sdkDir is '$ANDROID_HOME'
         sdkDir = (cp.execSync('echo $ANDROID_HOME') + '').trim()
         unless config.local.android.sdkDir = sdkDir
-            log.error "Specify Android SDK directory in 'local.json'"
+            log.error "Specify Android SDK directory in `local.json`"
             return
 
-    logtime = log.time "Copy android files into '#{OUT_DIR}'"
+    logLine = log.line().timer().loading "Copying android files into `#{OUT_DIR}`..."
     if fs.existsSync(OUT_DIR)
         fs.removeSync OUT_DIR
     fs.copySync RUNTIME_PATH, OUT_DIR,
@@ -65,21 +65,26 @@ module.exports = (config, callback) ->
                 mustacheFiles.push path
                 return false
             true
-    log.end logtime
+    logLine.ok "Android files copied into `#{OUT_DIR}`"
+    logLine.stop()
 
     if fs.existsSync(CUSTOM_NATIVE_DIR)
-        logtime = log.time "Copy custom native files into `#{CUSTOM_NATIVE_OUT_DIR}`"
+        logLine = log.line().timer().loading """
+            Copying custom native files into `#{CUSTOM_NATIVE_OUT_DIR}`...
+        """
         fs.copySync CUSTOM_NATIVE_DIR, CUSTOM_NATIVE_OUT_DIR
-        log.end logtime
+        logLine.ok "Custom native files copied into `#{CUSTOM_NATIVE_OUT_DIR}`"
+        logLine.stop()
 
     if fs.existsSync(STATIC_DIR)
-        logtime = log.time "Copy static files into '#{STATIC_OUT_DIR}'"
+        logLine = log.line().timer().loading "Copying static files into `#{STATIC_OUT_DIR}`..."
         fs.copySync STATIC_DIR, STATIC_OUT_DIR
         if fs.existsSync('./build/static')
             fs.copySync './build/static', STATIC_OUT_DIR
-        log.end logtime
+        logLine.ok "Static files copied into `#{STATIC_OUT_DIR}`"
+        logLine.stop()
 
-    logtime = log.time 'Copy extensions'
+    logLine = log.line().timer().loading 'Copying extensions...'
     config.androidExtensions = []
     for ext in config.allExtensions
         nativeDirPath = "#{ext.path}/native/android"
@@ -91,12 +96,13 @@ module.exports = (config, callback) ->
                 name: name
                 packageName: packageName
             fs.copySync nativeDirPath, "#{EXT_NATIVE_OUT_DIR}#{packageName}"
-    log.end logtime
+    logLine.ok 'Extensions copied'
+    logLine.stop()
 
-    logtime = log.time 'Prepare android files'
+    logLine = log.line().timer().loading 'Preparing Android files...'
     for path in mustacheFiles
         processMustacheFile path, config
-    log.end logtime
+    logLine.ok 'Android files prepared'
 
     # main activity
     androidPackagePath = config.package.android.package.replace /\./g, '/'
@@ -106,14 +112,18 @@ module.exports = (config, callback) ->
         if err
             return callback err
 
-        logtime = log.time 'Create android APK file'
+        logLine = log.line().timer().repeat().loading 'Creating Android APK...'
         apkMode = if config.release then 'release' else 'debug'
         gradlewMode = 'assembleDebug'
         if /^win/.test(process.platform)
-            cmd = "./gradlew.bat #{gradlewMode}"
+            cmd = "./gradlew.bat #{gradlewMode} --quiet"
         else
-            cmd = "chmod +x gradlew && ./gradlew #{gradlewMode}"
+            cmd = "chmod +x gradlew && ./gradlew #{gradlewMode} --quiet"
         gradleProcess = cp.exec cmd, cwd: BUNDLE_DIR, (err) ->
-            log.end logtime
+            if err
+                logLine.error 'Cannot create Android SDK'
+            else
+                logLine.ok 'Android SDK created'
+            logLine.stop()
             callback err
         gradleProcess.stdout.pipe process.stdout

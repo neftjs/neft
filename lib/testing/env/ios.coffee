@@ -88,7 +88,7 @@ scanProgress = (env, logsReader, callback) ->
             tail.kill()
 
     onExit = ->
-        callback logsReader.error
+        callback()
 
     tail = tailLogs env, onLog, onExit
     return

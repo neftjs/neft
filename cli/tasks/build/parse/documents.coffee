@@ -31,9 +31,11 @@ module.exports = (platform, app, callback) ->
     unless fs.existsSync(IN_DIR)
         return callback null
 
-    logtime = log.time 'Parse documents'
+    logLine = log.line().timer().loading 'Find documents'
 
     parsingError = null
+    parsed = 0
+    paths = []
 
     # clear
     fs.removeSync "./#{OUT_DIR}/#{IN_DIR}"
@@ -71,7 +73,10 @@ module.exports = (platform, app, callback) ->
         return
 
     parseFile = (path) ->
-        log.show "Parse document '#{path}'"
+        return if Document._files[path]
+
+        logLine.progress 'Parse documents', parsed, paths.length
+
         try
             html = moduleCache.getFileSync path
         catch
@@ -84,7 +89,8 @@ module.exports = (platform, app, callback) ->
             msg = "Cannot parse file '#{path}'\n#{error.stack}"
             parsingError = new DocumentParseError msg, parsingError
             return
-        file
+        parsed += 1
+        return
 
     saveComponent = (name, component, callback) ->
         json = JSON.stringify component
@@ -112,16 +118,20 @@ module.exports = (platform, app, callback) ->
         Document.onParse.disconnect onParseListener
         Document.onStyle.disconnect onStyleListener
 
-        log.end logtime
+        if parsingError
+            logLine.error 'Cannot parse documents'
+        else
+            logLine.ok "Documents parsed _(#{parsed} files)_"
         callback parsingError
         return
 
     cliUtils.forEachFileDeep IN_DIR, (path, stat) ->
-        if /\..*ml$/.test(path) and not Document._files[path]
+        if /\..*ml$/.test(path)
             mainPaths[path] = true
-            parseFile path
+            paths.push path
     , (err) ->
         if err
-            log.end logtime
             return callback err
+        for path in paths
+            parseFile path
         onFilesParsed()
