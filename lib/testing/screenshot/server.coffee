@@ -27,6 +27,8 @@ fs.emptyDirSync DEST
 
 rects = {}
 
+exports.verbose = false
+
 getPathWithBasename = (path, basename) ->
     pathUtils.format utils.mergeAll {}, pathUtils.parse(path),
         name: basename
@@ -87,7 +89,8 @@ takeScreenshot = (opts) ->
     return
 
 server.onInitializeScreenshots (opts) ->
-    log.log "🎞  Initialize screenshots"
+    if exports.verbose
+        log.log "🎞  Initialize screenshots"
 
     fs.emptyDirSync DEST
 
@@ -117,7 +120,9 @@ server.onInitializeScreenshots (opts) ->
     return
 
 server.onScreenshot (opts) ->
-    log.log "🎞  Take screenshot"
+    if exports.verbose
+        log.log "🎞  Take screenshot"
+
     path = pathUtils.parse opts.expected
     opts.name ?= path.name
     opts.path = getPathWithBasename pathUtils.join(DEST, path.base), path.name

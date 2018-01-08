@@ -36,14 +36,18 @@ launchProject = (env, logsReader, callback) ->
 exports.getName = (env) ->
     "MacOS tests"
 
-exports.run = (env, logsReader, callback) ->
-    logsReader.log "Building project"
+exports.build = (env, callback) ->
+    logLine = log.line().timer().info "Building MacOS project... (may take a while)"
     try
         buildProject env
     catch err
-        log.debug String err.stdout
+        logLine.error "Cannot build project"
+        log.error String err.stdout
         return callback new Error "Cannot build MacOS project"
+    logLine.ok "MacOS project built"
+    callback()
+    return
 
-    logsReader.log "Running tests"
+exports.run = (env, logsReader, callback) ->
     launchProject env, logsReader, callback
     return

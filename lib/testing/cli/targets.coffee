@@ -59,19 +59,36 @@ buildProject = (env, callback) ->
 
 exports.runEnvs = (callback) ->
     buildAndRun = (name, envCfg) ->
-        testsFile.saveBuildTestsFile envCfg.env.platform, (err) ->
-            if err
-                return callback err
+        buildProjectStep = (callback) ->
             buildProject envCfg.env, (err) ->
                 if err
                     return callback err
+                prepareTestsStep callback
+
+        prepareTestsStep = (callback) ->
+            if typeof envCfg.handler.build is 'function'
                 log.log ''
-                log.info "**#{name}**"
-                logsReader = new processLogs.LogsReader name
-                envCfg.handler.run envCfg.env, logsReader, (err) ->
-                    if err# or logsReader.errors.length > 0
+                log.log "📦 **Preparing #{getEnvTarget(env)}**"
+                envCfg.handler.build envCfg.env, (err) ->
+                    if err
                         return callback err
-                    runNext()
+                    runTestsStep callback
+            else
+                runTestsStep callback
+
+        runTestsStep = (callback) ->
+            log.log ''
+            log.info "**#{name}**"
+            logsReader = new processLogs.LogsReader name
+            envCfg.handler.run envCfg.env, logsReader, (err) ->
+                if err# or logsReader.errors.length > 0
+                    return callback err
+                runNext()
+
+        testsFile.saveBuildTestsFile envCfg.env.platform, (err) ->
+            if err
+                return callback err
+            buildProjectStep callback
 
     runNext = ->
         unless envCfg = envQueue.shift()

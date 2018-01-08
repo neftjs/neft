@@ -78,10 +78,14 @@ Options:
             assert.isBoolean opts.allowAllOrigins, """
                 allowAllOrigins option must be a boolean, but `#{opts.allowAllOrigins}` given
             """ if opts.allowAllOrigins?
+            assert.isBoolean opts.verbose, """
+                verbose options must be a boolean, but `#{opts.verbose}` given
+            """ if opts.verbose?
 
             utils.defineProperty @, '_handlers', utils.CONFIGURABLE, {}
             {@type, @protocol, @port, @host, @language} = opts
             @allowAllOrigins = opts.allowAllOrigins ? false
+            @verbose = opts.verbose ? true
             @pendingRequests = new List
 
             if opts.url?
@@ -271,7 +275,8 @@ The given options object corresponds to the *Networking.Request* properties.
             assert.ok req.pending
             res = req.response
 
-            log.info "Resolve `#{req}`"
+            if @verbose
+                log.info "Resolve `#{req}`"
 
             onError = (err) ->
                 unless req.pending
