@@ -6,23 +6,17 @@ import android.view.Choreographer;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.ViewTreeObserver;
+import io.neft.client.Client;
+import io.neft.customapp.CustomApp;
+import io.neft.renderer.*;
+import lombok.Getter;
+import lombok.NonNull;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.neft.client.Client;
-import io.neft.customapp.CustomApp;
-import io.neft.renderer.Image;
-import io.neft.renderer.Item;
-import io.neft.renderer.NativeItem;
-import io.neft.renderer.Rectangle;
-import io.neft.renderer.Renderer;
-import io.neft.renderer.Text;
-import lombok.Getter;
-import lombok.NonNull;
 
 public class App {
     private abstract class UrlResponse implements Runnable {
@@ -46,14 +40,11 @@ public class App {
     private static final Choreographer CHOREOGRAPHER = Choreographer.getInstance();
     @Getter private MainActivity activity;
     @Getter private WindowView windowView;
-    private String codeWatchChangesUrl;
     private CustomApp customApp;
     @Getter private Client client;
     @Getter private Renderer renderer;
     private final UiThreadFrame uiThreadFrame;
     private final FrameCallback frameCallback;
-    private Runnable initExtensions;
-    private Runnable restart;
     private final List<MotionEvent> touchEvents = new ArrayList<>();
     private final List<FullKeyEvent> keyEvents = new ArrayList<>();
 
@@ -101,6 +92,10 @@ public class App {
         Item.onAnimationFrame();
     }
 
+    public WindowView getWindowView() {
+        return windowView;
+    }
+
     public void run() {
         System.loadLibrary("neft");
 
@@ -118,9 +113,7 @@ public class App {
         NativeItem.register();
 
         renderer.init();
-        if (initExtensions != null) {
-            initExtensions.run();
-        }
+        AppConfig.initExtensions();
 
         customApp = new CustomApp();
         loadCode();
@@ -128,22 +121,15 @@ public class App {
         activity.runOnUiThread(uiThreadFrame);
     }
 
-    public void attach(
-            @NonNull MainActivity activity,
-            String codeWatchChangesUrl,
-            Runnable initExtensions,
-            Runnable restart
-    ) {
-        if (this.activity != null) {
-            throw new IllegalStateException("App thread cannot be attached multiple times");
-        }
-        this.activity = activity;
-        this.windowView = activity.view;
-        this.codeWatchChangesUrl = codeWatchChangesUrl;
-        this.initExtensions = initExtensions;
-        this.restart = restart;
+    public void attach(@NonNull MainActivity activity) {
+        boolean isFirstAttach = this.activity == null;
 
-        startWhenReady();
+        this.activity = activity;
+
+        if (isFirstAttach) {
+            windowView = new WindowView(activity.getApplicationContext());
+            startWhenReady();
+        }
     }
 
     public void processTouchEvent(@NonNull MotionEvent event) {
@@ -177,7 +163,7 @@ public class App {
     }
 
     private void loadCode() {
-        if (codeWatchChangesUrl == null) {
+        if (AppConfig.CODE_WATCH_CHANGES_URL == null) {
             String code = getAssetFile(ASSET_FILE_PATH);
             Native.Bridge.init(code);
         } else {
@@ -187,7 +173,7 @@ public class App {
 
     private void loadRemoteCode() {
         final String[] codeArray = {null};
-        Thread reqThread = getUrlDataAsync(codeWatchChangesUrl + "/bundle/android", new UrlResponse() {
+        Thread reqThread = getUrlDataAsync(AppConfig.CODE_WATCH_CHANGES_URL + "/bundle/android", new UrlResponse() {
             @Override
             public void run(String response) {
                 codeArray[0] = response;
@@ -203,7 +189,7 @@ public class App {
             code = getAssetFile(ASSET_FILE_PATH);
         }
         Native.Bridge.init(code);
-        watchOnBundleChange(codeWatchChangesUrl + "/onNewBundle/android");
+        watchOnBundleChange(AppConfig.CODE_WATCH_CHANGES_URL + "/onNewBundle/android");
     }
 
     private String getAssetFile(String path) {
@@ -256,7 +242,7 @@ public class App {
                             return;
                         }
                         if (response.isEmpty()) {
-                            restart.run();
+                            AppConfig.restart();
                             return;
                         }
                         client.pushEvent("__neftHotReload", response);

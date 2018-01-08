@@ -8,12 +8,13 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="{{&package.android.application.label}}"
-        android:theme="@android:style/Theme.Light.NoTitleBar"
+        android:theme="@style/NeftTheme"
         android:hardwareAccelerated="true" >
         <activity
             android:name=".MainActivity"
             android:label="{{&package.android.application.label}}"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:resizeableActivity="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
