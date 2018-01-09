@@ -129,6 +129,9 @@ server.onScreenshot (opts) ->
     opts.diff = getPathWithBasename opts.path, "#{path.name}_diff"
     opts.rect = rects[opts.clientUid]
 
+    unless opts.rect
+        throw new Error "Screenshots are not initialized"
+
     takeScreenshot opts
     if testScreenshot(opts)
         fs.unlinkSync opts.diff
