@@ -36,6 +36,13 @@ launchProject = (env, logsReader, callback) ->
 exports.getName = (env) ->
     "MacOS tests"
 
+exports.focusWindow = ->
+    cmd = '''
+        osascript -e 'tell application "io.neft.mac"' -e 'activate' -e 'end tell'
+    '''
+    childProcess.execSync cmd
+    return
+
 exports.build = (env, callback) ->
     logLine = log.line().timer().info "Building MacOS project... (may take a while)"
     try

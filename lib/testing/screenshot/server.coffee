@@ -63,6 +63,7 @@ takeScreenshot = (opts) ->
     # use target-specified screenshot function
     if opts.env
         handler = targets.getEnvHandler(opts.env)
+        handler.focusWindow?()
         if handler.takeScreenshot
             startTime = Date.now()
             maxDelay = handler.TAKE_SCREENSHOT_DELAY_MS ? CUSTOM_SCREENSHOT_MAX_DELAY_MS
