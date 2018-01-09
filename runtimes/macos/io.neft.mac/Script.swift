@@ -24,11 +24,14 @@ class Script: NSObject, WKScriptMessageHandler {
     }
 
     func runCode(_ code: String, _ completion: (() -> Void)? = nil) {
-        self.webView.evaluateJavaScript(code) { (result, error) in
-            if error != nil {
-                print(error.debugDescription)
+        // communicate with WKWebView only on the UI thread
+        DispatchQueue.main.async {
+            self.webView.evaluateJavaScript(code) { (result, error) in
+                if error != nil {
+                    print(error.debugDescription)
+                }
+                completion?()
             }
-            completion?()
         }
     }
 

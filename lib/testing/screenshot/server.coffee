@@ -27,6 +27,8 @@ fs.emptyDirSync DEST
 
 rects = {}
 
+exports.verbose = false
+
 getPathWithBasename = (path, basename) ->
     pathUtils.format utils.mergeAll {}, pathUtils.parse(path),
         name: basename
@@ -61,6 +63,7 @@ takeScreenshot = (opts) ->
     # use target-specified screenshot function
     if opts.env
         handler = targets.getEnvHandler(opts.env)
+        handler.focusWindow?()
         if handler.takeScreenshot
             startTime = Date.now()
             maxDelay = handler.TAKE_SCREENSHOT_DELAY_MS ? CUSTOM_SCREENSHOT_MAX_DELAY_MS
@@ -87,7 +90,8 @@ takeScreenshot = (opts) ->
     return
 
 server.onInitializeScreenshots (opts) ->
-    log.log "🎞  Initialize screenshots"
+    if exports.verbose
+        log.log "🎞  Initialize screenshots"
 
     fs.emptyDirSync DEST
 
@@ -117,12 +121,17 @@ server.onInitializeScreenshots (opts) ->
     return
 
 server.onScreenshot (opts) ->
-    log.log "🎞  Take screenshot"
+    if exports.verbose
+        log.log "🎞  Take screenshot"
+
     path = pathUtils.parse opts.expected
     opts.name ?= path.name
     opts.path = getPathWithBasename pathUtils.join(DEST, path.base), path.name
     opts.diff = getPathWithBasename opts.path, "#{path.name}_diff"
     opts.rect = rects[opts.clientUid]
+
+    unless opts.rect
+        throw new Error "Screenshots are not initialized"
 
     takeScreenshot opts
     if testScreenshot(opts)

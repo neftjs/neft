@@ -65,23 +65,37 @@ class Client {
         onData(reader)
     }
 
-    func onData(_ reader: Reader) {
+    func updateViews(_ transaction: () -> Void) {
         // No clue why Cocoa is so stupid to animate all changes by default.
-        // Let's disable it by default.
+        // Let's disable it.
         CATransaction.begin()
         CATransaction.setDisableActions(true)
+        transaction()
+        CATransaction.commit()
+    }
 
-        while let action = reader.getAction() {
-            let actionFunc = actions[action]
-            if actionFunc != nil {
-                actionFunc!(reader)
-            } else {
-                print("Not implemented action '\(action)'")
+    func onData(_ reader: Reader) {
+        updateViews {
+            while let action = reader.getAction() {
+                let actionFunc = self.actions[action]
+                if actionFunc != nil {
+                    actionFunc!(reader)
+                } else {
+                    print("Not implemented action '\(action)'")
+                }
             }
         }
 
-        CATransaction.commit()
         sendData()
+
+        // update layer transformations when all frames are set;
+        // changing frame resets transform on a layer;
+        // better solution could be custom NSView see https://gist.github.com/jwilling/8162440
+        DispatchQueue.main.async {
+            self.updateViews {
+                Item.updateItemTransforms()
+            }
+        }
     }
 
     private func pushIntoArray<T>(_ arr: inout [T], index: Int, val: T) {

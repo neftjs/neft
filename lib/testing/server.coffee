@@ -7,13 +7,14 @@ config = require './cli/config'
 exports.onInitializeScreenshots = signal.create()
 exports.onScreenshot = signal.create()
 
-exports.startServer = ->
+exports.startServer = ({verbose}) ->
     log.info "Starting HTTP server for tests"
 
     networking = new Networking utils.merge
         type: Networking.HTTP
         language: 'en'
         allowAllOrigins: true
+        verbose: verbose
     , config.getConfig().server
 
     networking.createHandler
@@ -29,7 +30,6 @@ exports.startServer = ->
             try
                 exports.onInitializeScreenshots.emit req.data
             catch err
-                log.error err?.stack or err
                 res.raise err?.message or err
                 return
             res.send 200
@@ -41,7 +41,6 @@ exports.startServer = ->
             try
                 exports.onScreenshot.emit req.data
             catch err
-                log.error err?.stack or err
                 res.raise err?.message or err
                 return
             res.send 200

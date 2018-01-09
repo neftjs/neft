@@ -56,6 +56,7 @@ reportAndExit = (err) ->
 
 module.exports = ({verbose}) ->
     processLogs.verbose = verbose
-    server.startServer()
+    screenshot.verbose = verbose
+    server.startServer {verbose}
     targets.runEnvs (err) ->
         reportAndExit err

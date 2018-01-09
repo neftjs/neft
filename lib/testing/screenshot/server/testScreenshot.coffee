@@ -26,10 +26,6 @@ resize = (opts) ->
     if width is size[0] and height is size[1]
         return
 
-    log.log """
-        Original screenshot file #{size[0]}x#{size[1]} needs to be resized into #{width}x#{height}
-    """
-
     cmd = 'convert '
     cmd += "#{opts.path} "
     cmd += "-scale #{width}x#{height}\\! "

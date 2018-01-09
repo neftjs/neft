@@ -155,6 +155,15 @@ class Item {
         }
     }
 
+    static var itemsToTransform = [Int: Item]()
+
+    static func updateItemTransforms() {
+        for (_, item) in itemsToTransform {
+            item.layer.setAffineTransform(item.getTransform())
+        }
+        itemsToTransform.removeAll()
+    }
+
     var id: Int!
     let view: ItemView
     let layer: CALayer
@@ -219,8 +228,12 @@ class Item {
     }
 
     private func updateTransform() {
-        guard view.superview != nil else { return }
+        if id != nil {
+            Item.itemsToTransform[id] = self
+        }
+    }
 
+    private func getTransform() -> CGAffineTransform {
         var a: CGFloat = 1
         var b: CGFloat = 0
         var c: CGFloat = 0
@@ -257,9 +270,8 @@ class Item {
         tx += a * -originX + c * -originY
         ty += b * -originX + d * -originY
 
-        // save
-        let transform = CGAffineTransform(a: a, b: b, c: c, d: d, tx: tx, ty: ty)
-        layer.setAffineTransform(transform)
+        // return
+        return CGAffineTransform(a: a, b: b, c: c, d: d, tx: tx, ty: ty)
     }
 
     func pushAction(_ action: OutAction, _ args: Any...) {

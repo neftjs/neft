@@ -23,6 +23,7 @@ exports.LogsReader = class LogsReader
         @finished = 0
         @amount = 0
         @errors = []
+        @logger = log.prefix @name.split(' ')[0].toLowerCase()
         unless exports.verbose
             @progressLog = log.line().timer().progress 0
             @testLog = log.line().log ''
@@ -43,7 +44,7 @@ exports.LogsReader = class LogsReader
         else if msg.indexOf(logger.TEST_START) >= 0
             testName = msg.slice(logger.TEST_START.length)
             if exports.verbose
-                log.debug "Test `#{testName}`"
+                @logger.log "Running test `#{testName}`"
             else
                 @testLog.log testName
         else if msg.indexOf(logger.TEST) >= 0
@@ -51,21 +52,23 @@ exports.LogsReader = class LogsReader
             @finished += 1
             exports.stats[@name].passed += 1
             if exports.verbose
-                log.ok testName
+                @logger.ok testName
             else
                 @progressLog.progress @finished, @amount
         else if msg.indexOf(logger.ERROR_TEST) >= 0
             testName = msg.slice(logger.ERROR_TEST.length)
             @finished += 1
             exports.stats[@name].failed += 1
-            log.error testName
-            unless exports.verbose
+            if exports.verbose
+                @logger.error testName
+            else
                 @progressLog.progress @finished, @amount
         else if msg.indexOf(logger.ERROR) >= 0
             errMsg = msg.slice logger.ERROR.length
             errMsg = try decodeURIComponent errMsg catch then errMsg
             errMsg = "\n#{errMsg}\n"
-            # log.error errMsg
+            if exports.verbose
+                @logger.error errMsg
             @errors.push errMsg
             exports.errors[@name] ?= ''
             exports.errors[@name] += errMsg
@@ -89,4 +92,4 @@ exports.LogsReader = class LogsReader
             else if logByMsgPrefix 'ERROR  ', 'error', msg
                 return
             else
-                log.debug msg
+                @logger.debug msg
