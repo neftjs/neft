@@ -85,12 +85,11 @@ matrix:
                 - echo no | $ANDROID_HOME/tools/android create avd --force -n neft-android-24-default_armeabi-v7a-200x250 -t android-24 --abi default/armeabi-v7a --skin 200x250
                 - $ANDROID_HOME/tools/emulator -port 5554 -avd neft-android-24-default_armeabi-v7a-200x250 &
 
-        # OSX Node and iOS
+        # OSX iOS
         -
             os: osx
             osx_image: xcode8.3
             env:
-                - TEST_NODE=1
                 - TEST_IOS=1
             before_script:
                 - npm run bundle -- --node --ios
@@ -98,11 +97,12 @@ matrix:
                 - HOMEBREW_NO_AUTO_UPDATE=1 brew install imagemagick
                 - HOMEBREW_NO_AUTO_UPDATE=1 brew install lcdf-typetools
 
-        # OSX MacOS
+        # OSX Node and MacOS
         -
             os: osx
             osx_image: xcode8.3
             env:
+                - TEST_NODE=1
                 - TEST_MACOS=1
             before_script:
                 - npm run bundle -- --node --macos
