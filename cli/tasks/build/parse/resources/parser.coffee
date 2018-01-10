@@ -5,6 +5,7 @@ pathUtils = require 'path'
 yaml = require 'js-yaml'
 mkdirp = require 'mkdirp'
 Jimp = require 'jimp'
+imageSizeOf = require 'image-size'
 
 utils = require 'src/utils'
 log = require 'src/log'
@@ -39,22 +40,6 @@ resolutionToString = (resolution) ->
     else
         '@' + (resolution + '').replace('.', 'p') + 'x'
 
-getImageSize = do ->
-    cache = Object.create null
-    (path, mtime, callback) ->
-        if cache[path] and mtime < Date.now() - 1000
-            callback null, cache[path]
-            return
-        Jimp.read path, (err, image) ->
-            if err
-                return callback err
-            cache[path] =
-                width: image.bitmap.width
-                height: image.bitmap.height
-            callback null, cache[path]
-            return
-        return
-
 exports.parse = (path, callback) ->
     logLine = log.line().timer().loading 'Find resources'
 
@@ -83,7 +68,7 @@ exports.parse = (path, callback) ->
 
         imagesToGetSize += 1
         imageSizeStack.add (callback) ->
-            getImageSize path, mtime.valueOf(), (err, meta) ->
+            imageSizeOf path, (err, meta) ->
                 if err
                     return callback err
 
