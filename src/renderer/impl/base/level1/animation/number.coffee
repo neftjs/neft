@@ -24,16 +24,14 @@ module.exports = (impl) ->
                 updateAnimation anim, Renderer.PropertyAnimation.ON_PENDING
                 i++
             else
-                # remove element in not ordered list
-                # this array may change due loop
-                pending[i] = pending[n - 1]
-                pending.pop()
+                pending.splice i, 1
                 anim._impl.pending = false
                 n--
-        eventLoop.release()
 
         if pending.length > 0
             requestAnimationFrame vsync
+
+        eventLoop.release()
         return
 
     updateAnimation = (anim, stateFlags) ->
