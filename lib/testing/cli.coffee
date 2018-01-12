@@ -43,6 +43,9 @@ reportAndExit = (err) ->
             **#{stat.passed + stat.failed}** total
         """
 
+        unless stat.passed
+            err ?= "No tests passed for `#{name}`"
+
     # result
     log.log ''
     if err or not utils.isEmpty(processLogs.errors)
