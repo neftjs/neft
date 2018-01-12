@@ -110,10 +110,13 @@ module.exports = (options, callback = ->) ->
                 logLine.ok 'Application run'
             logLine.stop()
 
-            log.log '''
-                \n**Android logs below**
-                **------------------**
-            '''
+            unless options.onLog
+                log.log '''
+                    \n**Android logs below**
+                    **------------------**
+                '''
+
+            options.onRun?()
 
     unless options.pipeOutput is false
         adb.stdout.pipe process.stdout
