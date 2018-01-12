@@ -4,6 +4,8 @@ childProcess = require 'child_process'
 fs = require 'fs'
 pathUtils = require 'path'
 
+log = Neft.log.scope('testing').scope 'ios'
+
 SIMULATOR_PATH = """
     /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/Contents/MacOS/Simulator
 """
@@ -76,6 +78,9 @@ tailLogs = (env, onLog, onExit) ->
             onLog msg
         return
 
+    tail.stderr.on 'data', (data) ->
+        log.error String data
+
     tail.on 'exit', -> onExit()
 
     kill: ->
@@ -104,26 +109,30 @@ exports.takeScreenshot = ({env, path}) ->
     cmd = "xcrun simctl io #{deviceId} screenshot #{path}"
     childProcess.execSync cmd, stdio: 'pipe'
 
-exports.run = (env, logsReader, callback) ->
-    logsReader.log "Finding requested device id"
+exports.build = (env, callback) ->
+    log.debug "Finding requested device id"
     device = getDeviceId env
     env.deviceId = device.id
-    logsReader.log "Use device id #{env.deviceId}"
+    log.debug "Use device id #{env.deviceId}"
 
     if device.status is 'Booted'
-        logsReader.log "Requested simulator is already booted"
+        log.debug "Requested simulator is already booted"
     else
-        logsReader.log "Running simulator"
+        log.debug "Running simulator"
         runSimulator env
 
-    logsReader.log "Building project"
+    log.debug "Building project"
     buildProject env
 
-    logsReader.log "Installing project"
+    log.debug "Installing project"
     installProject env
 
-    logsReader.log "Running tests"
+    log.debug "Running app"
     clearLogs env
     launchProject env
+
+    callback()
+
+exports.run = (env, logsReader, callback) ->
     scanProgress env, logsReader, callback
     return
