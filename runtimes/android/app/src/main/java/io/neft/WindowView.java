@@ -2,18 +2,14 @@ package io.neft;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.RelativeLayout;
-
 import io.neft.client.InAction;
+import io.neft.client.OutAction;
 import io.neft.client.Reader;
 import io.neft.client.handlers.ReaderActionHandler;
 import io.neft.renderer.Item;
 import io.neft.renderer.ItemView;
-import io.neft.renderer.Rectangle;
-import io.neft.utils.ColorValue;
+import io.neft.renderer.Renderer;
 
 public class WindowView extends ItemView {
     private static final App APP = App.getInstance();
@@ -36,7 +32,22 @@ public class WindowView extends ItemView {
 
     public WindowView(Context context){
         super(context);
-        this.requestFocus();
+        requestFocus();
+        setBackgroundColor(Color.WHITE);
+    }
+
+    @Override
+    protected void onSizeChanged(int width, int height, int oldw, int oldh) {
+        super.onSizeChanged(width, height, oldw, oldh);
+
+        Renderer renderer = APP.getRenderer();
+        if (renderer == null) {
+            return;
+        }
+        float dpWidth = renderer.pxToDp(width);
+        float dpHeight = renderer.pxToDp(height);
+        System.out.println("RESIZE TO " + dpWidth + "x" + dpHeight);
+        APP.getClient().pushAction(OutAction.WINDOW_RESIZE, dpWidth, dpHeight);
     }
 
     private boolean onKeyEvent(int keyCode, KeyEvent event) {

@@ -7,6 +7,7 @@ builder = require '../cli/builder'
 androidRun = require 'cli/tasks/run/android'
 
 {utils, log} = Neft
+log = log.scope('testing').scope 'android'
 
 ADB = 'platform-tools/adb'
 EMULATOR = 'tools/emulator'
@@ -108,17 +109,17 @@ isDeviceAvailable = (deviceSerialNumber) ->
     output = try childProcess.execSync cmd, cwd: SDK_DIR, stdio: 'pipe'
     String(output).trim() is '1'
 
-createEmulator = (env, logsReader, callback) ->
+createEmulator = (env, callback) ->
     name = getEmulatorName env
     env.emulatorName = name
 
-    logsReader.log "Checking available android emulators"
+    log.debug "Checking available android emulators"
     avds = childProcess.execSync "#{EMULATOR} -list-avds", cwd: SDK_DIR
     avds = String(avds).split '\n'
     if utils.has(avds, name)
         return callback null
 
-    logsReader.log "Creating android emulator"
+    log.debug "Creating android emulator"
     cmd = "echo no | #{ANDROID} create avd --force -n #{name} "
     cmd += "-t #{env.target} --abi #{env.abi} --skin #{env.width}x#{env.height}"
     log.debug "> #{cmd}" if CI
@@ -131,8 +132,8 @@ createEmulator = (env, logsReader, callback) ->
     androidProcess.stdout.pipe process.stdout
     return
 
-runEmulator = (env, logsReader, callback) ->
-    logsReader.log "Checking run android devices"
+runEmulator = (env, callback) ->
+    log.debug "Checking run android devices"
     pending = true
 
     finishWhenReady = (delay = 0) ->
@@ -145,9 +146,9 @@ runEmulator = (env, logsReader, callback) ->
             return
 
         if delay is 0
-            logsReader.log "Waiting for device"
+            log.debug "Waiting for device"
         else if delay % (DEVICE_RUN_TRY_DELAY * 10) is 0
-            logsReader.log "Waiting for device (#{delay / 1000}s)"
+            log.debug "Waiting for device (#{delay / 1000}s)"
         setTimeout ->
             finishWhenReady delay + DEVICE_RUN_TRY_DELAY
         , DEVICE_RUN_TRY_DELAY
@@ -158,7 +159,7 @@ runEmulator = (env, logsReader, callback) ->
             finishWhenReady()
             return
 
-        logsReader.log "Starting android emulator"
+        log.debug "Starting android emulator"
         port = getFreeDevicePort()
         env.deviceSerialNumber = getDeviceSerialNumberForPort port
         cmd = EMULATOR
@@ -182,21 +183,27 @@ closeProcessNotRespondingPopup = (deviceSerialNumber) ->
         #{ADB} -s #{deviceSerialNumber} shell input keyevent 66 66 &
     """, cwd: SDK_DIR
 
-runTests = (env, logsReader, callback) ->
-    logsReader.log "Running android tests on #{env.deviceSerialNumber}"
+runTests = (env, callback) ->
+    log.debug "Running android tests on #{env.deviceSerialNumber}"
     createdSerialNumbersByName[env.emulatorName] = env.deviceSerialNumber
     androidProcess = androidRun
         release: false
         deviceSerialNumber: env.deviceSerialNumber
         pipeOutput: false
+        onRun: callback
         onLog: (msg) ->
-            logsReader.log msg
-            if logsReader.terminated
-                androidProcess.kill()
-                return
+            env.onLog msg, androidProcess
     , (err) ->
-        callback err
+        env.onExit err
     return
+
+listenOnTests = (env, logsReader, callback) ->
+    env.onExit = callback
+    env.onLog = (msg, androidProcess) ->
+        logsReader.log msg
+        if logsReader.terminated
+            androidProcess.kill()
+        return
 
 exports.onInitializeScreenshots = (env) ->
     name = getEmulatorName env
@@ -219,13 +226,15 @@ exports.onInitializeScreenshots = (env) ->
 exports.getName = (env) ->
     "#{utils.capitalize env.target} on #{env.abi} tests"
 
-exports.run = (env, logsReader, callback) ->
+exports.build = (env, callback) ->
     loadConfig()
-    createEmulator env, logsReader, (err) ->
+    createEmulator env, (err) ->
         if err
             return callback err
-        runEmulator env, logsReader, (err, emulator) ->
+        runEmulator env, (err) ->
             if err
                 return callback err
-            runTests env, logsReader, (err) ->
-                callback err
+            runTests env, callback
+
+exports.run = (env, logsReader, callback) ->
+    listenOnTests env, logsReader, callback

@@ -53,6 +53,7 @@ module.exports = (config, callback) ->
         sdkDir = (cp.execSync('echo $ANDROID_HOME') + '').trim()
         unless config.local.android.sdkDir = sdkDir
             log.error "Specify Android SDK directory in `local.json`"
+            callback new Error '$ANDROID_HOME not specified'
             return
 
     logLine = log.line().timer().loading "Copying android files into `#{OUT_DIR}`..."

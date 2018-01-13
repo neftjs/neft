@@ -33,7 +33,7 @@ environments:
         width: 200
         height: 250
         view:
-            y: 10
+            y: 40
             width: 200
             height: 200
     -
@@ -44,7 +44,7 @@ environments:
         width: 200
         height: 250
         view:
-            y: 10
+            y: 40
             width: 200
             height: 200
     -
