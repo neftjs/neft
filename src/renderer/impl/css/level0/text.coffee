@@ -99,6 +99,8 @@ module.exports = (impl) ->
                     x += charWidth + wordSpacing
                 wordWidth = 0
             else if char is '\n'
+                if x > width
+                    width = x
                 height += lineHeight
                 x = 0
             else

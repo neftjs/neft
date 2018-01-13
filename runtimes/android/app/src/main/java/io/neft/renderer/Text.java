@@ -1,36 +1,28 @@
 package io.neft.renderer;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
-import android.graphics.PixelFormat;
-import android.graphics.Typeface;
+import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
 import io.neft.client.Reader;
 import io.neft.client.handlers.NoArgsActionHandler;
 import io.neft.client.handlers.ReaderActionHandler;
-import io.neft.renderer.handlers.BooleanItemActionHandler;
-import io.neft.renderer.handlers.ColorItemActionHandler;
-import io.neft.renderer.handlers.FloatItemActionHandler;
-import io.neft.renderer.handlers.NoArgsItemActionHandler;
-import io.neft.renderer.handlers.StringItemActionHandler;
+import io.neft.renderer.handlers.*;
 import io.neft.utils.ColorValue;
 import io.neft.utils.ViewUtils;
+import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Text extends Item {
     private static final String DEFAULT_FONT_FAMILY = "";
     private static final int DEFAULT_FONT_PIXEL_SIZE = 14;
     private static final int DEFAULT_COLOR = Color.BLACK;
-    private static final String WORDS_REGEX = " ";
+    private static final String SPACE = " ";
+    private static final String NEW_LINE = "\n";
     private static final HashMap<String, Typeface> FONTS = new HashMap<>();
     private static final Paint.FontMetrics FONT_METRICS = new Paint.FontMetrics();
     private static final HashMap<String, Float> ALIGNMENT;
@@ -158,6 +150,7 @@ public class Text extends Item {
         thread.start();
     }
 
+    @ToString
     private static class Line {
         private int textStart;
         private int textEnd;
@@ -216,7 +209,6 @@ public class Text extends Item {
     private float contentHeight = 0;
 
     private String text;
-    private String[] words;
     private String linesText = "";
     private ArrayList<Line> lines = new ArrayList<>();
     private int linesLength;
@@ -231,7 +223,6 @@ public class Text extends Item {
 
     public void setText(String val) {
         text = val;
-        words = val.isEmpty() ? null : val.split(WORDS_REGEX);
     }
 
     public void setWrap(boolean val) {
@@ -277,17 +268,27 @@ public class Text extends Item {
         alignmentVertical = ALIGNMENT.get(val);
     }
 
+    private String[][] splitText() {
+        String[] lines = text.split(NEW_LINE, -1);
+        String[][] result = new String[lines.length][];
+        for (int i = 0; i < lines.length; i++) {
+            result[i] = lines[i].split(SPACE, -1);
+        }
+        return result;
+    }
+
     public void updateContentSize() {
         linesLength = 0;
         linesText = text;
 
-        if (words == null) {
+        if (text == null || text.isEmpty()) {
             contentWidth = contentHeight = 0;
         } else {
             paint.getFontMetrics(FONT_METRICS);
 
+            String[][] textLines = splitText();
+            int textLinesLength = textLines.length;
             int linesArrayLength = lines.size();
-            int wordsLength = words.length;
             int width = view.getLayoutParams().width;
             float lineHeightPx = lineHeight * fontPixelSize;
             float spaceWidth = paint.measureText(" ");
@@ -295,46 +296,53 @@ public class Text extends Item {
             float x = 0, textWidth = 0, textHeight = 0;
             int textPointer = 0, lineStart = 0, lineLength = 0;
 
-            for (int i = 0; i <= wordsLength; i++) {
-                String word = i < wordsLength ? words[i] : null;
-                int wordLength = word != null ? word.length() : 0;
-                float wordWidth = word != null ? paint.measureText(word) : 0;
+            for (int i = 0; i < textLinesLength; i++) {
+                String[] words = textLines[i];
+                int wordsLength = words.length;
 
-                if (i > 0 && (i == wordsLength || (wrap && x + wordWidth > width))) {
-                    // get line object
-                    Line line;
-                    if (linesArrayLength <= linesLength){
-                        line = new Line();
-                        lines.add(line);
-                    } else {
-                        line = lines.get(linesLength);
+                for (int j = 0; j <= wordsLength; j++) {
+                    String word = j < wordsLength ? words[j] : null;
+                    int wordLength = word != null ? word.length() : 0;
+                    float wordWidth = word != null ? paint.measureText(word) : 0;
+
+                    if (j > 0 && (j == wordsLength || (wrap && x + wordWidth > width))) {
+                        // get line object
+                        Line line;
+                        if (linesArrayLength <= linesLength) {
+                            line = new Line();
+                            lines.add(line);
+                        } else {
+                            line = lines.get(linesLength);
+                        }
+                        linesLength++;
+
+                        // fill line
+                        line.textStart = lineStart;
+                        line.textEnd = lineStart + lineLength - 1;
+                        line.width = x - spaceWidth;
+                        line.y = textHeight + fontTop;
+
+                        // clear
+                        lineStart = textPointer;
+                        lineLength = 0;
+                        x = 0;
+
+                        // next line
+                        textHeight += lineHeightPx;
                     }
-                    linesLength++;
 
-                    // fill line
-                    line.textStart = lineStart;
-                    line.textEnd = lineStart + lineLength - 1;
-                    line.width = x - spaceWidth;
-                    line.y = textHeight + fontTop;
+                    if (word != null) {
+                        x += wordWidth;
+                        textPointer += wordLength + 1;
+                        lineLength += wordLength + 1;
+                    }
 
-                    // clear
-                    lineStart = textPointer;
-                    lineLength = 0;
-                    x = 0;
+                    if (x > textWidth) {
+                        textWidth = x;
+                    }
 
-                    // next line
-                    textHeight += lineHeightPx;
+                    x += spaceWidth;
                 }
-
-                x += wordWidth;
-                textPointer += wordLength + 1;
-                lineLength += wordLength + 1;
-
-                if (x > textWidth) {
-                    textWidth = x;
-                }
-
-                x += spaceWidth;
             }
 
             contentWidth = textWidth;
