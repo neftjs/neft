@@ -1,4 +1,4 @@
-const { Renderer, assert, utils } = Neft;
+const { Renderer } = Neft;
 const { Impl } = Renderer;
 
 class Button extends Renderer.Native {}
