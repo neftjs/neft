@@ -104,7 +104,7 @@ exports.parse = (path, callback) ->
                 return
 
     parseResourcesFolder = (path) ->
-        throw new Error "Resources folder not implemented"
+        throw new Error "Resources folder `#{path}` is not implemented"
 
     parseResourcesFile = (path, config) ->
         assert.isString path

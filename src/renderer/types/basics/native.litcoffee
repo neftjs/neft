@@ -8,7 +8,8 @@
     colorUtils = require 'src/renderer/utils/color'
 
     IS_NATIVE = process.env.NEFT_NATIVE
-    try {callNativeFunction, onNativeEvent} = require 'src/native'
+    if process.env.NEFT_NATIVE
+        {callNativeFunction, onNativeEvent} = require 'src/native'
 
     module.exports = (Renderer, Impl, itemUtils) ->
 
@@ -272,7 +273,7 @@ where `XYZ` is the given name.
                     itemListeners.push func
                 else
                     eventName = "on#{name}"
-                    @_impl[eventName]?.connect func
+                    @_impl[eventName]?.connect func, @
                 return
 
         Native
