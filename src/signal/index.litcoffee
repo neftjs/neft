@@ -205,6 +205,20 @@ obj.onPress.emit();
 
             return
 
+## Signal::connectOnce(*Function* listener, [*Any* context])
+
+        connectOnce: (listener, ctx = null) ->
+            assert.isFunction @, 'connectOnce must be called on a signal function'
+            assert.isFunction listener, 'listener is not a function'
+
+            signal = @
+            wrapper = (arg1, arg2) ->
+                signal.disconnect wrapper, ctx
+                listener.call @, arg1, arg2
+
+            @connect wrapper, ctx
+
+
 ## Signal::disconnect(*Function* listener, [*Any* context])
 
 Returns the given listener function from the signal listeners.
