@@ -16,6 +16,7 @@ public class ScrollableItem extends NativeItem {
     private static class ScrollableView extends ScrollView {
         private ScrollableItem scrollable;
         private HorizontalScrollView hScroll;
+        private ViewGroup content;
 
         class HorizontalScrollableView extends HorizontalScrollView {
             public HorizontalScrollableView(Context context) {
@@ -31,15 +32,15 @@ public class ScrollableItem extends NativeItem {
         public ScrollableView(Context context) {
             super(context);
 
-            setLayerType(LAYER_TYPE_HARDWARE, null);
-
-            hScroll = new HorizontalScrollableView(context);
+            hScroll = new HorizontalScrollView(context);
             hScroll.setLayoutParams(new LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                    LayoutParams.MATCH_PARENT,
+                    LayoutParams.WRAP_CONTENT
             ));
-            hScroll.setClipChildren(false);
             addView(hScroll);
+
+            content = new FrameLayout(context);
+            hScroll.addView(content);
         }
 
         @Override
@@ -48,17 +49,14 @@ public class ScrollableItem extends NativeItem {
         }
 
         @Override
-        public boolean onTouchEvent(MotionEvent event) {
-            return super.onTouchEvent(event) || hScroll.onTouchEvent(event);
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(MotionEvent event) {
-            return super.onInterceptTouchEvent(event) || hScroll.onInterceptTouchEvent(event);
+        public boolean dispatchTouchEvent(MotionEvent event) {
+            hScroll.dispatchTouchEvent(event);
+            onTouchEvent(event);
+            return true;
         }
 
         void addContentView(View view) {
-            hScroll.addView(view);
+            content.addView(view);
         }
     }
 
