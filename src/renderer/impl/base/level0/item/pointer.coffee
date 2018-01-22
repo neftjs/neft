@@ -39,6 +39,7 @@ module.exports = (impl) ->
             h = item._height * parentScale
             scale = item._scale
             rotation = item._rotation
+            fullScale = scale * parentScale
 
             # add scale
             if scale isnt 1
@@ -68,7 +69,7 @@ module.exports = (impl) ->
                 if item._children
                     child = item._children.topChild
                     while child
-                        result = checkItem(child, ex, ey, onItem, x, y, scale)
+                        result = checkItem(child, ex, ey, onItem, x, y, fullScale)
                         if result & STOP_PROPAGATION
                             return result
                         if result & STOP_ASIDE_PROPAGATION
