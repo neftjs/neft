@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 
@@ -32,7 +33,7 @@ public class ScrollableItem extends NativeItem {
         public ScrollableView(Context context) {
             super(context);
 
-            hScroll = new HorizontalScrollView(context);
+            hScroll = new HorizontalScrollableView(context);
             hScroll.setLayoutParams(new LayoutParams(
                     LayoutParams.MATCH_PARENT,
                     LayoutParams.WRAP_CONTENT
@@ -66,6 +67,8 @@ public class ScrollableItem extends NativeItem {
     public ScrollableItem() {
         super(new ScrollableView(APP.getActivity().getApplicationContext()));
         getItemView().scrollable = this;
+        setHorizontalScrollEffect(true);
+        setVerticalScrollEffect(true);
     }
 
     private ScrollableView getItemView() {
@@ -105,5 +108,25 @@ public class ScrollableItem extends NativeItem {
         int px = Math.round(dpToPx(val));
         getItemView().scrollTo(0, px);
         sendContentY();
+    }
+
+    @OnSet("horizontalScrollBar")
+    public void setHorizontalScrollBar(boolean val) {
+        getItemView().hScroll.setHorizontalScrollBarEnabled(val);
+    }
+
+    @OnSet("verticalScrollBar")
+    public void setVerticalScrollBar(boolean val) {
+        getItemView().setVerticalScrollBarEnabled(val);
+    }
+
+    @OnSet("horizontalScrollEffect")
+    public void setHorizontalScrollEffect(boolean val) {
+        getItemView().hScroll.setOverScrollMode(val ? View.OVER_SCROLL_IF_CONTENT_SCROLLS : View.OVER_SCROLL_NEVER);
+    }
+
+    @OnSet("verticalScrollEffect")
+    public void setVerticalScrollEffect(boolean val) {
+        getItemView().setOverScrollMode(val ? View.OVER_SCROLL_IF_CONTENT_SCROLLS : View.OVER_SCROLL_NEVER);
     }
 }
