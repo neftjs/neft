@@ -4,6 +4,7 @@ assert = require 'src/assert'
 utils = require 'src/utils'
 signal = require 'src/signal'
 log = require 'src/log'
+eventLoop = require 'src/eventLoop'
 Renderer = require 'src/renderer'
 
 log = log.scope 'Styles'
@@ -436,7 +437,7 @@ module.exports = (File, data) -> class Style
     Item may not be created if it won't be used, that is:
         - parent is a text style.
     ###
-    createItemDeeply: ->
+    createItemDeeply: eventLoop.bindInLock ->
         @createItem()
 
         # optimization - don't create styles inside the text style
