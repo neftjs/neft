@@ -999,15 +999,6 @@ Points to the URI which will be used when user clicks on this item.
             developmentSetter: (val) ->
                 assert.isString val, "Item.linkUri needs to be a string, but #{val} given"
 
-## Item::overlap(*Item* item)
-
-Returns `true` if two items overlaps.
-
-        overlap: (item) ->
-            assert.instanceOf item, Item, "Item.overlap called on wrong context"
-
-            Impl.doItemOverlap.call @, item
-
         @createSpacing = require('./item/spacing') Renderer, Impl, itemUtils, Item
         @createAlignment = require('./item/alignment') Renderer, Impl, itemUtils, Item
         @createAnchors = require('./item/anchors') Renderer, Impl, itemUtils, Item
