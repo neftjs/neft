@@ -1,6 +1,6 @@
 // when=NEFT_HTML
 
-const { utils } = Neft;
+const { utils, signal } = Neft;
 const { Impl } = Neft.Renderer;
 const { Item } = Impl.Types;
 
@@ -8,7 +8,7 @@ exports.create = function (data) {
     Item.create.call(this, data);
 
     const scrollElem = data.scrollElem = document.createElement('div');
-    scrollElem.style.overflow = 'hidden';
+    scrollElem.style.overflow = 'scroll';
     scrollElem.style.width = '100%';
     scrollElem.style.height = '100%';
     data.elem.appendChild(scrollElem);
@@ -30,8 +30,7 @@ exports.create = function (data) {
 
         const oldVal = this.contentX;
         if (val !== oldVal) {
-            this._contentX = val;
-            this.onContentXChange.emit(oldVal);
+            this._impl.onContentXChange.emit(val);
         }
     };
 
@@ -47,8 +46,7 @@ exports.create = function (data) {
 
         const oldVal = this.contentY;
         if (val !== oldVal) {
-            this._contentY = val;
-            this.onContentYChange.emit(oldVal);
+            this._impl.onContentYChange.emit(val);
         }
     };
 
@@ -72,7 +70,9 @@ exports.createData = function () {
     return utils.merge({
         contentItem: null,
         scrollElem: null,
-        yScrollbar: false
+        yScrollbar: false,
+        onContentXChange: signal.create(),
+        onContentYChange: signal.create(),
     }, Item.DATA);
 };
 

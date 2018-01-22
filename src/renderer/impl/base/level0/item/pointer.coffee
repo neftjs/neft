@@ -75,18 +75,6 @@ module.exports = (impl) ->
                             break
                         child = child.belowSibling
 
-                # test content item
-                if item._contentItem and not (result & STOP_ASIDE_PROPAGATION)
-                    result = checkItem(
-                        item._contentItem,
-                        ex, ey,
-                        onItem,
-                        x - item.contentX * parentScale, y - item.contentY * parentScale,
-                        scale
-                    )
-                    if result & STOP_PROPAGATION
-                        return result
-
             # test this child
             if result & PROPAGATE_UP or isPointInBox(ex, ey, x, y, w, h)
                 result = onItem(item)
