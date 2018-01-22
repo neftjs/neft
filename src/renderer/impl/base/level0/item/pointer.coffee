@@ -78,7 +78,9 @@ module.exports = (impl) ->
 
             # test this child
             if result & PROPAGATE_UP or isPointInBox(ex, ey, x, y, w, h)
-                result = onItem(item)
+                itemX = (ex - x) / fullScale
+                itemY = (ey - y) / fullScale
+                result = onItem(item, itemX, itemY)
 
             return result
 
@@ -104,12 +106,15 @@ module.exports = (impl) ->
 
         # support press event
         Device.onPointerPress do ->
-            onItem = (item) ->
+            onItem = (item, itemX, itemY) ->
                 {capturePointer} = item._impl
                 if capturePointer & CLICK
                     pressedItems.push item
                 if capturePointer & PRESS
-                    event._ensureRelease = event._ensureMove = true
+                    event._ensureRelease = true
+                    event._ensureMove = true
+                    event._itemX = itemX
+                    event._itemY = itemY
                     emitSignal item.pointer, 'onPress', event
                     if event._ensureRelease
                         itemsToRelease.push item
@@ -128,9 +133,12 @@ module.exports = (impl) ->
 
         # support release and click events
         Device.onPointerRelease do ->
-            onItem = (item) ->
+            onItem = (item, itemX, itemY) ->
                 data = item._impl
                 {capturePointer} = data
+                if capturePointer & (RELEASE | PRESS | CLICK)
+                    event._itemX = itemX
+                    event._itemY = itemY
                 if capturePointer & RELEASE
                     emitSignal item._pointer, 'onRelease', event
                 if capturePointer & PRESS
@@ -150,6 +158,9 @@ module.exports = (impl) ->
                 event._checkSiblings = false
 
                 captureItems impl.windowItem, e._x, e._y, onItem
+
+                event._itemX = -1
+                event._itemY = -1
 
                 # exit all entered items on touch screen
                 if impl.Renderer.Screen.touch
@@ -175,11 +186,13 @@ module.exports = (impl) ->
         Device.onPointerMove do ->
             flag = 0
 
-            onItem = (item) ->
+            onItem = (item, itemX, itemY) ->
                 data = item._impl
                 {capturePointer} = data
                 if capturePointer & (ENTER | EXIT | MOVE)
                     data.pointerMoveFlag = flag
+                    event._itemX = itemX
+                    event._itemY = itemY
                 if capturePointer & (ENTER | EXIT) and not data.pointerHover
                     data.pointerHover = true
                     hoverItems.push item
@@ -197,6 +210,9 @@ module.exports = (impl) ->
                 flag = (flag % 2) + 1
 
                 captureItems impl.windowItem, e._x, e._y, onItem
+
+                event._itemX = -1
+                event._itemY = -1
 
                 for item in itemsToMove
                     if event._stopPropagation
@@ -221,10 +237,12 @@ module.exports = (impl) ->
 
         # support wheel event
         Device.onPointerWheel do ->
-            onItem = (item) ->
+            onItem = (item, itemX, itemY) ->
                 event._stopPropagation = true
                 if item._impl.capturePointer & WHEEL
                     if (pointer = item._pointer) and not signal.isEmpty(pointer.onWheel)
+                        event._itemX = itemX
+                        event._itemY = itemY
                         emitSignal pointer, 'onWheel', event
                         if event._stopPropagation
                             return STOP_PROPAGATION
