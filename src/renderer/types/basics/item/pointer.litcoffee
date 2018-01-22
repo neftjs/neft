@@ -206,6 +206,8 @@ Stopped 'Exit' event will emit 'Release' event on this item.
 
         @Event = class PointerEvent
             constructor: ->
+                @_itemX = 0
+                @_itemY = 0
                 @_stopPropagation = true
                 @_checkSiblings = false
                 @_ensureRelease = true
@@ -215,6 +217,22 @@ Stopped 'Exit' event will emit 'Release' event on this item.
 
             @:: = Object.create Renderer.Device.pointer
             @::constructor = PointerEvent
+
+## ReadOnly *Float* PointerEvent::itemX
+
+Represents pointer horizontal position in a local item coordinate system.
+
+Is not available inside `onExit` event and for move or release ensured items.
+
+            utils.defineProperty @::, 'itemX', null, (-> @_itemX), null
+
+## ReadOnly *Float* PointerEvent::itemY
+
+Represents pointer vertical position in a local item coordinate system.
+
+Is not available inside `onExit` event and for move or release ensured items.
+
+            utils.defineProperty @::, 'itemY', null, (-> @_itemY), null
 
 ### *Boolean* PointerEvent::stopPropagation = `false`
 

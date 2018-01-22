@@ -1,4 +1,4 @@
-const { Renderer, assert, utils, signal } = Neft;
+const { Renderer, assert, utils, signal, log } = Neft;
 const { setPropertyValue } = Renderer.itemUtils;
 const { emitSignal } = signal.Emitter;
 const { Impl } = Renderer;
@@ -11,11 +11,15 @@ Scrollable.__name__ = 'Scrollable';
 
 Scrollable.Initialize = (item) => {
     item.on('contentXChange', function (val) {
+        const { contentItem } = this;
         setPropertyValue(this, 'contentX', val);
+        if (contentItem) contentItem._x = -val;
     });
 
     item.on('contentYChange', function (val) {
+        const { contentItem } = this;
         setPropertyValue(this, 'contentY', val);
+        if (contentItem) contentItem._y = -val;
     });
 
     let pressX = 0, pressY = 0, prevented = false;
@@ -45,15 +49,38 @@ Scrollable.defineProperty({
     name: 'contentItem',
     defaultValue: null,
     setter: function (_super) {
+        function onPositionChange() {
+            log.warn("Scrollable::contentItem position cannot be changed manually");
+            this.x = 0;
+            this.y = 0;
+        }
+
         return function (val) {
+            const oldVal = this.contentItem;
+            if (oldVal != null) {
+                oldVal.parent = null;
+                oldVal.onXChange.disconnect(onPositionChange, oldVal);
+                oldVal.onYChange.disconnect(onPositionChange, oldVal);
+            }
             if (val != null) {
-                val.parent = null;
-                val._parent = this;
-                emitSignal(val, 'onParentChange', null);
+                // put item as a most bottom child to support pointer events and bindings
+                val.parent = this;
+                val.previousSibling = null;
+                val.x = 0;
+                val.y = 0;
+                val.onXChange.connect(onPositionChange, val);
+                val.onYChange.connect(onPositionChange, val);
             }
             _super.call(this, val);
         };
     }
+});
+
+Scrollable.defineProperty({
+    type: 'boolean',
+    name: 'clip',
+    defaultValue: true,
+    setter: null
 });
 
 Scrollable.defineProperty({
