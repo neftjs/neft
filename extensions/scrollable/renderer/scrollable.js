@@ -57,17 +57,39 @@ Scrollable.defineProperty({
 });
 
 Scrollable.defineProperty({
-    enabled: true,
     type: 'number',
     name: 'contentX',
     defaultValue: 0
 });
 
 Scrollable.defineProperty({
-    enabled: true,
     type: 'number',
     name: 'contentY',
     defaultValue: 0
+});
+
+Scrollable.defineProperty({
+    type: 'boolean',
+    name: 'horizontalScrollBar',
+    defaultValue: true
+});
+
+Scrollable.defineProperty({
+    type: 'boolean',
+    name: 'verticalScrollBar',
+    defaultValue: true
+});
+
+Scrollable.defineProperty({
+    type: 'boolean',
+    name: 'horizontalScrollEffect',
+    defaultValue: true
+});
+
+Scrollable.defineProperty({
+    type: 'boolean',
+    name: 'verticalScrollEffect',
+    defaultValue: true
 });
 
 if (process.env.NEFT_HTML) {

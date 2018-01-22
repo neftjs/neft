@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 
@@ -16,6 +17,7 @@ public class ScrollableItem extends NativeItem {
     private static class ScrollableView extends ScrollView {
         private ScrollableItem scrollable;
         private HorizontalScrollView hScroll;
+        private ViewGroup content;
 
         class HorizontalScrollableView extends HorizontalScrollView {
             public HorizontalScrollableView(Context context) {
@@ -31,15 +33,15 @@ public class ScrollableItem extends NativeItem {
         public ScrollableView(Context context) {
             super(context);
 
-            setLayerType(LAYER_TYPE_HARDWARE, null);
-
             hScroll = new HorizontalScrollableView(context);
             hScroll.setLayoutParams(new LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                    LayoutParams.MATCH_PARENT,
+                    LayoutParams.WRAP_CONTENT
             ));
-            hScroll.setClipChildren(false);
             addView(hScroll);
+
+            content = new FrameLayout(context);
+            hScroll.addView(content);
         }
 
         @Override
@@ -48,17 +50,14 @@ public class ScrollableItem extends NativeItem {
         }
 
         @Override
-        public boolean onTouchEvent(MotionEvent event) {
-            return super.onTouchEvent(event) || hScroll.onTouchEvent(event);
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(MotionEvent event) {
-            return super.onInterceptTouchEvent(event) || hScroll.onInterceptTouchEvent(event);
+        public boolean dispatchTouchEvent(MotionEvent event) {
+            hScroll.dispatchTouchEvent(event);
+            onTouchEvent(event);
+            return true;
         }
 
         void addContentView(View view) {
-            hScroll.addView(view);
+            content.addView(view);
         }
     }
 
@@ -68,6 +67,8 @@ public class ScrollableItem extends NativeItem {
     public ScrollableItem() {
         super(new ScrollableView(APP.getActivity().getApplicationContext()));
         getItemView().scrollable = this;
+        setHorizontalScrollEffect(true);
+        setVerticalScrollEffect(true);
     }
 
     private ScrollableView getItemView() {
@@ -107,5 +108,25 @@ public class ScrollableItem extends NativeItem {
         int px = Math.round(dpToPx(val));
         getItemView().scrollTo(0, px);
         sendContentY();
+    }
+
+    @OnSet("horizontalScrollBar")
+    public void setHorizontalScrollBar(boolean val) {
+        getItemView().hScroll.setHorizontalScrollBarEnabled(val);
+    }
+
+    @OnSet("verticalScrollBar")
+    public void setVerticalScrollBar(boolean val) {
+        getItemView().setVerticalScrollBarEnabled(val);
+    }
+
+    @OnSet("horizontalScrollEffect")
+    public void setHorizontalScrollEffect(boolean val) {
+        getItemView().hScroll.setOverScrollMode(val ? View.OVER_SCROLL_IF_CONTENT_SCROLLS : View.OVER_SCROLL_NEVER);
+    }
+
+    @OnSet("verticalScrollEffect")
+    public void setVerticalScrollEffect(boolean val) {
+        getItemView().setOverScrollMode(val ? View.OVER_SCROLL_IF_CONTENT_SCROLLS : View.OVER_SCROLL_NEVER);
     }
 }
