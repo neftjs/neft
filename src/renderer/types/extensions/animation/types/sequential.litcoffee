@@ -85,4 +85,4 @@
                 _super.call @, val
                 return
 
-## *ReadOnly* *Animation[]* SequentialAnimation::children
+## ReadOnly *Animation[]* SequentialAnimation::children
