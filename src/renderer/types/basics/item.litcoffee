@@ -999,6 +999,28 @@ Points to the URI which will be used when user clicks on this item.
             developmentSetter: (val) ->
                 assert.isString val, "Item.linkUri needs to be a string, but #{val} given"
 
+## Item::scaleInPoint(*Float* scale, *Float* pointX, *Float* pointY)
+
+        scaleInPoint: (scale, pointX, pointY) ->
+            oldScale = @scale
+
+            # scale
+            @scale *= scale
+
+            # move to point horizontal
+            {width} = @
+            widthChange = (width * @scale - width * oldScale) / 2
+            xOriginToChange = -2 * (pointX / width) + 1
+            @x += xOriginToChange * widthChange
+
+            # move to point vertical
+            {height} = @
+            heightChange = (height * @scale - height * oldScale) / 2
+            yOriginToChange = -2 * (pointY / height) + 1
+            @y += yOriginToChange * heightChange
+
+            return
+
         @createSpacing = require('./item/spacing') Renderer, Impl, itemUtils, Item
         @createAlignment = require('./item/alignment') Renderer, Impl, itemUtils, Item
         @createAnchors = require('./item/anchors') Renderer, Impl, itemUtils, Item
