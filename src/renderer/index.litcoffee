@@ -34,6 +34,8 @@
         require('./types/extensions/animation/types/property/types/number') exports, Impl, itemUtils
     exports.SequentialAnimation =
         require('./types/extensions/animation/types/sequential') exports, Impl, itemUtils
+    exports.ParallelAnimation =
+        require('./types/extensions/animation/types/parallel') exports, Impl, itemUtils
     exports.Transition = require('./types/extensions/transition') exports, Impl, itemUtils
 
     exports.Item = require('./types/basics/item') exports, Impl, itemUtils
