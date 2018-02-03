@@ -1006,17 +1006,17 @@ Points to the URI which will be used when user clicks on this item.
             oldScale = @scale
 
             # scale
-            @scale *= scale
+            @scale = scale
 
             # move to point horizontal
             {width} = @
-            widthChange = (width * @scale - width * oldScale) / 2
+            widthChange = (width * scale - width * oldScale) / 2
             xOriginToChange = -2 * (pointX / width) + 1
             @x += xOriginToChange * widthChange
 
             # move to point vertical
             {height} = @
-            heightChange = (height * @scale - height * oldScale) / 2
+            heightChange = (height * scale - height * oldScale) / 2
             yOriginToChange = -2 * (pointY / height) + 1
             @y += yOriginToChange * heightChange
 
