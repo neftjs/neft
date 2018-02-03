@@ -12,6 +12,7 @@ import io.neft.renderer.Item;
 import io.neft.renderer.NativeItem;
 import io.neft.renderer.annotation.OnCreate;
 import io.neft.renderer.annotation.OnSet;
+import io.neft.renderer.annotation.OnCall;
 
 public class ScrollableItem extends NativeItem {
     private static class ScrollableView extends ScrollView {
@@ -129,5 +130,13 @@ public class ScrollableItem extends NativeItem {
     @OnSet("verticalScrollEffect")
     public void setVerticalScrollEffect(boolean val) {
         getItemView().setOverScrollMode(val ? View.OVER_SCROLL_IF_CONTENT_SCROLLS : View.OVER_SCROLL_NEVER);
+    }
+
+    @OnCall("animatedScrollTo")
+    public void animatedScrollTo(Object[] args) {
+        float x = (float) args[0];
+        float y = (float) args[1];
+        getItemView().hScroll.smoothScrollTo(Math.round(dpToPx(x)), 0);
+        getItemView().smoothScrollTo(0, Math.round(dpToPx(y)));
     }
 }
