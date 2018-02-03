@@ -133,6 +133,13 @@ public class App {
     }
 
     public void processTouchEvent(@NonNull MotionEvent event) {
+        // call press events synchronously to know which native items should handle further events
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            renderer.getDevice().onTouchEvent(event);
+            client.sendData();
+            return;
+        }
+
         MotionEvent eventToProcess = MotionEvent.obtain(event);
         synchronized (touchEvents) {
             int lastIndex = touchEvents.size() - 1;

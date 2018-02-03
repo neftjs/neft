@@ -1,19 +1,20 @@
 package io.neft.renderer;
 
+import android.content.Context;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-
-import java.util.HashMap;
-
+import io.neft.MainActivity;
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
 import io.neft.client.Reader;
-import io.neft.MainActivity;
 import io.neft.client.handlers.StringActionHandler;
 import io.neft.renderer.annotation.Parser;
 import io.neft.renderer.handlers.ReaderItemActionHandler;
 import io.neft.utils.Consumer;
 import io.neft.utils.StringUtils;
+
+import java.util.HashMap;
 
 public class NativeItem extends Item {
     public static final HashMap<String, Class<? extends NativeItem>> types = new HashMap<>();
@@ -99,9 +100,24 @@ public class NativeItem extends Item {
     protected final View itemView;
     protected boolean autoWidth = true;
     protected boolean autoHeight = true;
+    protected boolean pressed = false;
+
+    public static class NativeItemView extends ItemView {
+        NativeItem item;
+
+        public NativeItemView(Context context) {
+            super(context);
+        }
+
+        @Override
+        public boolean dispatchTouchEvent(MotionEvent ev) {
+            return item.pressed && super.dispatchTouchEvent(ev);
+        }
+    }
 
     protected NativeItem(View itemView) {
-        super();
+        super(new NativeItemView(APP.getWindowView().getContext()));
+        ((NativeItemView) view).item = this;
         this.itemView = itemView;
         if (itemView != null) {
             view.addView(itemView);
@@ -170,9 +186,13 @@ public class NativeItem extends Item {
         }
     }
 
-    protected void onPointerPress(float x, float y) {}
+    protected void onPointerPress(float x, float y) {
+        pressed = true;
+    }
 
-    protected void onPointerRelease(float x, float y) {}
+    protected void onPointerRelease(float x, float y) {
+        pressed = false;
+    }
 
     protected void onPointerMove(float x, float y) {}
 
