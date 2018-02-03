@@ -86,13 +86,27 @@ Scrollable.defineProperty({
 Scrollable.defineProperty({
     type: 'number',
     name: 'contentX',
-    defaultValue: 0
+    defaultValue: 0,
+    setter(_super) {
+        return function(val) {
+            const { contentItem } = this;
+            _super.call(this, val)
+            if (contentItem) contentItem._x = -val;
+        }
+    }
 });
 
 Scrollable.defineProperty({
     type: 'number',
     name: 'contentY',
-    defaultValue: 0
+    defaultValue: 0,
+    setter(_super) {
+        return function(val) {
+            const { contentItem } = this;
+            _super.call(this, val)
+            if (contentItem) contentItem._y = -val;
+        }
+    }
 });
 
 Scrollable.defineProperty({
