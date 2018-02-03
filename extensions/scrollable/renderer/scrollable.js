@@ -5,7 +5,20 @@ const { Impl } = Renderer;
 
 const PREVENT_CLICK_MIN_PX = 10;
 
-class Scrollable extends Renderer.Native {}
+class Scrollable extends Renderer.Native {
+    scrollTo(x, y, opts) {
+        const animate = opts ? opts.animate : false
+        assert.isFloat(x);
+        assert.isFloat(y);
+        assert.isBoolean(animate);
+        if (animate) {
+            this.call('animatedScrollTo', x, y);
+        } else {
+            this.contentX = x
+            this.contentY = y
+        }
+    }
+}
 
 Scrollable.__name__ = 'Scrollable';
 
@@ -86,13 +99,27 @@ Scrollable.defineProperty({
 Scrollable.defineProperty({
     type: 'number',
     name: 'contentX',
-    defaultValue: 0
+    defaultValue: 0,
+    setter(_super) {
+        return function(val) {
+            const { contentItem } = this;
+            _super.call(this, val)
+            if (contentItem) contentItem._x = -val;
+        }
+    }
 });
 
 Scrollable.defineProperty({
     type: 'number',
     name: 'contentY',
-    defaultValue: 0
+    defaultValue: 0,
+    setter(_super) {
+        return function(val) {
+            const { contentItem } = this;
+            _super.call(this, val)
+            if (contentItem) contentItem._y = -val;
+        }
+    }
 });
 
 Scrollable.defineProperty({

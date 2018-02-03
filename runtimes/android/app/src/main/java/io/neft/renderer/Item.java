@@ -5,10 +5,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import io.neft.App;
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
@@ -16,11 +12,10 @@ import io.neft.client.Reader;
 import io.neft.client.handlers.ActionHandler;
 import io.neft.client.handlers.NoArgsActionHandler;
 import io.neft.client.handlers.ReaderActionHandler;
-import io.neft.renderer.handlers.BooleanItemActionHandler;
-import io.neft.renderer.handlers.FloatItemActionHandler;
-import io.neft.renderer.handlers.IntItemActionHandler;
-import io.neft.renderer.handlers.ItemActionHandler;
-import io.neft.renderer.handlers.ItemItemActionHandler;
+import io.neft.renderer.handlers.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Item {
     protected static final App APP = App.getInstance();
@@ -192,11 +187,15 @@ public class Item {
         }
     }
 
-    public Item() {
-        view = new ItemView(APP.getWindowView().getContext());
+    protected Item(ItemView view) {
+        this.view = view;
         view.setLayoutParams(new ItemView.LayoutParams(0, 0));
         this.id = APP.getRenderer().registerItem(this);
         view.setClipChildren(optimized);
+    }
+
+    public Item() {
+        this(new ItemView(APP.getWindowView().getContext()));
     }
 
     private void invalidate() {

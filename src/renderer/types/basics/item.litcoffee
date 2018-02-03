@@ -6,6 +6,7 @@
     utils = require 'src/utils'
     signal = require 'src/signal'
     List = require 'src/list'
+    Matrix = require 'src/renderer/utils/Matrix'
 
     {isArray} = Array
     {emitSignal} = signal.Emitter
@@ -998,6 +999,70 @@ Points to the URI which will be used when user clicks on this item.
             implementation: Impl.setItemLinkUri
             developmentSetter: (val) ->
                 assert.isString val, "Item.linkUri needs to be a string, but #{val} given"
+
+## Item::scaleInPoint(*Float* scale, *Float* pointX, *Float* pointY)
+
+        scaleInPoint: (scale, pointX, pointY) ->
+            oldScale = @scale
+
+            # scale
+            @scale = scale
+
+            # move to point horizontal
+            {width} = @
+            widthChange = (width * scale - width * oldScale) / 2
+            xOriginToChange = -2 * (pointX / width) + 1
+            @x += xOriginToChange * widthChange
+
+            # move to point vertical
+            {height} = @
+            heightChange = (height * scale - height * oldScale) / 2
+            yOriginToChange = -2 * (pointY / height) + 1
+            @y += yOriginToChange * heightChange
+
+            return
+
+## *Object* Item::getGlobalComputes()
+
+Returns globally computed x, y, scale, rotation, visible and opacity.
+
+        getGlobalComputes: ->
+            m = new Matrix()
+            {visible, opacity} = @
+
+            chain = []
+            item = @
+            while item
+                chain.push(item)
+
+                visible and= item.visible
+                opacity *= item.opacity
+                item = item.parent
+
+            for item in chain by -1
+                originX = item.width / 2
+                originY = item.height / 2
+
+                m.translate(item.x + originX, item.y + originY)
+                m.scale(item.scale)
+                m.rotate(item.rotation)
+                m.translate(-originX, -originY)
+
+            mScale = m.getScale()
+            mRotation = m.getRotation()
+
+            m2 = new Matrix()
+            m2.translate(-@width / 2, -@height / 2)
+            m2.rotate(mRotation)
+            m2.translate(@width * mScale / 2, @height * mScale / 2)
+
+            mTranslate = m.getTranslate()
+            m2Translate = m2.getTranslate()
+
+            x: mTranslate.x + m2Translate.x
+            y: mTranslate.y + m2Translate.y
+            scale: mScale
+            rotation: mRotation
 
         @createSpacing = require('./item/spacing') Renderer, Impl, itemUtils, Item
         @createAlignment = require('./item/alignment') Renderer, Impl, itemUtils, Item

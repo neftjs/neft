@@ -238,8 +238,6 @@ Is not available inside `onExit` event and for move or release ensured items.
 
 Enable this property to stop further event propagation.
 
-This property is reset on each pointer press.
-
             utils.defineProperty @::, 'stopPropagation', null, ->
                 @_stopPropagation
             , (val) ->
@@ -251,8 +249,6 @@ This property is reset on each pointer press.
 By default first deepest captured item will propagate this event only by his parents.
 
 Change this value to test previous siblings as well.
-
-This property is reset on each pointer press.
 
             utils.defineProperty @::, 'checkSiblings', null, ->
                 @_checkSiblings

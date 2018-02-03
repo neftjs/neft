@@ -45,6 +45,7 @@ extension Extension.Scrollable {
                     oldValue!.view.removeFromSuperview()
                 }
                 if contentItem != nil {
+                    contentItem!.view.removeFromSuperview()
                     scrollView.insertSubview(contentItem!.view, at: 0)
                 }
             }
