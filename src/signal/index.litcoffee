@@ -125,6 +125,23 @@ Returns `true` if the given signal has no listeners.
 
         handler
 
+    disconnectFromListeners = (listeners, listener, ctx) ->
+        index = 0
+
+        loop
+            index = listeners.indexOf listener, index
+            if index is -1 or listeners[index + 1] is ctx
+                break
+            index += 2
+        assert.isNot index, -1, "listener doesn't exist in this signal"
+        assert.is listeners[index], listener
+        assert.is listeners[index + 1], ctx
+
+        listeners[index] = null
+        listeners[index + 1] = null
+
+        return
+
     SignalPrototype =
 
 ## Signal::emit([*Any* argument1, *Any* argument2])
@@ -211,9 +228,9 @@ obj.onPress.emit();
             assert.isFunction @, 'connectOnce must be called on a signal function'
             assert.isFunction listener, 'listener is not a function'
 
-            signal = @
+            {listeners} = @
             wrapper = (arg1, arg2) ->
-                signal.disconnect wrapper, ctx
+                disconnectFromListeners listeners, wrapper, ctx
                 listener.call @, arg1, arg2
 
             @connect wrapper, ctx
@@ -243,20 +260,7 @@ obj.onPress.emit()
             assert.isFunction @, 'disconnect must be called on a signal function'
             assert.isFunction listener, 'listener is not a function'
 
-            {listeners} = @
-            index = 0
-
-            loop
-                index = listeners.indexOf listener, index
-                if index is -1 or listeners[index + 1] is ctx
-                    break
-                index += 2
-            assert.isNot index, -1, "listener doesn't exist in this signal"
-            assert.is listeners[index], listener
-            assert.is listeners[index + 1], ctx
-
-            listeners[index] = null
-            listeners[index + 1] = null
+            disconnectFromListeners @listeners, listener, ctx
 
             return
 
