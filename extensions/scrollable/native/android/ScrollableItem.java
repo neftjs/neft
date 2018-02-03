@@ -92,6 +92,7 @@ public class ScrollableItem extends NativeItem {
         }
         contentItem = val;
         if (val != null) {
+            val.removeFromParent();
             getItemView().addContentView(val.view);
         }
     }
