@@ -1,6 +1,7 @@
 'use strict'
 
 {signal} = Neft
+{Emitter} = signal
 
 describe 'signal', ->
     describe 'connectOnce()', ->
@@ -42,3 +43,14 @@ describe 'signal', ->
             onTest.connectOnce (localArgs...) -> args = localArgs
             onTest.emit 'arg1', 'arg2'
             assert.isEqual args, ['arg1', 'arg2']
+
+        it 'works in emitter', ->
+            emitter = new Emitter
+            Emitter.createSignalOnObject emitter, 'onTest'
+            Emitter.createSignalOnObject emitter, 'onNothing'
+
+            calls = 0
+            emitter.onTest.connect -> emitter.onNothing.emit()
+            emitter.onTest.connectOnce -> calls += 1
+            emitter.onTest.emit() for i in [1..10]
+            assert.is calls, 1
