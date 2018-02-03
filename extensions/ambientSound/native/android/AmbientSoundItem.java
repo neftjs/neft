@@ -46,6 +46,7 @@ public class AmbientSoundItem extends NativeItem {
     @OnSet("source")
     public void setSource(String val) {
         mediaPlayer.reset();
+        prepared = false;
         try {
             if (val.startsWith("/static")) {
                 setStaticSource(val);
@@ -66,6 +67,7 @@ public class AmbientSoundItem extends NativeItem {
 
     @OnSet("running")
     public void setRunning(boolean val) {
+        running = val;
         if (!prepared) return;
         if (mediaPlayer.isPlaying() == val) return;
 
