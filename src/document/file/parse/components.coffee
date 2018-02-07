@@ -34,14 +34,9 @@ module.exports = (File) ->
             while ++i < n
                 child = children[i]
 
-                if child.name isnt 'component'
+                if child.name isnt 'n-component'
                     forEachNodeRec child
                     continue
-
-                # support 'name' as 'n-name'
-                if child.props.name
-                    child.props['n-name'] = child.props.name
-                    delete child.props.name
 
                 unless name = child.props['n-name']
                     continue

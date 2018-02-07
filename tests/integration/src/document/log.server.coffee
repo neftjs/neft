@@ -2,11 +2,11 @@
 
 {createView, renderParse, uid} = require './utils.server'
 
-describe '<log />', ->
+describe '<n-log />', ->
     it 'is recognized and saved', ->
         view = createView '''
             <span />
-            <div><log a="1" /></div>
+            <div><n-log a="1" /></div>
         '''
         view = view.clone()
 
@@ -15,7 +15,7 @@ describe '<log />', ->
 
     it 'is not rendered', ->
         view = createView '''
-            <div><log a="1">123</log></div>
+            <div><n-log a="1">123</n-log></div>
         '''
         view = view.clone()
 

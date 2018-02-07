@@ -15,7 +15,7 @@ module.exports = (File) -> (file) ->
 
             forEachNodeRec child
 
-            unless ref = child.props['ref']
+            unless ref = child.props['n-ref']
                 continue
 
             if refs.hasOwnProperty(ref)

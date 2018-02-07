@@ -67,7 +67,7 @@ describe 'Document script', ->
             <script>
                 this.a = this.refs.x.props.a;
             </script>
-            <b ref="x" a="1" />
+            <b n-ref="x" a="1" />
         '''
         view = view.clone()
 

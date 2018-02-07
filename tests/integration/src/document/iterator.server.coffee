@@ -68,7 +68,7 @@ describe 'Document n-each', ->
 
     it 'access `refs`', ->
         source = createView """
-            <div ref="a" prop="a" visible="false" />
+            <div n-ref="a" prop="a" visible="false" />
             <ul n-each="[1,2]">${refs.a.props.prop}</ul>
         """
         view = source.clone()
@@ -78,10 +78,10 @@ describe 'Document n-each', ->
 
     it 'access component `props`', ->
         source = createView """
-            <component name="a" a="a">
+            <n-component n-name="a" a="a">
                 <ul n-each="[1,2]">${props.a}${props.b}</ul>
-            </component>
-            <use component="a" b="b" />
+            </n-component>
+            <n-use n-component="a" b="b" />
         """
         view = source.clone()
 
@@ -90,7 +90,7 @@ describe 'Document n-each', ->
 
     it 'uses parent `this` scope', ->
         source = createView """
-            <component name="a">
+            <n-component n-name="a">
                 <script>
                     this.self = this;
                     this.getX = function(){
@@ -98,8 +98,8 @@ describe 'Document n-each', ->
                     };
                 </script>
                 <ul n-each="[1,2]">${this.getX()}</ul>
-            </component>
-            <use component="a" />
+            </n-component>
+            <n-use n-component="a" />
         """
         view = source.clone()
 
@@ -147,13 +147,13 @@ describe 'Document n-each', ->
 
     it 'reverts components when comes invisible', ->
         view = createView '''
-            <component name="abc">
+            <n-component n-name="abc">
                 <script>
                 this.onBeforeRevert(function () {
                     this.props.onRevertCalled();
                 });
                 </script>
-            </component>
+            </n-component>
             <script>
             this.onChildRevert = () => {
                 this.reverted = (this.reverted + 1) || 1;
@@ -162,7 +162,7 @@ describe 'Document n-each', ->
                 this.state.set('visible', true);
             });
             </script>
-            <div ref="container" n-if="${state.visible}">
+            <div n-ref="container" n-if="${state.visible}">
                 <ul n-each="[2]">
                     <abc onRevertCalled="${this.onChildRevert}" />
                 </ul>
