@@ -71,9 +71,9 @@ describe 'Document style', ->
         assert.isNot testNode.props['n-style'].indexOf('firstItem'), -1
         assert.ok view.node.props['n-style']
 
-    it 'can be placed in <component />', ->
+    it 'can be placed in <n-component />', ->
         view = createView '''
-            <component name="TestComp">
+            <n-component n-name="TestComp">
                 <style>
                     Item {
                         id: firstItem
@@ -81,7 +81,7 @@ describe 'Document style', ->
                     }
                 </style>
                 <test />
-            </component>
+            </n-component>
             <TestComp />
         '''
         view = view.clone()

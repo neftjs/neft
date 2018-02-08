@@ -2,11 +2,11 @@
 
 {createView, renderParse, uid} = require './utils.server'
 
-describe 'Document import', ->
+describe 'Document n-import', ->
     it 'is not rendered', ->
         first = "namespace#{uid()}"
         view1 = createView '', first
-        view2 = createView "<import href=\"#{first}\" />"
+        view2 = createView "<n-import href=\"#{first}\" />"
         view2 = view2.clone()
 
         renderParse view2
@@ -15,9 +15,9 @@ describe 'Document import', ->
     describe 'components from external file', ->
         it 'without namespace', ->
             first = "namespace#{uid()}"
-            view1 = createView '<component name="a">1</component>', first
+            view1 = createView '<n-component n-name="a">1</n-component>', first
             view2 = createView """
-                <import href="#{first}" />
+                <n-import href="#{first}" />
                 <a />
             """
             view2 = view2.clone()
@@ -27,9 +27,9 @@ describe 'Document import', ->
 
         it 'with namespace', ->
             first = uid()
-            view1 = createView '<component name="a">1</component>', first
+            view1 = createView '<n-component n-name="a">1</n-component>', first
             view2 = createView """
-                <import href="#{first}" as="ns">
+                <n-import href="#{first}" as="ns">
                 <ns:a />
             """
             view2 = view2.clone()
@@ -41,11 +41,11 @@ describe 'Document import', ->
         it 'with namespace', ->
             first = uid()
             view1 = createView '''
-                <component name="a">1</component>
+                <n-component n-name="a">1</n-component>
                 file<a />2
             ''', first
             view2 = createView """
-                <import href="#{first}" as="ns">
+                <n-import href="#{first}" as="ns">
                 <ns />
             """
             view2 = view2.clone()

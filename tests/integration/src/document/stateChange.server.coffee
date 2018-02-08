@@ -2,10 +2,10 @@
 
 {createView, renderParse} = require './utils.server'
 
-describe 'Document <state />', ->
+describe 'Document <n-state />', ->
     it 'sets value under state property', ->
         source = createView '''
-            <state name="a" value="1" />
+            <n-state name="a" value="1" />
         '''
         view = source.clone()
 
@@ -14,7 +14,7 @@ describe 'Document <state />', ->
 
     it 'set value is available before render', ->
         source = createView '''
-            <state name="a" value="1" />
+            <n-state name="a" value="1" />
             <script>
                 this.onBeforeRender(() => {
                     this.stateA = this.state.a;
@@ -28,7 +28,7 @@ describe 'Document <state />', ->
 
     it 'value is set always before render', ->
         source = createView '''
-            <state name="a" value="1" />
+            <n-state name="a" value="1" />
         '''
         view = source.clone()
 
@@ -41,7 +41,7 @@ describe 'Document <state />', ->
 
     it 'value is set only when state node is visible', ->
         source = createView '''
-            <state name="a" value="1" n-if="${props.visible}" />
+            <n-state name="a" value="1" n-if="${props.visible}" />
             <script>
                 this.defaultState = {
                     a: 2
@@ -60,7 +60,7 @@ describe 'Document <state />', ->
 
     it 'value is set after defaultState', ->
         source = createView '''
-            <state name="a" value="1" />
+            <n-state name="a" value="1" />
             <script>
                 this.defaultState = {
                     a: 2

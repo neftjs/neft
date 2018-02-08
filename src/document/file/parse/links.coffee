@@ -13,7 +13,7 @@ module.exports = (File) -> (file) ->
     while ++i < n
         node = children[i]
 
-        if node.name isnt 'import'
+        if node.name isnt 'n-import'
             continue
 
         href = node.props.href or node.props.src

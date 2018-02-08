@@ -6,7 +6,7 @@ module.exports = (File) ->
     (file) ->
         {stateChanges} = file
 
-        nodes = file.node.queryAll 'state'
+        nodes = file.node.queryAll 'n-state'
 
         for node in nodes
             target = node.parent

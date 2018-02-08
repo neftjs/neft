@@ -3,11 +3,11 @@
 {Document} = Neft
 {createView, renderParse, uid} = require './utils.server'
 
-describe 'Document use', ->
+describe 'Document n-use', ->
     it 'is replaced by component', ->
         view = createView '''
-            <component name="a"><b></b></component>
-            <use component="a" />
+            <n-component n-name="a"><b></b></n-component>
+            <n-use n-component="a" />
         '''
         view = view.clone()
 
@@ -16,9 +16,9 @@ describe 'Document use', ->
 
     it 'is replaced in component', ->
         source = createView '''
-            <component name="b">1</component>
-            <component name="a"><use component="b" /></component>
-            <use component="a" />
+            <n-component n-name="b">1</n-component>
+            <n-component n-name="a"><n-use n-component="b" /></n-component>
+            <n-use n-component="a" />
         '''
         view = source.clone()
 
@@ -27,15 +27,15 @@ describe 'Document use', ->
 
     it 'can be rendered recursively', ->
         source = createView '''
-            <component name="a">
+            <n-component n-name="a">
                 1
-                <use
-                  component="a"
+                <n-use
+                  n-component="a"
                   n-if="${props.loops > 0}"
                   loops="${props.loops - 1}"
                 />
-            </component>
-            <use component="a" loops="3" />
+            </n-component>
+            <n-use n-component="a" loops="3" />
         '''
         view = source.clone()
 
@@ -44,7 +44,7 @@ describe 'Document use', ->
 
     it 'can be rendered using short syntax', ->
         view = createView '''
-            <component name="a-b"><b></b></component>
+            <n-component n-name="a-b"><b></b></n-component>
             <a-b />
         '''
         view = view.clone()
@@ -59,13 +59,13 @@ describe 'Document use', ->
                 this.logs = [];
             });
             </script>
-            <component name="a-b">
+            <n-component n-name="a-b">
                 <script>
                 this.onRender(function () {
                     this.props.logs.push(this.props.name);
                 });
                 </script>
-            </component>
+            </n-component>
             <a-b logs="${this.logs}" name="fail" n-if="${false}" />
             <a-b logs="${this.logs}" name="ok" />
         '''
@@ -80,13 +80,13 @@ describe 'Document use', ->
                 this.logs = [];
             });
             </script>
-            <component name="a-b">
+            <n-component n-name="a-b">
                 <script>
                 this.onRender(function () {
                     this.props.logs.push(this.props.name);
                 });
                 </script>
-            </component>
+            </n-component>
             <div n-if="${false}">
                 <a-b logs="${this.logs}" name="fail" />
             </div>
@@ -98,20 +98,20 @@ describe 'Document use', ->
 
     it 'is reverted when comes invisible', ->
         view = createView '''
-            <component name="abc">
+            <n-component n-name="abc">
                 <script>
                 this.onRevert(function () {
                     this.reverted = (this.reverted + 1) || 1;
                 });
                 </script>
-            </component>
+            </n-component>
             <script>
             this.onBeforeRender(function () {
                 this.state.set('visible', true);
             });
             </script>
-            <div ref="container" n-if="${state.visible}">
-                <abc ref="abc" />
+            <div n-ref="container" n-if="${state.visible}">
+                <abc n-ref="abc" />
             </div>
         '''
         view = view.clone()

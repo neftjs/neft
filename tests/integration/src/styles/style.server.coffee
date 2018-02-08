@@ -305,7 +305,7 @@ describe 'styles', ->
             node.props.set 'class', 'g a c'
             assert.isEqual item.classes.toArray(), node.props.class.split(' ')
 
-    describe 'Style item visible', ->
+    describe 'item visible', ->
         it "is 'true' by default", ->
             doc = render
                 html: '<b n-style="renderer:Item" />'
@@ -377,7 +377,7 @@ describe 'styles', ->
             divNode.visible = false
             assert.is bNode.style.visible, true
 
-    describe "Style item parent", ->
+    describe "item parent", ->
         it "refers to the first styled parent style", ->
             doc = render
                 html: """<div n-style="renderer:Item">
@@ -403,14 +403,14 @@ describe 'styles', ->
             bNode.parent = iNode
             assert.is bNode.style.parent, divNode.style
 
-        it "is properly synchronized on 'use'", ->
+        it "is properly synchronized on 'n-use'", ->
             doc = render
-                html: '''<component name="a">
+                html: '''<n-component n-name="a">
                     <b n-style="renderer:Item" />
                     <i n-style="renderer:Item" />
-                </component>
+                </n-component>
                 <div n-style="renderer:Item">
-                    <use component="a" />
+                    <n-use n-component="a" />
                 </div>'''
 
             divNode = doc.node.query 'div'

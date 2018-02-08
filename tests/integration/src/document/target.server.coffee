@@ -2,15 +2,15 @@
 
 {createView, renderParse, uid} = require './utils.server'
 
-describe 'Document target', ->
+describe 'Document n-target', ->
     it 'is replaced by the use body', ->
         source = createView '''
-            <component name="a">
+            <n-component n-name="a">
                 <a1 />
-                <target />
+                <n-target />
                 <a2 />
-            </component>
-            <use component="a"><b></b></use>
+            </n-component>
+            <n-use n-component="a"><b></b></n-use>
         '''
         view = source.clone()
 
@@ -19,10 +19,10 @@ describe 'Document target', ->
 
     it 'can be hidden', ->
         source = createView '''
-            <component name="a">
-                <target n-if="${props.x === 1}" />
-            </component>
-            <use component="a" x="0"><b></b></use>
+            <n-component n-name="a">
+                <n-target n-if="${props.x === 1}" />
+            </n-component>
+            <n-use n-component="a" x="0"><b></b></n-use>
         '''
         view = source.clone()
         elem = view.node.children[0]

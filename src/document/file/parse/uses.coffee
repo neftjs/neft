@@ -14,16 +14,11 @@ module.exports = (File) -> (file) ->
         # change short syntax to long formula
         if file.components[node.name]
             component = node.name
-            node.name = 'use'
+            node.name = 'n-use'
             node.props['n-component'] = component
 
         # get uses
-        if node.name is 'use'
-            # support 'n-component' as 'component'
-            if node.props.component
-                node.props['n-component'] = node.props.component
-                delete node.props.component
-
+        if node.name is 'n-use'
             # mark tag as internal
             node.name = 'blank'
 

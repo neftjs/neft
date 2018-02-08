@@ -13,13 +13,13 @@ describe 'Document View', ->
         assert.is view.node.stringify(), '<div></div>'
 
     it 'finds components', ->
-        view = createView '<component name="a"></component>'
+        view = createView '<n-component n-name="a"></n-component>'
         assert.is Object.keys(view.components).length, 1
 
     it 'finds uses', ->
         view = createView '''
-            <component name="a"><b></b></component>
-            <use component="a" />
+            <n-component n-name="a"><b></b></n-component>
+            <n-use n-component="a" />
         '''
         assert.is view.uses.length, 1
 

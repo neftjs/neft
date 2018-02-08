@@ -64,7 +64,7 @@ module.exports = (File) -> class Use
         assert.instanceOf @node, File.Element
 
         @name = @node.props['n-component']
-        @refName = @node.props.ref
+        @refName = @node.props['n-ref']
         @usedComponent = null
         @isRendered = false
         @isRenderPending = false
