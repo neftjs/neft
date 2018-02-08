@@ -20,8 +20,13 @@ module.exports = (File, Input) -> class InputProp extends Input
             obj = new InputProp file, node, arr[JSON_TEXT], arr[JSON_BINDING], arr[JSON_ATTR_NAME]
         obj
 
-    isHandler = (name) ->
-        /^on[A-Z]|\:on[A-Z][A-Za-z0-9_$]*$/.test name
+    isHandler = (node, propName) ->
+        if /^:?on[A-Z][A-Za-z0-9_$]*$/.test(propName)
+            true
+        else if node.name is 'n-when' and propName is 'call'
+            true
+        else
+            false
 
     constructor: (file, node, text, bindingConfig, @propName) ->
         assert.isString @propName
@@ -29,7 +34,7 @@ module.exports = (File, Input) -> class InputProp extends Input
 
         Input.call @, file, node, text, bindingConfig
 
-        if isHandler(@propName)
+        if isHandler(node, @propName)
             @handlerFunc = createHandlerFunc @
             node.props.set @propName, @handlerFunc
         else
