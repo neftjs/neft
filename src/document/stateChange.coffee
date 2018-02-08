@@ -15,21 +15,18 @@ module.exports = (File) -> class StateChange
 
     i = 1
     JSON_NODE = i++
-    JSON_TARGET = i++
     JSON_NAME = i++
     JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
     @_fromJSON = (file, arr, obj) ->
         unless obj
             node = file.node.getChildByAccessPath arr[JSON_NODE]
-            target = file.node.getChildByAccessPath arr[JSON_TARGET]
-            obj = new StateChange file, node, target, arr[JSON_NAME]
+            obj = new StateChange file, node, arr[JSON_NAME]
         obj
 
-    constructor: (@file, @node, @target, @name) ->
+    constructor: (@file, @node, @name) ->
         assert.instanceOf @file, File
         assert.instanceOf @node, File.Element
-        assert.instanceOf @target, File.Element
         assert.isString @name
         assert.notLengthOf @name, 0
 
@@ -62,22 +59,20 @@ module.exports = (File) -> class StateChange
 
     onPropsChange = (name, oldValue) ->
         if name is 'name'
-            throw new Error 'Dynamic <state /> name is not yet supported'
+            throw new Error 'Dynamic <state /> name is not supported yet'
         else if name is 'value'
             @update()
         return
 
     clone: (original, file) ->
         node = original.node.getCopiedElement @node, file.node
-        target = original.node.getCopiedElement @target, file.node
 
-        new StateChange file, node, target, @name
+        new StateChange file, node, @name
 
     toJSON: (key, arr) ->
         unless arr
             arr = new Array JSON_ARGS_LENGTH
             arr[0] = JSON_CTOR_ID
         arr[JSON_NODE] = @node.getAccessPath @file.node
-        arr[JSON_TARGET] = @target.getAccessPath @file.node
         arr[JSON_NAME] = @name
         arr

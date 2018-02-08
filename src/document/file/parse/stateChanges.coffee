@@ -9,8 +9,7 @@ module.exports = (File) ->
         nodes = file.node.queryAll 'n-state'
 
         for node in nodes
-            target = node.parent
             name = node.props.name
-            stateChanges.push new StateChange file, node, target, name
+            stateChanges.push new StateChange file, node, name
 
         return

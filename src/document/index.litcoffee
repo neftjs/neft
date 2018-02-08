@@ -44,6 +44,7 @@
         JSON_PROPS_TO_PARSE = i++
         JSON_COMPONENTS = i++
         JSON_SCRIPTS = i++
+        JSON_WHEN_LISTENERS = i++
         JSON_STATE_CHANGES = i++
         JSON_INPUTS = i++
         JSON_CONDITIONS = i++
@@ -97,6 +98,7 @@ Corresponding node handler: *n-onRevert=""*.
         signal.create @, 'onRevert'
 
         @Element = require('./element/index')
+        @WhenListener = require('./whenListener') @
         @StateChange = require('./stateChange') @
         @Use = require('./use') @
         @Scripts = require('./scripts') @
@@ -189,11 +191,12 @@ Corresponding node handler: *n-onRevert=""*.
                 jsonPropsToParse = arr[JSON_PROPS_TO_PARSE]
                 for propNode, i in jsonPropsToParse by 2
                     propsToParse.push node.getChildByAccessPath(propNode)
-                    propsToParse.push jsonPropsToParse[i+1]
+                    propsToParse.push jsonPropsToParse[i + 1]
 
                 utils.merge obj.components, arr[JSON_COMPONENTS]
                 if (scripts = arr[JSON_SCRIPTS])?
                     obj.scripts = Document.JSON_CTORS[scripts[0]]._fromJSON(obj, scripts)
+                parseArray obj, arr[JSON_WHEN_LISTENERS], obj.whenListeners
                 parseArray obj, arr[JSON_STATE_CHANGES], obj.stateChanges
                 parseArray obj, arr[JSON_INPUTS], obj.inputs
                 parseArray obj, arr[JSON_CONDITIONS], obj.conditions
@@ -224,6 +227,7 @@ Corresponding node handler: *n-onRevert=""*.
             scripts = require('./file/parse/scripts') Document
             styles = require('./file/parse/styles') Document
             props = require('./file/parse/props') Document
+            whenListeners = require('./file/parse/whenListeners') Document
             stateChanges = require('./file/parse/stateChanges') Document
             iterators = require('./file/parse/iterators') Document
             target = require('./file/parse/target') Document
@@ -249,6 +253,7 @@ Corresponding node handler: *n-onRevert=""*.
                 scripts file
                 iterators file
                 props file
+                whenListeners file
                 stateChanges file
                 target file
                 uses file
@@ -310,6 +315,7 @@ Corresponding node handler: *n-onRevert=""*.
 
             @propsToParse = []
             @components = {}
+            @whenListeners = []
             @stateChanges = []
             @inputs = []
             @conditions = []
@@ -632,6 +638,10 @@ Corresponding node handler: *n-onReplaceByUse=""*.
                 propName = propsToParse[i + 1]
                 propNode.props.set propName, parseProp(propNode.props[propName])
 
+            # whenListeners
+            for whenListener in @whenListeners
+                clone.whenListeners.push whenListener.clone @, clone
+
             # stateChanges
             for stateChange in @stateChanges
                 clone.stateChanges.push stateChange.clone @, clone
@@ -712,10 +722,11 @@ Corresponding node handler: *n-onReplaceByUse=""*.
                 propsToParse = arr[JSON_PROPS_TO_PARSE] = new Array @propsToParse.length
                 for propNode, i in @propsToParse by 2
                     propsToParse[i] = propNode.getAccessPath @node
-                    propsToParse[i+1] = @propsToParse[i+1]
+                    propsToParse[i + 1] = @propsToParse[i + 1]
 
                 arr[JSON_COMPONENTS] = @components
                 arr[JSON_SCRIPTS] = @scripts
+                arr[JSON_WHEN_LISTENERS] = @whenListeners.map callToJSON
                 arr[JSON_STATE_CHANGES] = @stateChanges.map callToJSON
                 arr[JSON_INPUTS] = @inputs.map callToJSON
                 arr[JSON_CONDITIONS] = @conditions.map callToJSON
