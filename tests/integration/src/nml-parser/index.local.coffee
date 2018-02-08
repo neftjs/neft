@@ -19,7 +19,7 @@ describe 'nml-parser', ->
             Class = Neft.Renderer.Class
             Item = Neft.Renderer.Item
             windowItem = undefined
-            exports._i0 = ({document}) ->
+            exports._i0 = ({}) ->
                 _i0 = Item.New()
                 _RendererObject.setOpts(_i0, {"query": 'any-item'})
                 _i0.onReady.emit()
@@ -49,7 +49,7 @@ describe 'nml-parser', ->
             CustomStyle = require "styles/ChildNamespace/CustomStyle"
             Class = Neft.Renderer.Class
             windowItem = undefined
-            exports._i0 = ({document}) ->
+            exports._i0 = ({}) ->
                 _i0 = TileImage.New()
                 _i0.onReady.emit()
                 objects: {"_i0": _i0}
@@ -81,7 +81,7 @@ describe 'nml-parser', ->
             func = `function () {return 2}
             `
             windowItem = undefined
-            exports._i0 = ({document}) ->
+            exports._i0 = ({}) ->
                 _i0 = Item.New()
                 _i0.onReady.emit()
                 objects: {"_i0": _i0}

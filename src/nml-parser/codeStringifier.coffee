@@ -11,7 +11,6 @@ PRIMITIVE_TYPE = 'primitive'
 
 PUBLIC_BINDING_VARIABLES =
     __proto__: null
-    document: true
     app: true
 
 PUBLIC_BINDING_IDS =
