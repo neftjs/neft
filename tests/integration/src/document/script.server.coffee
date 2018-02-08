@@ -337,3 +337,28 @@ describe 'Document script', ->
         it 'is applied in onBeforeRender signal', ->
             @view.render()
             assert.is @view.scope.savedState.abc, 123
+
+    describe 'defaultProps', ->
+        beforeEach ->
+            @view = createView """
+                <script>
+                    this.defaultProps = {
+                        abc: 123
+                    };
+                    this.onBeforeRender(() => {
+                        this.savedProps = this.props;
+                    });
+                </script>
+            """
+            @view = @view.clone()
+
+        it 'is not applied on created document', ->
+            assert.notOk @view.inputProps.abc
+
+        it 'is applied on rendered document', ->
+            @view.render()
+            assert.is @view.inputProps.abc, 123
+
+        it 'is applied in onBeforeRender signal', ->
+            @view.render()
+            assert.is @view.scope.savedProps.abc, 123

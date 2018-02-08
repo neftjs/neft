@@ -457,6 +457,15 @@ Corresponding node handler: *n-onRevert=""*.
                     for prop, val of viewRefs
                         inputRefs._set prop, val
 
+                # defaultProps
+                if isScopeRender and @scope.defaultProps isnt undefined
+                    assert.isPlainObject @scope.defaultProps, '''
+                        defaultProps needs to be a plain object
+                    '''
+                    for prop, val of @scope.defaultProps
+                        if inputProps[prop] is undefined
+                            @_setInputProp prop, val
+
                 # propsSchema
                 if isScopeRender
                     validateProps @
