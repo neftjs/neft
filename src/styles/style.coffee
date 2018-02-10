@@ -380,7 +380,7 @@ module.exports = (File, data) -> class Style
                     log.warn "Can't find `#{id}` style item"
                     return
             else
-                @scope = styles[file]?[style]? document: @file.scope
+                @scope = styles[file]?[style]?()
                 if @scope
                     @item = @scope.item
                 else

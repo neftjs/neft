@@ -5,7 +5,7 @@ pathUtils = require 'path'
 fs = require 'fs'
 
 GLOBAL_VARIABLES = ['windowItem']
-OBJECT_VARIABLES = ['document']
+OBJECT_VARIABLES = []
 PADDING = '    '
 
 getImportValue = (cfg) ->

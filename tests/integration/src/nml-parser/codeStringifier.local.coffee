@@ -200,14 +200,14 @@ describe 'nml-parser', ->
         code = '''
             Class {
                 changes: {
-                    width: document.width
+                    width: app.width
                 }
             }
         '''
         expected = '''
             _i0 = Class.New()
             _RendererObject.setOpts(_i0, {"changes": {"width": [\
-            `function(){return document.width}`, [[document, 'width']]]}})
+            `function(){return app.width}`, [[app, 'width']]]}})
             objects: {"_i0": _i0}
             item: _i0
         '''
@@ -247,7 +247,7 @@ describe 'nml-parser', ->
         code = '''
             Item {
                 if (this.width > 50) {
-                    height: document.width
+                    height: app.width
                 }
             }
         '''
@@ -258,7 +258,7 @@ describe 'nml-parser', ->
             _RendererObject.setOpts(_r0, {\
             "running": [`function(){return this.target.width > 50}`, \
             [[['this', 'target'], 'width']]], \
-            "changes": {"height": [`function(){return document.width}`, [[document, 'width']]]}\
+            "changes": {"height": [`function(){return app.width}`, [[app, 'width']]]}\
             })\
             ]})
             _i0.onReady.emit()
@@ -270,7 +270,7 @@ describe 'nml-parser', ->
     it 'parses conditions returning value', ->
         code = '''
             Item {
-                if (document.props.hover) {
+                if (app.props.hover) {
                     height: 100
                 }
             }
@@ -280,8 +280,8 @@ describe 'nml-parser', ->
             _r0 = Class.New()
             _RendererObject.setOpts(_i0, {"children": [\
             _RendererObject.setOpts(_r0, {\
-            "running": [`function(){return document.props.hover}`, \
-            [[[document, 'props'], 'hover']]], \
+            "running": [`function(){return app.props.hover}`, \
+            [[[app, 'props'], 'hover']]], \
             "changes": {"height": 100}\
             })\
             ]})
