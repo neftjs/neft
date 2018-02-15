@@ -3,7 +3,7 @@
 # ! IMPORTANT !
 # DO NOT INCLUDE THIS FILE INTO PRODUCTION BUILDS
 
-{log, utils, Document} = Neft
+{log, utils, Document, eventLoop} = Neft
 try {onNativeEvent} = Neft.native
 
 log = log.scope 'hot-reloader'
@@ -132,7 +132,7 @@ module.exports = (app) ->
 
         return
 
-    app?.reload = reload = (hotReloads) ->
+    app?.reload = reload = eventLoop.bindInLock (hotReloads) ->
         for hotReload in hotReloads
             switch hotReload.destination
                 when 'components'
@@ -143,6 +143,7 @@ module.exports = (app) ->
                     reloadScript(hotReload.name, hotReload.file)
                 else
                     throw new Error "Unsupported hot reload destination #{hotReload.destination}"
+        return
 
     if process.env.NEFT_NATIVE
         onNativeEvent NATIVE_EVENT, (data) ->

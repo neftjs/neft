@@ -180,6 +180,8 @@ AttributeEnds
 
 AttributeBody
     = d:Type AttributeEnds? { return d }
+    / "{" __ "}" AttributeEnds { return "{}" }
+    / "[" __ "]" AttributeEnds { return "[]" }
     / "{" d:(__ d:Declaration __ { return d })* __ "}" AttributeEnds { return d }
     / "[" d:Type* "]" AttributeEnds { return d }
     / d:$StringLiteral AttributeEnds { return d }

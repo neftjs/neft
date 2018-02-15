@@ -20,10 +20,6 @@ class DocumentBinding extends Binding
     constructor: (binding, ctx) ->
         super binding, ctx
         @args = ctx.file.inputArgs
-        `//<development>`
-        @failed = false
-        @failCheckPending = false
-        `//</development>`
 
     getItemById: (item) ->
         if item is 'this'
@@ -36,26 +32,8 @@ class DocumentBinding extends Binding
             @args[2]
 
     `//<development>`
-    failCheckQueue = []
-    failCheckQueuePending = false
-
-    checkFails = ->
-        while binding = failCheckQueue.pop()
-            err = failCheckQueue.pop()
-            if binding.failed
-                log.error "Error in '#{binding.ctx.text}', file '#{binding.ctx.file.path}':\n#{err}"
-            binding.failCheckPending = false
-        failCheckQueuePending = false
-        return
-
     onError: (err) ->
-        @failed = true
-        unless @failCheckPending
-            @failCheckPending = true
-            failCheckQueue.push err, @
-        unless failCheckQueuePending
-            failCheckQueuePending = true
-            setImmediate checkFails
+        log.error "Failed `#{@ctx.text}` binding in file `#{@ctx.file.path}`: `#{err}`"
         return
     `//</development>`
 
@@ -63,9 +41,6 @@ class DocumentBinding extends Binding
         # disable updates for reverted files
         if not @ctx.isRendered
             return
-        `//<development>`
-        @failed = false
-        `//</development>`
         eventLoop.lock()
         super()
         eventLoop.release()

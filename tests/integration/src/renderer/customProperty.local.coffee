@@ -67,6 +67,38 @@ describe 'Item custom property', ->
         '''
         assert.is item.createChild(4, 7), 11
 
+    it 'can be an array literal', ->
+        item = getItemFromNml '''
+            Item {
+                property custom: [];
+            }
+        '''
+        assert.isEqual item.custom, []
+
+    it 'can be an array literal with elements', ->
+        item = getItemFromNml '''
+            Item {
+                property custom: [1, 4, 6];
+            }
+        '''
+        assert.isEqual item.custom, [1, 4, 6]
+
+    it 'can be an object literal', ->
+        item = getItemFromNml '''
+            Item {
+                property custom: {};
+            }
+        '''
+        assert.isEqual item.custom, {}
+
+    it 'can be an object literal with elements', ->
+        item = getItemFromNml '''
+            Item {
+                property custom: {a: 1, b: 2};
+            }
+        '''
+        assert.isEqual item.custom, {a: 1, b: 2}
+
     it 'cannot override other properties', ->
         try
             getItemFromNml '''

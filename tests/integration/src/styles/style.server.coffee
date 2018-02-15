@@ -275,17 +275,50 @@ describe 'styles', ->
             node.props.set 'style:x', 70
             assert.is item.x, node.props['style:x']
 
-        it "'null' value is not set for non-object properties", ->
+        it 'set event handlers', ->
             doc = render
-                html: '<b n-style="renderer:Item" style:x="null" />'
+                html: '''
+                    <b n-style="renderer:Item" style:onXChange="${this.calls += 1}" />
+                    <script>this.calls = 0</script>
+                '''
 
             {node, item} = doc.styles[0]
 
-            assert.is item.x, 0
+            assert.is doc.scope.calls, 0
+            item.x = 10
+            assert.is doc.scope.calls, 1
 
-            node.props.set 'style:x', 4
-            node.props.set 'style:x', null
+            doc.revert()
+            doc.render()
+
+            item.x = 20
+            assert.is doc.scope.calls, 2
+
+        it "is not updated when file is reverting", ->
+            doc = render
+                html: '''
+                <b n-style="renderer:Item" style:x="${state.x}" />
+                <script>this.defaultState = { x: 2 }</script>
+                '''
+
+            {item} = doc.styles[0]
+            oldVals = []
+
+            item.onXChange (oldVal) -> oldVals.push oldVal
+
+            assert.is item.x, 2
+            assert.isEqual oldVals, []
+
+            doc.scope.state.set 'x', 4
             assert.is item.x, 4
+            assert.isEqual oldVals, [2, 0]
+
+            doc.revert()
+            assert.isEqual oldVals, [2, 0]
+
+            doc.render()
+            assert.is item.x, 2
+            assert.isEqual oldVals, [2, 0, 4, 0]
 
     describe "'class' attribute", ->
         it 'sets item classes', ->

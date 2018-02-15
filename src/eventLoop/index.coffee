@@ -11,6 +11,7 @@ exports.lock = ->
 
 exports.release = ->
     pending -= 1
+    assert.ok pending >= 0
     if pending is 0 and immediate.length > 0
         exports.lock()
         while immediate.length > 0

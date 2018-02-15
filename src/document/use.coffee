@@ -175,6 +175,10 @@ module.exports = (File) -> class Use
     clone: (original, file) ->
         node = original.node.getCopiedElement @node, file.node
 
+        if @refName
+            file.refs[@refName] = null
+            file.inputRefs._set @refName, null
+
         new Use file, node
 
     toJSON: (key, arr) ->

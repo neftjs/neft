@@ -383,7 +383,7 @@ Corresponding node handler: *n-onRevert=""*.
             return
 
         _warnPropSchema: (error) ->
-            log.error "Invalid props passed for component #{@path}: #{error.message}"
+            log.error "Invalid props passed for component `#{@path}`: `#{error.message}`"
             return
 
         validateProps = (doc) ->

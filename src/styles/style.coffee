@@ -16,6 +16,7 @@ module.exports = (File, data) -> class Style
     {windowStyle, styles, queries} = data
     {Element} = File
     {Tag, Text} = Element
+    {isHandler} = File.Input.Prop
 
     @__name__ = 'Style'
     @__path__ = 'File.Style'
@@ -54,7 +55,7 @@ module.exports = (File, data) -> class Style
                 if isStyleProp and not nStyleWarned
                     nStyleWarned = true
                     log.warn 'n-style is deprecated, use style instead'
-                isStyleProp ||= prop.slice(0, 6) is 'style:'
+                isStyleProp ||= prop.slice(0, 6) is PROP_PREFIX
                 if isStyleProp
                     props ?= {}
                     props[prop] = true
@@ -164,6 +165,9 @@ module.exports = (File, data) -> class Style
 
         {propsClass} = @
 
+        if propsClass.changes._attributes[attr] is val
+            return
+
         propsClass.running = false
         propsClass.changes.setAttribute attr, val
         propsClass.running = true
@@ -204,13 +208,13 @@ module.exports = (File, data) -> class Style
             return unless obj
             for i in [0...parts.length - 1] by 1
                 unless obj = obj[parts[i]]
-                    log.warn "Attribute '#{prop}' doesn't exist in item '#{@item}'"
+                    log.warn "Attribute `#{prop}` doesn't exist in item `#{@item}`"
                     return false
 
             # break if property doesn't exist
             lastPart = utils.last parts
             unless lastPart of obj
-                log.warn "Attribute '#{prop}' doesn't exist in item '#{@item}'"
+                log.warn "Attribute `#{prop}` doesn't exist in item `#{@item}`"
                 return false
 
             # set value
@@ -225,10 +229,7 @@ module.exports = (File, data) -> class Style
                     obj[lastPart].disconnect oldVal
                 if typeof val is 'function'
                     obj[lastPart] val
-
-            # omit 'null' values for primitive properties;
-            # all props from string interpolation may be equal 'null' by default
-            else if val isnt null or typeof obj[internalProp] is 'object'
+            else
                 @setPropsClassAttribute getPropertyPath(prop), val
 
             return true
@@ -412,11 +413,8 @@ module.exports = (File, data) -> class Style
                 # set props
                 if @props
                     for key of @props
-                        @setProp key, node.props[key], null
-
-                # set class prop
-                if classAttr = node.props['class']
-                    @syncClassProp classAttr, ''
+                        if isHandler(@node, key)
+                            @setProp key, node.props[key], null
 
             # find parent if necessary or only update index for fixed parents
             if @isAutoParent
@@ -539,6 +537,22 @@ module.exports = (File, data) -> class Style
                 continue if style.item?.parent
                 style.findItemParent()
                 style.findItemIndex()
+
+        # set properties
+        if @node instanceof Tag
+            # set props
+            if @props
+                for key of @props
+                    unless isHandler(@node, key)
+                        @setProp key, @node.props[key], null
+
+            # set class prop
+            if classAttr = @node.props['class']
+                @syncClassProp classAttr, ''
+
+        # render children
+        for style in @children
+            style.render()
         return
 
     revert: ->
