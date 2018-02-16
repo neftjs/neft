@@ -1,5 +1,6 @@
 'use strict'
 
+log = require 'src/log'
 eventLoop = require 'src/eventLoop'
 Binding = require 'src/binding'
 
@@ -15,8 +16,9 @@ module.exports = (impl) ->
 
         @New = (obj, prop, binding, ctx, target) ->
             target ?= new RendererBinding obj, prop, binding, ctx
-            Binding.New binding, ctx, target
-            target.update()
+            eventLoop.setImmediate ->
+                Binding.New binding, ctx, target
+                target.update()
             target
 
         constructor: (@obj, @prop, binding, ctx) ->
@@ -50,8 +52,14 @@ module.exports = (impl) ->
         getLoopDetectedErrorMessage: ->
             """
                 Potential loop detected. \
-                Property binding '#{@prop}' on '#{@item.toString()}' has been disabled.
+                Property binding `#{@prop}` on `#{@ctx}` has been disabled.
             """
+
+        `//<development>`
+        onError: (err) ->
+            log.error "Failed property `#{@prop}` binding in style `#{@ctx}`: `#{err}`"
+            return
+        `//</development>`
 
         destroy: ->
             # remove from the list

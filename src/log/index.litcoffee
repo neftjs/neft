@@ -87,9 +87,11 @@
             @println (ctx) ->
                 marker.yellow(marker.bold('WARN', ctx), ctx) + '  ' + parser.parse(msg, ctx)
 
-        error: (msg) ->
+        error: (msg, error) ->
             @println (ctx) ->
                 marker.red(marker.bold('ERROR', ctx), ctx) + '  ' + parser.parse(msg, ctx)
+            if error?.stack
+                @println (ctx) -> error.stack
 
         progress: (title, value, max) ->
             if typeof title is 'number'

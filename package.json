@@ -45,7 +45,7 @@
     "form-data": "1.0.0-rc4",
     "fs-extra": "0.30.0",
     "glob": "7.0.3",
-    "htmlparser2": "3.9.0",
+    "htmlparser2": "3.9.2",
     "http-server": "^0.10.0",
     "image-size": "^0.6.2",
     "jimp": "0.2.27",

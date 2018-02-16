@@ -122,4 +122,4 @@ describe 'Document n-use', ->
         assert.is abc.reverted, undefined
         scope.state.set 'visible', false
         assert.is abc.reverted, 1
-        assert.instanceOf scope.refs.abc, Document.Element
+        assert.is scope.refs.abc, null

@@ -5,9 +5,13 @@ log = require 'src/log'
 log = log.scope 'Document'
 
 DEFAULT_ATTR_VALUE = utils.uid 100
+AMPERSAND = 'Მ'
+AMPERSAND_RE = new RegExp AMPERSAND, 'g'
 
 propsKeyGen = (i, elem) -> elem
 propsValueGen = (i, elem) -> i
+encodeText = (text) -> text.replace(new RegExp('&', 'g'), AMPERSAND)
+decodeText = (text) -> text.replace(AMPERSAND_RE, '&')
 
 module.exports = (Element) ->
     extensions = Element.Tag.extensions
@@ -46,6 +50,8 @@ module.exports = (Element) ->
         onopentag: (name, attribs) ->
             element = new (extensions[name] or Element.Tag)
             element.name = name
+            for key, val of attribs
+                attribs[key] = decodeText val
             utils.merge element.props, attribs
 
             @_addDomElement element
@@ -58,7 +64,7 @@ module.exports = (Element) ->
 
             element = new Element.Text
 
-            element._text = data
+            element._text = decodeText data
             @_addDomElement element
 
         oncomment: ->
@@ -72,13 +78,13 @@ module.exports = (Element) ->
         onprocessinginstruction: (name, data) ->
             element = new Element.Text
 
-            element._text = "<#{data}>"
+            element._text = "<#{decodeText data}>"
             @_addDomElement element
 
     parse: (html) ->
         r = null
 
-        handler = new Parser (err, node) =>
+        handler = new Parser (err, node) ->
             if err then throw err
 
             r = node
@@ -108,7 +114,7 @@ module.exports = (Element) ->
                 @_attribvalue = 'true'
             _super.call @
 
-        parser.write html
+        parser.write encodeText html
         parser.end()
 
         r

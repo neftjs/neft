@@ -196,12 +196,12 @@ module.exports = (File) -> class Iterator
         assert.isObject @data
         assert.isInteger i
 
-        @node.children[i].parent = undefined
-
         usedComponent = @usedComponents[i]
         usedComponent.scope = null
         usedComponent.revert().destroy()
         @usedComponents.splice i, 1
+
+        usedComponent.node.parent = undefined
 
         @
 

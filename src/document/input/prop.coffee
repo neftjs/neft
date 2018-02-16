@@ -20,8 +20,8 @@ module.exports = (File, Input) -> class InputProp extends Input
             obj = new InputProp file, node, arr[JSON_TEXT], arr[JSON_BINDING], arr[JSON_ATTR_NAME]
         obj
 
-    isHandler = (node, propName) ->
-        if /^:?on[A-Z][A-Za-z0-9_$]*$/.test(propName)
+    @isHandler = isHandler = (node, propName) ->
+        if /(?:^|:)on[A-Z][A-Za-z0-9_$]*$/.test(propName)
             true
         else if node.name is 'n-when' and propName is 'call'
             true

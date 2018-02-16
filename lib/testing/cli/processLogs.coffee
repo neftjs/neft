@@ -29,7 +29,7 @@ exports.LogsReader = class LogsReader
             @testLog = log.line().log ''
         exports.stats[@name] = passed: 0, failed: 0
     log: (data) ->
-        msg = String(data).trim()
+        msg = String(data)
         msg = msg.replace /^\n+|\n+$/g, ''
         unless msg
             return

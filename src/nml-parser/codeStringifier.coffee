@@ -67,6 +67,8 @@ class Stringifier
             @stringifyAnyObject value
         else if @isAnchor(ast)
             @anchorToString value
+        else if @isReference(value)
+            @referenceToString value
         else if bindingParser.isBinding(value)
             @bindingToString value
         else
@@ -214,6 +216,12 @@ class Stringifier
 
     anchorToString: (value) ->
         JSON.stringify value.split '.'
+
+    isReference: (value) ->
+        typeof value is 'string' and utils.has(@publicIds, value)
+
+    referenceToString: (value) ->
+        value
 
     getIdsObject: (ast) ->
         elems = []

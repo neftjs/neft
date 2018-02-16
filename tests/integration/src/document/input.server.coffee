@@ -133,7 +133,7 @@ describe 'Document string interpolation', ->
                     </script>
                 </n-component>
                 <a n-ref="first" />
-                ${refs.first.state.name}
+                ${refs.first && refs.first.state.name}
             '''
             view = source.clone()
 
