@@ -30,7 +30,8 @@
     "bundle": "cross-env NODE_PATH=./ coffee --nodejs --harmony scripts/bundle.coffee",
     "test": "node ./bin/neft.js test",
     "update-api-docs": "cross-env NODE_PATH=./ coffee scripts/api-docs.coffee",
-    "prepublishOnly": "npm run bundle"
+    "prepublishOnly": "npm run bundle",
+    "postinstall": "coffee scripts/ensure-bundle.coffee"
   },
   "dependencies": {
     "acorn": "^5.2.1",
