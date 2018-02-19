@@ -34,12 +34,22 @@ exports.fail = (err) ->
     return
 
 # this method name will be used to truncate error stack
-exports.callFunction = `function __callNeftTestingFunction__(func, context, args) {
+exports.callFunction = `function __callNeftTestingFunction__(func, context, args, callback) {
+    callback = callback || function () {}
     try {
-        func.apply(context, args);
-        return true;
+        const result = func.apply(context, args);
+        if (typeof Promise !== 'undefined' && result instanceof Promise) {
+            result
+                .then(function () {callback(true)})
+                .catch(function (err) {
+                    exports.fail(err)
+                    callback(false)
+                })
+        } else {
+            callback(true)
+        }
     } catch (err) {
         exports.fail(err);
-        return false;
+        callback(false)
     }
 }`
