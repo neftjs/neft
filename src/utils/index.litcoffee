@@ -1344,6 +1344,21 @@ utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}})
             else
                 return compareFunc a, b
 
+## *String* snakeToCamel(*String* value)
+
+    exports.snakeToCamel = do ->
+        regex = /(_\w)/g
+        replacer = (matches) ->
+            matches[1].toUpperCase()
+
+        (value) ->
+            `//<development>`
+            if typeof value isnt 'string'
+                throw new Error 'utils.snakeToCamel value must be a string'
+            `//</development>`
+
+            value.replace regex, replacer
+
 ## *String* kebabToCamel(*String* value)
 
     exports.kebabToCamel = do ->
