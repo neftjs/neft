@@ -292,7 +292,7 @@ public class Text extends Item {
             int width = view.getLayoutParams().width;
             float lineHeightPx = lineHeight * fontPixelSize;
             float spaceWidth = paint.measureText(" ");
-            float fontTop = lineHeightPx - FONT_METRICS.descent / 3;
+            float fontTop = lineHeightPx;
             float x = 0, textWidth = 0, textHeight = 0;
             int textPointer = 0, lineStart = 0, lineLength = 0;
 
@@ -343,6 +343,10 @@ public class Text extends Item {
 
                     x += spaceWidth;
                 }
+            }
+
+            if (textHeight > 0) {
+                textHeight += FONT_METRICS.descent;
             }
 
             contentWidth = textWidth;
