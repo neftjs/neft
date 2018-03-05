@@ -2,6 +2,7 @@ package io.neft;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -37,5 +38,27 @@ public class MainActivity extends Activity {
     public boolean dispatchTouchEvent(MotionEvent event) {
         App.getInstance().processTouchEvent(event);
         return super.dispatchTouchEvent(event);
+    }
+
+    private void onKeyEvent(int keyCode, KeyEvent event) {
+        APP.processKeyEvent(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        onKeyEvent(keyCode, event);
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event){
+        onKeyEvent(keyCode, event);
+        return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event){
+        onKeyEvent(keyCode, event);
+        return super.onKeyMultiple(keyCode, repeatCount, event);
     }
 }
