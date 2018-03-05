@@ -70,6 +70,7 @@ public class ScrollableItem extends NativeItem {
         getItemView().scrollable = this;
         setHorizontalScrollEffect(true);
         setVerticalScrollEffect(true);
+        setClip(true);
     }
 
     private ScrollableView getItemView() {
