@@ -50,12 +50,14 @@ public class ScrollableItem extends NativeItem {
             scrollable.sendContentY();
         }
 
-        @Override
-        public boolean dispatchTouchEvent(MotionEvent event) {
-            hScroll.dispatchTouchEvent(event);
-            onTouchEvent(event);
-            return true;
-        }
+        // overriding this method gives smooth scroll effect in both directions but
+        // breaks touch events on native elements
+        // @Override
+        // public boolean dispatchTouchEvent(MotionEvent event) {
+        //     hScroll.dispatchTouchEvent(event);
+        //     onTouchEvent(event);
+        //     return true;
+        // }
 
         void addContentView(View view) {
             content.addView(view);
