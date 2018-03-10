@@ -9,6 +9,11 @@ module.exports = (impl) ->
     {bridge} = impl
     {outActions, pushAction, pushItem, pushBoolean, pushInteger, pushFloat, pushString} = bridge
 
+    bridge.listen bridge.inActions.ITEM_KEYS_FOCUS, (reader) ->
+        item = bridge.getItemFromReader reader
+        item.keys.focus = true
+        return
+
     NOP = ->
 
     DATA = utils.merge

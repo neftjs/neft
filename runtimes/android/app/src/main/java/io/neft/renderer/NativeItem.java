@@ -199,6 +199,7 @@ public class NativeItem extends Item {
     @Override
     public void setKeysFocus(boolean val) {
         super.setKeysFocus(val);
+        if (itemView.hasFocus() == val) return;
         if (val) {
             itemView.requestFocus();
         } else {

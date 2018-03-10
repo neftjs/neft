@@ -24,5 +24,6 @@ enum OutAction: Int {
     fontLoad,
     nativeItemWidth,
     nativeItemHeight,
-    windowResize
+    windowResize,
+    itemKeysFocus
 }

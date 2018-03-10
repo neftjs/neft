@@ -1,6 +1,6 @@
 'use strict'
 
-exports.in = do (i=0) ->
+exports.in = do (i = 0) ->
     # basic
     EVENT: i++
 
@@ -26,8 +26,9 @@ exports.in = do (i=0) ->
     NATIVE_ITEM_WIDTH: i++
     NATIVE_ITEM_HEIGHT: i++
     WINDOW_RESIZE: i++
+    ITEM_KEYS_FOCUS: i++
 
-exports.out = do (i=0) ->
+exports.out = do (i = 0) ->
     # basic
     CALL_FUNCTION: i++
 

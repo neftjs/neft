@@ -1,15 +1,15 @@
 package io.neft.renderer;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
 import lombok.Getter;
 
 public class ItemView extends ViewGroup {
+    @Getter int itemId = 0;
+
     public ItemView(Context context) {
         super(context);
     }

@@ -203,7 +203,7 @@ public class Client {
             } else if (arg instanceof String) {
                 pushString((String) arg);
             } else {
-                throw new RuntimeException("ActionHandler can be pushed with Boolean, Float or String, but '"+arg+"' given");
+                throw new RuntimeException("ActionHandler can be pushed with Boolean, Float, Integer or String, but '"+arg+"' given");
             }
         }
     }
