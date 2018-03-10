@@ -59,6 +59,23 @@ public class ScrollableItem extends NativeItem {
         //     return true;
         // }
 
+        @Override
+        protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+            // disable default animation on activity size change
+            smoothScrollBy(0, 0);
+        }
+
+        @Override
+        public View findFocus() {
+            // do not scroll to focus element
+            return null;
+        }
+
+        @Override
+        public void requestChildFocus(View child, View focused) {
+            // do not scroll to focus element
+        }
+
         void addContentView(View view) {
             content.addView(view);
         }
