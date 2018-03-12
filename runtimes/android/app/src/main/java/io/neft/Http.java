@@ -1,5 +1,9 @@
 package io.neft;
 
+import android.util.Log;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -65,13 +69,9 @@ class Http {
                 // get data code
                 int respCode = conn.getResponseCode();
 
-                // end of wrong data code
-                if (respCode >= 400 && respCode < 500){
-                    return new Response("", respCode, "", "");
-                }
-
                 // read data
-                String resp = getStringFromInputStream(conn.getInputStream());
+                boolean isError = conn.getResponseCode() >= 400;
+                String resp = getStringFromInputStream(isError ? conn.getErrorStream() : conn.getInputStream());
 
                 // get cookies
                 String cookies = conn.getHeaderField("x-cookies");
@@ -83,8 +83,20 @@ class Http {
             } finally {
                 conn.disconnect();
             }
-        } catch (IOException e) {
-            return new Response(e.toString(), 0, "", "");
+        } catch (IOException error) {
+            String respError;
+            Log.e("NEFT", "Cannot do http request", error);
+            try {
+                JSONObject json = new JSONObject();
+                json.put("name", "NativeError");
+                json.put("type", error.getClass().getSimpleName());
+                json.put("message", error.getMessage());
+                respError = json.toString();
+            } catch (JSONException error2) {
+                Log.e("NEFT", "Cannot parse error", error2);
+                respError = "InternalError";
+            }
+            return new Response(respError, 0, "", "");
         }
     }
 

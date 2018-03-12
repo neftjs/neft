@@ -13,6 +13,7 @@ module.exports = (Networking) ->
             return
         delete requests[id]
 
+        error = utils.tryFunction JSON.parse, null, [error], error
         if request.type is Networking.Request.JSON_TYPE
             resp = utils.tryFunction JSON.parse, null, [resp], resp
         cookies = utils.tryFunction JSON.parse, null, [headers?['X-Cookies']], null
