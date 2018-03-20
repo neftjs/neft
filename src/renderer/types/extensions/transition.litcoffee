@@ -39,6 +39,8 @@ Rectangle {
 
         constructor: ->
             super()
+            @_running = true
+            @_ready = false
             @_animation = null
             @_property = ''
             @_animationClass = Renderer.Class.New
@@ -49,7 +51,7 @@ Rectangle {
         listener = (oldVal) ->
             {animation} = @
             to = @_target[@property]
-            shouldRun = animation and @running and not animation.updatePending
+            shouldRun = animation and @running and @_ready and not animation.updatePending
             shouldRun and= utils.isFloat(oldVal) and utils.isFloat(to)
             unless shouldRun
                 return
@@ -61,7 +63,7 @@ Rectangle {
             return
 
         onTargetReady = ->
-            @_running = true
+            @_ready = true
 
         itemUtils.defineProperty
             constructor: @
@@ -83,7 +85,7 @@ Rectangle {
                 if oldVal
                     utils.remove oldVal._extensions, @
 
-                @_running = false
+                @_ready = false
                 if val instanceof itemUtils.Object
                     item = val
                 else if val instanceof itemUtils.MutableDeepObject
@@ -93,7 +95,7 @@ Rectangle {
 
                 if item
                     item._extensions.push @
-                    @_running = true
+                    @_ready = true
 
                 if property
                     handlerName = itemUtils.getPropHandlerName property
