@@ -1,13 +1,16 @@
 package io.neft.extensions.textinput_extension;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import io.neft.renderer.NativeItem;
+import io.neft.renderer.annotation.OnCall;
 import io.neft.renderer.annotation.OnCreate;
 import io.neft.renderer.annotation.OnSet;
 import io.neft.utils.ColorValue;
@@ -133,5 +136,13 @@ public class TextInputItem extends NativeItem {
     public void setSecureTextEntry(boolean val) {
         secureTextEntry = val;
         updateInputType();
+    }
+
+    @OnCall("focus")
+    public void focus() {
+        EditText itemView = getItemView();
+        itemView.requestFocusFromTouch();
+        InputMethodManager manager = (InputMethodManager) APP.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        manager.showSoftInput(itemView, 0);
     }
 }

@@ -3,7 +3,11 @@ const { setPropertyValue } = Renderer.itemUtils;
 const { emitSignal } = signal.Emitter
 const { Impl } = Renderer;
 
-class TextInput extends Renderer.Native {}
+class TextInput extends Renderer.Native {
+    focus() {
+        this.call('focus');
+    }
+}
 
 TextInput.__name__ = 'TextInput';
 
