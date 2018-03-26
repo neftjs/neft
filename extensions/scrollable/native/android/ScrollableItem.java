@@ -1,18 +1,17 @@
 package io.neft.extensions.scrollable_extension;
 
 import android.content.Context;
-import android.view.MotionEvent;
+import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
-
 import io.neft.renderer.Item;
 import io.neft.renderer.NativeItem;
+import io.neft.renderer.annotation.OnCall;
 import io.neft.renderer.annotation.OnCreate;
 import io.neft.renderer.annotation.OnSet;
-import io.neft.renderer.annotation.OnCall;
 
 public class ScrollableItem extends NativeItem {
     private static class ScrollableView extends ScrollView {
@@ -72,8 +71,9 @@ public class ScrollableItem extends NativeItem {
         }
 
         @Override
-        public void requestChildFocus(View child, View focused) {
+        protected int computeScrollDeltaToGetChildRectOnScreen(Rect rect) {
             // do not scroll to focus element
+            return 0;
         }
 
         void addContentView(View view) {
