@@ -3,17 +3,14 @@ package io.neft.renderer;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Rect;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -390,31 +387,66 @@ public final class Device {
     private KeyboardText keyboardText;
 
     static void init(final Device device) {
+        device.initializeKeyboardEvents();
+        device.pushPixelRatio();
+        device.pushIsPhone();
+        device.listenOnKeyboard();
+    }
+
+    private void initializeKeyboardEvents() {
         // create EditText to handle KeyInput
-        device.keyboardText = new KeyboardText(APP.getActivity().getApplicationContext());
+        keyboardText = new KeyboardText(APP.getActivity().getApplicationContext());
         final Window window = APP.getActivity().getWindow();
         APP.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                APP.getWindowView().addView(device.keyboardText);
+                APP.getWindowView().addView(keyboardText);
 
                 // hide keyboard
                 window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
             }
         });
+    }
 
+    private void pushPixelRatio() {
         Resources resources = APP.getActivity().getResources();
-
-        // DEVICE_PIXEL_RATIO
         final DisplayMetrics metrics = resources.getDisplayMetrics();
-        device.pixelRatio = metrics.density;
-        APP.getClient().pushAction(OutAction.DEVICE_PIXEL_RATIO, device.pixelRatio);
+        pixelRatio = metrics.density;
+        APP.getClient().pushAction(OutAction.DEVICE_PIXEL_RATIO, pixelRatio);
+    }
 
-        // DEVICE_IS_PHONE
-        device.isPhone = (resources.getConfiguration().screenLayout
+    private void pushIsPhone() {
+        Resources resources = APP.getActivity().getResources();
+        isPhone = (resources.getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-        APP.getClient().pushAction(OutAction.DEVICE_IS_PHONE, device.isPhone);
+        APP.getClient().pushAction(OutAction.DEVICE_IS_PHONE, isPhone);
+    }
+
+    private void listenOnKeyboard() {
+        final Window window = APP.getActivity().getWindow();
+        final Resources resources = APP.getActivity().getApplicationContext().getResources();
+        View rootView = window.getDecorView().findViewById(android.R.id.content);
+
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect rect = new Rect();
+                View view = window.getDecorView();
+                view.getWindowVisibleDisplayFrame(rect);
+
+                int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+                int navBarHeight = resourceId > 0 ? resources.getDimensionPixelSize(resourceId) : 0;
+                int keyboardHeight = Math.max(0, view.getHeight() - rect.height() - rect.top - navBarHeight);
+
+                if (keyboardHeight > 0) {
+                    APP.getClient().pushAction(OutAction.DEVICE_KEYBOARD_HEIGHT, APP.getRenderer().pxToDp(keyboardHeight));
+                    APP.getClient().pushAction(OutAction.DEVICE_KEYBOARD_SHOW);
+                } else {
+                    APP.getClient().pushAction(OutAction.DEVICE_KEYBOARD_HIDE);
+                }
+            }
+        });
     }
 
     void log(String val){

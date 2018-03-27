@@ -15,6 +15,7 @@ enum OutAction: Int {
     pointerMove,
     deviceKeyboardShow,
     deviceKeyboardHide,
+    deviceKeyboardHeight,
     keyPress,
     keyHold,
     keyInput,
