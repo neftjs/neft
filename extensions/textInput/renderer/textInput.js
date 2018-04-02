@@ -24,6 +24,41 @@ TextInput.defineProperty({
     name: 'textColor'
 });
 
+TextInput.defineProperty({
+    type: 'text',
+    name: 'placeholder',
+    defaultValue: ''
+});
+
+TextInput.defineProperty({
+    type: 'color',
+    name: 'placeholderColor'
+});
+
+// text, numeric, email, tel
+TextInput.defineProperty({
+    type: 'text',
+    name: 'keyboardType',
+    implementationValue: val => val && val.toLowerCase()
+});
+
+TextInput.defineProperty({
+    type: 'boolean',
+    name: 'multiline'
+});
+
+// done, go, next, search, send, null
+TextInput.defineProperty({
+    type: 'text',
+    name: 'returnKeyType',
+    implementationValue: val => val && val.toLowerCase()
+});
+
+TextInput.defineProperty({
+    type: 'boolean',
+    name: 'secureTextEntry'
+});
+
 if (process.env.NEFT_HTML) {
     Impl.addTypeImplementation('TextInput', require('./impl/css/textInput'));
 }
