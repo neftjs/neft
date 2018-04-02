@@ -105,6 +105,7 @@ public class App {
         renderer = new Renderer();
         Db.register();
 
+        Device.register();
         WindowView.register();
         Item.register();
         Rectangle.register();
