@@ -62,9 +62,6 @@ module.exports = (Networking) ->
             else
                 data = utils.tryFunction JSON.stringify, null, [data], String(data)
 
-        if data and typeof data is 'string'
-            headers['content-length'] = String data.length
-
         id = ++lastId
         webkit.messageHandlers.networking.postMessage
             id: id

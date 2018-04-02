@@ -48,9 +48,6 @@ module.exports = (Networking) ->
         if typeof (data = req.data) isnt 'string'
             data = utils.tryFunction JSON.stringify, null, [data], data+''
 
-        if typeof data is 'string'
-            headers.push 'content-length', data.length
-
         id = _neft.http.request req.uri, req.method, headers, data
 
         requests[id] =

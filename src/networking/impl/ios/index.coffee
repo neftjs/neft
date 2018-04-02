@@ -61,9 +61,6 @@ module.exports = (Networking) ->
             else
                 data = utils.tryFunction JSON.stringify, null, [data], String(data)
 
-        if data and typeof data is 'string'
-            headers.push 'content-length', data.length
-
         id = ios.httpRequest req.uri, req.method, headers, data
 
         requests[id] =
