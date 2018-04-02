@@ -37,7 +37,7 @@ exports.fail = (err) ->
 exports.callFunction = `function __callNeftTestingFunction__(func, context, args, callback) {
     callback = callback || function () {}
     try {
-        const result = func.apply(context, args);
+        var result = func.apply(context, args);
         if (typeof Promise !== 'undefined' && result instanceof Promise) {
             result
                 .then(function () {callback(true)})
