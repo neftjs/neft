@@ -2,3 +2,5 @@
 
 module.exports = (impl) ->
     initScreenNamespace: ->
+
+    setScreenStatusBarColor: (val) ->

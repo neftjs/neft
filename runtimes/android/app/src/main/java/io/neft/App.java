@@ -106,6 +106,7 @@ public class App {
         Db.register();
 
         Device.register();
+        Screen.register();
         WindowView.register();
         Item.register();
         Rectangle.register();

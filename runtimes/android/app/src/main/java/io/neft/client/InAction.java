@@ -5,6 +5,8 @@ public enum InAction {
     CALL_FUNCTION,
 
     // renderer
+    SET_SCREEN_STATUSBAR_COLOR,
+
     DEVICE_LOG,
     DEVICE_SHOW_KEYBOARD,
     DEVICE_HIDE_KEYBOARD,

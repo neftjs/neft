@@ -7,6 +7,8 @@
     assert = require 'src/assert'
 
     module.exports = (Renderer, Impl, itemUtils) ->
+        StatusBar = require('./screen/statusBar') Renderer, Impl, itemUtils
+
         class Screen extends signal.Emitter
             constructor: ->
                 super()
@@ -15,6 +17,7 @@
                 @_width = 1024
                 @_height = 800
                 @_orientation = 'Portrait'
+                @_statusBar = new StatusBar
 
                 Object.preventExtensions @
 
@@ -54,6 +57,12 @@ May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape.
                 name: 'orientation'
                 developmentSetter: (val) ->
                     assert.isString val
+
+## ReadOnly *StatusBar* Screen.statusBar
+
+            utils.defineProperty @::, 'statusBar', null, ->
+                @_statusBar
+            , null
 
         screen = new Screen
         Impl.initScreenNamespace.call screen, ->

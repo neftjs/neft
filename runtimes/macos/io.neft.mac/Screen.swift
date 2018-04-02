@@ -4,6 +4,10 @@ class Screen {
     var rect: CGRect
 
     class func register() {
+        App.getApp().client.onAction(.setScreenStatusBarColor) {
+            (reader: Reader) in
+            let val = reader.getString()
+        }
     }
 
     init() {
