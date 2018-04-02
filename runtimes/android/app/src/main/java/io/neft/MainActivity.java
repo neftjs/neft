@@ -18,20 +18,17 @@ public class MainActivity extends Activity {
         APP.attach(this);
 
         view = APP.getWindowView();
+
+        if (view.getParent() != null) {
+            ViewGroup parent = (ViewGroup) this.view.getParent();
+            parent.removeView(view);
+        }
+
         setContentView(view);
 
         // transparent status bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        ViewGroup parent = (ViewGroup) this.view.getParent();
-        parent.removeView(view);
-        this.view = null;
     }
 
     @Override
