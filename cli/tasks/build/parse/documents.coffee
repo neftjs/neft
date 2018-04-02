@@ -41,13 +41,6 @@ module.exports = (platform, app, callback) ->
     fs.removeSync "./#{OUT_DIR}/#{IN_DIR}"
     fs.removeSync SCRIPTS_DIR
 
-    # install document extensions
-    for ext in app.allExtensions
-        path = pathUtils.join ext.path, '/init.js'
-        if not loadedExtensions[ext.name] and fs.existsSync(path)
-            loadedExtensions[ext.name] = true
-            require(path)()
-
     styles {windowStyle: null, styles: {}, queries: app.styleQueries}
     utils.clear Document._files
     mainPaths = Object.create null

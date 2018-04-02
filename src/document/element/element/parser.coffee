@@ -14,8 +14,6 @@ encodeText = (text) -> text.replace(new RegExp('&', 'g'), AMPERSAND)
 decodeText = (text) -> text.replace(AMPERSAND_RE, '&')
 
 module.exports = (Element) ->
-    extensions = Element.Tag.extensions
-
     class Parser
         constructor: (callback) ->
             @_callback = callback
@@ -48,7 +46,7 @@ module.exports = (Element) ->
             return
 
         onopentag: (name, attribs) ->
-            element = new (extensions[name] or Element.Tag)
+            element = new Element.Tag
             element.name = name
             for key, val of attribs
                 attribs[key] = decodeText val
