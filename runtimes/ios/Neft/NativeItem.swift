@@ -133,6 +133,13 @@ class NativeItem: Item {
 
     var autoWidth = true
     var autoHeight = true
+    var focused = false {
+        didSet {
+            if (focused) {
+                pushAction(.itemKeysFocus)
+            }
+        }
+    }
     override var keysFocus: Bool {
         didSet {
             if keysFocus {
