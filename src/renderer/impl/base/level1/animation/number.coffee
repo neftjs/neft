@@ -43,7 +43,7 @@ module.exports = (impl) ->
         else if progress > 1
             progress = 1
         data.progress = progress
-        running = progress isnt 1 or (anim._running and anim._loop and anim._when)
+        running = progress isnt 1 or (anim._running and anim._loop)
 
         fromVal = if data.reversed then data.to else data.from
         toVal = if data.reversed then data.from else data.to
