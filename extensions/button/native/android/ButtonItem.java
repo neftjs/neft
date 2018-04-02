@@ -1,6 +1,5 @@
 package io.neft.extensions.button_extension;
 
-import android.graphics.Color;
 import android.widget.Button;
 
 import io.neft.renderer.NativeItem;
@@ -12,7 +11,6 @@ public class ButtonItem extends NativeItem {
     @OnCreate("Button")
     public ButtonItem() {
         super(new Button(APP.getWindowView().getContext()));
-        getItemView().setTextColor(Color.BLACK);
     }
 
     private Button getItemView() {
