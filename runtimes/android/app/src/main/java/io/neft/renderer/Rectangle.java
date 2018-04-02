@@ -118,6 +118,8 @@ public class Rectangle extends Item {
     public Rectangle() {
         super();
         ViewUtils.setBackground(view, shape);
+        setColor(ColorValue.TRANSPARENT);
+        setBorderColor(ColorValue.TRANSPARENT);
     }
 
     public void setColor(ColorValue val) {
