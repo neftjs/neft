@@ -24,7 +24,7 @@ public class TextInputItem extends NativeItem {
 
     static {
         KEYBOARD_TYPES.put("text", InputType.TYPE_CLASS_TEXT);
-        KEYBOARD_TYPES.put("numeric", InputType.TYPE_CLASS_NUMBER);
+        KEYBOARD_TYPES.put("numeric", InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         KEYBOARD_TYPES.put("email", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         KEYBOARD_TYPES.put("tel", InputType.TYPE_CLASS_PHONE);
 
