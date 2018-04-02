@@ -81,7 +81,7 @@ public class NativeItem extends Item {
         APP.getClient().addCustomFunction(eventName, new Consumer<Object[]>() {
             @Override
             public void accept(Object[] args) {
-                final NativeItem item = (NativeItem) APP.getRenderer().getItemById(Math.round((float) args[0]));
+                final NativeItem item = (NativeItem) APP.getRenderer().getItemById(((Number) args[0]).intValue());
                 Object[] handlerArgs = new Object[args.length - 1];
                 System.arraycopy(args, 1, handlerArgs, 0, handlerArgs.length);
                 handler.work(item, handlerArgs);
@@ -134,7 +134,7 @@ public class NativeItem extends Item {
             clientArgs = new Object[]{this.id};
         } else {
             clientArgs = new Object[args.length + 1];
-            clientArgs[0] = (float) this.id;
+            clientArgs[0] = this.id;
             System.arraycopy(args, 0, clientArgs, 1, args.length);
         }
         APP.getClient().pushEvent(eventName, clientArgs);

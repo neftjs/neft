@@ -21,6 +21,7 @@
     i = 0
     EVENT_NULL_TYPE = i++
     EVENT_BOOLEAN_TYPE = i++
+    EVENT_INTEGER_TYPE = i++
     EVENT_FLOAT_TYPE = i++
     EVENT_STRING_TYPE = i++
 
@@ -35,6 +36,8 @@
                     args[i] = null
                 when EVENT_BOOLEAN_TYPE
                     args[i] = reader.getBoolean()
+                when EVENT_INTEGER_TYPE
+                    args[i] = reader.getInteger()
                 when EVENT_FLOAT_TYPE
                     args[i] = reader.getFloat()
                 when EVENT_STRING_TYPE
@@ -73,21 +76,24 @@
 
         for i in [0...argsLen]
             arg = arguments[i + 1]
-            switch typeof arg
-                when 'boolean'
+            switch true
+                when typeof arg is 'boolean'
                     bridge.pushInteger EVENT_BOOLEAN_TYPE
                     bridge.pushBoolean arg
-                when 'number'
+                when typeof arg is 'string'
+                    bridge.pushInteger EVENT_STRING_TYPE
+                    bridge.pushString arg
+                when utils.isInteger(arg)
+                    bridge.pushInteger EVENT_INTEGER_TYPE
+                    bridge.pushInteger arg
+                when typeof arg is 'number'
                     assert.isFloat arg, "NaN can't be passed to the native function"
                     bridge.pushInteger EVENT_FLOAT_TYPE
                     bridge.pushFloat arg
-                when 'string'
-                    bridge.pushInteger EVENT_STRING_TYPE
-                    bridge.pushString arg
                 else
                     if arg?
                         log.warn 'Native function can be called with a boolean, ' +
-                            "float or a string, but '#{arg}' given"
+                            "integer, float or a string, but '#{arg}' given"
                     bridge.pushInteger EVENT_NULL_TYPE
 
         unless pushPending

@@ -1,15 +1,15 @@
 package io.neft.renderer.annotation;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import io.neft.App;
 import io.neft.renderer.Item;
 import io.neft.renderer.NativeItem;
 import io.neft.utils.ColorValue;
 import io.neft.utils.Consumer;
 import io.neft.utils.StringUtils;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public final class Parser {
     private static final App APP = App.getInstance();
@@ -28,21 +28,21 @@ public final class Parser {
         } else if (arg == boolean.class) {
             return new Object[] {args[0]};
         } else if (arg == float.class) {
-            return new Object[] {args[0]};
+            return new Object[] {((Number) args[0]).longValue()};
         } else if (arg == int.class) {
-            return new Object[] {Math.round((float) args[0])};
+            return new Object[] {((Number) args[0]).intValue()};
         } else if (arg == ColorValue.class) {
             if (args[0] == null) {
                 return new Object[1];
             } else {
-                int val = Float.floatToIntBits((float) args[0]);
+                int val = ((Number) args[0]).intValue();
                 int argb = ColorValue.RGBAtoARGB(val);
                 return new Object[] {new ColorValue(argb)};
             }
         } else if (arg == String.class) {
             return new Object[]{args[0]};
         } else if (arg == Item.class) {
-            Integer id = args[0] == null ? 0 : Math.round((float) args[0]);
+            Integer id = args[0] == null ? 0 : ((Number) args[0]).intValue();
             if (id <= 0) {
                 return new Object[1];
             } else {
@@ -69,7 +69,7 @@ public final class Parser {
         APP.getClient().addCustomFunction(eventName, new Consumer<Object[]>() {
             @Override
             public void accept(Object[] args) {
-                int itemId = Math.round((float) args[0]);
+                int itemId = ((Number) args[0]).intValue();
                 NativeItem item = (NativeItem) APP.getRenderer().getItemById(itemId);
                 Object[] handlerArgs = new Object[args.length - 1];
                 System.arraycopy(args, 1, handlerArgs, 0, handlerArgs.length);

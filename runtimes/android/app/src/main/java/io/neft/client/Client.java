@@ -18,8 +18,9 @@ public class Client {
 
     private static final int EVENT_NULL_TYPE = 0;
     private static final int EVENT_BOOLEAN_TYPE = 1;
-    private static final int EVENT_FLOAT_TYPE = 2;
-    private static final int EVENT_STRING_TYPE = 3;
+    private static final int EVENT_INTEGER_TYPE = 2;
+    private static final int EVENT_FLOAT_TYPE = 3;
+    private static final int EVENT_STRING_TYPE = 4;
 
     final private InAction[] InActionValues = InAction.values();
 
@@ -54,6 +55,8 @@ public class Client {
                     args[i] = null;
                 } else if (argType == EVENT_BOOLEAN_TYPE) {
                     args[i] = reader.getBoolean();
+                } else if (argType == EVENT_INTEGER_TYPE) {
+                    args[i] = reader.getInteger();
                 } else if (argType == EVENT_FLOAT_TYPE) {
                     args[i] = reader.getFloat();
                 } else if (argType == EVENT_STRING_TYPE) {
@@ -167,6 +170,9 @@ public class Client {
                 } else if (arg instanceof Boolean) {
                     pushInteger(EVENT_BOOLEAN_TYPE);
                     pushBoolean((Boolean) arg);
+                } else if (arg instanceof Integer) {
+                    pushInteger(EVENT_INTEGER_TYPE);
+                    pushInteger((Integer) arg);
                 } else if (arg instanceof Float) {
                     pushInteger(EVENT_FLOAT_TYPE);
                     pushFloat((Float) arg);

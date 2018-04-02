@@ -155,8 +155,8 @@ public class ScrollableItem extends NativeItem {
 
     @OnCall("animatedScrollTo")
     public void animatedScrollTo(Object[] args) {
-        float x = (float) args[0];
-        float y = (float) args[1];
+        float x = ((Number) args[0]).floatValue();
+        float y = ((Number) args[1]).floatValue();
         getItemView().hScroll.smoothScrollTo(Math.round(dpToPx(x)), 0);
         getItemView().smoothScrollTo(0, Math.round(dpToPx(y)));
     }
