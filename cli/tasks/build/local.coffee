@@ -13,6 +13,7 @@ DEFAULT_LOCAL_FILE =
     android:
         sdkDir: '$ANDROID_HOME'
         compileSdkVersion: 25
+        targetSdkVersion: 25
         buildToolsVersion: '25'
         dependencies: []
 

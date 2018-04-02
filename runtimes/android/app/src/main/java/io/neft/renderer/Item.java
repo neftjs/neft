@@ -154,8 +154,8 @@ public class Item {
     private final Rect size = new Rect();
     private final Rect bounds = new Rect();
     private final Rect childrenBounds = new Rect();
+    private final Rect takenBounds = new Rect();
     private boolean optimized = false;
-    private boolean childrenOptimized = false;
 
     // hardware layers
     private boolean isInLayers = false;
@@ -288,14 +288,16 @@ public class Item {
     public void insertBefore(Item val) {
         removeFromParent();
 
-        val.parent.children.add(this);
-        val.parent.invalidate();
+        Item newParent = val.parent;
 
-        ViewGroup viewParent = (ViewGroup) val.view.getParent();
+        newParent.children.add(this);
+        ViewGroup viewParent = newParent.view;
         int index = viewParent.indexOfChild(val.view);
         viewParent.addView(view, index);
+        newParent.invalidate();
 
-        parent = val.parent;
+        parent = newParent;
+        invalidate();
     }
 
     public void setVisible(boolean val) {
@@ -429,24 +431,27 @@ public class Item {
 
         // measure children
         if (dirtyChildren) {
-            childrenOptimized = true;
             childrenBounds.setEmpty();
             for (int i = 0, len = children.size(); i < len; i++) {
                 Item child = children.get(i);
                 if (child.visible) {
                     child.measure();
-                    childrenOptimized = childrenOptimized && child.optimized;
-                    childrenBounds.union(child.bounds);
+                    childrenBounds.union(child.takenBounds);
                 }
             }
             dirtyChildren = false;
         }
 
+        // update taken bounds by itself and children
+        takenBounds.setEmpty();
+        takenBounds.union(bounds);
+        if (!clip) takenBounds.union(childrenBounds);
+
         // optimize if possible
         boolean optimize = clip || size.contains(childrenBounds);
         if (visible && optimized != optimize) {
             optimized = optimize;
-            view.setClipChildren(optimized && childrenOptimized);
+            view.setClipChildren(optimized);
             if (!optimized) {
                 dropGpu();
             }

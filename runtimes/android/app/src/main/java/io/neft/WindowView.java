@@ -49,29 +49,4 @@ public class WindowView extends ItemView {
         System.out.println("RESIZE TO " + dpWidth + "x" + dpHeight);
         APP.getClient().pushAction(OutAction.WINDOW_RESIZE, dpWidth, dpHeight);
     }
-
-    private boolean onKeyEvent(int keyCode, KeyEvent event) {
-        APP.processKeyEvent(keyCode, event);
-        return keyCode == KeyEvent.KEYCODE_BACK;
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        return onKeyEvent(keyCode, event);
-    }
-
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event){
-        return onKeyEvent(keyCode, event);
-    }
-
-    @Override
-    public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event){
-        return onKeyEvent(keyCode, event);
-    }
-
-    @Override
-    public boolean onKeyPreIme(int keyCode, KeyEvent event){
-        return onKeyEvent(keyCode, event);
-    }
 }

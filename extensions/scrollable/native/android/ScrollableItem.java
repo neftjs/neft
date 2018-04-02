@@ -1,18 +1,17 @@
 package io.neft.extensions.scrollable_extension;
 
 import android.content.Context;
-import android.view.MotionEvent;
+import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
-
 import io.neft.renderer.Item;
 import io.neft.renderer.NativeItem;
+import io.neft.renderer.annotation.OnCall;
 import io.neft.renderer.annotation.OnCreate;
 import io.neft.renderer.annotation.OnSet;
-import io.neft.renderer.annotation.OnCall;
 
 public class ScrollableItem extends NativeItem {
     private static class ScrollableView extends ScrollView {
@@ -50,11 +49,31 @@ public class ScrollableItem extends NativeItem {
             scrollable.sendContentY();
         }
 
+        // overriding this method gives smooth scroll effect in both directions but
+        // breaks touch events on native elements
+        // @Override
+        // public boolean dispatchTouchEvent(MotionEvent event) {
+        //     hScroll.dispatchTouchEvent(event);
+        //     onTouchEvent(event);
+        //     return true;
+        // }
+
         @Override
-        public boolean dispatchTouchEvent(MotionEvent event) {
-            hScroll.dispatchTouchEvent(event);
-            onTouchEvent(event);
-            return true;
+        protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+            // disable default animation on activity size change
+            smoothScrollBy(0, 0);
+        }
+
+        @Override
+        public View findFocus() {
+            // do not scroll to focus element
+            return null;
+        }
+
+        @Override
+        protected int computeScrollDeltaToGetChildRectOnScreen(Rect rect) {
+            // do not scroll to focus element
+            return 0;
         }
 
         void addContentView(View view) {
@@ -70,6 +89,7 @@ public class ScrollableItem extends NativeItem {
         getItemView().scrollable = this;
         setHorizontalScrollEffect(true);
         setVerticalScrollEffect(true);
+        setClip(true);
     }
 
     private ScrollableView getItemView() {
@@ -93,7 +113,8 @@ public class ScrollableItem extends NativeItem {
         }
         contentItem = val;
         if (val != null) {
-            val.removeFromParent();
+            val.setParent(this);
+            view.removeView(val.view);
             getItemView().addContentView(val.view);
         }
     }

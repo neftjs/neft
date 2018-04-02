@@ -396,7 +396,6 @@ public final class Device {
         APP.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                APP.getWindowView().getLocationOnScreen(VIEW_LOCATION);
                 APP.getWindowView().addView(device.keyboardText);
 
                 // hide keyboard
@@ -454,6 +453,7 @@ public final class Device {
     public void onTouchEvent(MotionEvent event){
         OutAction action = TOUCH_EVENTS_MAPPING.get(event.getAction());
         if (action != null) {
+            APP.getWindowView().getLocationOnScreen(VIEW_LOCATION);
             float x = (event.getRawX() - VIEW_LOCATION[0]) / pixelRatio;
             float y = (event.getRawY() - VIEW_LOCATION[1]) / pixelRatio;
             APP.getClient().pushAction(action, x, y);
