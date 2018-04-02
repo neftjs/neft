@@ -263,7 +263,7 @@ Acceptable syntaxes:
             hash = route.__hash__
             assert.notOk pendingRoutes[hash]
 
-            if IS_CLIENT
+            if IS_CLIENT and req.type is 'html'
                 if Route.lastClientRoute
                     destroyRoute Route.lastClientRoute
                 {lastClientRoute} = Route
