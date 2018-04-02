@@ -92,7 +92,7 @@ Returns `true` if the given signal has no listeners.
                 containsGaps = true
             else
                 ctx = listeners[i + 1]
-                if result <= 0 and func.call(ctx or obj, arg1, arg2) is STOP_PROPAGATION
+                if func.call(ctx or obj, arg1, arg2) is STOP_PROPAGATION
                     result = STOP_PROPAGATION
                     if containsGaps
                         break
