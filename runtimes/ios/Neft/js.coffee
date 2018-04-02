@@ -1,6 +1,6 @@
 @_createOnCompletion = (id) ->
     (data) ->
-        _neft.postMessage "response",
+        ios.postMessage "response",
             id: id
             response: data
         return
