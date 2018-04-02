@@ -23,12 +23,31 @@ extension Extension.Scrollable {
                 (item: ScrollableItem, val: CGFloat) in
                 item.scrollView.contentOffset.y = val
             }
+
+            onCall("animatedScrollTo") {
+                (item: ScrollableItem, args: [Any?]) in
+                let x = (args[0] as! Number).float()
+                let y = (args[1] as! Number).float()
+                item.animatedScrollTo(x, y)
+            }
         }
 
-        class Delegate: UIViewController, UIScrollViewDelegate {
+        class NeftUIScrollView: UIScrollView, UIScrollViewDelegate {
             weak var scrollable: ScrollableItem?
 
-            func scrollViewDidScroll(_ scrollView: UIScrollView) {
+            override func didMoveToWindow() {
+                super.didMoveToWindow()
+                delegate = self
+            }
+
+            override func layoutSubviews() {
+                super.layoutSubviews()
+
+                guard scrollable?.contentItem != nil else { return }
+                scrollable!.scrollView.contentSize = scrollable!.contentItem!.view.layer.bounds.size
+            }
+
+            internal func scrollViewDidScroll(_ scrollView: UIScrollView) {
                 guard scrollable != nil else { return }
                 let offset = scrollView.contentOffset
                 scrollable!.pushEvent(event: "contentXChange", args: [offset.x])
@@ -36,8 +55,7 @@ extension Extension.Scrollable {
             }
         }
 
-        let delegate = Delegate()
-        let scrollView = UIScrollView()
+        let scrollView = NeftUIScrollView()
 
         var contentItem: Item? {
             didSet {
@@ -69,15 +87,12 @@ extension Extension.Scrollable {
 
         init() {
             super.init(itemView: UIView())
+            scrollView.scrollable = self
             view.addSubview(scrollView)
-            delegate.scrollable = self
         }
 
-        override func onPointerPress(_ x: CGFloat, _ y: CGFloat) {
-            super.onPointerPress(x, y)
-            guard contentItem != nil else { return }
-            scrollView.contentSize = contentItem!.view.layer.bounds.size
-            scrollView.delegate = delegate
+        func animatedScrollTo(_ x: CGFloat, _ y: CGFloat) {
+            scrollView.setContentOffset(CGPoint(x: x, y: y), animated: true)
         }
     }
 }
