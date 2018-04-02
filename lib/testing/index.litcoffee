@@ -35,8 +35,10 @@
         scopes.push scope
 
         # before/after functions
-        push.apply scope.beforeFunctions, currentScope.beforeFunctions
-        push.apply scope.afterFunctions, currentScope.afterFunctions
+        push.apply scope.beforeAllFunctions, currentScope.beforeAllFunctions
+        push.apply scope.afterAllFunctions, currentScope.afterAllFunctions
+        push.apply scope.beforeEachFunctions, currentScope.beforeEachFunctions
+        push.apply scope.afterEachFunctions, currentScope.afterEachFunctions
 
         # save scope to parent
         currentScope.children.push scope
@@ -89,13 +91,25 @@ The given test function can contains optional *callback* argument.
 # beforeEach(*Function* code)
 
     exports.beforeEach = (func) ->
-        currentScope.beforeFunctions.push func
+        currentScope.beforeEachFunctions.push func
         return
 
 # afterEach(*Function* code)
 
     exports.afterEach = (func) ->
-        currentScope.afterFunctions.push func
+        currentScope.afterEachFunctions.push func
+        return
+
+# beforeAll(*Function* code)
+
+    exports.beforeAll = (func) ->
+        currentScope.beforeAllFunctions.push func
+        return
+
+# afterAll(*Function* code)
+
+    exports.afterAll = (func) ->
+        currentScope.afterAllFunctions.push func
         return
 
 # whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay = `1000`])

@@ -296,6 +296,10 @@ describe 'utils', ->
             assert.is utils.isEqual({a: [{b: 1}]}, {a: [{b: 2}]}, 2), true
             assert.is utils.isEqual({a: [{b: 1}]}, {a: [{b: 2}]}, 3), false
 
+    describe 'snakeToCamel()', ->
+        it 'returns given string as camel case', ->
+            assert.is utils.snakeToCamel('ab_cd_23_efg'), 'abCd23Efg'
+
     describe 'kebabToCamel()', ->
         it 'returns given string as camel case', ->
             assert.is utils.kebabToCamel('ab-cd-23-efg'), 'abCd23Efg'

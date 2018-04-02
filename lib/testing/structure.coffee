@@ -4,15 +4,29 @@
 stack = require './stack'
 logger = require './logger'
 
-ASYNC_TEST_TIMEOUT = 8000
+callFunctions = (funcs, context, callback) ->
+    index = 0
+    callNextFunction = ->
+        unless funcs[index]
+            callback()
+            return
+        func = funcs[index]
+        index += 1
+        if func.length is 0
+            stack.callFunction func, context, null, -> callNextFunction()
+        else
+            stack.callFunction func, context, [callNextFunction]
+    callNextFunction()
 
 class Scope
     constructor: ->
         @parent = null
         @message = ''
         @children = []
-        @beforeFunctions = []
-        @afterFunctions = []
+        @beforeAllFunctions = []
+        @afterAllFunctions = []
+        @beforeEachFunctions = []
+        @afterEachFunctions = []
         @isOnly = false
         Object.seal @
 
@@ -24,10 +38,14 @@ class Scope
         (callback) ->
             Object.freeze @
             logger.onScopeStart @
-            utils.async.forEach @children, forEachCallback, ->
-                logger.onScopeEnd @
-                callback()
-            , @
+            callFunctions @beforeAllFunctions, @context, (err) =>
+                if err
+                    callback err
+                    return
+                utils.async.forEach @children, forEachCallback, =>
+                    logger.onScopeEnd @
+                    callFunctions @afterAllFunctions, @context, callback
+                , @
             return
 
 class Test
@@ -64,10 +82,7 @@ class Test
         logger.onTestEnd @
 
         # call after functions
-        for afterFunc in stack.currentScope.afterFunctions
-            stack.callFunction afterFunc, @context
-
-        @_callback()
+        callFunctions stack.currentScope.afterEachFunctions, @context, @_callback
 
         return
 
@@ -90,19 +105,9 @@ class Test
         logger.onTestStart @
         Test.currentTest = @
 
-        # call before functions
-        for beforeFunc in stack.currentScope.beforeFunctions
-            stack.callFunction beforeFunc, @context
-
-        # call test function
-        if @testFunction.length is 0
-            stack.callFunction @testFunction, @context
-            @onEnd()
-        else
-            setTimeout =>
-                @onEnd new Error "timeout of #{ASYNC_TEST_TIMEOUT}ms exceeded"
-            , ASYNC_TEST_TIMEOUT
-            stack.callFunction @testFunction, @context, [@onEnd]
+        # call beforeEach and test functions
+        funcs = stack.currentScope.beforeEachFunctions.concat([@testFunction])
+        callFunctions funcs, @context, @onEnd
 
         return
 
