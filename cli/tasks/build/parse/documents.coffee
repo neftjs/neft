@@ -43,7 +43,7 @@ module.exports = (platform, app, callback) ->
 
     # install document extensions
     for ext in app.allExtensions
-        path = pathUtils.join ext.path, '/app.js'
+        path = pathUtils.join ext.path, '/init.js'
         if not loadedExtensions[ext.name] and fs.existsSync(path)
             loadedExtensions[ext.name] = true
             require(path)()
