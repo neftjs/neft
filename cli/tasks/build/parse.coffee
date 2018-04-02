@@ -10,6 +10,7 @@ linkFiles = require './parse/files'
 linkStyles = require './parse/styles'
 linkDocuments = require './parse/documents'
 linkResources = require './parse/resources'
+linkManifest = require './parse/manifest'
 createIndexFile = require './parse/index'
 
 NEFT_EXTENSIONS = do ->
@@ -70,6 +71,7 @@ module.exports = (platform, options, callback) ->
     stack.add linkDocuments, null, [platform, app]
     stack.add linkFiles, null, [platform, app]
     stack.add linkResources, null, [platform, app]
+    stack.add linkManifest, null, [platform, app]
 
     stack.runAll (err) ->
         if err
