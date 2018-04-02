@@ -24,6 +24,22 @@ class Device {
 
     var pixelRatio: CGFloat = 1
     var lastEvent: UIEvent!
+    var keyboardVisible = false {
+        didSet {
+            let app = App.getApp()
+            if (keyboardVisible) {
+                app.client.pushAction(OutAction.deviceKeyboardShow)
+            } else {
+                app.client.pushAction(OutAction.deviceKeyboardHide)
+            }
+        }
+    }
+    var keyboardHeight: CGFloat = 0 {
+        didSet {
+            let app = App.getApp()
+            app.client.pushAction(OutAction.deviceKeyboardHeight, keyboardHeight)
+        }
+    }
     let onTouchEnded = Signal()
     fileprivate var view: DeviceView!
 
@@ -36,7 +52,7 @@ class Device {
         App.getApp().client.onAction(.deviceShowKeyboard) {
             App.getApp().renderer.device!.showKeyboard()
         }
-        
+
         App.getApp().client.onAction(.deviceHideKeyboard) {
             App.getApp().renderer.device!.hideKeyboard()
         }
@@ -59,16 +75,23 @@ class Device {
         let isPhone = UIDevice.current.userInterfaceIdiom == .phone
         app.client.pushAction(OutAction.deviceIsPhone)
         app.client.pushBoolean(isPhone)
+
+        // notifications
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
     func onEvent(_ event: UIEvent) {
         let app: GameViewController = App.getApp()
-        
+
         let touches = event.allTouches
         guard touches != nil else { return }
 
         let touch = touches!.first
         guard touch != nil else { return }
+
+        let location = touch!.location(in: view)
+        if keyboardVisible && location.y >= view.frame.height - keyboardHeight { return }
 
         self.lastEvent = event
 
@@ -83,7 +106,6 @@ class Device {
         default: break
         }
 
-        let location = touch!.location(in: self.view)
         app.client.pushFloat(location.x)
         app.client.pushFloat(location.y)
         app.client.sendData()
@@ -94,14 +116,24 @@ class Device {
     }
 
     func showKeyboard() {
-        let app: GameViewController = App.getApp()
         view.becomeFirstResponder()
-        app.client.pushAction(OutAction.deviceKeyboardShow)
     }
 
     func hideKeyboard() {
-        let app: GameViewController = App.getApp()
+        let app = App.getApp()
         app.view.endEditing(true)
-        app.client.pushAction(OutAction.deviceKeyboardHide)
+    }
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            if let size = userInfo[UIKeyboardFrameEndUserInfoKey] as? CGRect {
+                keyboardHeight = size.height
+            }
+        }
+        keyboardVisible = true
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        keyboardVisible = false
     }
 }
