@@ -10,8 +10,9 @@ class Client {
 
     private static let EventNilType = 0
     private static let EventBooleanType = 1
-    private static let EventFloatType = 2
-    private static let EventStringType = 3
+    private static let EventIntegerType = 2
+    private static let EventFloatType = 3
+    private static let EventStringType = 4
 
     var outActions: [Int] = []
     private var outActionsIndex = 0
@@ -43,8 +44,10 @@ class Client {
                     break
                 case Client.EventBooleanType:
                     args[i] = reader.getBoolean()
+                case Client.EventIntegerType:
+                    args[i] = Number(reader.getInteger())
                 case Client.EventFloatType:
-                    args[i] = reader.getFloat()
+                    args[i] = Number(reader.getFloat())
                 case Client.EventStringType:
                     args[i] = reader.getString()
                 default:
@@ -149,6 +152,9 @@ class Client {
                 } else if arg! is Bool {
                     pushInteger(Client.EventBooleanType)
                     pushBoolean(arg as! Bool)
+                } else if arg! is Int {
+                    pushInteger(Client.EventIntegerType)
+                    pushInteger(arg as! Int)
                 } else if arg! is CGFloat {
                     pushInteger(Client.EventFloatType)
                     pushFloat(arg as! CGFloat)
@@ -157,7 +163,7 @@ class Client {
                     pushString(arg as! String)
                 } else {
                     pushInteger(Client.EventNilType)
-                    print("Event can be pushed with a nil, Bool, CGFloat or a String, but '\(arg)' given")
+                    print("Event can be pushed with a nil, Bool, Int, CGFloat or a String, but '\(arg)' given")
                 }
             }
         } else {
@@ -222,7 +228,7 @@ class Client {
             } else if arg is String {
                 pushString(arg as! String)
             } else {
-                fatalError("Action can be pushed with Bool, CGFloat or String, but '\(arg)' given")
+                fatalError("Action can be pushed with Bool, Int, CGFloat or String, but '\(arg)' given")
             }
         }
     }
