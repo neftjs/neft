@@ -6,10 +6,12 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import io.neft.utils.Signal;
 
 public class MainActivity extends Activity {
     private static final App APP = App.getInstance();
     protected WindowView view;
+    public Signal onBackPress = new Signal();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
