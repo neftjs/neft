@@ -1,4 +1,5 @@
-engines:
+version: 2
+plugins:
     coffeelint:
         enabled: true
         config: coffeelint.json
@@ -8,6 +9,6 @@ engines:
         enabled: true
     shellcheck:
         enabled: true
-ratings:
-    paths:
-        - "**"
+    duplication:
+        enabled: false
+
