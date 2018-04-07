@@ -58,3 +58,37 @@ class Color {
         return UIColor(cgColor: hexColorToCGColor(hex))
     }
 }
+
+struct Number {
+    let val: Any
+
+    init(_ val: Int) {
+        self.val = val
+    }
+
+    init(_ val: CGFloat) {
+        self.val = val
+    }
+
+    func int() -> Int {
+        switch val {
+        case let int as Int:
+            return int
+        case let float as CGFloat:
+            return Int(float)
+        default:
+            fatalError()
+        }
+    }
+
+    func float() -> CGFloat {
+        switch val {
+        case let int as Int:
+            return CGFloat(int)
+        case let float as CGFloat:
+            return float
+        default:
+            fatalError()
+        }
+    }
+}

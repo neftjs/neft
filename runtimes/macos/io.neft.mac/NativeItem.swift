@@ -44,7 +44,7 @@ class NativeItem: Item {
         App.getApp().client.addCustomFunction(funcName) {
             (inputArgs: [Any?]) in
             var args = inputArgs
-            let index = Int(round(args[0] as! CGFloat))
+            let index = (args[0] as! Number).int()
             let item = App.getApp().renderer.items[index] as! T
             args.removeFirst()
             handler(item, args)
@@ -74,7 +74,7 @@ class NativeItem: Item {
         ) {
         onSet(propertyName) {
             (item: T, args: [Any?]) in
-            handler(item, args[0] as! CGFloat)
+            handler(item, (args[0] as! Number).float())
         }
     }
 
@@ -84,7 +84,7 @@ class NativeItem: Item {
         ) {
         onSet(propertyName) {
             (item: T, args: [Any?]) in
-            handler(item, Int(args[0] as! CGFloat))
+            handler(item, (args[0] as! Number).int())
         }
     }
 
@@ -203,7 +203,7 @@ class NativeItem: Item {
 
     internal func pushEvent(event: String, args: [Any?]?) {
         let eventName = "rendererOn\(type(of: self).name.uppercaseFirst)\(event.uppercaseFirst)"
-        var clientArgs: [Any?] = [CGFloat(id)]
+        var clientArgs: [Any?] = [id]
         if args != nil {
             clientArgs.append(contentsOf: args!)
         }

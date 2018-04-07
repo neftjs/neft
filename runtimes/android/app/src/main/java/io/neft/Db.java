@@ -1,13 +1,12 @@
 package io.neft;
 
 import android.content.Context;
+import io.neft.client.Client;
+import io.neft.utils.Consumer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
-
-import io.neft.client.Client;
-import io.neft.utils.Consumer;
 
 public final class Db {
     private static final App APP = App.getInstance();
@@ -24,7 +23,7 @@ public final class Db {
             @Override
             public void accept(Object[] args) {
                 final String key = encodeKey((String) args[0]);
-                float id = (float) args[1];
+                int id = ((Number) args[1]).intValue();
 
                 resolve(id, new Resolver() {
                     @Override
@@ -41,7 +40,7 @@ public final class Db {
             public void accept(Object[] args) {
                 final String key = encodeKey((String) args[0]);
                 final String value = (String) args[1];
-                float id = (float) args[2];
+                int id = ((Number) args[2]).intValue();
 
                 resolve(id, new Resolver() {
                     @Override
@@ -61,7 +60,7 @@ public final class Db {
             @Override
             public void accept(Object[] args) {
                 final String key = encodeKey((String) args[0]);
-                float id = (float) args[1];
+                int id = ((Number) args[1]).intValue();
 
                 resolve(id, new Resolver() {
                     @Override
@@ -78,7 +77,7 @@ public final class Db {
         return "__neftDb_" + key;
     }
 
-    private static void resolve(final float id, final Resolver resolver) {
+    private static void resolve(final int id, final Resolver resolver) {
         new Thread(new Runnable() {
             @Override
             public void run() {

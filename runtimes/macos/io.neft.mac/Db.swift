@@ -9,7 +9,7 @@ class Db {
         client?.addCustomFunction("__neftDbGet") {
             (args: [Any?]) in
             let key = args[0] as! String
-            let id = args[1] as! CGFloat
+            let id = (args[1] as! Number).int()
             resolve(key, id) {
                 (url: URL) throws in
                 return try String(contentsOf: url)
@@ -20,7 +20,7 @@ class Db {
             (args: [Any?]) in
             let key = args[0] as! String
             let value = args[1] as! String
-            let id = args[2] as! CGFloat
+            let id = (args[2] as! Number).int()
             resolve(key, id) {
                 (url: URL) throws in
                 try value.write(to: url, atomically: true, encoding: .utf8)
@@ -31,7 +31,7 @@ class Db {
         client?.addCustomFunction("__neftDbRemove") {
             (args: [Any?]) in
             let key = args[0] as! String
-            let id = args[1] as! CGFloat
+            let id = (args[1] as! Number).int()
             resolve(key, id) {
                 (url: URL) throws in
                 try FileManager.default.removeItem(at: url)
@@ -40,7 +40,7 @@ class Db {
         }
     }
 
-    private static func resolve(_ path: String, _ id: CGFloat, _ completion: @escaping (URL) throws -> String?) {
+    private static func resolve(_ path: String, _ id: Int, _ completion: @escaping (URL) throws -> String?) {
         var responseArgs: [Any?]? = nil
         thread({
             let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)

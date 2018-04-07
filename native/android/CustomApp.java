@@ -10,7 +10,7 @@ public class CustomApp {
             @Override
             public void accept(Object[] args) {
                 boolean bool = (Boolean) args[0];
-                float number = (Float) args[1];
+                float number = ((Number) args[1]).floatValue();
                 String string = (String) args[2];
                 app.getClient().pushEvent(
                         "testResponseEventName",
