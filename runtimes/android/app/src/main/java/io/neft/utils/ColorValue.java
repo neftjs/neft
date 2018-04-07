@@ -1,6 +1,9 @@
 package io.neft.utils;
 
+import android.graphics.Color;
+
 public class ColorValue {
+    public static final ColorValue TRANSPARENT = new ColorValue(Color.TRANSPARENT);
     private final int color;
 
     public static int RGBAtoARGB(int val) {
