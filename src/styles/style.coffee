@@ -138,7 +138,9 @@ module.exports = (File, data) -> class Style
         assert.isDefined item
         assert.notOk @textProp
 
-        if @node instanceof Text or 'text' of item
+        hasText = @node instanceof Text or @node.children.length > 0
+
+        if hasText and (@node instanceof Text or 'text' of item)
             "#{PROP_PREFIX}text"
         else
             ''
@@ -146,8 +148,6 @@ module.exports = (File, data) -> class Style
     updateText: ->
         {textProp, node} = @
         assert.ok textProp
-
-        isText = node instanceof Text
 
         if node instanceof Tag
             text = node.stringifyChildren()

@@ -59,8 +59,8 @@ module.exports = (File, Input) -> class InputProp extends Input
                 return
             r = input.bindingConfig.func.apply input, input.file.inputArgs
             if typeof r is 'function'
-                r.apply @, arguments
-            return
+                r = r.apply @, arguments
+            r
 
     clone: (original, file) ->
         node = original.node.getCopiedElement @node, file.node

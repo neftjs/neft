@@ -20,7 +20,7 @@
         @Props = Props = require('./tag/props') @
         @DEFAULT_STRINGIFY_REPLACEMENTS = Object.create null
 
-        @extensions = Object.create null
+        extensions = @extensions = Object.create null
 
         @__name__ = 'Tag'
         @__path__ = 'File.Element.Tag'
@@ -33,9 +33,13 @@
         JSON_ATTRS = i++
         JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
-        @_fromJSON = (arr, obj = new Tag) ->
+        @_fromJSON = (arr, obj) ->
+            name = arr[JSON_NAME]
+            unless obj
+                ctor = extensions[name] or Tag
+                obj = new ctor
             Element._fromJSON arr, obj
-            obj.name = arr[JSON_NAME]
+            obj.name = name
             utils.merge obj.props, arr[JSON_ATTRS]
 
             prevChild = null
@@ -77,7 +81,7 @@
 
         signal.Emitter.createSignal @, 'onPropsChange'
 
-        clone: (clone = new Tag) ->
+        clone: (clone = new @constructor) ->
             super clone
             clone.name = @name
             utils.merge clone.props, @props

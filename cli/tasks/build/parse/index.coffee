@@ -47,7 +47,7 @@ module.exports = (platform, app, options) ->
 
     # include app extensions
     for ext in app.allExtensions
-        path = pathUtils.join ext.path, '/app.js'
+        path = pathUtils.join ext.path, '/init.js'
         if fs.existsSync(path)
             app.extensions.push "`require('#{path}')`"
 
