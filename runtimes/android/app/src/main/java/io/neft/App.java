@@ -92,10 +92,6 @@ public class App {
         Item.onAnimationFrame();
     }
 
-    public WindowView getWindowView() {
-        return windowView;
-    }
-
     public void run() {
         System.loadLibrary("neft");
 

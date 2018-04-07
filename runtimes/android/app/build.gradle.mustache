@@ -10,9 +10,23 @@ android {
         versionCode {{&package.android.versionCode}}
         versionName "{{&package.android.versionName}}"
     }
+    signingConfigs {
+        {{#package.android.signing}}
+        config {
+            storeFile file('{{&storeFile}}')
+            storePassword '{{&storePassword}}'
+            keyPassword '{{&keyPassword}}'
+            keyAlias '{{&keyAlias}}'
+        }
+        {{/package.android.signing}}
+    }
     buildTypes {
         release {
             minifyEnabled true
+            {{#package.android.signing}}
+            signingConfig signingConfigs.config
+            {{/package.android.signing}}
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     sourceSets {
@@ -31,14 +45,19 @@ android {
             universalApk true
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     {{#local.android.dependencies}}
-    compile '{{&.}}'
+    implementation '{{&.}}'
     {{/local.android.dependencies}}
-    compile files('src/main/libs/androidsvg-1.2.1.jar')
-    compile 'com.jakewharton:process-phoenix:1.1.0'
-    provided 'org.projectlombok:lombok:1.12.6'
+    implementation files('src/main/libs/androidsvg-1.2.1.jar')
+    implementation 'com.jakewharton:process-phoenix:1.1.0'
+    compileOnly 'org.projectlombok:lombok:1.12.6'
+    annotationProcessor 'org.projectlombok:lombok:1.12.6'
 }

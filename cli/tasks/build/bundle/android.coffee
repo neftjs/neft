@@ -122,8 +122,7 @@ module.exports = (config, callback) ->
             return callback err
 
         logLine = log.line().timer().repeat().loading 'Creating Android APK...'
-        apkMode = if config.release then 'release' else 'debug'
-        gradlewMode = 'assembleDebug'
+        gradlewMode = if config.release then 'assembleRelease' else 'assembleDebug'
         if /^win/.test(process.platform)
             cmd = "./gradlew.bat #{gradlewMode} --quiet"
         else
