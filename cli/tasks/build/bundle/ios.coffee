@@ -14,6 +14,8 @@ CUSTOM_NATIVE_DIR = './native/ios'
 CUSTOM_NATIVE_OUT_DIR = "#{OUT_DIR}Neft/"
 STATIC_DIR = './static'
 STATIC_OUT_DIR = "#{OUT_DIR}static"
+ICON_DIR = './build/manifest/icons/ios'
+ICON_OUT_DIR = "#{OUT_DIR}Neft/Assets.xcassets/AppIcon.appiconset"
 ANDROID_BUNDLE_DIR = './build/ios/'
 XCODE_PROJECT_PATH = "#{OUT_DIR}Neft.xcodeproj/project.pbxproj"
 RUNTIME_PATH = pathUtils.resolve __dirname, '../../../../runtimes/ios'
@@ -129,6 +131,12 @@ module.exports = (config, callback) ->
         logLine.stop()
     else
         fs.ensureDirSync STATIC_OUT_DIR
+
+    if fs.existsSync(ICON_DIR)
+        logLine = log.line().timer().loading "Copying icon files into `#{ICON_OUT_DIR}`"
+        fs.copySync ICON_DIR, ICON_OUT_DIR
+        logLine.ok "Icons copied into `#{ICON_OUT_DIR}`"
+        logLine.stop()
 
     logLine = log.line().timer().repeat().loading 'Copying extensions...'
     config.iosExtensions = []

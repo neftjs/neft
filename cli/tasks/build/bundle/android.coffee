@@ -15,6 +15,8 @@ CUSTOM_NATIVE_DIR = './native/android'
 CUSTOM_NATIVE_OUT_DIR = "#{NATIVE_OUT_DIR}customapp/"
 STATIC_DIR = './static'
 STATIC_OUT_DIR = "#{OUT_DIR}app/src/main/assets/static"
+ICON_DIR = './build/manifest/icons/android'
+ICON_OUT_DIR = "#{OUT_DIR}app/src/main/res"
 JS_FILE_PATH = "app/src/main/assets/javascript/neft.coffee.mustache"
 BUNDLE_DIR = './build/android/'
 RUNTIME_PATH = pathUtils.resolve __dirname, '../../../../runtimes/android'
@@ -83,6 +85,12 @@ module.exports = (config, callback) ->
         if fs.existsSync('./build/static')
             fs.copySync './build/static', STATIC_OUT_DIR
         logLine.ok "Static files copied into `#{STATIC_OUT_DIR}`"
+        logLine.stop()
+
+    if fs.existsSync(ICON_DIR)
+        logLine = log.line().timer().loading "Copying icon files into `#{ICON_OUT_DIR}`"
+        fs.copySync ICON_DIR, ICON_OUT_DIR
+        logLine.ok "Icons copied into `#{ICON_OUT_DIR}`"
         logLine.stop()
 
     logLine = log.line().timer().loading 'Copying extensions...'
