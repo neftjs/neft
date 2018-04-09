@@ -36,6 +36,7 @@ module.exports = (options, callback = ->) ->
             logLine.stop()
             apkFiles = cp.execSync "ls -l #{dir}"
             log.debug "Available APK files: #{apkFiles}"
+            callback err
             return
         logLine.ok 'APK installed'
         logLine.stop()
