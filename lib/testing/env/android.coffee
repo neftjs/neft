@@ -194,7 +194,10 @@ runTests = (env, callback) ->
         onLog: (msg) ->
             env.onLog msg, androidProcess
     , (err) ->
-        env.onExit err
+        if env.onExit
+            env.onExit err
+        else
+            callback err
     return
 
 listenOnTests = (env, logsReader, callback) ->

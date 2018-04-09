@@ -49,7 +49,10 @@
             @
 
         line: ->
-            lineLogger?.createLogger(@) or @
+            if process.env.CI
+                @
+            else
+                lineLogger?.createLogger(@) or @
 
         repeat: (opts) ->
             if process.env.CI

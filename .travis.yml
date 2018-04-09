@@ -69,7 +69,7 @@ matrix:
                     - tools
                     - platform-tools
                     # build
-                    - build-tools-25.0.0
+                    - build-tools-27.0.3
                     - android-25
                     # emulators
                     - android-24
