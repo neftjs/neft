@@ -16,6 +16,7 @@ exports.in = do (i = 0) ->
     POINTER_MOVE: i++
     DEVICE_KEYBOARD_SHOW: i++
     DEVICE_KEYBOARD_HIDE: i++
+    DEVICE_KEYBOARD_HEIGHT: i++
     KEY_PRESS: i++
     KEY_HOLD: i++
     KEY_INPUT: i++

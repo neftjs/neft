@@ -48,6 +48,10 @@ module.exports = (impl) ->
         keyboard.visible = false
         return
 
+    bridge.listen bridge.inActions.DEVICE_KEYBOARD_HEIGHT, (reader) ->
+        keyboard.height = reader.getFloat()
+        return
+
     bridge.listen bridge.inActions.KEY_PRESS, (reader) ->
         keyboard.key = reader.getString()
         device.onKeyPress.emit keyboard

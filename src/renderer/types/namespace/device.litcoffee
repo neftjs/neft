@@ -214,6 +214,7 @@ Text {
                 super()
 
                 @_visible = false
+                @_height = 0
                 @_key = ''
                 @_text = ''
 
@@ -227,6 +228,15 @@ Text {
                 constructor: @
                 name: 'visible'
                 defaultValue: false
+
+## ReadOnly *Float* Device.KeyboardEvent::height
+
+## *Signal* Device.KeyboardEvent::onHeightChange(*Float* oldValue)
+
+            itemUtils.defineProperty
+                constructor: @
+                name: 'height'
+                defaultValue: 0
 
 ## ReadOnly *String* Device.KeyboardEvent::key
 
