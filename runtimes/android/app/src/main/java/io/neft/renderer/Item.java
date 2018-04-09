@@ -191,6 +191,7 @@ public class Item {
         this.view = view;
         view.setLayoutParams(new ItemView.LayoutParams(0, 0));
         this.id = APP.getRenderer().registerItem(this);
+        view.itemId = this.id;
         view.setClipChildren(optimized);
     }
 

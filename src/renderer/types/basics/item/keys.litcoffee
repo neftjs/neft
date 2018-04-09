@@ -31,10 +31,6 @@ Rectangle {
             name: 'keys'
             valueConstructor: Keys
 
-## *Boolean* Keys.focusWindowOnPointerPress = `true`
-
-        @focusWindowOnPointerPress = true
-
 ## *Item* Keys.focusedItem
 
         @focusedItem = null
@@ -71,17 +67,6 @@ Rectangle {
 ## *Signal* Keys::onFocusChange(*Boolean* oldValue)
 
         focusedKeys = null
-        focusChangeOnPointerPress = false
-
-        Renderer.onReady ->
-            Renderer.Device.onPointerPress ->
-                focusChangeOnPointerPress = false
-
-        Renderer.onWindowItemChange ->
-            Impl.windowItem.pointer.onPress ->
-                if Keys.focusWindowOnPointerPress and not focusChangeOnPointerPress
-                    @keys.focus = true
-            , Impl.windowItem
 
         itemUtils.defineProperty
             constructor: Keys
@@ -93,25 +78,15 @@ Rectangle {
             developmentSetter: (val) ->
                 assert.isBoolean val
             setter: (_super) -> (val) ->
-                if val
-                    focusChangeOnPointerPress = true
                 if @_focus isnt val
                     if val and focusedKeys isnt @
-                        if focusedKeys
-                            oldVal = focusedKeys
-                            focusedKeys = null
-                            Impl.setItemKeysFocus.call oldVal._ref, false
-                            oldVal._focus = false
-                            oldVal.onFocusChange.emit true
-                            oldVal._ref.onKeysChange.emit oldVal
+                        focusedKeys?.focus = false
                         focusedKeys = @
                         Keys.focusedItem = @_ref
                     _super.call @, val
                     if not val and focusedKeys is @
                         focusedKeys = null
                         Keys.focusedItem = null
-                        if focusedKeys isnt Impl.windowItem.keys
-                            Impl.windowItem.keys.focus = true
                 return
 
         Device.onKeyPress (event) ->

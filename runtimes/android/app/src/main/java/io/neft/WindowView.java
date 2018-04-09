@@ -2,7 +2,9 @@ package io.neft;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewParent;
+import android.view.ViewTreeObserver;
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
 import io.neft.client.Reader;
@@ -34,6 +36,13 @@ public class WindowView extends ItemView {
         super(context);
         requestFocus();
         setBackgroundColor(Color.WHITE);
+
+        getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
+            @Override
+            public void onGlobalFocusChanged(View oldFocus, View newFocus) {
+                onFocusViewChanged(newFocus);
+            }
+        });
     }
 
     @Override
@@ -46,7 +55,22 @@ public class WindowView extends ItemView {
         }
         float dpWidth = renderer.pxToDp(width);
         float dpHeight = renderer.pxToDp(height);
-        System.out.println("RESIZE TO " + dpWidth + "x" + dpHeight);
         APP.getClient().pushAction(OutAction.WINDOW_RESIZE, dpWidth, dpHeight);
+    }
+
+    public void onFocusViewChanged(View view) {
+        View parent = view;
+        while (parent != null) {
+            if (parent instanceof ItemView) {
+                ItemView itemView = ((ItemView) parent);
+                int itemId = itemView.getItemId();
+                if (itemId > 0) {
+                    APP.getClient().pushAction(OutAction.ITEM_KEYS_FOCUS, itemId);
+                    break;
+                }
+            }
+            ViewParent anyParent = parent.getParent();
+            parent = anyParent instanceof View ? (View) anyParent : null;
+        }
     }
 }
