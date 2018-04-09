@@ -4,6 +4,7 @@ enum InAction: Int {
     callFunction = 0,
 
     // renderer
+    setScreenStatusBarColor,
     deviceLog,
     deviceShowKeyboard,
     deviceHideKeyboard,

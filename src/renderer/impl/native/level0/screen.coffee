@@ -2,6 +2,7 @@
 
 module.exports = (impl) ->
     {bridge} = impl
+    {outActions, pushAction, pushString} = bridge
 
     callback = screen = null
 
@@ -16,8 +17,17 @@ module.exports = (impl) ->
         screen.orientation = reader.getString()
         return
 
+    bridge.listen bridge.inActions.SCREEN_STATUSBAR_HEIGHT, (reader) ->
+        screen.statusBar._height = reader.getFloat()
+        return
+
     initScreenNamespace: (_callback) ->
         callback = _callback
         screen = this
 
         @_touch = true # TODO
+
+    setScreenStatusBarColor: (val) ->
+        pushAction outActions.SET_SCREEN_STATUSBAR_COLOR
+        pushString val
+        return

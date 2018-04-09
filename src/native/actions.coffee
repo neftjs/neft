@@ -7,6 +7,7 @@ exports.in = do (i = 0) ->
     # renderer
     SCREEN_SIZE: i++
     SCREEN_ORIENTATION: i++
+    SCREEN_STATUSBAR_HEIGHT: i++
     NAVIGATOR_LANGUAGE: i++
     NAVIGATOR_ONLINE: i++
     DEVICE_PIXEL_RATIO: i++
@@ -34,6 +35,8 @@ exports.out = do (i = 0) ->
     CALL_FUNCTION: i++
 
     # renderer
+    SET_SCREEN_STATUSBAR_COLOR: i++
+
     DEVICE_LOG: i++
     DEVICE_SHOW_KEYBOARD: i++
     DEVICE_HIDE_KEYBOARD: i++
