@@ -10,7 +10,7 @@ FATAL_ERROR_DELAY = 2000
 
 module.exports = (options, callback = ->) ->
     callbackCalled = false
-    mode = if options.release then 'release' else 'develop'
+    mode = if options.release then 'release' else 'debug'
 
     logLine = log.line().timer().repeat().loading 'Installing APK...'
     packageFile = JSON.parse fs.readFileSync('./package.json', 'utf-8')
@@ -21,7 +21,7 @@ module.exports = (options, callback = ->) ->
         sdkDir = process.env.ANDROID_HOME
 
     adbPath = "#{sdkDir}/platform-tools/adb"
-    apkFileName = 'app-universal-debug.apk'
+    apkFileName = "app-universal-#{mode}.apk"
 
     if options.deviceSerialNumber
         adbPath += " -s #{options.deviceSerialNumber}"
@@ -29,12 +29,12 @@ module.exports = (options, callback = ->) ->
     adb = logcat = null
 
     dir = "build/android/app/build/outputs/apk"
-    cmd = "#{adbPath} install -r #{dir}/#{apkFileName}"
+    cmd = "#{adbPath} install -r #{dir}/#{mode}/#{apkFileName}"
     adb = cp.exec cmd, (err) ->
         if err
             logLine.error 'Cannot install APK', err
             logLine.stop()
-            apkFiles = cp.execSync "ls -l #{dir}"
+            apkFiles = cp.execSync "ls -l #{dir}/*"
             log.debug "Available APK files: #{apkFiles}"
             callback err
             return
