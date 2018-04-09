@@ -69,7 +69,7 @@ import JavaScriptCore
             let request = js.pendingRequests[id]
             if request != nil {
                 js.pendingRequests.removeValue(forKey: id)
-                request!(data.object(forKey: "response")! as AnyObject)
+                request!(data.object(forKey: "response") as? AnyObject)
             } else {
                 print("Response has no handler; id '\(id)'")
             }
@@ -140,7 +140,7 @@ class JS {
     fileprivate var handlers: Dictionary<String, (_ message: AnyObject) -> ()> = [:]
 
     var lastRequestId = 0
-    var pendingRequests: Dictionary<Int, (_ message: AnyObject) -> Void> = [:]
+    var pendingRequests: Dictionary<Int, (_ message: AnyObject?) -> Void> = [:]
 
     init(){
         context = JSContext()
@@ -150,7 +150,7 @@ class JS {
         self.runScript("js")
         context.exceptionHandler = {
             (context: JSContext!, value: JSValue!) in
-            NSLog("JS ERROR: \(value.objectForKeyedSubscript("stack").toString())")
+            NSLog("JS ERROR: \(value.objectForKeyedSubscript("message").toString())\n\(value.objectForKeyedSubscript("stack").toString())")
         }
     }
 
@@ -172,20 +172,32 @@ class JS {
         handlers[name] = handler
     }
 
-    func callFunction(_ name: String, argv: String = "", completion: ((_ message: AnyObject) -> Void)? = nil) {
-        var code = name + "(" + argv
+    func callFunction(_ name: String? = nil, argv: String? = nil, completion: ((_ message: AnyObject?) -> Void)? = nil) {
+        var code = ""
+        if name != nil {
+            code += name! + "(" + (argv ?? "")
+        }
         if completion != nil {
             let id = self.lastRequestId
             self.lastRequestId += 1
             pendingRequests[id] = completion
-            if !argv.isEmpty {
+            if argv != nil && !argv!.isEmpty {
                 code += ", "
             }
             code += "_createOnCompletion(\(id))"
         }
-        code += ")"
-
+        code += name == nil ? "()" : ")"
         self.context.evaluateScript(code)
+    }
+
+    func blockUntilFree() {
+        let group = DispatchGroup()
+        group.enter()
+        callFunction {
+            (message: AnyObject?) in
+            group.leave()
+        }
+        group.wait()
     }
 
     func callAnimationFrame() {
