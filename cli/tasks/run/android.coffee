@@ -31,7 +31,7 @@ module.exports = (options, callback = ->) ->
     cmd = "#{adbPath} install -r build/android/app/build/outputs/apk/#{apkFileName}"
     adb = cp.exec cmd, (err) ->
         if err
-            logLine.error 'Cannot install APK'
+            logLine.error 'Cannot install APK', err
             logLine.stop()
             return
         logLine.ok 'APK installed'
