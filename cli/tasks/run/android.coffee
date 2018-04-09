@@ -28,11 +28,14 @@ module.exports = (options, callback = ->) ->
 
     adb = logcat = null
 
-    cmd = "#{adbPath} install -r build/android/app/build/outputs/apk/#{apkFileName}"
+    dir = "build/android/app/build/outputs/apk"
+    cmd = "#{adbPath} install -r #{dir}/#{apkFileName}"
     adb = cp.exec cmd, (err) ->
         if err
             logLine.error 'Cannot install APK', err
             logLine.stop()
+            apkFiles = cp.execSync "ls -l #{dir}"
+            log.debug "Available APK files: #{apkFiles}"
             return
         logLine.ok 'APK installed'
         logLine.stop()
