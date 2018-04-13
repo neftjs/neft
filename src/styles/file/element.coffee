@@ -93,7 +93,8 @@ module.exports = (Document) ->
                 docStyle.setVisibility val
             else if node instanceof Tag
                 for child in node.children
-                    setVisibleForNode child, val
+                    if child.visible
+                        setVisibleForNode child, val
             return
 
         updateTextNode = (node) ->
