@@ -388,6 +388,17 @@ describe 'styles', ->
             node.visible = false
             assert.is doc.styles[0].item.visible, false
 
+        it "is 'false' when not-styled node parent comes visible on invisible item", ->
+            doc = render
+                html: """<div visible="false">
+                    <b n-style="renderer:Item" visible="false" />
+                </div>"""
+
+            node = doc.node.query 'div'
+
+            node.visible = true
+            assert.is doc.styles[0].item.visible, false
+
         it "is 'true' if the styled node parent is invisible", ->
             doc = render
                 html: """<div n-style="renderer:Rectangle" visible="false">
