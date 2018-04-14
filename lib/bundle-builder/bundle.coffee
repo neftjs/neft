@@ -49,7 +49,7 @@ FILE_SCOPE = """(function(){
 
         requireFunc.initModule = function (path, moduleExports) {
             if (!__modules[path]) {
-                throw new Error('Cannot initialize unknown module ' + path)
+                __modules[path] = function() { return moduleExports }
             }
             initialized[path] = true;
             exports[path] = moduleExports;
