@@ -121,6 +121,17 @@ describe 'Document n-each', ->
         renderParse view
         assert.is view.node.stringify(), '<ul>11</ul><ul>11</ul>'
 
+    it 'updates parent component `state` object bindings', ->
+        source = createView '''
+            <ul n-each="[1,2]">${state.a}</ul>
+            <ul n-each="[1,2]">${this.state.a}</ul>
+        '''
+        view = source.clone()
+
+        renderParse view
+        view.inputState.set 'a', 2
+        assert.is view.node.stringify(), '<ul>22</ul><ul>22</ul>'
+
     it 'internal props are not accessible by scope', ->
         source = createView '''
             <ul n-each="[0]">

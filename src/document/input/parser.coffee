@@ -8,6 +8,7 @@ bindingParser = require 'src/binding/parser'
 PARSER_OPTS =
     globalIdToThis:
         context: true
+        state: true
     modifyBindingPart: (elem) ->
         # File scope doesn't have signal on 'context' change, so
         # we need to use short '${context}' syntax which uses Input::context.
