@@ -35,8 +35,6 @@
         scopes.push scope
 
         # before/after functions
-        push.apply scope.beforeAllFunctions, currentScope.beforeAllFunctions
-        push.apply scope.afterAllFunctions, currentScope.afterAllFunctions
         push.apply scope.beforeEachFunctions, currentScope.beforeEachFunctions
         push.apply scope.afterEachFunctions, currentScope.afterEachFunctions
 
