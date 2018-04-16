@@ -14,7 +14,7 @@ TESTS_FILE_PATH = './build/tests.js'
 exports.saveBuildTestsFile = (target, callback) ->
     indexFile = ''
 
-    glob './tests/!(node_modules)/**/*.?(js|coffee)', (err, files) ->
+    glob './tests/**/*.?(js|coffee)', ignore: './tests/node_modules/**/*', (err, files) ->
         files.sort (a, b) ->
             if INIT_FILES[a] then -1 else 0
 
