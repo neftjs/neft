@@ -1,0 +1,781 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="/styles/main.css">
+<nav id="navbar">
+    <div class="main">
+        <div class="logo">
+            <a href="/">
+                <img src="/media/logo-lines-text-on.svg" alt="Neft.io" />
+            </a>
+        </div>
+
+        <div class="links">
+            <a href="/guide/get-started.html" class="">Guide</a>
+            <a href="/api/app.html" class="active">API</a>
+            <!--<a href="/examples.html" class="">Examples</a>-->
+        </div>
+
+        <div id="searchResult"></div>
+        <input id="search" type="text" placeholder="Search">
+        <span id="searchTitle">Search</span>
+    </div>
+</nav>
+<div class="main">
+    <aside id="aside">
+<ul>
+    <li>
+        <a href="/api/app.html" class="">
+            App
+        </a>
+<ul>
+    <li>
+        <a href="/api/app-route.html" class="">
+            Route
+        </a>
+    </li>
+    <li>
+        <a href="/api/app-standard-routes.html" class="">
+            Standard routes
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/assert.html" class="">
+            Assertions
+        </a>
+    </li>
+    <li>
+        <a href="/api/db.html" class="">
+            Database
+        </a>
+    </li>
+    <li>
+        <a href="/api/dict.html" class="">
+            Dict
+        </a>
+    </li>
+    <li>
+        <a href="/api/document.html" class="">
+            Document
+        </a>
+<ul>
+    <li>
+        <a href="/api/document-element.html" class="">
+            Element
+        </a>
+<ul>
+    <li>
+        <a href="/api/document-*class*-tag-:-*element*.html" class="">
+            Tag
+        </a>
+<ul>
+    <li>
+        <a href="/api/document-props.html" class="">
+            Props
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/document-text.html" class="">
+            Text
+        </a>
+    </li>
+</ul>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/list.html" class="">
+            List
+        </a>
+    </li>
+    <li>
+        <a href="/api/log.html" class="">
+            Log
+        </a>
+    </li>
+    <li>
+        <a href="/api/native.html" class="">
+            Native
+        </a>
+    </li>
+    <li>
+        <a href="/api/networking.html" class="">
+            Networking
+        </a>
+<ul>
+    <li>
+        <a href="/api/networking-handler.html" class="">
+            Handler
+        </a>
+    </li>
+    <li>
+        <a href="/api/networking-request.html" class="">
+            Request
+        </a>
+    </li>
+    <li>
+        <a href="/api/networking-response.html" class="">
+            Response
+        </a>
+<ul>
+    <li>
+        <a href="/api/networking-response-error.html" class="">
+            Response Error
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/networking-uri.html" class="">
+            Uri
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer.html" class="">
+            Renderer
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-animation.html" class="">
+            Animation
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-parallelanimation.html" class="">
+            ParallelAnimation
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-propertyanimation.html" class="">
+            PropertyAnimation
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-easing.html" class="">
+            Easing
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-numberanimation.html" class="">
+            NumberAnimation
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer-sequentialanimation.html" class="">
+            SequentialAnimation
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer-class.html" class="">
+            Class
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-column.html" class="">
+            Column
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-device.html" class="">
+            Device
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-extension.html" class="">
+            Extension
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-flow.html" class="">
+            Flow
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-fontloader.html" class="">
+            FontLoader
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-grid.html" class="">
+            Grid
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-image.html" class="">
+            Image
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-item.html" class="active">
+            Item
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-alignment.html" class="">
+            Alignment
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-anchors.html" class="">
+            Anchors
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-keys.html" class="">
+            Keys
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-layout.html" class="">
+            Layout
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-margin.html" class="">
+            Margin
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-pointer.html" class="">
+            Pointer
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-spacing.html" class="">
+            Spacing
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer-native.html" class="">
+            Native
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-navigator.html" class="">
+            Navigator
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-rectangle.html" class="">
+            Rectangle
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-resourcesloader.html" class="">
+            ResourcesLoader
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-row.html" class="">
+            Row
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-screen.html" class="">
+            Screen
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-statusbar.html" class="">
+            StatusBar
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer-text.html" class="">
+            Text
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-font.html" class="">
+            Font
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer-transition.html" class="">
+            Transition
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/resources.html" class="">
+            Resources
+        </a>
+<ul>
+    <li>
+        <a href="/api/resources-resource.html" class="">
+            Resource
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/schema.html" class="">
+            Schema
+        </a>
+<ul>
+    <li>
+        <a href="/api/schema-array-validator.html" class="">
+            Array Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-max-validator.html" class="">
+            Max Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-min-validator.html" class="">
+            Min Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-object-validator.html" class="">
+            Object Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-optional-validator.html" class="">
+            Optional Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-options-validator.html" class="">
+            Options Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-regexp-validator.html" class="">
+            RegExp Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-type-validator.html" class="">
+            Type Validator
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/signal.html" class="">
+            Signal
+        </a>
+    </li>
+    <li>
+        <a href="/api/typed-array.html" class="">
+            Typed Array
+        </a>
+    </li>
+    <li>
+        <a href="/api/utils.html" class="">
+            Utils
+        </a>
+<ul>
+    <li>
+        <a href="/api/utils-asynchronous.html" class="">
+            Asynchronous
+        </a>
+    </li>
+    <li>
+        <a href="/api/utils-properties-extraction.html" class="">
+            Properties extraction
+        </a>
+    </li>
+    <li>
+        <a href="/api/utils-stringifying.html" class="">
+            Stringifying
+        </a>
+    </li>
+</ul>
+    </li>
+</ul>
+    </aside>
+    <main class="content" id="api">
+        <h1 id="item">Item</h1>
+<blockquote>
+<p><strong>API</strong> ▸ <a href="/api/renderer.html">Renderer</a> ▸ <strong>Item</strong></p>
+</blockquote>
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee"><code>Source</code></a></p>
+<h2 id="item-new-options-">Item.<strong>New</strong>(<em>options</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>options — <code>Object</code> — <i>optional</i></li></ul></dd><dt>Returns:</dt><dd><code>Item</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#item-itemnewobject-options"><code>Source</code></a></p>
+<h2 id="item-constructor-">Item::<strong>constructor</strong>()</h2>
+<dl><dt>Returns:</dt><dd><code>Item</code></dd></dl>
+
+<p>This is a base class for everything which is visible.</p>
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#item-itemconstructor"><code>Source</code></a></p>
+<h3 id="custom-properties">Custom properties</h3>
+<pre><code class="hljs nml"><span class="hljs-title">Item</span> {
+    <span class="hljs-attribute">id:</span><span class="hljs-string"> main</span>
+    <span class="hljs-keyword">property</span><span class="hljs-string"> currentLife</span>: <span class="hljs-number">0.8</span>
+    <span class="hljs-title">Text</span> {
+        <span class="hljs-attribute">text</span>: <span class="hljs-string">"Life: "</span> + main.currentLife
+    }
+}
+</code></pre>
+<h3 id="custom-signals">Custom signals</h3>
+<pre><code class="hljs nml"><span class="hljs-title">Item</span> {
+    <span class="hljs-keyword">signal</span><span class="hljs-string"> onPlayerCollision</span>
+    onPlayerCollision(){
+        <span class="hljs-comment">// boom!</span>
+    }
+}
+</code></pre>
+<h2 id="item-query">Item::<strong>query</strong></h2>
+<dl><dt>Type:</dt><dd><code>String</code></dd><dt>Read Only</dt></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#readonly-string-itemquery"><code>Source</code></a></p>
+<h2 id="item-node">Item::<strong>node</strong></h2>
+<dl><dt>Type:</dt><dd><code>Document.Element</code></dd><dt>Read Only</dt></dl>
+
+<h2 id="item-onnodechange-oldvalue-">Item::<strong>onNodeChange</strong>(<em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Document.Element</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+<pre><code class="hljs javascript">Text {
+    <span class="hljs-attr">text</span>: <span class="hljs-keyword">this</span>.node.props.value
+}
+</code></pre>
+<pre><code class="hljs javascript">Text {
+    <span class="hljs-attr">onNodeChange</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+        <span class="hljs-keyword">var</span> inputs = <span class="hljs-keyword">this</span>.node.queryAll(<span class="hljs-string">'input[type=string]'</span>);
+    }
+}
+</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonnodechangedocumentelement-oldvalue"><code>Source</code></a></p>
+<h2 id="item-ready-">Item::<strong>ready</strong>()</h2>
+<dl><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+<p>Called when the Item is ready, that is, all
+properties have been set and it&#39;s ready to use.</p>
+<pre><code class="hljs nml"><span class="hljs-title">Rectangle</span> {
+    <span class="hljs-attribute">width</span>: <span class="hljs-number">200</span>
+    <span class="hljs-attribute">height</span>: <span class="hljs-number">50</span>
+    <span class="hljs-attribute">color</span>: <span class="hljs-string">'green'</span>
+    <span class="hljs-title">Rectangle</span> {
+        <span class="hljs-attribute">width</span>: <span class="hljs-built_in">parent</span>.width / <span class="hljs-number">2</span>
+        <span class="hljs-attribute">height</span>: <span class="hljs-built_in">parent</span>.height / <span class="hljs-number">2</span>
+        <span class="hljs-attribute">color</span>: <span class="hljs-string">'yellow'</span>
+        <span class="hljs-attribute">onReady</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.width, <span class="hljs-keyword">this</span>.height);
+            <span class="hljs-comment">// 100, 25</span>
+        }
+    }
+}
+</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemready"><code>Source</code></a></p>
+<h2 id="item-onanimationframe-miliseconds-">Item::<strong>onAnimationFrame</strong>(<em>miliseconds</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>miliseconds — <code>Integer</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonanimationframeinteger-miliseconds"><code>Source</code></a></p>
+<h2 id="item-id">Item::<strong>id</strong></h2>
+<dl><dt>Type:</dt><dd><code>String</code></dd><dt>Read Only</dt></dl>
+
+<h2 id="item-children">Item::<strong>children</strong></h2>
+<dl><dt>Type:</dt><dd><code>Object</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#object-itemchildren"><code>Source</code></a></p>
+<h2 id="item-onchildrenchange-added-removed-">Item::<strong>onChildrenChange</strong>(<em>added</em>, <em>removed</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>added — <code>Item</code></li><li>removed — <code>Item</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonchildrenchangeitem-added-item-removed"><code>Source</code></a></p>
+<h3 id="item-children-firstchild">Item::<strong>children.firstChild</strong></h3>
+<dl><dt>Type:</dt><dd><code>Item</code></dd><dt>Read Only</dt></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#readonly-item-itemchildrenfirstchild"><code>Source</code></a></p>
+<h3 id="item-children-lastchild">Item::<strong>children.lastChild</strong></h3>
+<dl><dt>Type:</dt><dd><code>Item</code></dd><dt>Read Only</dt></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#readonly-item-itemchildrenlastchild"><code>Source</code></a></p>
+<h3 id="item-children-bottomchild">Item::<strong>children.bottomChild</strong></h3>
+<dl><dt>Type:</dt><dd><code>Item</code></dd><dt>Read Only</dt></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#readonly-item-itemchildrenbottomchild"><code>Source</code></a></p>
+<h3 id="item-children-topchild">Item::<strong>children.topChild</strong></h3>
+<dl><dt>Type:</dt><dd><code>Item</code></dd><dt>Read Only</dt></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#readonly-item-itemchildrentopchild"><code>Source</code></a></p>
+<h3 id="item-children-length">Item::<strong>children.length</strong></h3>
+<dl><dt>Type:</dt><dd><code>Integer</code></dd><dt>Read Only</dt></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#readonly-integer-itemchildrenlength"><code>Source</code></a></p>
+<h3 id="item-children-layout">Item::<strong>children.layout</strong></h3>
+<dl><dt>Type:</dt><dd><code>Item</code></dd></dl>
+
+<p>Item used to position children items.
+Can be e.g. <em>Flow</em>, <em>Grid</em> etc.</p>
+<h3 id="item-children-onlayoutchange-oldvalue-">Item::<strong>children.onLayoutChange</strong>(<em>oldValue</em>)</h3>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Item</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemchildrenonlayoutchangeitem-oldvalue"><code>Source</code></a></p>
+<h3 id="item-children-target">Item::<strong>children.target</strong></h3>
+<dl><dt>Type:</dt><dd><code>Item</code></dd></dl>
+
+<p>A new child trying to be added into the item with the <code>children.target</code> defined
+will be added into the <code>target</code> item.</p>
+<h3 id="item-children-ontargetchange-oldvalue-">Item::<strong>children.onTargetChange</strong>(<em>oldValue</em>)</h3>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Item</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemchildrenontargetchangeitem-oldvalue"><code>Source</code></a></p>
+<h3 id="item-children-get-index-">Item::<strong>children.get</strong>(<em>index</em>)</h3>
+<dl><dt>Parameters:</dt><dd><ul><li>index — <code>Integer</code></li></ul></dd><dt>Returns:</dt><dd><code>Item</code></dd></dl>
+
+<p>Returns an item with the given index.</p>
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#item-itemchildrengetinteger-index"><code>Source</code></a></p>
+<h3 id="item-children-index-value-">Item::<strong>children.index</strong>(<em>value</em>)</h3>
+<dl><dt>Parameters:</dt><dd><ul><li>value — <code>Item</code></li></ul></dd><dt>Returns:</dt><dd><code>Integer</code></dd></dl>
+
+<p>Returns an index of the given child in the children array.</p>
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#integer-itemchildrenindexitem-value"><code>Source</code></a></p>
+<h3 id="item-children-has-value-">Item::<strong>children.has</strong>(<em>value</em>)</h3>
+<dl><dt>Parameters:</dt><dd><ul><li>value — <code>Item</code></li></ul></dd><dt>Returns:</dt><dd><code>Boolean</code></dd></dl>
+
+<p>Returns <code>true</code> if the given item is an item child.</p>
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#boolean-itemchildrenhasitem-value"><code>Source</code></a></p>
+<h3 id="item-children-clear-">Item::<strong>children.clear</strong>()</h3>
+<p>Removes all children from the item.</p>
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#itemchildrenclear"><code>Source</code></a></p>
+<h2 id="item-parent">Item::<strong>parent</strong></h2>
+<dl><dt>Type:</dt><dd><code>Item</code></dd><dt>Default value:</dt><dd><code>null</code></dd></dl>
+
+<h2 id="item-onparentchange-oldparent-">Item::<strong>onParentChange</strong>(<em>oldParent</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>oldParent — <code>Item</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonparentchangeitem-oldparent"><code>Source</code></a></p>
+<h2 id="item-previoussibling">Item::<strong>previousSibling</strong></h2>
+<dl><dt>Type:</dt><dd><code>Item</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#item-itemprevioussibling"><code>Source</code></a></p>
+<h2 id="item-onprevioussiblingchange-oldvalue-">Item::<strong>onPreviousSiblingChange</strong>(<em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Item</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonprevioussiblingchangeitem-oldvalue"><code>Source</code></a></p>
+<h2 id="item-nextsibling">Item::<strong>nextSibling</strong></h2>
+<dl><dt>Type:</dt><dd><code>Item</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#item-itemnextsibling"><code>Source</code></a></p>
+<h2 id="item-onnextsiblingchange-oldvalue-">Item::<strong>onNextSiblingChange</strong>(<em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Item</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonnextsiblingchangeitem-oldvalue"><code>Source</code></a></p>
+<h2 id="item-belowsibling">Item::<strong>belowSibling</strong></h2>
+<dl><dt>Type:</dt><dd><code>Item</code></dd><dt>Read Only</dt></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#readonly-item-itembelowsibling"><code>Source</code></a></p>
+<h2 id="item-abovesibling">Item::<strong>aboveSibling</strong></h2>
+<dl><dt>Type:</dt><dd><code>Item</code></dd><dt>Read Only</dt></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#readonly-item-itemabovesibling"><code>Source</code></a></p>
+<h2 id="item-index">Item::<strong>index</strong></h2>
+<dl><dt>Type:</dt><dd><code>Integer</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#integer-itemindex"><code>Source</code></a></p>
+<h2 id="item-visible">Item::<strong>visible</strong></h2>
+<dl><dt>Type:</dt><dd><code>Boolean</code></dd><dt>Default value:</dt><dd><code>true</code></dd></dl>
+
+<p>Determines whether an item is visible or not.</p>
+<pre><code class="hljs nml"><span class="hljs-title">Item</span> {
+    <span class="hljs-attribute">width</span>: <span class="hljs-number">100</span>
+    <span class="hljs-attribute">height</span>: <span class="hljs-number">100</span>
+    <span class="hljs-attribute">pointer.onClick</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+        <span class="hljs-built_in">rect</span>.visible = !<span class="hljs-built_in">rect</span>.visible;
+        text.text = <span class="hljs-built_in">rect</span>.visible ? <span class="hljs-string">"Click to hide"</span> : <span class="hljs-string">"Click to show"</span>;
+    }
+    <span class="hljs-title">Rectangle</span> {
+        <span class="hljs-attribute">id:</span><span class="hljs-string"> rect</span>
+        <span class="hljs-attribute">anchors.fill</span>: <span class="hljs-built_in">parent</span>
+        <span class="hljs-attribute">color</span>: <span class="hljs-string">'blue'</span>
+    }
+    <span class="hljs-title">Text</span> {
+        <span class="hljs-attribute">id:</span><span class="hljs-string"> text</span>
+        <span class="hljs-attribute">text</span>: <span class="hljs-string">"Click to hide"</span>
+        <span class="hljs-attribute">anchors.centerIn</span>: <span class="hljs-built_in">parent</span>
+    }
+}
+</code></pre>
+<h2 id="item-onvisiblechange-oldvalue-">Item::<strong>onVisibleChange</strong>(<em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Boolean</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonvisiblechangeboolean-oldvalue"><code>Source</code></a></p>
+<h2 id="item-clip">Item::<strong>clip</strong></h2>
+<dl><dt>Type:</dt><dd><code>Boolean</code></dd><dt>Default value:</dt><dd><code>false</code></dd></dl>
+
+<h2 id="item-onclipchange-oldvalue-">Item::<strong>onClipChange</strong>(<em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Boolean</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonclipchangeboolean-oldvalue"><code>Source</code></a></p>
+<h2 id="item-width">Item::<strong>width</strong></h2>
+<dl><dt>Type:</dt><dd><code>Float</code></dd><dt>Default value:</dt><dd><code>0</code></dd></dl>
+
+<h2 id="item-onwidthchange-oldvalue-">Item::<strong>onWidthChange</strong>(<em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Float</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonwidthchangefloat-oldvalue"><code>Source</code></a></p>
+<h2 id="item-height">Item::<strong>height</strong></h2>
+<dl><dt>Type:</dt><dd><code>Float</code></dd><dt>Default value:</dt><dd><code>0</code></dd></dl>
+
+<h2 id="item-onheightchange-oldvalue-">Item::<strong>onHeightChange</strong>(<em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Float</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonheightchangefloat-oldvalue"><code>Source</code></a></p>
+<h2 id="item-x">Item::<strong>x</strong></h2>
+<dl><dt>Type:</dt><dd><code>Float</code></dd><dt>Default value:</dt><dd><code>0</code></dd></dl>
+
+<h2 id="item-onxchange-oldvalue-">Item::<strong>onXChange</strong>(<em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Float</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonxchangefloat-oldvalue"><code>Source</code></a></p>
+<h2 id="item-y">Item::<strong>y</strong></h2>
+<dl><dt>Type:</dt><dd><code>Float</code></dd><dt>Default value:</dt><dd><code>0</code></dd></dl>
+
+<h2 id="item-onychange-oldvalue-">Item::<strong>onYChange</strong>(<em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Float</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonychangefloat-oldvalue"><code>Source</code></a></p>
+<h2 id="item-z">Item::<strong>z</strong></h2>
+<dl><dt>Type:</dt><dd><code>Float</code></dd><dt>Default value:</dt><dd><code>0</code></dd></dl>
+
+<h2 id="item-onzchange-oldvalue-">Item::<strong>onZChange</strong>(<em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Float</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonzchangefloat-oldvalue"><code>Source</code></a></p>
+<h2 id="item-scale">Item::<strong>scale</strong></h2>
+<dl><dt>Type:</dt><dd><code>Float</code></dd><dt>Default value:</dt><dd><code>1</code></dd></dl>
+
+<h2 id="item-onscalechange-oldvalue-">Item::<strong>onScaleChange</strong>(<em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Float</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonscalechangefloat-oldvalue"><code>Source</code></a></p>
+<h2 id="item-rotation">Item::<strong>rotation</strong></h2>
+<dl><dt>Type:</dt><dd><code>Float</code></dd><dt>Default value:</dt><dd><code>0</code></dd></dl>
+
+<pre><code class="hljs nml"><span class="hljs-title">Rectangle</span> {
+    <span class="hljs-attribute">width</span>: <span class="hljs-number">100</span>
+    <span class="hljs-attribute">height</span>: <span class="hljs-number">100</span>
+    <span class="hljs-attribute">color</span>: <span class="hljs-string">'red'</span>
+    <span class="hljs-attribute">rotation</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span>
+}
+</code></pre>
+<h2 id="item-onrotationchange-oldvalue-">Item::<strong>onRotationChange</strong>(<em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Float</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonrotationchangefloat-oldvalue"><code>Source</code></a></p>
+<h2 id="item-opacity">Item::<strong>opacity</strong></h2>
+<dl><dt>Type:</dt><dd><code>Float</code></dd><dt>Default value:</dt><dd><code>1</code></dd></dl>
+
+<h2 id="item-onopacitychange-oldvalue-">Item::<strong>onOpacityChange</strong>(<em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Float</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonopacitychangefloat-oldvalue"><code>Source</code></a></p>
+<h2 id="item-linkuri">Item::<strong>linkUri</strong></h2>
+<dl><dt>Type:</dt><dd><code>String</code></dd><dt>Default value:</dt><dd><code>&#39;&#39;</code></dd></dl>
+
+<p>Points to the URI which will be used when user clicks on this item.</p>
+<h2 id="item-onlinkurichange-oldvalue-">Item::<strong>onLinkUriChange</strong>(<em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>String</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonlinkurichangestring-oldvalue"><code>Source</code></a></p>
+<h2 id="item-scaleinpoint-scale-pointx-pointy-">Item::<strong>scaleInPoint</strong>(<em>scale</em>, <em>pointX</em>, <em>pointY</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>scale — <code>Float</code></li><li>pointX — <code>Float</code></li><li>pointY — <code>Float</code></li></ul></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#itemscaleinpointfloat-scale-float-pointx-float-pointy"><code>Source</code></a></p>
+<h2 id="item-getglobalcomputes-">Item::<strong>getGlobalComputes</strong>()</h2>
+<dl><dt>Returns:</dt><dd><code>Object</code></dd></dl>
+
+<p>Returns globally computed x, y, scale, rotation, visible and opacity.</p>
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#object-itemgetglobalcomputes"><code>Source</code></a></p>
+<h2 id="item-anchors">Item::<strong>anchors</strong></h2>
+<dl><dt>Type:</dt><dd><code>Item.Anchors</code></dd></dl>
+
+<h2 id="item-onanchorschange-property-oldvalue-">Item::<strong>onAnchorsChange</strong>(<em>property</em>, <em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>property — <code>String</code></li><li>oldValue — <code>Array</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonanchorschangestring-property-array-oldvalue"><code>Source</code></a></p>
+<h2 id="item-layout">Item::<strong>layout</strong></h2>
+<dl><dt>Type:</dt><dd><code>Item.Layout</code></dd></dl>
+
+<h2 id="item-onlayoutchange-property-oldvalue-">Item::<strong>onLayoutChange</strong>(<em>property</em>, <em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>property — <code>String</code></li><li>oldValue — <code>Any</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonlayoutchangestring-property-any-oldvalue"><code>Source</code></a></p>
+<h2 id="item-pointer">Item::<strong>pointer</strong></h2>
+<dl><dt>Type:</dt><dd><code>Item.Pointer</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#itempointer-itempointer"><code>Source</code></a></p>
+<h2 id="item-margin">Item::<strong>margin</strong></h2>
+<dl><dt>Type:</dt><dd><code>Item.Margin</code></dd></dl>
+
+<h2 id="item-onmarginchange-property-oldvalue-">Item::<strong>onMarginChange</strong>(<em>property</em>, <em>oldValue</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>property — <code>String</code></li><li>oldValue — <code>Any</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonmarginchangestring-property-any-oldvalue"><code>Source</code></a></p>
+<h2 id="item-keys">Item::<strong>keys</strong></h2>
+<dl><dt>Type:</dt><dd><code>Item.Keys</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#itemkeys-itemkeys"><code>Source</code></a></p>
+
+    </main>
+</div>
+<link rel="stylesheet" type="text/css" href="/styles/highlights-github.css">
+<script src="/scripts/aside.js"></script>
+<script src="/scripts/svg-render.js"></script>
+<script src="/scripts/search-texts.js"></script>
+<script src="/scripts/elasticlunr.min.js"></script>
+<script src="/scripts/search.js"></script>

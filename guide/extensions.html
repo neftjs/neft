@@ -1,0 +1,168 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="/styles/main.css">
+<nav id="navbar">
+    <div class="main">
+        <div class="logo">
+            <a href="/">
+                <img src="/media/logo-white-text-on.svg" alt="Neft.io" />
+            </a>
+        </div>
+
+        <div class="links">
+            <a href="/guide/get-started.html" class="active">Guide</a>
+            <a href="/api/app.html" class="">API</a>
+            <!--<a href="/examples.html" class="">Examples</a>-->
+        </div>
+
+        <div id="searchResult"></div>
+        <input id="search" type="text" placeholder="Search">
+        <span id="searchTitle">Search</span>
+    </div>
+</nav>
+<div class="main">
+    <aside id="aside">
+<ul>
+    <li>
+        <a href="/guide/get-started.html" class="">
+            Get Started
+        </a>
+    </li>
+    <li>
+        <a href="/guide/testing.html" class="">
+            Testing
+        </a>
+    </li>
+    <li>
+        <a href="/guide/scripting.html" class="">
+            Scripting
+        </a>
+    </li>
+    <li>
+        <a href="/guide/virtual-dom.html" class="">
+            Virtual DOM
+        </a>
+    </li>
+    <li>
+        <a href="/guide/contribute.html" class="">
+            Contribute
+        </a>
+    </li>
+    <li>
+        <a href="/guide/data-binding.html" class="">
+            Data Binding
+        </a>
+    </li>
+    <li>
+        <a href="/guide/extensions.html" class="active">
+            Extensions
+        </a>
+    </li>
+    <li>
+        <a href="/guide/native-communication.html" class="">
+            Native Communication
+        </a>
+    </li>
+    <li>
+        <a href="/guide/networking.html" class="">
+            Networking
+        </a>
+    </li>
+    <li>
+        <a href="/guide/routing.html" class="">
+            Routing
+        </a>
+    </li>
+    <li>
+        <a href="/guide/models.html" class="">
+            Models
+        </a>
+    </li>
+    <li>
+        <a href="/guide/components.html" class="">
+            Components
+        </a>
+    </li>
+    <li>
+        <a href="/guide/styles.html" class="">
+            Styles
+        </a>
+    </li>
+    <li>
+        <a href="/guide/animations.html" class="">
+            Animations
+        </a>
+    </li>
+    <li>
+        <a href="/guide/components-integration.html" class="">
+            Components Integration
+        </a>
+    </li>
+    <li>
+        <a href="/guide/custom-properties.html" class="">
+            Custom Properties
+        </a>
+    </li>
+    <li>
+        <a href="/guide/generic-styles.html" class="">
+            Generic Styles
+        </a>
+    </li>
+    <li>
+        <a href="/guide/layout.html" class="">
+            Layout
+        </a>
+    </li>
+    <li>
+        <a href="/guide/main-style.html" class="">
+            Main Style
+        </a>
+    </li>
+    <li>
+        <a href="/guide/runtime-styling.html" class="">
+            Runtime Styling
+        </a>
+    </li>
+    <li>
+        <a href="/guide/type-extending.html" class="">
+            Type Extending
+        </a>
+    </li>
+    <li>
+        <a href="/guide/static-resources.html" class="">
+            Static Resources
+        </a>
+    </li>
+</ul>
+    </aside>
+    <main class="content" id="guide">
+        <h1 id="extensions">Extensions</h1>
+<p>Neft modules provides basic functions required to run simple application on various environments like:</p>
+<ul>
+<li>rendering shapes, texts and images,</li>
+<li>handling cursor, touch and keyboard events,</li>
+<li>networking.</li>
+</ul>
+<p>To build more complex and more customized application you need to use platform-specific and native APIs.</p>
+<p><em>Extensions</em> are used to wrap these APIs from different environments in one code available from your JavaScript application.</p>
+<h2 id="types-of-extensions">Types of extensions</h2>
+<p>Extensions can be installed in three ways:</p>
+<ol>
+<li><strong>Built-in Neft extensions</strong> can be loaded by <code>package.json</code> <em>extensions</em> list. Check menu on the left to see a list of all available and supported extensions.</li>
+<li><strong>Package extensions</strong> are provided by contributors and can be installed through <a href="https://www.npmjs.com/">NPM</a>. Package name needs to be prefixed by <code>neft-</code> and installed to be properly added into your application.</li>
+<li><strong>Custom extensions</strong> are placed in your <code>extensions/</code> local folder and are automatically loaded. To see how to create your own extension, check some of the <a href="https://github.com/Neft-io/neft/tree/master/extensions/">built-in extensions</a>.</li>
+</ol>
+
+    </main>
+</div>
+<link rel="stylesheet" type="text/css" href="/styles/highlights-github.css">
+<script src="/scripts/aside.js"></script>
+<script src="/scripts/svg-render.js"></script>
+<script src="/scripts/search-texts.js"></script>
+<script src="/scripts/elasticlunr.min.js"></script>
+<script src="/scripts/search.js"></script>

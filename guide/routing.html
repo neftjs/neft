@@ -1,0 +1,239 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="/styles/main.css">
+<nav id="navbar">
+    <div class="main">
+        <div class="logo">
+            <a href="/">
+                <img src="/media/logo-white-text-on.svg" alt="Neft.io" />
+            </a>
+        </div>
+
+        <div class="links">
+            <a href="/guide/get-started.html" class="active">Guide</a>
+            <a href="/api/app.html" class="">API</a>
+            <!--<a href="/examples.html" class="">Examples</a>-->
+        </div>
+
+        <div id="searchResult"></div>
+        <input id="search" type="text" placeholder="Search">
+        <span id="searchTitle">Search</span>
+    </div>
+</nav>
+<div class="main">
+    <aside id="aside">
+<ul>
+    <li>
+        <a href="/guide/get-started.html" class="">
+            Get Started
+        </a>
+    </li>
+    <li>
+        <a href="/guide/testing.html" class="">
+            Testing
+        </a>
+    </li>
+    <li>
+        <a href="/guide/scripting.html" class="">
+            Scripting
+        </a>
+    </li>
+    <li>
+        <a href="/guide/virtual-dom.html" class="">
+            Virtual DOM
+        </a>
+    </li>
+    <li>
+        <a href="/guide/contribute.html" class="">
+            Contribute
+        </a>
+    </li>
+    <li>
+        <a href="/guide/data-binding.html" class="">
+            Data Binding
+        </a>
+    </li>
+    <li>
+        <a href="/guide/extensions.html" class="">
+            Extensions
+        </a>
+    </li>
+    <li>
+        <a href="/guide/native-communication.html" class="">
+            Native Communication
+        </a>
+    </li>
+    <li>
+        <a href="/guide/networking.html" class="">
+            Networking
+        </a>
+    </li>
+    <li>
+        <a href="/guide/routing.html" class="active">
+            Routing
+        </a>
+    </li>
+    <li>
+        <a href="/guide/models.html" class="">
+            Models
+        </a>
+    </li>
+    <li>
+        <a href="/guide/components.html" class="">
+            Components
+        </a>
+    </li>
+    <li>
+        <a href="/guide/styles.html" class="">
+            Styles
+        </a>
+    </li>
+    <li>
+        <a href="/guide/animations.html" class="">
+            Animations
+        </a>
+    </li>
+    <li>
+        <a href="/guide/components-integration.html" class="">
+            Components Integration
+        </a>
+    </li>
+    <li>
+        <a href="/guide/custom-properties.html" class="">
+            Custom Properties
+        </a>
+    </li>
+    <li>
+        <a href="/guide/generic-styles.html" class="">
+            Generic Styles
+        </a>
+    </li>
+    <li>
+        <a href="/guide/layout.html" class="">
+            Layout
+        </a>
+    </li>
+    <li>
+        <a href="/guide/main-style.html" class="">
+            Main Style
+        </a>
+    </li>
+    <li>
+        <a href="/guide/runtime-styling.html" class="">
+            Runtime Styling
+        </a>
+    </li>
+    <li>
+        <a href="/guide/type-extending.html" class="">
+            Type Extending
+        </a>
+    </li>
+    <li>
+        <a href="/guide/static-resources.html" class="">
+            Static Resources
+        </a>
+    </li>
+</ul>
+    </aside>
+    <main class="content" id="guide">
+        <h1 id="routing">Routing</h1>
+<p>Neft on all platforms is using URIs to support different pages, just like a browser do for web pages.</p>
+<p>All routes are placed in the <code>routes/</code> folder. Create it if needed.</p>
+<p>Each file in this folder must exports a function and return an object of routes.</p>
+<p>Let&#39;s consider how example <em>/routes/user.js</em> may looks like:</p>
+<pre><code class="hljs javascript"><span class="hljs-built_in">module</span>.exports = <span class="hljs-function">(<span class="hljs-params">app</span>) =&gt;</span> {
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">'get /users'</span>: {
+            getData(callback) {
+                callback(<span class="hljs-literal">null</span>, [{<span class="hljs-attr">name</span>: <span class="hljs-string">'User1'</span>}]);
+            }
+        }
+    };
+};
+</code></pre>
+<p>As you can see, you have access to the main <a href="/api/app.html">app</a> object.</p>
+<p><code>get /users</code> creates a <a href="/api/app-route.html">route</a>.</p>
+<p>It can be called in various ways:</p>
+<ul>
+<li>by a browser, when user open <code>/users</code> page,</li>
+<li>when user clicks on a link pointed to <code>/users</code> (using <code>&lt;a href /&gt;</code> tag or <a href="/api/renderer-item.html#linkuri">Item::linkUri</a>),</li>
+<li>by a crawler (e.g. GoogleBot),</li>
+<li>by you, when you sends a request to your server using <code>app.networking.get(&#39;/users&#39;, (err, data) =&gt; {})</code>,</li>
+<li>by you, when you sends a <em>local request</em>, using <a href="/api/networking.html#createlocalrequest">app.networking.createLocalRequest</a>.</li>
+</ul>
+<p>Each route needs to return some data. To do this, declare the <a href="/api/app-route.html#getdata">getData</a> function.</p>
+<p><code>callback</code> argument is a function.
+It expects an <em>Error</em> instance (if thrown) and data as the second parameter.
+This is a common pattern used in Neft callbacks.</p>
+<p><code>getData</code> is only one of the many methods you can declare in a route.
+See API Reference of <a href="/api/app-route.html">Route</a> for more.</p>
+<h2 id="uri-parameters">URI parameters</h2>
+<p>In URI you can specify parameters by putting them in curly brackets.</p>
+<p>Matched parameters are available under the <code>this.request.params</code> object.</p>
+<p>For instance, if you want to return user data based on the given <em>id</em>:</p>
+<pre><code class="hljs javascript"><span class="hljs-built_in">module</span>.exports = <span class="hljs-function">(<span class="hljs-params">app</span>) =&gt;</span> {
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">'get /user/{id}'</span>: {
+            getData(callback) {
+                app.models.users.getById(<span class="hljs-keyword">this</span>.request.params.id, callback);
+
+                <span class="hljs-comment">// e.g. for the URI '/user/12'</span>
+                <span class="hljs-comment">// this.request.params.id == 12</span>
+            }
+        }
+    };
+};
+</code></pre>
+<h2 id="parameters-schema">Parameters schema</h2>
+<p>For more strict parameters validation, you can use <a href="/api/schema.html">Schema</a> module. Just declare it as <code>schema</code> in your route object.</p>
+<p>If the received request does not correspond to the <em>schema</em>, route is omitted.</p>
+<pre><code class="hljs javascript"><span class="hljs-built_in">module</span>.exports = <span class="hljs-function">(<span class="hljs-params">app</span>) =&gt;</span> {
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">'get /user/{id}'</span>: {
+            <span class="hljs-attr">schema</span>: {
+                <span class="hljs-attr">id</span>: {
+                    <span class="hljs-attr">type</span>: <span class="hljs-string">'number'</span>,
+                    <span class="hljs-attr">min</span>: <span class="hljs-number">0</span>
+                }
+            },
+            getData(callback){
+            }
+        }
+    };
+};
+</code></pre>
+<p>In the example above, <code>getData()</code> will be called only if the matched <code>id</code> is a positive number.</p>
+<h2 id="request-data">Request data</h2>
+<p>If the request was called with some data (e.g. json) you can access it by <code>this.request.data</code>.</p>
+<h2 id="request-query">Request query</h2>
+<p>If the request URI specifies some query, it&#39;s available under the <code>this.request.uri.query</code> object.</p>
+<pre><code class="hljs javascript"><span class="hljs-comment">// /users?limit=100&amp;offset=200</span>
+<span class="hljs-comment">// this.request.uri.query.limit == 100</span>
+<span class="hljs-comment">// this.request.uri.query.offset == 200</span>
+</code></pre>
+<h2 id="custom-attributes">Custom attributes</h2>
+<p>All non-standard route properties are saved in the route object.</p>
+<p>This functionality is more useful for the HTML rendering, where the route object is available in the HTML document by the <code>${context}</code> string.</p>
+<pre><code class="hljs javascript"><span class="hljs-built_in">module</span>.exports = <span class="hljs-function">(<span class="hljs-params">app</span>) =&gt;</span> {
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">'get /users/nav'</span>: {
+            <span class="hljs-attr">defaultData</span>: <span class="hljs-keyword">new</span> Neft.List() <span class="hljs-comment">// accessible in views by ${context.defaultData}</span>
+        }
+    };
+};
+</code></pre>
+<h2 id="views-integration">Views integration</h2>
+
+    </main>
+</div>
+<link rel="stylesheet" type="text/css" href="/styles/highlights-github.css">
+<script src="/scripts/aside.js"></script>
+<script src="/scripts/svg-render.js"></script>
+<script src="/scripts/search-texts.js"></script>
+<script src="/scripts/elasticlunr.min.js"></script>
+<script src="/scripts/search.js"></script>

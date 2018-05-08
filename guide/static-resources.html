@@ -1,0 +1,210 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="/styles/main.css">
+<nav id="navbar">
+    <div class="main">
+        <div class="logo">
+            <a href="/">
+                <img src="/media/logo-white-text-on.svg" alt="Neft.io" />
+            </a>
+        </div>
+
+        <div class="links">
+            <a href="/guide/get-started.html" class="active">Guide</a>
+            <a href="/api/app.html" class="">API</a>
+            <!--<a href="/examples.html" class="">Examples</a>-->
+        </div>
+
+        <div id="searchResult"></div>
+        <input id="search" type="text" placeholder="Search">
+        <span id="searchTitle">Search</span>
+    </div>
+</nav>
+<div class="main">
+    <aside id="aside">
+<ul>
+    <li>
+        <a href="/guide/get-started.html" class="">
+            Get Started
+        </a>
+    </li>
+    <li>
+        <a href="/guide/testing.html" class="">
+            Testing
+        </a>
+    </li>
+    <li>
+        <a href="/guide/scripting.html" class="">
+            Scripting
+        </a>
+    </li>
+    <li>
+        <a href="/guide/virtual-dom.html" class="">
+            Virtual DOM
+        </a>
+    </li>
+    <li>
+        <a href="/guide/contribute.html" class="">
+            Contribute
+        </a>
+    </li>
+    <li>
+        <a href="/guide/data-binding.html" class="">
+            Data Binding
+        </a>
+    </li>
+    <li>
+        <a href="/guide/extensions.html" class="">
+            Extensions
+        </a>
+    </li>
+    <li>
+        <a href="/guide/native-communication.html" class="">
+            Native Communication
+        </a>
+    </li>
+    <li>
+        <a href="/guide/networking.html" class="">
+            Networking
+        </a>
+    </li>
+    <li>
+        <a href="/guide/routing.html" class="">
+            Routing
+        </a>
+    </li>
+    <li>
+        <a href="/guide/models.html" class="">
+            Models
+        </a>
+    </li>
+    <li>
+        <a href="/guide/components.html" class="">
+            Components
+        </a>
+    </li>
+    <li>
+        <a href="/guide/styles.html" class="">
+            Styles
+        </a>
+    </li>
+    <li>
+        <a href="/guide/animations.html" class="">
+            Animations
+        </a>
+    </li>
+    <li>
+        <a href="/guide/components-integration.html" class="">
+            Components Integration
+        </a>
+    </li>
+    <li>
+        <a href="/guide/custom-properties.html" class="">
+            Custom Properties
+        </a>
+    </li>
+    <li>
+        <a href="/guide/generic-styles.html" class="">
+            Generic Styles
+        </a>
+    </li>
+    <li>
+        <a href="/guide/layout.html" class="">
+            Layout
+        </a>
+    </li>
+    <li>
+        <a href="/guide/main-style.html" class="">
+            Main Style
+        </a>
+    </li>
+    <li>
+        <a href="/guide/runtime-styling.html" class="">
+            Runtime Styling
+        </a>
+    </li>
+    <li>
+        <a href="/guide/type-extending.html" class="">
+            Type Extending
+        </a>
+    </li>
+    <li>
+        <a href="/guide/static-resources.html" class="active">
+            Static Resources
+        </a>
+    </li>
+</ul>
+    </aside>
+    <main class="content" id="guide">
+        <h1 id="static-resources">Static Resources</h1>
+<p>Resources like images are handled by the <a href="/api/resources.html">Resources</a> module.</p>
+<p>All resource files are available:</p>
+<ul>
+<li>directly in native applications,</li>
+<li>by the <code>/static</code> URI on run <em>Node</em> server,</li>
+<li>on demand for browser applications (<em>Node</em> server needs to be run).</li>
+</ul>
+<p>All config files and resources needs to be stored in the <code>/static</code> folder. Create it if needed.</p>
+<p>Each resource file has to be declared in a config file.</p>
+<p>The main config file is <code>/static/resources.json</code> or <code>/static/resources.yaml</code>. Both <em>JSON</em> and <em>YAML</em> formats are supported.</p>
+<h2 id="config-file">Config file</h2>
+<p>Config file needs to define <code>resources</code> object with named resources.</p>
+<p>Let&#39;s create a <code>background</code> resource pointing to <code>default_background.png</code> file.</p>
+<pre><code class="hljs json">{
+    <span class="hljs-attr">"resources"</span>: {
+        <span class="hljs-attr">"background"</span>: {
+            <span class="hljs-attr">"file"</span>: <span class="hljs-string">"default_background.png"</span>
+        }
+    }
+}
+</code></pre>
+<h3 id="image-resolutions">Image resolutions</h3>
+<p>Different devices have different resolutions and pixel ratios.</p>
+<p>For instance on Apple devices with Retina screens, the pixel ratio is equal <code>2</code>. It means, all images needs to be two times bigger to show them sharp, not blurry.</p>
+<p>To define an image with different resolutions you have to:</p>
+<ul>
+<li>create a file with a suffix <code>@Nx</code>, where <code>N</code> is the resolution (e.g. <code>@2x</code> for retina, <code>@3x</code> for devices with greater pixel ratio),</li>
+<li>defines available resolutions in the <code>resolutions</code> array.</li>
+</ul>
+<p>Neft automatically determines, which variant of an image should be used.</p>
+<p>For instance, if you have an image called <code>logo.png</code> and you want to support retina devices:</p>
+<pre><code class="hljs json">{
+    <span class="hljs-attr">"resources"</span>: {
+        <span class="hljs-attr">"logo"</span>: {
+            <span class="hljs-attr">"file"</span>: <span class="hljs-string">"logo@2x.png"</span>,
+            <span class="hljs-attr">"resolutions"</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
+        }
+    }
+}
+</code></pre>
+<h3 id="color-value">Color value</h3>
+<p>Use <code>color</code> instead of <code>file</code> to store color value under a name.</p>
+<pre><code class="hljs json">{
+    <span class="hljs-attr">"resources"</span>: {
+        <span class="hljs-attr">"primary"</span>: {
+            <span class="hljs-attr">"color"</span>: <span class="hljs-string">"#ff00cc"</span>
+        }
+    }
+}
+</code></pre>
+<h2 id="using-resources">Using resources</h2>
+<p>Prefix resource name by <code>rsc:</code> to use it in styles or views.</p>
+<p>To use previously defined <code>logo</code> resource, you should specify <a href="/api/renderer-image.html#source">Image::source</a> as <code>rsc:logo</code>.</p>
+<pre><code class="hljs javascript">Image {
+    <span class="hljs-attr">source</span>: <span class="hljs-string">'rsc:logo'</span>
+}
+</code></pre>
+
+    </main>
+</div>
+<link rel="stylesheet" type="text/css" href="/styles/highlights-github.css">
+<script src="/scripts/aside.js"></script>
+<script src="/scripts/svg-render.js"></script>
+<script src="/scripts/search-texts.js"></script>
+<script src="/scripts/elasticlunr.min.js"></script>
+<script src="/scripts/search.js"></script>

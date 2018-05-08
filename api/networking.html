@@ -1,0 +1,556 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="/styles/main.css">
+<nav id="navbar">
+    <div class="main">
+        <div class="logo">
+            <a href="/">
+                <img src="/media/logo-lines-text-on.svg" alt="Neft.io" />
+            </a>
+        </div>
+
+        <div class="links">
+            <a href="/guide/get-started.html" class="">Guide</a>
+            <a href="/api/app.html" class="active">API</a>
+            <!--<a href="/examples.html" class="">Examples</a>-->
+        </div>
+
+        <div id="searchResult"></div>
+        <input id="search" type="text" placeholder="Search">
+        <span id="searchTitle">Search</span>
+    </div>
+</nav>
+<div class="main">
+    <aside id="aside">
+<ul>
+    <li>
+        <a href="/api/app.html" class="">
+            App
+        </a>
+<ul>
+    <li>
+        <a href="/api/app-route.html" class="">
+            Route
+        </a>
+    </li>
+    <li>
+        <a href="/api/app-standard-routes.html" class="">
+            Standard routes
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/assert.html" class="">
+            Assertions
+        </a>
+    </li>
+    <li>
+        <a href="/api/db.html" class="">
+            Database
+        </a>
+    </li>
+    <li>
+        <a href="/api/dict.html" class="">
+            Dict
+        </a>
+    </li>
+    <li>
+        <a href="/api/document.html" class="">
+            Document
+        </a>
+<ul>
+    <li>
+        <a href="/api/document-element.html" class="">
+            Element
+        </a>
+<ul>
+    <li>
+        <a href="/api/document-*class*-tag-:-*element*.html" class="">
+            Tag
+        </a>
+<ul>
+    <li>
+        <a href="/api/document-props.html" class="">
+            Props
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/document-text.html" class="">
+            Text
+        </a>
+    </li>
+</ul>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/list.html" class="">
+            List
+        </a>
+    </li>
+    <li>
+        <a href="/api/log.html" class="">
+            Log
+        </a>
+    </li>
+    <li>
+        <a href="/api/native.html" class="">
+            Native
+        </a>
+    </li>
+    <li>
+        <a href="/api/networking.html" class="active">
+            Networking
+        </a>
+<ul>
+    <li>
+        <a href="/api/networking-handler.html" class="">
+            Handler
+        </a>
+    </li>
+    <li>
+        <a href="/api/networking-request.html" class="">
+            Request
+        </a>
+    </li>
+    <li>
+        <a href="/api/networking-response.html" class="">
+            Response
+        </a>
+<ul>
+    <li>
+        <a href="/api/networking-response-error.html" class="">
+            Response Error
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/networking-uri.html" class="">
+            Uri
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer.html" class="">
+            Renderer
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-animation.html" class="">
+            Animation
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-parallelanimation.html" class="">
+            ParallelAnimation
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-propertyanimation.html" class="">
+            PropertyAnimation
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-easing.html" class="">
+            Easing
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-numberanimation.html" class="">
+            NumberAnimation
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer-sequentialanimation.html" class="">
+            SequentialAnimation
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer-class.html" class="">
+            Class
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-column.html" class="">
+            Column
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-device.html" class="">
+            Device
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-extension.html" class="">
+            Extension
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-flow.html" class="">
+            Flow
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-fontloader.html" class="">
+            FontLoader
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-grid.html" class="">
+            Grid
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-image.html" class="">
+            Image
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-item.html" class="">
+            Item
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-alignment.html" class="">
+            Alignment
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-anchors.html" class="">
+            Anchors
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-keys.html" class="">
+            Keys
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-layout.html" class="">
+            Layout
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-margin.html" class="">
+            Margin
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-pointer.html" class="">
+            Pointer
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-spacing.html" class="">
+            Spacing
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer-native.html" class="">
+            Native
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-navigator.html" class="">
+            Navigator
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-rectangle.html" class="">
+            Rectangle
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-resourcesloader.html" class="">
+            ResourcesLoader
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-row.html" class="">
+            Row
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-screen.html" class="">
+            Screen
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-statusbar.html" class="">
+            StatusBar
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer-text.html" class="">
+            Text
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-font.html" class="">
+            Font
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer-transition.html" class="">
+            Transition
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/resources.html" class="">
+            Resources
+        </a>
+<ul>
+    <li>
+        <a href="/api/resources-resource.html" class="">
+            Resource
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/schema.html" class="">
+            Schema
+        </a>
+<ul>
+    <li>
+        <a href="/api/schema-array-validator.html" class="">
+            Array Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-max-validator.html" class="">
+            Max Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-min-validator.html" class="">
+            Min Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-object-validator.html" class="">
+            Object Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-optional-validator.html" class="">
+            Optional Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-options-validator.html" class="">
+            Options Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-regexp-validator.html" class="">
+            RegExp Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-type-validator.html" class="">
+            Type Validator
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/signal.html" class="">
+            Signal
+        </a>
+    </li>
+    <li>
+        <a href="/api/typed-array.html" class="">
+            Typed Array
+        </a>
+    </li>
+    <li>
+        <a href="/api/utils.html" class="">
+            Utils
+        </a>
+<ul>
+    <li>
+        <a href="/api/utils-asynchronous.html" class="">
+            Asynchronous
+        </a>
+    </li>
+    <li>
+        <a href="/api/utils-properties-extraction.html" class="">
+            Properties extraction
+        </a>
+    </li>
+    <li>
+        <a href="/api/utils-stringifying.html" class="">
+            Stringifying
+        </a>
+    </li>
+</ul>
+    </li>
+</ul>
+    </aside>
+    <main class="content" id="api">
+        <h1 id="networking">Networking</h1>
+<blockquote>
+<p><strong>API</strong> ▸ <strong>Networking</strong></p>
+</blockquote>
+<p>This module cares about communication client-server and client internally.</p>
+<p>Currently only the HTTP protocol is supported.</p>
+<p>Access it with:</p>
+<pre><code class="hljs javascript"><span class="hljs-keyword">var</span> Networking = <span class="hljs-built_in">require</span>(<span class="hljs-string">'networking'</span>);
+</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee"><code>Source</code></a></p>
+<h2 id="networking-constructor-options-">Networking::<strong>constructor</strong>(<em>options</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>options — <code>Object</code></li></ul></dd></dl>
+
+<p>Options:</p>
+<ul>
+<li><code>allowAllOrigins</code> determines whether <em>Access-Control-Allow-Origin</em> should return wildcard,
+false by default</li>
+</ul>
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee#networkingconstructorobject-options"><code>Source</code></a></p>
+<h2 id="networking-onrequest-request-response-">Networking::<strong>onRequest</strong>(<em>request</em>, <em>response</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>request — <code>Networking.Request</code></li><li>response — <code>Networking.Response</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee#signal-networkingonrequestnetworkingrequest-request-networkingresponse-response"><code>Source</code></a></p>
+<h2 id="networking-protocol">Networking::<strong>protocol</strong></h2>
+<dl><dt>Type:</dt><dd><code>String</code></dd><dt>Read Only</dt></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee#readonly-string-networkingprotocol"><code>Source</code></a></p>
+<h2 id="networking-port">Networking::<strong>port</strong></h2>
+<dl><dt>Type:</dt><dd><code>Integer</code></dd><dt>Read Only</dt></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee#readonly-integer-networkingport"><code>Source</code></a></p>
+<h2 id="networking-host">Networking::<strong>host</strong></h2>
+<dl><dt>Type:</dt><dd><code>String</code></dd><dt>Read Only</dt></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee#readonly-string-networkinghost"><code>Source</code></a></p>
+<h2 id="networking-url">Networking::<strong>url</strong></h2>
+<dl><dt>Type:</dt><dd><code>String</code></dd><dt>Read Only</dt></dl>
+
+<p>URL path contains a protocol, port and a host.</p>
+<p>It can be set manually if the external address is different.
+Otherwise it&#39;s created automatically.</p>
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee#readonly-string-networkingurl"><code>Source</code></a></p>
+<h2 id="networking-language">Networking::<strong>language</strong></h2>
+<dl><dt>Type:</dt><dd><code>String</code></dd><dt>Read Only</dt></dl>
+
+<p>Indicates the application language regarding to BCP47 (e.g. &#39;en&#39;, &#39;en-US&#39;).</p>
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee#readonly-string-networkinglanguage"><code>Source</code></a></p>
+<h2 id="networking-pendingrequests">Networking::<strong>pendingRequests</strong></h2>
+<dl><dt>Type:</dt><dd><code>List</code></dd><dt>Read Only</dt></dl>
+
+<h2 id="networking-createhandler-options-">Networking::<strong>createHandler</strong>(<em>options</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>options — <code>Object</code></li></ul></dd><dt>Returns:</dt><dd><code>Networking.Handler</code></dd></dl>
+
+<p>Use this method to create a new <em>Networking.Handler</em>.</p>
+<pre><code class="hljs javascript">app.networking.createHandler({
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'get'</span>,
+    <span class="hljs-attr">uri</span>: <span class="hljs-string">'/users/{name}'</span>,
+    <span class="hljs-attr">schema</span>: <span class="hljs-keyword">new</span> Schema({
+        <span class="hljs-attr">name</span>: {
+            <span class="hljs-attr">type</span>: <span class="hljs-string">'string'</span>,
+            <span class="hljs-attr">min</span>: <span class="hljs-number">3</span>
+        },
+    }),
+    <span class="hljs-attr">callback</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>)</span>{
+        res.raise(<span class="hljs-keyword">new</span> Networking.Response.Error(Networking.Response.NOT_IMPLEMENTED));
+    }
+});
+</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee#networkinghandler-networkingcreatehandlerobject-options"><code>Source</code></a></p>
+<h2 id="networking-createrequest-options-">Networking::<strong>createRequest</strong>(<em>options</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>options — <code>Object|Networking.Request</code></li></ul></dd><dt>Returns:</dt><dd><code>Networking.Request</code></dd></dl>
+
+<p>The given options object corresponds to the <em>Networking.Request</em> properties.</p>
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee#networkingrequest-networkingcreaterequestobjectnetworkingrequest-options"><code>Source</code></a></p>
+<h2 id="networking-get-uri-onloadend-">Networking::<strong>get</strong>(<em>uri</em>, <em>onLoadEnd</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>uri — <code>String</code></li><li>onLoadEnd — <code>Function</code></li></ul></dd><dt>Returns:</dt><dd><code>Networking.Request</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee#networkingrequest-networkinggetstring-uri-function-onloadend"><code>Source</code></a></p>
+<h2 id="networking-post-uri-data-onloadend-">Networking::<strong>post</strong>(<em>uri</em>, <em>data</em>, <em>onLoadEnd</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>uri — <code>String</code></li><li>data — <code>Any</code> — <i>optional</i></li><li>onLoadEnd — <code>Function</code></li></ul></dd><dt>Returns:</dt><dd><code>Networking.Request</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee#networkingrequest-networkingpoststring-uri-any-data-function-onloadend"><code>Source</code></a></p>
+<h2 id="networking-put-uri-data-onloadend-">Networking::<strong>put</strong>(<em>uri</em>, <em>data</em>, <em>onLoadEnd</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>uri — <code>String</code></li><li>data — <code>Any</code> — <i>optional</i></li><li>onLoadEnd — <code>Function</code></li></ul></dd><dt>Returns:</dt><dd><code>Networking.Request</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee#networkingrequest-networkingputstring-uri-any-data-function-onloadend"><code>Source</code></a></p>
+<h2 id="networking-delete-uri-data-onloadend-">Networking::<strong>delete</strong>(<em>uri</em>, <em>data</em>, <em>onLoadEnd</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>uri — <code>String</code></li><li>data — <code>Any</code> — <i>optional</i></li><li>onLoadEnd — <code>Function</code></li></ul></dd><dt>Returns:</dt><dd><code>Networking.Request</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee#networkingrequest-networkingdeletestring-uri-any-data-function-onloadend"><code>Source</code></a></p>
+<h2 id="networking-resolverequest-request-">Networking::<strong>resolveRequest</strong>(<em>request</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>request — <code>Networking.Request</code></li></ul></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee#networkingresolverequestnetworkingrequest-request"><code>Source</code></a></p>
+<h2 id="networking-createlocalrequest-options-">Networking::<strong>createLocalRequest</strong>(<em>options</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>options — <code>Object|Networking.Request</code></li></ul></dd><dt>Returns:</dt><dd><code>Networking.Request</code></dd></dl>
+
+<p>Use this method to create a new [Request][networking/Request] and handle it.</p>
+<p>The given options object corresponds to the [Request][networking/Request] properties.</p>
+<p>Local and server requests are supported.</p>
+<h3 id="local-requests">Local requests</h3>
+<pre><code class="hljs javascript">app.networking.createRequest({
+    <span class="hljs-attr">uri</span>: <span class="hljs-string">'/achievements/world_2'</span>,
+    <span class="hljs-attr">onLoadEnd</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, data</span>)</span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.response.isSucceed()){
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Request has been loaded! Data: "</span> + data);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Error: "</span> + err);
+        }
+    }
+});
+</code></pre>
+<h3 id="requests-to-the-server">Requests to the server</h3>
+<pre><code class="hljs javascript">app.networking.createRequest({
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'post'</span>,
+    <span class="hljs-attr">uri</span>: <span class="hljs-string">'http://server.domain/comments'</span>,
+    <span class="hljs-attr">data</span>: {<span class="hljs-attr">message</span>: <span class="hljs-string">'Great article! Like it.'</span>},
+    <span class="hljs-attr">onLoadEnd</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, data</span>)</span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.response.isSucceed()){
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Comment has been added!"</span>);
+        }
+    }
+});
+</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee"><code>Source</code></a></p>
+
+    </main>
+</div>
+<link rel="stylesheet" type="text/css" href="/styles/highlights-github.css">
+<script src="/scripts/aside.js"></script>
+<script src="/scripts/svg-render.js"></script>
+<script src="/scripts/search-texts.js"></script>
+<script src="/scripts/elasticlunr.min.js"></script>
+<script src="/scripts/search.js"></script>

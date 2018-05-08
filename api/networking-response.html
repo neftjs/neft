@@ -1,0 +1,555 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="/styles/main.css">
+<nav id="navbar">
+    <div class="main">
+        <div class="logo">
+            <a href="/">
+                <img src="/media/logo-lines-text-on.svg" alt="Neft.io" />
+            </a>
+        </div>
+
+        <div class="links">
+            <a href="/guide/get-started.html" class="">Guide</a>
+            <a href="/api/app.html" class="active">API</a>
+            <!--<a href="/examples.html" class="">Examples</a>-->
+        </div>
+
+        <div id="searchResult"></div>
+        <input id="search" type="text" placeholder="Search">
+        <span id="searchTitle">Search</span>
+    </div>
+</nav>
+<div class="main">
+    <aside id="aside">
+<ul>
+    <li>
+        <a href="/api/app.html" class="">
+            App
+        </a>
+<ul>
+    <li>
+        <a href="/api/app-route.html" class="">
+            Route
+        </a>
+    </li>
+    <li>
+        <a href="/api/app-standard-routes.html" class="">
+            Standard routes
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/assert.html" class="">
+            Assertions
+        </a>
+    </li>
+    <li>
+        <a href="/api/db.html" class="">
+            Database
+        </a>
+    </li>
+    <li>
+        <a href="/api/dict.html" class="">
+            Dict
+        </a>
+    </li>
+    <li>
+        <a href="/api/document.html" class="">
+            Document
+        </a>
+<ul>
+    <li>
+        <a href="/api/document-element.html" class="">
+            Element
+        </a>
+<ul>
+    <li>
+        <a href="/api/document-*class*-tag-:-*element*.html" class="">
+            Tag
+        </a>
+<ul>
+    <li>
+        <a href="/api/document-props.html" class="">
+            Props
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/document-text.html" class="">
+            Text
+        </a>
+    </li>
+</ul>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/list.html" class="">
+            List
+        </a>
+    </li>
+    <li>
+        <a href="/api/log.html" class="">
+            Log
+        </a>
+    </li>
+    <li>
+        <a href="/api/native.html" class="">
+            Native
+        </a>
+    </li>
+    <li>
+        <a href="/api/networking.html" class="">
+            Networking
+        </a>
+<ul>
+    <li>
+        <a href="/api/networking-handler.html" class="">
+            Handler
+        </a>
+    </li>
+    <li>
+        <a href="/api/networking-request.html" class="">
+            Request
+        </a>
+    </li>
+    <li>
+        <a href="/api/networking-response.html" class="active">
+            Response
+        </a>
+<ul>
+    <li>
+        <a href="/api/networking-response-error.html" class="">
+            Response Error
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/networking-uri.html" class="">
+            Uri
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer.html" class="">
+            Renderer
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-animation.html" class="">
+            Animation
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-parallelanimation.html" class="">
+            ParallelAnimation
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-propertyanimation.html" class="">
+            PropertyAnimation
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-easing.html" class="">
+            Easing
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-numberanimation.html" class="">
+            NumberAnimation
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer-sequentialanimation.html" class="">
+            SequentialAnimation
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer-class.html" class="">
+            Class
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-column.html" class="">
+            Column
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-device.html" class="">
+            Device
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-extension.html" class="">
+            Extension
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-flow.html" class="">
+            Flow
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-fontloader.html" class="">
+            FontLoader
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-grid.html" class="">
+            Grid
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-image.html" class="">
+            Image
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-item.html" class="">
+            Item
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-alignment.html" class="">
+            Alignment
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-anchors.html" class="">
+            Anchors
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-keys.html" class="">
+            Keys
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-layout.html" class="">
+            Layout
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-margin.html" class="">
+            Margin
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-pointer.html" class="">
+            Pointer
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-spacing.html" class="">
+            Spacing
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer-native.html" class="">
+            Native
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-navigator.html" class="">
+            Navigator
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-rectangle.html" class="">
+            Rectangle
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-resourcesloader.html" class="">
+            ResourcesLoader
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-row.html" class="">
+            Row
+        </a>
+    </li>
+    <li>
+        <a href="/api/renderer-screen.html" class="">
+            Screen
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-statusbar.html" class="">
+            StatusBar
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer-text.html" class="">
+            Text
+        </a>
+<ul>
+    <li>
+        <a href="/api/renderer-font.html" class="">
+            Font
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/renderer-transition.html" class="">
+            Transition
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/resources.html" class="">
+            Resources
+        </a>
+<ul>
+    <li>
+        <a href="/api/resources-resource.html" class="">
+            Resource
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/schema.html" class="">
+            Schema
+        </a>
+<ul>
+    <li>
+        <a href="/api/schema-array-validator.html" class="">
+            Array Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-max-validator.html" class="">
+            Max Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-min-validator.html" class="">
+            Min Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-object-validator.html" class="">
+            Object Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-optional-validator.html" class="">
+            Optional Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-options-validator.html" class="">
+            Options Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-regexp-validator.html" class="">
+            RegExp Validator
+        </a>
+    </li>
+    <li>
+        <a href="/api/schema-type-validator.html" class="">
+            Type Validator
+        </a>
+    </li>
+</ul>
+    </li>
+    <li>
+        <a href="/api/signal.html" class="">
+            Signal
+        </a>
+    </li>
+    <li>
+        <a href="/api/typed-array.html" class="">
+            Typed Array
+        </a>
+    </li>
+    <li>
+        <a href="/api/utils.html" class="">
+            Utils
+        </a>
+<ul>
+    <li>
+        <a href="/api/utils-asynchronous.html" class="">
+            Asynchronous
+        </a>
+    </li>
+    <li>
+        <a href="/api/utils-properties-extraction.html" class="">
+            Properties extraction
+        </a>
+    </li>
+    <li>
+        <a href="/api/utils-stringifying.html" class="">
+            Stringifying
+        </a>
+    </li>
+</ul>
+    </li>
+</ul>
+    </aside>
+    <main class="content" id="api">
+        <h1 id="response">Response</h1>
+<blockquote>
+<p><strong>API</strong> ▸ <a href="/api/networking.html">Networking</a> ▸ <strong>Response</strong></p>
+</blockquote>
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee"><code>Source</code></a></p>
+<h2 id="response-statuses">Response.<strong>STATUSES</strong></h2>
+<dl><dt>Type:</dt><dd><code>Array</code></dd></dl>
+
+<p>Contains abstract codes used to describe the response type.</p>
+<p>Each status corresponds to the HTTP numeral value.
+Check <a href="">http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html</a> for more.</p>
+<p>Contains:</p>
+<ul>
+<li>Response.OK,</li>
+<li>Response.CREATED,</li>
+<li>Response.ACCEPTED,</li>
+<li>Response.NO_CONTENT,</li>
+<li>Response.MOVED,</li>
+<li>Response.FOUND,</li>
+<li>Response.NOT_MODIFIED,</li>
+<li>Response.TEMPORARY_REDIRECT,</li>
+<li>Response.BAD_REQUEST,</li>
+<li>Response.UNAUTHORIZED,</li>
+<li>Response.PAYMENT_REQUIRED,</li>
+<li>Response.FORBIDDEN,</li>
+<li>Response.NOT_FOUND,</li>
+<li>Response.CONFLICT,</li>
+<li>Response.PRECONDITION_FAILED,</li>
+<li>Response.UNSUPPORTED_MEDIA_TYPE,</li>
+<li>Response.INTERNAL_SERVER_ERROR,</li>
+<li>Response.NOT_IMPLEMENTED,</li>
+<li>Response.SERVICE_UNAVAILABLE.</li>
+</ul>
+<pre><code class="hljs javascript"><span class="hljs-built_in">console</span>.log(Networking.Response.OK);
+<span class="hljs-built_in">console</span>.log(Networking.Response.BAD_REQUEST);
+</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#array-responsestatuses"><code>Source</code></a></p>
+<h2 id="response-constructor-options-">Response::<strong>constructor</strong>(<em>options</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>options — <code>Object</code></li></ul></dd></dl>
+
+<p>Access it with:</p>
+<pre><code class="hljs javascript"><span class="hljs-keyword">var</span> Networking = <span class="hljs-built_in">require</span>(<span class="hljs-string">'networking'</span>);
+<span class="hljs-keyword">var</span> Response = Networking.Response;
+</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#responseconstructorobject-options"><code>Source</code></a></p>
+<h2 id="response-onsend-">Response::<strong>onSend</strong>()</h2>
+<dl><dt>Type:</dt><dd><code>Signal</code></dd></dl>
+
+<p>Called when the response has been sent.</p>
+<pre><code class="hljs javascript">res.onSend(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Response has been sent!"</span>);
+});
+</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#signal-responseonsend"><code>Source</code></a></p>
+<h2 id="response-pending">Response::<strong>pending</strong></h2>
+<dl><dt>Type:</dt><dd><code>Boolean</code></dd><dt>Read Only</dt></dl>
+
+<p>Indicates whether the response is not destroyed.</p>
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#readonly-boolean-responsepending"><code>Source</code></a></p>
+<h2 id="response-request">Response::<strong>request</strong></h2>
+<dl><dt>Type:</dt><dd><code>Networking.Request</code></dd><dt>Read Only</dt></dl>
+
+<p>Refers to the [Request][networking/Request].</p>
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#readonly-networkingrequest-responserequest"><code>Source</code></a></p>
+<h2 id="response-status">Response::<strong>status</strong></h2>
+<dl><dt>Type:</dt><dd><code>Integer</code></dd><dt>Default value:</dt><dd><code>Response.OK</code></dd></dl>
+
+<p>Keeps a normalized code determined the response type.</p>
+<p>It refers to one of the <em>Response.STATUSES</em> values.</p>
+<pre><code class="hljs javascript">res.status = Networking.Response.CREATED;
+res.status = Networking.Response.PAYMENT_REQUIRED;
+</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#integer-responsestatus--responseok"><code>Source</code></a></p>
+<h2 id="response-data">Response::<strong>data</strong></h2>
+<dl><dt>Type:</dt><dd><code>Any</code></dd></dl>
+
+<p>Value sent to the client.</p>
+<pre><code class="hljs javascript">res.data = {<span class="hljs-attr">items</span>: [<span class="hljs-string">'superhero toy'</span>, <span class="hljs-string">'book'</span>]};
+res.data = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"Wrong order"</span>);
+res.data = Document.fromJSON(...);
+</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#any-responsedata"><code>Source</code></a></p>
+<h2 id="response-headers">Response::<strong>headers</strong></h2>
+<dl><dt>Type:</dt><dd><code>Object</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#object-responseheaders"><code>Source</code></a></p>
+<h2 id="response-cookies">Response::<strong>cookies</strong></h2>
+<dl><dt>Type:</dt><dd><code>Object</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#object-responsecookies"><code>Source</code></a></p>
+<h2 id="response-encoding">Response::<strong>encoding</strong></h2>
+<dl><dt>Type:</dt><dd><code>String</code></dd><dt>Default value:</dt><dd><code>&#39;utf-8&#39;</code></dd></dl>
+
+
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#string-responseencoding--39utf839"><code>Source</code></a></p>
+<h2 id="response-setheader-name-value-">Response::<strong>setHeader</strong>(<em>name</em>, <em>value</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>name — <code>String</code></li><li>value — <code>String</code></li></ul></dd><dt>Returns:</dt><dd><code>Response</code></dd></dl>
+
+<pre><code class="hljs javascript">res.setHeader(<span class="hljs-string">'Location'</span>, <span class="hljs-string">'/redirect/to/url'</span>);
+</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#response-responsesetheaderstring-name-string-value"><code>Source</code></a></p>
+<h2 id="response-send-status-data-">Response::<strong>send</strong>(<em>status</em>, <em>data</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>status — <code>Integer</code> — <i>optional</i></li><li>data — <code>Any</code> — <i>optional</i></li></ul></dd></dl>
+
+<p>This method calls the [onSend()][networking/Response::onSend()] signal.</p>
+<pre><code class="hljs javascript">res.onSend(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Response has been sent"</span>);
+});
+
+res.send(Networking.Response.OK, {<span class="hljs-attr">user</span>: <span class="hljs-string">'Max'</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">43</span>});
+</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#responsesendinteger-status-any-data"><code>Source</code></a></p>
+<h2 id="response-redirect-status-uri-">Response::<strong>redirect</strong>(<em>status</em>, <em>uri</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>status — <code>Integer</code> — <code>= Response.FOUND</code></li><li>uri — <code>String</code></li></ul></dd></dl>
+
+<p>The <em>Response.FOUND</em> status is typically used for temporary redirection.
+The <em>Response.MOVED</em> is a permanent redirection.</p>
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#responseredirectinteger-status--responsefound-string-uri"><code>Source</code></a></p>
+<h2 id="response-raise-error-">Response::<strong>raise</strong>(<em>error</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>error — <code>Any</code></li></ul></dd></dl>
+
+<p>Finishes the response with an error.</p>
+<pre><code class="hljs javascript">res.raise(<span class="hljs-keyword">new</span> Networking.Response.Error(<span class="hljs-string">"Login first"</span>));
+res.raise(<span class="hljs-keyword">new</span> Networking.Response.Error(Networking.Response.UNAUTHORIZED, <span class="hljs-string">"Login first"</span>));
+</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#responseraiseany-error"><code>Source</code></a></p>
+<h2 id="response-issucceed-">Response::<strong>isSucceed</strong>()</h2>
+<dl><dt>Returns:</dt><dd><code>Boolean</code></dd></dl>
+
+<p>Returns <code>true</code> if the response status is in range from 200 to 299.</p>
+<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#boolean-responseissucceed"><code>Source</code></a></p>
+
+    </main>
+</div>
+<link rel="stylesheet" type="text/css" href="/styles/highlights-github.css">
+<script src="/scripts/aside.js"></script>
+<script src="/scripts/svg-render.js"></script>
+<script src="/scripts/search-texts.js"></script>
+<script src="/scripts/elasticlunr.min.js"></script>
+<script src="/scripts/search.js"></script>

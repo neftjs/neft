@@ -1,0 +1,283 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="/styles/main.css">
+<nav id="navbar">
+    <div class="main">
+        <div class="logo">
+            <a href="/">
+                <img src="/media/logo-white-text-on.svg" alt="Neft.io" />
+            </a>
+        </div>
+
+        <div class="links">
+            <a href="/guide/get-started.html" class="active">Guide</a>
+            <a href="/api/app.html" class="">API</a>
+            <!--<a href="/examples.html" class="">Examples</a>-->
+        </div>
+
+        <div id="searchResult"></div>
+        <input id="search" type="text" placeholder="Search">
+        <span id="searchTitle">Search</span>
+    </div>
+</nav>
+<div class="main">
+    <aside id="aside">
+<ul>
+    <li>
+        <a href="/guide/get-started.html" class="">
+            Get Started
+        </a>
+    </li>
+    <li>
+        <a href="/guide/testing.html" class="">
+            Testing
+        </a>
+    </li>
+    <li>
+        <a href="/guide/scripting.html" class="">
+            Scripting
+        </a>
+    </li>
+    <li>
+        <a href="/guide/virtual-dom.html" class="">
+            Virtual DOM
+        </a>
+    </li>
+    <li>
+        <a href="/guide/contribute.html" class="">
+            Contribute
+        </a>
+    </li>
+    <li>
+        <a href="/guide/data-binding.html" class="">
+            Data Binding
+        </a>
+    </li>
+    <li>
+        <a href="/guide/extensions.html" class="">
+            Extensions
+        </a>
+    </li>
+    <li>
+        <a href="/guide/native-communication.html" class="">
+            Native Communication
+        </a>
+    </li>
+    <li>
+        <a href="/guide/networking.html" class="">
+            Networking
+        </a>
+    </li>
+    <li>
+        <a href="/guide/routing.html" class="">
+            Routing
+        </a>
+    </li>
+    <li>
+        <a href="/guide/models.html" class="">
+            Models
+        </a>
+    </li>
+    <li>
+        <a href="/guide/components.html" class="active">
+            Components
+        </a>
+    </li>
+    <li>
+        <a href="/guide/styles.html" class="">
+            Styles
+        </a>
+    </li>
+    <li>
+        <a href="/guide/animations.html" class="">
+            Animations
+        </a>
+    </li>
+    <li>
+        <a href="/guide/components-integration.html" class="">
+            Components Integration
+        </a>
+    </li>
+    <li>
+        <a href="/guide/custom-properties.html" class="">
+            Custom Properties
+        </a>
+    </li>
+    <li>
+        <a href="/guide/generic-styles.html" class="">
+            Generic Styles
+        </a>
+    </li>
+    <li>
+        <a href="/guide/layout.html" class="">
+            Layout
+        </a>
+    </li>
+    <li>
+        <a href="/guide/main-style.html" class="">
+            Main Style
+        </a>
+    </li>
+    <li>
+        <a href="/guide/runtime-styling.html" class="">
+            Runtime Styling
+        </a>
+    </li>
+    <li>
+        <a href="/guide/type-extending.html" class="">
+            Type Extending
+        </a>
+    </li>
+    <li>
+        <a href="/guide/static-resources.html" class="">
+            Static Resources
+        </a>
+    </li>
+</ul>
+    </aside>
+    <main class="content" id="guide">
+        <h1 id="components">Components</h1>
+<p>Components on the client side are used to organize and handle rendered elements.
+They can be also used to serve HTML documents for crawlers (e.g. GoogleBot).</p>
+<p>All components must be placed in the <code>/components</code> folder and use <em>XHTML</em> format.</p>
+<p>View file does not have to be fully compatible with the <em>XML</em> standard. You cannot use self-enclosing tags from <em>HTML</em> (write <code>&lt;meta /&gt;</code> instead of <code>&lt;meta&gt;</code>).</p>
+<p><code>components/index.xhtml</code> file is rendered as the first page.</p>
+<p>All elements inside the <code>&lt;body&gt;</code> tag are rendered.</p>
+<p>Each element in the view file can be stylized, but for now, lets learn about some predefined elements available in Neft:</p>
+<h2 id="string-interpolation">String Interpolation</h2>
+<p>String interpolation can be used in texts and in attribute values.</p>
+<p>Value you want to render put in <code>${…}</code>, just like in <em>EcmaScript 6 String Template</em>.</p>
+<p>Inside the brackets you can use data from different places like <a href="/routing.md">routes</a>, <em>XHTML</em> tags, scripts and others. You will learn more about it later. For now, let&#39;s remember that <code>state</code> is an object where you can store data for a view.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>${state.title}<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+</code></pre>
+<p>Will render any string you saved in a <code>state</code> object under the <code>title</code> key inside the <code>h1</code> tag.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"${state.image}"</span> /&gt;</span>
+</code></pre>
+<p>Will put any string you saved as <code>state.image</code> into <code>src</code> attribute.</p>
+<h2 id="log">log</h2>
+<p>For the debug purposes you can use <code>&lt;log /&gt;</code> tag.</p>
+<p>This tag logs the given attributes and the whole body into a console.</p>
+<p>Each <em>string interpolation</em> change is detected and the whole tag is logged.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">log</span> <span class="hljs-attr">userData</span>=<span class="hljs-string">"${state.data}"</span>&gt;</span>${state.text}<span class="hljs-tag">&lt;/<span class="hljs-name">log</span>&gt;</span>
+</code></pre>
+<h2 id="properties-evaluation">Properties Evaluation</h2>
+<p>Some of the properties are automatically evaluated to JavaScript objects.</p>
+<p>String <code>[...]</code> evaluates to an array.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">log</span> <span class="hljs-attr">list</span>=<span class="hljs-string">"[1, 2]"</span> /&gt;</span>
+</code></pre>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">log</span> <span class="hljs-attr">list</span>=<span class="hljs-string">"[{name: 't-shirt'}]"</span> /&gt;</span>
+</code></pre>
+<p>String <code>List(...)</code> evaluates to <a href="/data-binding.html#list">List</a>.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">log</span> <span class="hljs-attr">list</span>=<span class="hljs-string">"List([1, 2])"</span> /&gt;</span>
+</code></pre>
+<p>String <code>{...}</code> evaluates to an object.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">log</span> <span class="hljs-attr">object</span>=<span class="hljs-string">"{name: 'Johny'}"</span> /&gt;</span>
+</code></pre>
+<p>String <code>Dict(...)</code> evaluates to <a href="/data-binding.html#dict">Dict</a>.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">log</span> <span class="hljs-attr">object</span>=<span class="hljs-string">"Dict({name: 'Johny'})"</span> /&gt;</span>
+</code></pre>
+<h2 id="n-if">n-if</h2>
+<p>This attribute is used to hide or show the tag depends on the given condition.</p>
+<p>If the given <em>string interpolation</em> evalues to <em>falsy</em> result,
+the whole tag is being hidden.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">n-if</span>=<span class="hljs-string">"${state.isUserLogged}"</span>&gt;</span>Hi ${state.userName}!<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+</code></pre>
+<p><code>n-else</code> attribute may be specified in the next sibling.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">n-if</span>=<span class="hljs-string">"${state.isUserLogged}"</span>&gt;</span>Hi ${state.userName}!<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">n-else</span>&gt;</span>You need to log in<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+</code></pre>
+<h2 id="n-each">n-each</h2>
+<p><code>n-each</code> attribute repeats tag body for each element of the given list.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">n-each</span>=<span class="hljs-string">"[1, 2]"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>ping<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span> <span class="hljs-comment">&lt;!-- rendered twice --&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+</code></pre>
+<p>Inside the repeated tag body you can refer to:</p>
+<ul>
+<li><code>props.index</code> - current element index from a list,</li>
+<li><code>props.item</code> - current element from a list,</li>
+<li><code>props.each</code> - <code>n-each</code> attribute (e.g. an array or a <a href="/api/list.html">List</a>).</li>
+</ul>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">n-each</span>=<span class="hljs-string">"[1, 2, 3]"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Index=${props.index}; element=${props.item}; array=${props.each}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+</code></pre>
+<h2 id="ref">ref</h2>
+<p>Tags with the <code>ref</code> attribute are available in the <code>refs</code> object.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">"userNameInput"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"Max"</span> /&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Your name: ${refs.userNameInput.props.value}<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+</code></pre>
+<h1 id="state">state</h1>
+<p>This tag is used to dynamically change state in component.</p>
+<p>It allows to use data-binding for state properties what is not possible inside <code>&lt;script&gt;</code> tag.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">header</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">"header"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">state</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"active"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"${props.nav.active}"</span> <span class="hljs-attr">n-if</span>=<span class="hljs-string">"${props.useNav}"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>Active: ${state.active}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">header</span>&gt;</span>
+</code></pre>
+<h1 id="component">component</h1>
+<p>This tag is used to create separated and repeatable parts of a document.</p>
+<p>Each component has to define a unique <code>name</code>.</p>
+<p><em>Component</em> can be created using the <em><use /></em> tag,
+or by creating a tag with the component name.</p>
+<p>It&#39;s recommended to start component names with a big letter.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">component</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"Avatar"</span>&gt;</span>
+    <span class="hljs-comment">&lt;!-- user avatar here --&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">component</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">use</span> <span class="hljs-attr">component</span>=<span class="hljs-string">"Avatar"</span> /&gt;</span>
+<span class="hljs-comment">&lt;!-- or just --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">Avatar</span> /&gt;</span>
+</code></pre>
+<p><code>Use[component]</code> attribute can be changed in runtime.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">component</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"H1"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>H1 heading<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">component</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">use</span> <span class="hljs-attr">component</span>=<span class="hljs-string">"H${state.headingLevel}"</span> /&gt;</span>
+</code></pre>
+<h1 id="import">import</h1>
+<p>This tag is used to import <em>component</em>s from other files.</p>
+<p>The <em>href</em> attribute can be an absolute path (e.g. <code>/file.xhtml</code>),
+relative to the current file position (e.g. <code>./file.xhtml</code>), or
+relative to the <em>components</em> folder (e.g. <code>file.xhtml</code>).</p>
+<p>All imported files are accessible inside the document.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">import</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"./user_utils.xhtml"</span> /&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">Avatar</span> /&gt;</span> <span class="hljs-comment">&lt;!-- defined as a &lt;component /&gt; in user_utils.xhtml file --&gt;</span>
+</code></pre>
+<p>Optional <code>as</code> attribute specifies a namespace for imported components.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">import</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"./user_utils.xhtml"</span> <span class="hljs-attr">as</span>=<span class="hljs-string">"User"</span> /&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">User:Avatar</span> /&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">User</span> /&gt;</span> <span class="hljs-comment">&lt;!-- renders the whole file --&gt;</span>
+</code></pre>
+<h1 id="target">target</h1>
+<p>This tag is used in a <em>component</em> to define where the given children should be placed.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">component</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"User"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">target</span> /&gt;</span> <span class="hljs-comment">&lt;!-- &lt;superPower type="flying" /&gt; --&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">component</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">User</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">superPower</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"flying"</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">User</span>&gt;</span>
+</code></pre>
+<h1 id="blank">blank</h1>
+<p>The best on the end.</p>
+<p>Only children of this tag are rendered.</p>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">blank</span> <span class="hljs-attr">n-each</span>=<span class="hljs-string">"['Big', 'Ben']"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">User</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"${props.item}"</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">blank</span>&gt;</span>
+</code></pre>
+
+    </main>
+</div>
+<link rel="stylesheet" type="text/css" href="/styles/highlights-github.css">
+<script src="/scripts/aside.js"></script>
+<script src="/scripts/svg-render.js"></script>
+<script src="/scripts/search-texts.js"></script>
+<script src="/scripts/elasticlunr.min.js"></script>
+<script src="/scripts/search.js"></script>

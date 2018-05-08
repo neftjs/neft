@@ -1,0 +1,212 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="/styles/main.css">
+<nav id="navbar">
+    <div class="main">
+        <div class="logo">
+            <a href="/">
+                <img src="/media/logo-white-text-on.svg" alt="Neft.io" />
+            </a>
+        </div>
+
+        <div class="links">
+            <a href="/guide/get-started.html" class="active">Guide</a>
+            <a href="/api/app.html" class="">API</a>
+            <!--<a href="/examples.html" class="">Examples</a>-->
+        </div>
+
+        <div id="searchResult"></div>
+        <input id="search" type="text" placeholder="Search">
+        <span id="searchTitle">Search</span>
+    </div>
+</nav>
+<div class="main">
+    <aside id="aside">
+<ul>
+    <li>
+        <a href="/guide/get-started.html" class="active">
+            Get Started
+        </a>
+    </li>
+    <li>
+        <a href="/guide/testing.html" class="">
+            Testing
+        </a>
+    </li>
+    <li>
+        <a href="/guide/scripting.html" class="">
+            Scripting
+        </a>
+    </li>
+    <li>
+        <a href="/guide/virtual-dom.html" class="">
+            Virtual DOM
+        </a>
+    </li>
+    <li>
+        <a href="/guide/contribute.html" class="">
+            Contribute
+        </a>
+    </li>
+    <li>
+        <a href="/guide/data-binding.html" class="">
+            Data Binding
+        </a>
+    </li>
+    <li>
+        <a href="/guide/extensions.html" class="">
+            Extensions
+        </a>
+    </li>
+    <li>
+        <a href="/guide/native-communication.html" class="">
+            Native Communication
+        </a>
+    </li>
+    <li>
+        <a href="/guide/networking.html" class="">
+            Networking
+        </a>
+    </li>
+    <li>
+        <a href="/guide/routing.html" class="">
+            Routing
+        </a>
+    </li>
+    <li>
+        <a href="/guide/models.html" class="">
+            Models
+        </a>
+    </li>
+    <li>
+        <a href="/guide/components.html" class="">
+            Components
+        </a>
+    </li>
+    <li>
+        <a href="/guide/styles.html" class="">
+            Styles
+        </a>
+    </li>
+    <li>
+        <a href="/guide/animations.html" class="">
+            Animations
+        </a>
+    </li>
+    <li>
+        <a href="/guide/components-integration.html" class="">
+            Components Integration
+        </a>
+    </li>
+    <li>
+        <a href="/guide/custom-properties.html" class="">
+            Custom Properties
+        </a>
+    </li>
+    <li>
+        <a href="/guide/generic-styles.html" class="">
+            Generic Styles
+        </a>
+    </li>
+    <li>
+        <a href="/guide/layout.html" class="">
+            Layout
+        </a>
+    </li>
+    <li>
+        <a href="/guide/main-style.html" class="">
+            Main Style
+        </a>
+    </li>
+    <li>
+        <a href="/guide/runtime-styling.html" class="">
+            Runtime Styling
+        </a>
+    </li>
+    <li>
+        <a href="/guide/type-extending.html" class="">
+            Type Extending
+        </a>
+    </li>
+    <li>
+        <a href="/guide/static-resources.html" class="">
+            Static Resources
+        </a>
+    </li>
+</ul>
+    </aside>
+    <main class="content" id="guide">
+        <h1 id="get-started">Get Started</h1>
+<h2 id="tl-dr">tl;dr</h2>
+<pre><code>npm install neft -g
+neft create MyApp
+cd MyApp
+neft run node html --watch
+</code></pre><p>... and play with <code>MyApp/components/index.xhtml</code>;</p>
+<p>or alternatively:</p>
+<ul>
+<li><code>neft run ios --watch</code>,</li>
+<li><code>neft run android --watch</code>,</li>
+<li><code>neft run macos --watch</code>,</li>
+<li><code>neft run node webgl --watch</code>.</li>
+</ul>
+<hr>
+<h2 id="installation">Installation</h2>
+<p>To install Neft make sure you have installed <a href="https://nodejs.org/">Node.js</a> in version <strong>4.0.0 or newer</strong>.
+<em>Node</em> is an open-source JavaScript runtime environment.
+See <a href="https://nodejs.org/en/download/package-manager/">installation instruction for Linux distributions</a>, type <code>brew install node</code> under OSX or <code>choco install nodejs.install</code> under Windows. For more informations see <a href="Node.js&#39;s Downloads page">https://nodejs.org/en/download/</a>.</p>
+<p>Then you can easily install Neft on your machine by typing <code>npm install neft -g</code> in your terminal.</p>
+<p><em>npm</em> is the package manager for JavaScript installed by default in <a href="https://nodejs.org/">Node.js</a>.</p>
+<p>Now you can type <code>neft</code> and see the help page.</p>
+<h2 id="creating-app">Creating app</h2>
+<p>Neft application is a folder with standardized structure and <code>package.json</code> file.</p>
+<p>It&#39;s recommended to create application folder by typing <code>neft create MyAppName</code>.</p>
+<p>This command creates folder (e.g. <em>MyAppName</em>) with main view (<code>views/index.html</code>) and meta-data <code>package.json</code> file.</p>
+<h2 id="running-app">Running app</h2>
+<p>Each time you change the code of your application, you need to build the bundle.
+You can do this by typing <code>neft build html</code>.
+In place of <code>html</code> provide a platform you want to support. You can choose from <code>node</code>, <code>html</code>, <code>webgl</code>, <code>ios</code>, <code>macos</code> and <code>android</code>.</p>
+<p>By typing, for instance, <code>neft run ios</code> you will automatically build and run the application.</p>
+<p>If you want to run your application in a browser (<code>neft run html</code>), make sure you firstly run <em>node</em> server (<code>neft run node</code>) which serves all needed files for the browser.</p>
+<p>Server hostname and port are defined in the <code>package.json</code> file. It&#39;s <code>localhost:3000</code> by default.</p>
+<h3 id="webgl-renderer">WebGL renderer</h3>
+<p>By default, Neft uses the HTML renderer in a browser.</p>
+<p>If you want to use the WebGL renderer you can:</p>
+<ul>
+<li>change the <code>config.type</code> to <code>game</code> in <code>package.json</code>,</li>
+<li>use <code>/neft-type=game/</code> URI (e.g. <code>http://localhost:3000/neft-type=game/</code>).</li>
+</ul>
+<h3 id="text-mode">Text mode</h3>
+<p>If you want to disable the renderer in a browser and see how Google see your page, you can:</p>
+<ul>
+<li>change the <code>config.type</code> to <code>text</code> in <code>package.json</code>,</li>
+<li>use <code>/neft-type=text/</code> URI (e.g. <code>http://localhost:3000/neft-type=text/</code>).</li>
+</ul>
+<h2 id="production-mode">Production mode</h2>
+<p>When you are ready to publish your app, build client bundles using the <code>--release</code> flag.</p>
+<pre><code>neft run node --release
+</code></pre><p>In the release mode, code is minified and all assertions are removed.</p>
+<h2 id="local-configuration-file">Local configuration file</h2>
+<p>In your application folder, you can find <code>local.json</code> file.</p>
+<p>This file is used to configure your local environment. It&#39;s ignored by Git (see <code>.gitignore</code> file in your application folder).</p>
+<h3 id="android">Android</h3>
+<p>To build APK and run your application on Android device, you need to specify where, on your machine <em>Android SDK</em> is placed. See <code>android.sdkDir</code> in your <code>local.json</code> file.</p>
+<h2 id="watching-on-changes">Watching on changes</h2>
+<p>To speed up coding, you can automatically rebuild the bundle each time you change something. Type <code>neft build android --watch</code> or whatever platform you want to support.</p>
+<p>Application run in native environment will automatically restart.</p>
+<p>To make it works, you will need to specify <code>buildServer.host</code> in your <code>local.json</code> file. We recommend to use your machine IP address.</p>
+<p>Changing static files or custom native code requires you to rerun your application on a device manually.</p>
+
+    </main>
+</div>
+<link rel="stylesheet" type="text/css" href="/styles/highlights-github.css">
+<script src="/scripts/aside.js"></script>
+<script src="/scripts/svg-render.js"></script>
+<script src="/scripts/search-texts.js"></script>
+<script src="/scripts/elasticlunr.min.js"></script>
+<script src="/scripts/search.js"></script>
