@@ -1,0 +1,13 @@
+{{> head}}
+{{> navbar}}
+<div class="main">
+    {{#view}}
+    <aside id="aside">
+        {{> aside}}
+    </aside>
+    {{/view}}
+    <main class="content" id="guide">
+        {{{view.html}}}
+    </main>
+</div>
+{{> footer}}

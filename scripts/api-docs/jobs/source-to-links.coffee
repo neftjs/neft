@@ -16,7 +16,7 @@ exports.prepareFileToSave = (file, path) ->
             url = URL_PREFIX + fileCommit + '/' + pathUtils.normalize(path)
             if heading?.syntax
                 url += headingToUrl heading.syntax
-            text = "\n> [`Source`](#{url})\n"
+            text = "\n[`Source`](#{url})\n"
             file[i] = new Paragraph type.line, text
 
     return

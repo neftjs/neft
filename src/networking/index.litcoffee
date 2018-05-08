@@ -143,7 +143,7 @@ Indicates the application language regarding to BCP47 (e.g. 'en', 'en-US').
 
 Use this method to create a new *Networking.Handler*.
 
-```javscript
+```javascript
 app.networking.createHandler({
     method: 'get',
     uri: '/users/{name}',

@@ -6,9 +6,7 @@ fs = require 'fs-extra'
 Mustache = require 'mustache'
 {Heading, Paragraph} = require '../markdown'
 
-WIKI_INDEX_PATH = 'SUMMARY.md.mustache'
-WIKI_INDEX_OUT_PATH = 'SUMMARY.md'
-WIKI_INDEX_API_REF_TAG = 'api-reference'
+WIKI_INDEX_PATH = 'api/SUMMARY.json'
 SRC_INDEX_FILE = 'index.litcoffee'
 SEP = '/'
 
@@ -37,17 +35,11 @@ exports.modifyFile = (file, path, mdPath, uri) ->
         parent: null
     return
 
-treeToMd = (file, prefix = '') ->
-    md = "#{prefix}* [#{file.heading}](#{file.uri})"
-    if file.summary
-        md += " — #{file.summary}"
-    md += '\n'
-
-    prefix += '  '
-    for child in file.children
-        md += treeToMd child, prefix
-
-    md
+treeToJson = (file) ->
+    name: file.uri.slice(1, file.uri.lastIndexOf('.'))
+    title: file.heading
+    summary: file.summary
+    nav: treeToJson child for child in file.children
 
 exports.onFilesParse = (parsedFiles, repo) ->
     indexFiles = {}
@@ -89,24 +81,20 @@ exports.onFilesParse = (parsedFiles, repo) ->
                 0
 
     # wiki index file
-    md = ''
     mdFilesHeadings = []
     mdFilesByHeadings = {}
     for path, file of indexFiles
         mdFilesHeadings.push file.heading
-        mdFilesByHeadings[file.heading] = treeToMd file
+        mdFilesByHeadings[file.heading] = treeToJson file
 
     mdFilesHeadings.sort()
 
+    summary = []
     for heading in mdFilesHeadings
-        md += mdFilesByHeadings[heading]
+        summary.push mdFilesByHeadings[heading]
 
     wikiIndexPath = pathUtils.join repo, '/', WIKI_INDEX_PATH
-    wikiIndexOutPath = pathUtils.join repo, '/', WIKI_INDEX_OUT_PATH
-    indexWiki = fs.readFileSync wikiIndexPath, 'utf-8'
-    indexWiki = Mustache.render indexWiki,
-        "#{WIKI_INDEX_API_REF_TAG}": md
-    fs.outputFileSync wikiIndexOutPath, indexWiki
+    fs.outputFileSync wikiIndexPath, JSON.stringify(summary, 0, 4)
 
     return
 
@@ -119,12 +107,12 @@ exports.prepareFileToSave = (file, path) ->
 
     treeFile = filesTree[path]
 
-    md = '> **API Reference**'
+    md = '> **API**'
 
     parentsMd = ''
     parent = treeFile
     while parent = parent?.parent
-        wikiUri = parent.uri
+        wikiUri = parent.uri.slice(0, parent.uri.lastIndexOf('.')) + '.html'
         parentsMd = " ▸ [#{parent.heading}](#{wikiUri})" + parentsMd
     md += parentsMd
 
@@ -134,5 +122,6 @@ exports.prepareFileToSave = (file, path) ->
 
     # after first h1
     file.splice 1, 0, new Paragraph 0, md
+    # file.unshift new Paragraph 0, md
 
     return

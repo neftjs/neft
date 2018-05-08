@@ -193,6 +193,13 @@ so `anchors.top = parent.left` is not allowed.
 
 ## *Array* Anchors::horizontalCenter
 
+```svg
+<svg viewBox="0 0 1 1">
+    <rect x="0.2" y="0.2" width="0.6" height="0.6" fill="lightgray" />
+    <line x1="0.5" y1="0" x2="0.5" y2="1" stroke="black" stroke-width="0.01" />
+</svg>
+```
+
 ```javascript
 Item {
     height: 100
@@ -211,6 +218,13 @@ Item {
 ## *Signal* Anchors::onHorizontalCenterChange(*Array* oldValue)
 
 ## *Array* Anchors::top
+
+```svg
+<svg viewBox="0 0 1 1">
+    <rect x="0.2" y="0.2" width="0.6" height="0.6" fill="lightgray" />
+    <line x1="0" y1="0.2" x2="1" y2="0.2" stroke="black" stroke-width="0.01" />
+</svg>
+```
 
 ```javascript
 Item {
@@ -231,6 +245,13 @@ Item {
 
 ## *Array* Anchors::bottom
 
+```svg
+<svg viewBox="0 0 1 1">
+    <rect x="0.2" y="0.2" width="0.6" height="0.6" fill="lightgray" />
+    <line x1="0" y1="0.8" x2="1" y2="0.8" stroke="black" stroke-width="0.01" />
+</svg>
+```
+
         createAnchorProp 'bottom', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ, ->
             if @_ref
                 @_ref._y + @_ref._height + (@_ref._margin?._bottom or 0)
@@ -238,6 +259,13 @@ Item {
 ## *Signal* Anchors::onBottomChange(*Array* oldValue)
 
 ## *Array* Anchors::verticalCenter
+
+```svg
+<svg viewBox="0 0 1 1">
+    <rect x="0.2" y="0.2" width="0.6" height="0.6" fill="lightgray" />
+    <line x1="0" y1="0.5" x2="1" y2="0.5" stroke="black" stroke-width="0.01" />
+</svg>
+```
 
 ```javascript
 Item {

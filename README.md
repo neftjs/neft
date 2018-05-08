@@ -94,7 +94,7 @@ cd MyApp
 neft run node html --watch
 ```
 
-... and play with `MyApp/views/index.html`.
+... and play with `MyApp/components/index.xhtml`.
 
 ## Android native app
 
@@ -112,17 +112,24 @@ Download XCode (8.1 or newer) on your Mac computer and run:
 neft run ios --watch
 ```
 
-## No examples, tutorials, bad docs quality
+## MacOS native app
 
-You can help with making Neft brilliant. [Contribute](http://neft.io/contribute.html).
+Download XCode (8.1 or newer) on your Mac computer and run:
 
-Always create an issue if something doesn't work or can be improved.
+```
+neft run macos --watch
+```
 
-*Neft is ours ;)*
+## WebGL app
+
+```
+neft run node webgl --watch
+```
 
 * * *
 
 ### [Documentation](http://neft.io)
+### [Contribute](/Neft-io/neft/blob/master/CONTRIBUITING.md)
 
 * * *
 

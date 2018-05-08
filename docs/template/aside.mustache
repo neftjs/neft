@@ -1,0 +1,15 @@
+<ul>
+    {{#nav}}
+    <li>
+        <a href="/{{{name}}}.html" class="{{#active}}active{{/active}}">
+            {{title}}
+            {{#summary}}
+            <span class="summary">{{summary}}</span>
+            {{/summary}}
+        </a>
+        {{#hasSubnav}}
+        {{> aside}}
+        {{/hasSubnav}}
+    </li>
+    {{/nav}}
+</ul>

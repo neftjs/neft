@@ -30,6 +30,7 @@
     "bundle": "cross-env NODE_PATH=./ coffee --nodejs --harmony scripts/bundle.coffee",
     "test": "node ./bin/neft.js test",
     "update-api-docs": "cross-env NODE_PATH=./ coffee scripts/api-docs.coffee",
+    "generate-docs": "coffee ./scripts/docs/",
     "prepublishOnly": "npm run bundle",
     "postinstall": "coffee scripts/ensure-bundle.coffee"
   },
@@ -44,7 +45,7 @@
     "coffee-script": "1.10.0",
     "cross-env": "1.0.8",
     "form-data": "1.0.0-rc4",
-    "fs-extra": "0.30.0",
+    "fs-extra": "^4.0.2",
     "glob": "7.0.3",
     "htmlparser2": "3.9.2",
     "http-server": "^0.10.0",
@@ -58,6 +59,7 @@
     "open": "0.0.5",
     "pegjs": "0.10.0",
     "pngjs": "3.0.0",
+    "prismjs": "^1.6.0",
     "qs": "6.2.0",
     "semver": "5.1.0",
     "slash": "1.0.0",
@@ -70,8 +72,11 @@
     "coffee-coverage": "1.0.1",
     "coveralls": "2.11.14",
     "escape-html": "1.0.3",
+    "highlight.js": "^9.12.0",
     "imgur": "0.2.1",
     "istanbul": "^0.4.5",
+    "less": "^2.7.2",
+    "marked": "^0.3.6",
     "wd": "0.4.0"
   },
   "android": {

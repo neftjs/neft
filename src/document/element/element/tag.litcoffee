@@ -1,4 +1,4 @@
-# Tag
+# *Class* Tag : *Element*
 
     'use strict'
 
@@ -53,7 +53,7 @@
 
             obj
 
-## *Tag* Tag::constructor() : *Element*
+## Tag::constructor()
 
         constructor: ->
             Element.call @

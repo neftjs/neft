@@ -13,6 +13,8 @@ exports.Heading = class Heading
         else if /^-/m.test(@text)
             return 2
         return -1
+    getMarkdownLevel: ->
+        /^([#]+)/.exec(@text)?[1] or ''
     getHeadingText: ->
         escapeHtml /^(?:[#]*)(.*)/.exec(@text)?[1]?.trim?() or ''
     setHeadingText: (val) ->
