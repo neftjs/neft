@@ -7,6 +7,15 @@ nmlParser = require 'src/nml-parser'
 bundle = (nml) ->
     nmlParser.bundle(nml).bundle
 
+PREFIX = "_RendererObject = Neft.Renderer.itemUtils.Object"
+
+DEFAULT_IMPORTS = '''
+Class = Neft.Renderer.Class
+Device = Neft.Renderer.Device
+Navigator = Neft.Renderer.Navigator
+Screen = Neft.Renderer.Screen
+'''
+
 describe 'nml-parser', ->
     it 'bundles items', ->
         result = bundle nml: '''
@@ -14,9 +23,9 @@ describe 'nml-parser', ->
                 query: 'any-item'
             }
         '''
-        expected = '''
-            _RendererObject = Neft.Renderer.itemUtils.Object
-            Class = Neft.Renderer.Class
+        expected = """
+            #{PREFIX}
+            #{DEFAULT_IMPORTS}
             Item = Neft.Renderer.Item
             windowItem = undefined
             exports._i0 = ({}) ->
@@ -34,7 +43,7 @@ describe 'nml-parser', ->
             exports._queries = {"any-item":"_i0"}
             exports._imports = {}
 
-        '''
+        """
         assert.is result, expected
 
     it 'resolves imports', ->
@@ -43,11 +52,11 @@ describe 'nml-parser', ->
             import Styles.ChildNamespace.CustomStyle
             TileImage {}
         '''
-        expected = '''
-            _RendererObject = Neft.Renderer.itemUtils.Object
+        expected = """
+            #{PREFIX}
             TileImage = require "extensions/tileImage/renderer/tileImage"
             CustomStyle = require "styles/ChildNamespace/CustomStyle"
-            Class = Neft.Renderer.Class
+            #{DEFAULT_IMPORTS}
             windowItem = undefined
             exports._i0 = ({}) ->
                 _i0 = TileImage.New()
@@ -64,7 +73,7 @@ describe 'nml-parser', ->
             exports._imports = {"extensions/tileImage/renderer/tileImage":true,\
             "styles/ChildNamespace/CustomStyle":true}
 
-        '''
+        """
         assert.is result, expected
 
     it 'appends constants', ->
@@ -73,9 +82,9 @@ describe 'nml-parser', ->
             const func = function () {return 2}
             Item {}
         '''
-        expected = '''
-            _RendererObject = Neft.Renderer.itemUtils.Object
-            Class = Neft.Renderer.Class
+        expected = """
+            #{PREFIX}
+            #{DEFAULT_IMPORTS}
             Item = Neft.Renderer.Item
             abc = `1`
             func = `function () {return 2}
@@ -95,14 +104,14 @@ describe 'nml-parser', ->
             exports._queries = {}
             exports._imports = {}
 
-        '''
+        """
         assert.is result, expected
 
     it 'adds relative path', ->
         result = bundle nml: '', path: './testPath.nml'
-        expected = '''
-            _RendererObject = Neft.Renderer.itemUtils.Object
-            Class = Neft.Renderer.Class
+        expected = """
+            #{PREFIX}
+            #{DEFAULT_IMPORTS}
             windowItem = undefined
             exports._init = (opts) ->
                 windowItem = opts.windowItem
@@ -111,7 +120,7 @@ describe 'nml-parser', ->
             exports._imports = {}
             exports._path = "./testPath.nml"
 
-        '''
+        """
         assert.is result, expected
 
     it 'adds absolute path', ->
@@ -119,8 +128,8 @@ describe 'nml-parser', ->
         result = bundle nml: '', path: path
         expected = pathUtils.relative fs.realpathSync('.'), path
         expected = """
-            _RendererObject = Neft.Renderer.itemUtils.Object
-            Class = Neft.Renderer.Class
+            #{PREFIX}
+            #{DEFAULT_IMPORTS}
             windowItem = undefined
             exports._init = (opts) ->
                 windowItem = opts.windowItem

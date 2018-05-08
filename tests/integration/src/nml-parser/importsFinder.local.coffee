@@ -6,6 +6,13 @@ getImports = (nml) ->
     ast = nmlParser.getAST nml
     nmlParser.getImports ast
 
+DEFAULT_IMPORTS = [
+    {name: 'Class', ref: 'Neft.Renderer.Class'},
+    {name: 'Device', ref: 'Neft.Renderer.Device'},
+    {name: 'Navigator', ref: 'Neft.Renderer.Navigator'},
+    {name: 'Screen', ref: 'Neft.Renderer.Screen'},
+]
+
 describe 'nml-parser imports', ->
     it 'default items', ->
         code = '''
@@ -14,7 +21,7 @@ describe 'nml-parser imports', ->
         }
         '''
         expected = [
-            {name: 'Class', ref: 'Neft.Renderer.Class'},
+            DEFAULT_IMPORTS...,
             {name: 'Item', ref: 'Neft.Renderer.Item'},
             {name: 'PropertyAnimation', ref: 'Neft.Renderer.PropertyAnimation'},
         ]
@@ -26,7 +33,7 @@ describe 'nml-parser imports', ->
         '''
         expected = [
             {name: 'VerticalText', path: 'styles/Header/VerticalText'},
-            {name: 'Class', ref: 'Neft.Renderer.Class'},
+            DEFAULT_IMPORTS...,
         ]
         assert.isEqual getImports(code), expected
 
@@ -36,7 +43,7 @@ describe 'nml-parser imports', ->
         '''
         expected = [
             {name: 'VerticalText', path: 'styles/Header/VerticalText'},
-            {name: 'Class', ref: 'Neft.Renderer.Class'},
+            DEFAULT_IMPORTS...,
         ]
         assert.isEqual getImports(code), expected
 
@@ -49,7 +56,7 @@ describe 'nml-parser imports', ->
                 name: 'VerticalText',
                 path: 'node-modules/neft-vertical-text/renderer/verticalText'
             },
-            {name: 'Class', ref: 'Neft.Renderer.Class'},
+            DEFAULT_IMPORTS...,
         ]
         assert.isEqual getImports(code), expected
 
@@ -62,7 +69,7 @@ describe 'nml-parser imports', ->
                 name: 'Video',
                 path: 'extensions/video/renderer/video'
             },
-            {name: 'Class', ref: 'Neft.Renderer.Class'},
+            DEFAULT_IMPORTS...,
         ]
         assert.isEqual getImports(code), expected
 
@@ -75,6 +82,6 @@ describe 'nml-parser imports', ->
                 name: 'Video',
                 path: 'extensions/video/renderer/video'
             },
-            {name: 'Class', ref: 'Neft.Renderer.Class'},
+            DEFAULT_IMPORTS...,
         ]
         assert.isEqual getImports(code), expected
