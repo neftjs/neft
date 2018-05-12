@@ -78,19 +78,5 @@
     "less": "^2.7.2",
     "marked": "^0.3.6",
     "wd": "0.4.0"
-  },
-  "android": {
-    "package": "io.neft.tests",
-    "versionCode": 1,
-    "versionName": "1.0",
-    "application": {
-      "label": "Neft.io Tests"
-    }
-  },
-  "ios": {
-    "package": "io.neft.tests",
-    "application": {
-      "label": "Neft.io Tests"
-    }
   }
 }

@@ -14,19 +14,5 @@
   },
   "scripts": {
     "test": "neft test"
-  },
-  "android": {
-    "package": "io.neft.sample",
-    "versionCode": 1,
-    "versionName": "1.0",
-    "application": {
-      "label": "Neft.io Sample Project"
-    }
-  },
-  "ios": {
-    "package": "io.neft.sample",
-    "application": {
-        "label": "Neft.io Tests"
-    }
   }
 }

@@ -1,6 +1,7 @@
 'use strict'
 
 fs = require 'fs'
+pathUtils = require 'path'
 open = require 'open'
 cp = require 'child_process'
 
@@ -13,7 +14,7 @@ module.exports = (options, callback = ->) ->
     mode = if options.release then 'release' else 'debug'
 
     logLine = log.line().timer().repeat().loading 'Installing APK...'
-    packageFile = JSON.parse fs.readFileSync('./package.json', 'utf-8')
+    manifest = require pathUtils.resolve fs.realpathSync('.'), './manifest/android'
     local = JSON.parse fs.readFileSync('./local.json', 'utf-8')
 
     {sdkDir} = local.android
@@ -104,7 +105,7 @@ module.exports = (options, callback = ->) ->
         runCmd = """
             #{adbPath} shell am start \
             -a android.intent.action.MAIN \
-            -n #{packageFile.android.package}/.MainActivity
+            -n #{manifest.package}/.MainActivity
         """
         shell = cp.exec runCmd, (err) ->
             if err

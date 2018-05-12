@@ -32,6 +32,7 @@ ICON_FORMATS = {
         {width: 76, height: 76, out: "ipad-76.png"},
         {width: 152, height: 152, out: "ipad-76@2x.png"},
         {width: 167, height: 167, out: "ipad-83p5@2x.png"},
+        {width: 1024, height: 1024, out: "default.png"},
     ]
 }
 

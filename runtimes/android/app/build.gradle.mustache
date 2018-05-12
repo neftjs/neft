@@ -1,31 +1,31 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion {{&local.android.compileSdkVersion}}
-    buildToolsVersion "{{&local.android.buildToolsVersion}}"
+    compileSdkVersion {{&manifest.compileSdkVersion}}
+    buildToolsVersion "{{&manifest.buildToolsVersion}}"
     defaultConfig {
-        applicationId "{{&package.android.package}}"
+        applicationId "{{&manifest.package}}"
         minSdkVersion 18
-        targetSdkVersion {{&local.android.targetSdkVersion}}
-        versionCode {{&package.android.versionCode}}
-        versionName "{{&package.android.versionName}}"
+        targetSdkVersion {{&manifest.targetSdkVersion}}
+        versionCode {{&manifest.versionCode}}
+        versionName "{{&manifest.versionName}}"
     }
     signingConfigs {
-        {{#package.android.signing}}
+        {{#manifest.signing}}
         config {
             storeFile file('{{&storeFile}}')
             storePassword '{{&storePassword}}'
             keyPassword '{{&keyPassword}}'
             keyAlias '{{&keyAlias}}'
         }
-        {{/package.android.signing}}
+        {{/manifest.signing}}
     }
     buildTypes {
         release {
             minifyEnabled true
-            {{#package.android.signing}}
+            {{#manifest.signing}}
             signingConfig signingConfigs.config
-            {{/package.android.signing}}
+            {{/manifest.signing}}
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -53,11 +53,15 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    {{#local.android.dependencies}}
-    implementation '{{&.}}'
-    {{/local.android.dependencies}}
+    {{#manifest.app.dependencies}}
+    {{&.}}
+    {{/manifest.app.dependencies}}
     implementation files('src/main/libs/androidsvg-1.2.1.jar')
     implementation 'com.jakewharton:process-phoenix:1.1.0'
     compileOnly 'org.projectlombok:lombok:1.12.6'
     annotationProcessor 'org.projectlombok:lombok:1.12.6'
 }
+
+{{#manifest.app.plugins}}
+{{&.}}
+{{/manifest.app.plugins}}

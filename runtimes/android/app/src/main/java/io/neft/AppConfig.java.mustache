@@ -20,6 +20,6 @@ class AppConfig {
 
     static void restart() {
         Context context = App.getInstance().getActivity().getBaseContext();
-        ProcessPhoenix.triggerRebirth(context, new Intent(context, {{&package.android.package}}.MainActivity.class));
+        ProcessPhoenix.triggerRebirth(context, new Intent(context, {{&manifest.package}}.MainActivity.class));
     }
 }
