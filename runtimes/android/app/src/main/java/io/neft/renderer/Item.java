@@ -156,6 +156,7 @@ public class Item {
     private final Rect childrenBounds = new Rect();
     private final Rect takenBounds = new Rect();
     private boolean optimized = false;
+    private boolean childrenOptimized = false;
 
     // hardware layers
     private boolean isInLayers = false;
@@ -432,11 +433,15 @@ public class Item {
 
         // measure children
         if (dirtyChildren) {
+            childrenOptimized = true;
             childrenBounds.setEmpty();
             for (int i = 0, len = children.size(); i < len; i++) {
                 Item child = children.get(i);
                 if (child.visible) {
                     child.measure();
+                    if (!child.optimized) {
+                        childrenOptimized = false;
+                    }
                     childrenBounds.union(child.takenBounds);
                 }
             }
@@ -452,7 +457,7 @@ public class Item {
         boolean optimize = clip || size.contains(childrenBounds);
         if (visible && optimized != optimize) {
             optimized = optimize;
-            view.setClipChildren(optimized);
+            view.setClipChildren(optimized && childrenOptimized);
             if (!optimized) {
                 dropGpu();
             }
