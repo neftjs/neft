@@ -12,8 +12,10 @@ const fs = require('fs');
 const currentVersion = process.version;
 const expectedVersion = require('../package.json').engines.node;
 if (!semver.satisfies(currentVersion, expectedVersion)) {
-    console.error("Node version '#{currentVersion}' " +
-        "is lower than expected '#{expectedVersion}'");
+    console.error('\n! IMPORTANT !')
+    console.error('Your node version ' + currentVersion +
+        ' is lower than expected ' + expectedVersion);
+    console.error('! IMPORTANT !\n')
 }
 
 const isFirstRun = !fs.existsSync(pathUtils.join(__dirname, '../build'))

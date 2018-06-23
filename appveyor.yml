@@ -1,7 +1,7 @@
 version: '{build}-{branch}'
 platform: x64
 environment:
-    nodejs_version: "8.0"
+    nodejs_version: "8.1.2"
     TEST_NODE: 1
 install:
     - ps: Install-Product node $env:nodejs_version
