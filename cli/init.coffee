@@ -32,6 +32,7 @@ args =
 
 options =
     release: false
+    minify: false
     out: ''
     watch: false
     notify: false
