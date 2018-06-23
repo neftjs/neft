@@ -11,6 +11,7 @@
     Document = require 'src/document'
     Renderer = require 'src/renderer'
     Dict = require 'src/dict'
+    Struct = require 'src/struct'
 
     log = log.scope 'app', 'route'
 
@@ -32,13 +33,13 @@
         @getTemplateComponent = do ->
             if IS_NODE
                 (name) ->
-                    scope = app: app, routes: new Dict
+                    scope = routes: new Dict
                     tmpl = app.components[name].render null, scope
                     usedTemplates.push tmpl
                     tmpl
             else
                 (name) ->
-                    scope = app: app, routes: new Dict
+                    scope = routes: new Dict
                     templates[name] ?= app.components[name].render null, scope
 
 ## Route::constructor(*Object* options)
@@ -184,10 +185,16 @@ Acceptable syntaxes:
 
             return
 
+        objectDataToStruct = (data) ->
+            if utils.isObject(data)
+                new Struct data
+            else
+                data
+
         resolveSyncGetDataFunc = (route) ->
             assert.instanceOf route, Route
 
-            route.data = route.getData()
+            route.data = objectDataToStruct route.getData()
 
         resolveAsyncGetDataFuncCallback = (route, err, data) ->
             assert.instanceOf route, Route
@@ -201,7 +208,7 @@ Acceptable syntaxes:
             else
                 if route._dataPrepared and route.data is data
                     return false
-                route.data = data
+                route.data = objectDataToStruct data
             true
 
         prepareRouteData = (route) ->
@@ -348,6 +355,8 @@ Acceptable syntaxes:
 
 ## *Function* Route::getData([*Function* callback])
 
+        getData: -> @data
+
 ## *Function* Route::destroy()
 
 ## *Function* Route::destroyJSON()
@@ -414,7 +423,7 @@ Can be also a function. May returns a *Networking.Uri*, any String or `undefined
                         for route '#{routeToString.call(@)}'
                     """
             if component = app.components[componentName]
-                r = component.render null, @
+                r = component.render null, @data
             else
                 log.warn "Component '#{tmplName}' can't be found for route '#{routeToString.call(@)}'"
             if tmplComponent
