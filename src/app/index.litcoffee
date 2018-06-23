@@ -100,12 +100,6 @@ HTTP protocol is used by default with the data specified in the *package.json*.
             url: config.url
             language: config.language
 
-## *Object* app.routes = `{}`
-
-Files from the *routes* folder with objects returned by their exported functions.
-
-        app.routes = {}
-
 ## *Object* app.styles = `{}`
 
 Files from the *styles* folder as *Function*s
@@ -238,24 +232,6 @@ app.cookies.onChange(function(key){
         # load bootstrap
         bootstrapRoute? app
 
-        # loading files helper
-        init = (files, target) ->
-            for file in files when file.name?
-                if typeof file.file isnt 'function'
-                    continue
-
-                fileObj = file.file app
-                target[file.name] = fileObj
-
-                if baseNameMatch = BASE_FILE_NAME_RE.exec(file.name)
-                    [_, baseName] = baseNameMatch
-                    if target[baseName]?
-                        if utils.isPlainObject(target[baseName]) and utils.isPlainObject(fileObj)
-                            fileObj = utils.merge Object.create(target[baseName]), fileObj
-                    target[baseName] = fileObj
-
-            return
-
         # load app extensions
         if utils.isObject(opts.extensions)
             for ext in opts.extensions
@@ -269,23 +245,18 @@ app.cookies.onChange(function(key){
         for component in opts.components when component.name?
             app.components[component.name] = Document.fromJSON component.file
 
-        # load files
-        init opts.routes, app.routes
-
-        for path, obj of app.routes
-            r = {}
-            if utils.isObject(obj) and not (obj instanceof app.Route)
-                for method, opts of obj
-                    if utils.isObject(opts)
-                        route = new app.Route method, opts
-                        r[route.name] = route
-                    else
-                        r[method] = opts
-            app.routes[path] = r
+        # load routes
+        for route in opts.routes
+            if typeof route is 'function'
+                route = route app
+            if utils.isPlainObject(route.file)
+                for method, routeOpts of route.file
+                    if utils.isObject(routeOpts)
+                        new app.Route method, routeOpts
 
         # provide default index route
-        unless app.routes.index
-            app.routes.index = new app.Route 'get /', {}
+        if utils.isEmpty(opts.routes)
+            new app.Route 'get /', {}
 
         # emit ready signal
         app.onReady.emit()
