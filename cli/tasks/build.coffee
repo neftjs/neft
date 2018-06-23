@@ -1,6 +1,7 @@
 'use strict'
 
 fs = require 'fs-extra'
+readline = require 'readline'
 cliUtils = require '../utils'
 
 local = require './build/local'
@@ -13,9 +14,15 @@ Networking = require 'src/networking'
 
 log = log.scope 'cli', 'build'
 
+stdin = readline.createInterface
+    input: process.stdin
+    terminal: false
+stdinLogLine = log.line()
+
 startWatcher = (watchHandler, buildsStack, platform, options) ->
-    watch platform, options, (buildOptions, onBuilt) ->
+    buildPlatform = (buildOptions, onBuilt) ->
         buildsStack.add (callback) ->
+            localOpts = utils.mergeAll {}, buildOptions, buildBundleOnly: true
             build platform, buildOptions, (err, result) ->
                 watchHandler.send platform, result
                 onBuilt result
@@ -23,8 +30,18 @@ startWatcher = (watchHandler, buildsStack, platform, options) ->
         unless buildsStack.pending
             buildsStack.runAll utils.NOP
 
+    # start watching for new files
+    watch platform, options, buildPlatform
+
+    # force whole reload on stdin
+    stdin.on 'line', ->
+        buildPlatform options, utils.NOP
+
+    return
+
 startWatchers = (options) ->
-    log.info 'Starting HTTP server for watch mode'
+    log.info 'Starting watch mode'
+    log.info '🛎  Hit *ENTER* to force reload manually'
 
     networking = new Networking utils.merge
         type: Networking.HTTP
