@@ -421,39 +421,36 @@
 <p><strong>API</strong> ▸ <strong>List</strong></p>
 </blockquote>
 <p>Access it with:</p>
-<pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { List } = Neft;
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/list/index.litcoffee"><code>Source</code></a></p>
+<pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { List } = Neft;</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/list/index.litcoffee"><code>Source</code></a></p>
 <h2 id="list-constructor-data-">List::<strong>constructor</strong>(<em>data</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>data — <code>Array</code> — <i>optional</i></li></ul></dd></dl>
 
 <p>Creates a new list instance.</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> list = <span class="hljs-keyword">new</span> List([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]);
-list <span class="hljs-keyword">instanceof</span> List; <span class="hljs-comment">// true</span>
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/list/index.litcoffee#listconstructorarray-data"><code>Source</code></a></p>
+list <span class="hljs-keyword">instanceof</span> List; <span class="hljs-comment">// true</span></code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/list/index.litcoffee#listconstructorarray-data"><code>Source</code></a></p>
 <h2 id="list-onchange-oldvalue-index-">List::<strong>onChange</strong>(<em>oldValue</em>, <em>index</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Any</code></li><li>index — <code>Integer</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
 
 <p>Signal called on each value change.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/list/index.litcoffee#signal-listonchangeany-oldvalue-integer-index"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/list/index.litcoffee#signal-listonchangeany-oldvalue-integer-index"><code>Source</code></a></p>
 <h2 id="list-oninsert-value-index-">List::<strong>onInsert</strong>(<em>value</em>, <em>index</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>value — <code>Any</code></li><li>index — <code>Integer</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
 
 <p>Signal called when a value was added.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/list/index.litcoffee#signal-listoninsertany-value-integer-index"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/list/index.litcoffee#signal-listoninsertany-value-integer-index"><code>Source</code></a></p>
 <h2 id="list-onpop-oldvalue-index-">List::<strong>onPop</strong>(<em>oldValue</em>, <em>index</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Any</code></li><li>index — <code>Integer</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
 
 <p>Signal called when a value was removed.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/list/index.litcoffee#signal-listonpopany-oldvalue-integer-index"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/list/index.litcoffee#signal-listonpopany-oldvalue-integer-index"><code>Source</code></a></p>
 <h2 id="list-length">List::<strong>length</strong></h2>
 <dl><dt>Type:</dt><dd><code>Integer</code></dd><dt>Read Only</dt></dl>
 
 <p>Amount of values stored in the list.</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> list = <span class="hljs-keyword">new</span> List([<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>]);
-list.length; <span class="hljs-comment">// 2</span>
-</code></pre>
+list.length; <span class="hljs-comment">// 2</span></code></pre>
 <h2 id="list-set-index-value-">List::<strong>set</strong>(<em>index</em>, <em>value</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>index — <code>Integer</code></li><li>value — <code>Any</code></li></ul></dd><dt>Returns:</dt><dd><code>Any</code></dd></dl>
 
@@ -471,9 +468,8 @@ types.set(<span class="hljs-number">0</span>, <span class="hljs-string">'Fantasy
 <span class="hljs-comment">// element fantasy changed to Fantasy</span>
 
 types.set(<span class="hljs-number">0</span>, <span class="hljs-string">'Fantasy'</span>);
-<span class="hljs-comment">// nothing changed ...</span>
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/list/index.litcoffee#any-listsetinteger-index-any-value"><code>Source</code></a></p>
+<span class="hljs-comment">// nothing changed ...</span></code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/list/index.litcoffee#any-listsetinteger-index-any-value"><code>Source</code></a></p>
 <h2 id="list-append-value-">List::<strong>append</strong>(<em>value</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>value — <code>Any</code></li></ul></dd><dt>Returns:</dt><dd><code>Any</code></dd></dl>
 
@@ -490,9 +486,8 @@ fridge.append(<span class="hljs-string">'cheese'</span>);
 <span class="hljs-comment">// cheese appended!</span>
 
 <span class="hljs-built_in">console</span>.log(fridge.items());
-<span class="hljs-comment">// apple, milk, cheese</span>
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/list/index.litcoffee#any-listappendany-value"><code>Source</code></a></p>
+<span class="hljs-comment">// apple, milk, cheese</span></code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/list/index.litcoffee#any-listappendany-value"><code>Source</code></a></p>
 <h2 id="list-insert-index-value-">List::<strong>insert</strong>(<em>index</em>, <em>value</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>index — <code>Integer</code></li><li>value — <code>Any</code></li></ul></dd><dt>Returns:</dt><dd><code>Any</code></dd></dl>
 
@@ -510,15 +505,14 @@ list.insert(<span class="hljs-number">1</span>, <span class="hljs-string">'c'</s
 <span class="hljs-comment">// new element c inserted at index 1</span>
 
 <span class="hljs-built_in">console</span>.log(list.items());
-<span class="hljs-comment">// ['a', 'c', 'b']</span>
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/list/index.litcoffee#any-listinsertinteger-index-any-value"><code>Source</code></a></p>
+<span class="hljs-comment">// ['a', 'c', 'b']</span></code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/list/index.litcoffee#any-listinsertinteger-index-any-value"><code>Source</code></a></p>
 <h2 id="list-extend-items-">List::<strong>extend</strong>(<em>items</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>items — <code>Object</code></li></ul></dd><dt>Returns:</dt><dd><code>List</code></dd></dl>
 
 <p>Appends all values stored in the given items into the list.</p>
 <p>Calls <code>onInsert()</code> signal for each value.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/list/index.litcoffee#list-listextendobject-items"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/list/index.litcoffee#list-listextendobject-items"><code>Source</code></a></p>
 <h2 id="list-remove-value-">List::<strong>remove</strong>(<em>value</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>value — <code>Any</code></li></ul></dd><dt>Returns:</dt><dd><code>Any</code></dd></dl>
 
@@ -530,9 +524,8 @@ list[<span class="hljs-number">1</span>]; <span class="hljs-comment">// b</span>
 list.remove(<span class="hljs-string">'b'</span>);
 list[<span class="hljs-number">1</span>]; <span class="hljs-comment">// undefined</span>
 
-list; <span class="hljs-comment">// ['a']</span>
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/list/index.litcoffee#any-listremoveany-value"><code>Source</code></a></p>
+list; <span class="hljs-comment">// ['a']</span></code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/list/index.litcoffee#any-listremoveany-value"><code>Source</code></a></p>
 <h2 id="list-pop-index-">List::<strong>pop</strong>(<em>index</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>index — <code>Integer</code> — <i>optional</i></li></ul></dd><dt>Returns:</dt><dd><code>Any</code></dd></dl>
 
@@ -545,9 +538,8 @@ list[<span class="hljs-number">1</span>]; <span class="hljs-comment">// b</span>
 list.pop(<span class="hljs-number">1</span>);
 list[<span class="hljs-number">1</span>]; <span class="hljs-comment">// undefined</span>
 
-list; <span class="hljs-comment">// ['a']</span>
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/list/index.litcoffee#any-listpopinteger-index"><code>Source</code></a></p>
+list; <span class="hljs-comment">// ['a']</span></code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/list/index.litcoffee#any-listpopinteger-index"><code>Source</code></a></p>
 <h2 id="list-clear-">List::<strong>clear</strong>()</h2>
 <p>Removes all values stored in the list.</p>
 <p>Calls <code>onPop()</code> signal for each value.</p>
@@ -565,9 +557,8 @@ list.clear()
 <span class="hljs-comment">// Element a popped!</span>
 
 <span class="hljs-built_in">console</span>.log(list);
-<span class="hljs-comment">// []</span>
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/list/index.litcoffee#listclear"><code>Source</code></a></p>
+<span class="hljs-comment">// []</span></code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/list/index.litcoffee#listclear"><code>Source</code></a></p>
 <h2 id="list-index-value-">List::<strong>index</strong>(<em>value</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>value — <code>Any</code></li></ul></dd><dt>Returns:</dt><dd><code>Integer</code></dd></dl>
 
@@ -575,23 +566,21 @@ list.clear()
 <p>Returns <code>-1</code> if the value doesn&#39;t exist in the list.</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> list = <span class="hljs-keyword">new</span> List([<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>]);
 list.index(<span class="hljs-string">'b'</span>); <span class="hljs-comment">// 1</span>
-list.index(<span class="hljs-string">'c'</span>); <span class="hljs-comment">// -1</span>
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/list/index.litcoffee#integer-listindexany-value"><code>Source</code></a></p>
+list.index(<span class="hljs-string">'c'</span>); <span class="hljs-comment">// -1</span></code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/list/index.litcoffee#integer-listindexany-value"><code>Source</code></a></p>
 <h2 id="list-has-value-">List::<strong>has</strong>(<em>value</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>value — <code>Any</code></li></ul></dd><dt>Returns:</dt><dd><code>Boolean</code></dd></dl>
 
 <p>Returns <code>true</code> if the given value exists in the list.</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> list = <span class="hljs-keyword">new</span> List([<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>]);
 list.has(<span class="hljs-string">'a'</span>); <span class="hljs-comment">// true</span>
-list.has(<span class="hljs-string">'ab123'</span>); <span class="hljs-comment">// false</span>
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/list/index.litcoffee#boolean-listhasany-value"><code>Source</code></a></p>
+list.has(<span class="hljs-string">'ab123'</span>); <span class="hljs-comment">// false</span></code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/list/index.litcoffee#boolean-listhasany-value"><code>Source</code></a></p>
 <h2 id="list-toarray-">List::<strong>toArray</strong>()</h2>
 <dl><dt>Returns:</dt><dd><code>Array</code></dd></dl>
 
 
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/list/index.litcoffee#array-listtoarray"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/list/index.litcoffee#array-listtoarray"><code>Source</code></a></p>
 
     </main>
 </div>

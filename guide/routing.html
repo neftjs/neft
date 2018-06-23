@@ -154,8 +154,7 @@
             }
         }
     };
-};
-</code></pre>
+};</code></pre>
 <p>As you can see, you have access to the main <a href="/api/app.html">app</a> object.</p>
 <p><code>get /users</code> creates a <a href="/api/app-route.html">route</a>.</p>
 <p>It can be called in various ways:</p>
@@ -187,8 +186,7 @@ See API Reference of <a href="/api/app-route.html">Route</a> for more.</p>
             }
         }
     };
-};
-</code></pre>
+};</code></pre>
 <h2 id="parameters-schema">Parameters schema</h2>
 <p>For more strict parameters validation, you can use <a href="/api/schema.html">Schema</a> module. Just declare it as <code>schema</code> in your route object.</p>
 <p>If the received request does not correspond to the <em>schema</em>, route is omitted.</p>
@@ -205,8 +203,7 @@ See API Reference of <a href="/api/app-route.html">Route</a> for more.</p>
             }
         }
     };
-};
-</code></pre>
+};</code></pre>
 <p>In the example above, <code>getData()</code> will be called only if the matched <code>id</code> is a positive number.</p>
 <h2 id="request-data">Request data</h2>
 <p>If the request was called with some data (e.g. json) you can access it by <code>this.request.data</code>.</p>
@@ -214,8 +211,7 @@ See API Reference of <a href="/api/app-route.html">Route</a> for more.</p>
 <p>If the request URI specifies some query, it&#39;s available under the <code>this.request.uri.query</code> object.</p>
 <pre><code class="hljs javascript"><span class="hljs-comment">// /users?limit=100&amp;offset=200</span>
 <span class="hljs-comment">// this.request.uri.query.limit == 100</span>
-<span class="hljs-comment">// this.request.uri.query.offset == 200</span>
-</code></pre>
+<span class="hljs-comment">// this.request.uri.query.offset == 200</span></code></pre>
 <h2 id="custom-attributes">Custom attributes</h2>
 <p>All non-standard route properties are saved in the route object.</p>
 <p>This functionality is more useful for the HTML rendering, where the route object is available in the HTML document by the <code>${context}</code> string.</p>
@@ -225,8 +221,7 @@ See API Reference of <a href="/api/app-route.html">Route</a> for more.</p>
             <span class="hljs-attr">defaultData</span>: <span class="hljs-keyword">new</span> Neft.List() <span class="hljs-comment">// accessible in views by ${context.defaultData}</span>
         }
     };
-};
-</code></pre>
+};</code></pre>
 <h2 id="views-integration">Views integration</h2>
 
     </main>

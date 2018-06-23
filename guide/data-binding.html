@@ -164,22 +164,19 @@ In most cases there is no need to create them manually.</p>
 <span class="hljs-keyword">const</span> onLoad = signal.create();
 onLoad.connect(<span class="hljs-function">(<span class="hljs-params">src</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`LOADED: <span class="hljs-subst">${src}</span>`</span>));
 onLoad.emit(<span class="hljs-string">'/logo.png'</span>);
-<span class="hljs-comment">// LOADED: /logo.png</span>
-</code></pre>
+<span class="hljs-comment">// LOADED: /logo.png</span></code></pre>
 <p>Similar to <em>events model</em> well-known in other frameworks.</p>
 <p>Do you remember that <em>Signal</em> is a function? It works like <code>connect</code>.</p>
 <p>Both lines do the same:</p>
 <pre><code class="hljs javascript">onLoad.connect(<span class="hljs-function">(<span class="hljs-params">src</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`LOADED: <span class="hljs-subst">${src}</span>`</span>));
-onLoad(<span class="hljs-function">(<span class="hljs-params">src</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`LOADED: <span class="hljs-subst">${src}</span>`</span>));
-</code></pre>
+onLoad(<span class="hljs-function">(<span class="hljs-params">src</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`LOADED: <span class="hljs-subst">${src}</span>`</span>));</code></pre>
 <p>If you want to stop listening on a changes, call <code>disconnect</code> with registered listener.</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { signal } = Neft;
 <span class="hljs-keyword">const</span> onLoad = signal.create();
 <span class="hljs-keyword">const</span> logSrc = <span class="hljs-function">(<span class="hljs-params">src</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`LOADED: <span class="hljs-subst">${src}</span>`</span>);
 onLoad(logSrc);
 onLoad.disconnect(logSrc);
-onLoad.emit(<span class="hljs-string">'/logo.png'</span>); <span class="hljs-comment">// does nothing</span>
-</code></pre>
+onLoad.emit(<span class="hljs-string">'/logo.png'</span>); <span class="hljs-comment">// does nothing</span></code></pre>
 <p>Signals have a limit. You can emit up to two parameters in one call. The workaround is to emit an object.</p>
 <p>Now you know how Neft propagates changes. Let&#39;s see how we can you this knowledge.</p>
 <h3 id="list"><a href="/api/list.html">List</a></h3>
@@ -188,8 +185,7 @@ onLoad.emit(<span class="hljs-string">'/logo.png'</span>); <span class="hljs-com
 <pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { List } = Neft;
 <span class="hljs-keyword">new</span> List(); <span class="hljs-comment">// empty list</span>
 <span class="hljs-keyword">new</span> List([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]); <span class="hljs-comment">// list with two values: 1 and 2</span>
-List(); <span class="hljs-comment">// *new* is optional</span>
-</code></pre>
+List(); <span class="hljs-comment">// *new* is optional</span></code></pre>
 <p>Data in a list can be modified. Basic methods are: <a href="/api/list.html#append"><code>append()</code></a>, <a href="/api/list.html#set"><code>set()</code></a>, <a href="/api/list.html#insert"><code>insert()</code></a> and <a href="/api/list.html#pop"><code>pop()</code></a>.</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { List } = Neft;
 <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">new</span> List;
@@ -204,8 +200,7 @@ data.pop();
 <span class="hljs-built_in">console</span>.log(data.length); <span class="hljs-comment">// 1</span>
 
 data.set(<span class="hljs-number">0</span>, <span class="hljs-string">'ketchup'</span>);
-<span class="hljs-built_in">console</span>.log(data[<span class="hljs-number">0</span>]); <span class="hljs-comment">// ketchup</span>
-</code></pre>
+<span class="hljs-built_in">console</span>.log(data[<span class="hljs-number">0</span>]); <span class="hljs-comment">// ketchup</span></code></pre>
 <p>Each change in a list calls different <a href="/api/signal.html">signals</a>:</p>
 <ul>
 <li><a href="/api/list/html#onchange"><code>onChange</code></a> called when some value change,</li>
@@ -219,31 +214,27 @@ data.append(<span class="hljs-string">'fries'</span>);
 data.onPop(<span class="hljs-function">(<span class="hljs-params">oldValue, index</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`<span class="hljs-subst">${oldValue}</span> has been removed`</span>));
 
 data.pop();
-<span class="hljs-comment">// fries has been removed</span>
-</code></pre>
+<span class="hljs-comment">// fries has been removed</span></code></pre>
 <h2 id="dict"><a href="/api/dict.html">Dict</a></h2>
 <p><a href="/api/dict.html">Dict</a> is an observable version of standard objects.</p>
 <p>To create a dict, call <a href="/api/dict.html#constructor">its constructor</a>:</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { Dict } = Neft;
 <span class="hljs-keyword">new</span> Dict(); <span class="hljs-comment">// empty dict</span>
 <span class="hljs-keyword">new</span> Dict({ <span class="hljs-attr">name</span>: <span class="hljs-string">'Johny'</span> }); <span class="hljs-comment">// dict with one key</span>
-Dict(); <span class="hljs-comment">// *new* is optional</span>
-</code></pre>
+Dict(); <span class="hljs-comment">// *new* is optional</span></code></pre>
 <p>Data in a dict can be changed using the <a href="/api/dict.html#set"><code>set()</code> method</a>.</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { Dict } = Neft;
 <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">new</span> Dict;
 
 data.set(<span class="hljs-string">'pet'</span>, <span class="hljs-string">'cat'</span>);
-<span class="hljs-built_in">console</span>.log(data.pet); <span class="hljs-comment">// cat</span>
-</code></pre>
+<span class="hljs-built_in">console</span>.log(data.pet); <span class="hljs-comment">// cat</span></code></pre>
 <p>Each change in a dict emits <a href="/api/dict.html#onchange"><code>onChange</code> signal</a>.</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { Dict } = Neft;
 <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">new</span> Dict;
 
 data.onChange(<span class="hljs-function">(<span class="hljs-params">key, oldValue</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`<span class="hljs-subst">${key}</span> now is equal <span class="hljs-subst">${data[key]}</span>`</span>));
 data.set(<span class="hljs-string">'pet'</span>, <span class="hljs-string">'cat'</span>);
-<span class="hljs-comment">// pet now is equal cat</span>
-</code></pre>
+<span class="hljs-comment">// pet now is equal cat</span></code></pre>
 
     </main>
 </div>

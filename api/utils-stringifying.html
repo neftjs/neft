@@ -420,7 +420,7 @@
 <blockquote>
 <p><strong>API</strong> ▸ <a href="/api/utils.html">Utils</a> ▸ <strong>Stringifying</strong></p>
 </blockquote>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/utils/stringifying.litcoffee"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/utils/stringifying.litcoffee"><code>Source</code></a></p>
 <h2 id="utils-simplify-object-options-">utils.<strong>simplify</strong>(<em>object</em>, <em>options</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>object — <code>Object</code></li><li>options — <code>Object</code> — <i>optional</i></li></ul></dd></dl>
 
@@ -435,8 +435,7 @@
 </ul>
 <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> obj = {};
 obj.self = obj;
-<span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">JSON</span>.stringify(utils.simplify(obj)));
-</code></pre>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">JSON</span>.stringify(utils.simplify(obj)));</code></pre>
 <p>If <em>protos</em> is <em>false</em> and <em>constructors</em> is <em>true</em>,
 object will be recognized as an instance.</p>
 <pre><code class="hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Sample</span>(<span class="hljs-params"></span>)</span>{
@@ -450,14 +449,13 @@ Sample.prototype.fromPrototype = <span class="hljs-number">1</span>;
 
 <span class="hljs-built_in">console</span>.log(clone <span class="hljs-keyword">instanceof</span> Sample)
 <span class="hljs-comment">// it's true because 'protos' option is false and 'constructors' is true</span>
-<span class="hljs-comment">// won't work for json, because functions are not stringified ...</span>
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/utils/stringifying.litcoffee#utilssimplifyobject-object-object-options"><code>Source</code></a></p>
+<span class="hljs-comment">// won't work for json, because functions are not stringified ...</span></code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/utils/stringifying.litcoffee#utilssimplifyobject-object-object-options"><code>Source</code></a></p>
 <h2 id="utils-assemble-object-">utils.<strong>assemble</strong>(<em>object</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>object — <code>PlainObject</code></li></ul></dd></dl>
 
 <p>Backward utils.simplify() operation.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/utils/stringifying.litcoffee#utilsassembleplainobject-object"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/utils/stringifying.litcoffee#utilsassembleplainobject-object"><code>Source</code></a></p>
 
     </main>
 </div>

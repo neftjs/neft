@@ -422,9 +422,8 @@
 </blockquote>
 <p>Access it with:</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> utils = <span class="hljs-built_in">require</span>(<span class="hljs-string">'utils'</span>);
-<span class="hljs-keyword">var</span> <span class="hljs-keyword">async</span> = utils.async;
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/utils/async.litcoffee"><code>Source</code></a></p>
+<span class="hljs-keyword">var</span> <span class="hljs-keyword">async</span> = utils.async;</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/utils/async.litcoffee"><code>Source</code></a></p>
 <h2 id="utils-async-foreach-array-callback-onend-context-">utils.async.<strong>forEach</strong>(<em>array</em>, <em>callback</em>, <em>onEnd</em>, <em>context</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>array — <code>NotPrimitive</code></li><li>callback — <code>Function</code></li><li>onEnd — <code>Function</code> — <i>optional</i></li><li>context — <code>Any</code> — <i>optional</i></li></ul></dd></dl>
 
@@ -448,9 +447,8 @@ utils.async.forEach(toLoadInOrder, <span class="hljs-function"><span class="hljs
 <span class="hljs-comment">// Load users.json</span>
 <span class="hljs-comment">// Load families.json</span>
 <span class="hljs-comment">// load relationships.json</span>
-<span class="hljs-comment">// All files are loaded!</span>
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/utils/async.litcoffee#utilsasyncforeachnotprimitive-array-function-callback-function-onend-any-context"><code>Source</code></a></p>
+<span class="hljs-comment">// All files are loaded!</span></code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/utils/async.litcoffee#utilsasyncforeachnotprimitive-array-function-callback-function-onend-any-context"><code>Source</code></a></p>
 <h2 id="-class-stack-"><strong>**Class</strong> Stack**()</h2>
 <p>Stores functions and runs them synchronously or asynchronously.</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> stack = <span class="hljs-keyword">new</span> utils.async.Stack;
@@ -477,9 +475,8 @@ stack.runAllSimultaneously(<span class="hljs-function"><span class="hljs-keyword
 
 <span class="hljs-comment">// Load users.json file</span>
 <span class="hljs-comment">// Load items.json file</span>
-<span class="hljs-comment">// All files have been loaded!</span>
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/utils/async.litcoffee#class-stack"><code>Source</code></a></p>
+<span class="hljs-comment">// All files have been loaded!</span></code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/utils/async.litcoffee#class-stack"><code>Source</code></a></p>
 <h3 id="stack-add-function-context-arguments-">Stack::<strong>add</strong>(<em>function</em>, <em>context</em>, <em>arguments</em>)</h3>
 <dl><dt>Parameters:</dt><dd><ul><li>function — <code>Function</code></li><li>context — <code>Any</code> — <i>optional</i></li><li>arguments — <code>NotPrimitive</code> — <i>optional</i></li></ul></dd></dl>
 
@@ -508,26 +505,25 @@ stack.add(add, <span class="hljs-literal">null</span>, [<span class="hljs-number
 stack.runAll(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, result</span>)</span>{
   <span class="hljs-built_in">console</span>.log(err, result);
 });
-<span class="hljs-comment">// "Finite numbers are required!"  undefined</span>
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/utils/async.litcoffee#stackaddfunction-function-any-context-notprimitive-arguments"><code>Source</code></a></p>
+<span class="hljs-comment">// "Finite numbers are required!"  undefined</span></code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/utils/async.litcoffee#stackaddfunction-function-any-context-notprimitive-arguments"><code>Source</code></a></p>
 <h3 id="stack-callnext-arguments-callback-">Stack::<strong>callNext</strong>(<em>arguments</em>, <em>callback</em>)</h3>
 <dl><dt>Parameters:</dt><dd><ul><li>arguments — <code>Array</code> — <i>optional</i></li><li>callback — <code>Function</code></li></ul></dd></dl>
 
 <p>Calls the first function from the stack and remove it.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/utils/async.litcoffee#stackcallnextarray-arguments-function-callback"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/utils/async.litcoffee#stackcallnextarray-arguments-function-callback"><code>Source</code></a></p>
 <h3 id="stack-runall-callback-callbackcontext-">Stack::<strong>runAll</strong>(<em>callback</em>, <em>callbackContext</em>)</h3>
 <dl><dt>Parameters:</dt><dd><ul><li>callback — <code>Function</code> — <i>optional</i></li><li>callbackContext — <code>Any</code> — <i>optional</i></li></ul></dd></dl>
 
 <p>Calls all functions from the stack one by one.</p>
 <p>When an error occurs, processing stops and the callback function is called with the got error.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/utils/async.litcoffee#stackrunallfunction-callback-any-callbackcontext"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/utils/async.litcoffee#stackrunallfunction-callback-any-callbackcontext"><code>Source</code></a></p>
 <h3 id="stack-runallsimultaneously-callback-callbackcontext-">Stack::<strong>runAllSimultaneously</strong>(<em>callback</em>, <em>callbackContext</em>)</h3>
 <dl><dt>Parameters:</dt><dd><ul><li>callback — <code>Function</code> — <i>optional</i></li><li>callbackContext — <code>Any</code> — <i>optional</i></li></ul></dd></dl>
 
 <p>Calls all functions from the stack simultaneously (all at the same time).</p>
 <p>When an error occurs, processing stops and the callback function is called with the got error.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/utils/async.litcoffee#stackrunallsimultaneouslyfunction-callback-any-callbackcontext"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/utils/async.litcoffee#stackrunallsimultaneouslyfunction-callback-any-callbackcontext"><code>Source</code></a></p>
 
     </main>
 </div>

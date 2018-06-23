@@ -161,15 +161,13 @@
             app.networking.get(<span class="hljs-string">"/users"</span>, callback);
         }
     }
-};
-</code></pre>
+};</code></pre>
 <p>Example for views:</p>
 <pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="actionscript">
     <span class="hljs-keyword">this</span>.onRender(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
         <span class="hljs-keyword">this</span>.context.app.networking.get(<span class="hljs-string">"/users"</span>, (err, resp) =&gt; {});
     });
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-</code></pre>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>If you need to specify more options (e.g. expected type, headers, cookies) use <code>createRequest()</code> method.</p>
 <p>For local requests use <code>createLocalRequest()</code> method.</p>
 <h2 id="custom-headers">Custom headers</h2>

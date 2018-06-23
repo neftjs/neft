@@ -449,8 +449,7 @@ It&#39;s used for the crawlers (e.g. GoogleBot) or browsers with no javascript s
     <span class="hljs-keyword">var</span> app = NeftApp({ <span class="hljs-attr">title</span>: <span class="hljs-string">"Overridden title"</span> });
     <span class="hljs-built_in">console</span>.log(app.config);
     <span class="hljs-comment">// {title: "My first application!", protocol: "http", port: ....}</span>
-};
-</code></pre>
+};</code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/9e479395534119b194b4e1166b144fba1227e8d8/src/app/index.litcoffee"><code>Source</code></a></p>
 <h2 id="app-networking">app.<strong>networking</strong></h2>
 <dl><dt>Type:</dt><dd><code>Networking</code></dd></dl>
@@ -490,11 +489,9 @@ from the networking request.</p>
 <p>By default, client has <em>clientId</em> and <em>sessionId</em> hashes.</p>
 <pre><code class="hljs javascript">app.cookies.onChange(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">key</span>)</span>{
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'cookie changed'</span>, key, <span class="hljs-keyword">this</span>[key]);
-});
-</code></pre>
+});</code></pre>
 <pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Your clientId<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">em</span>&gt;</span>${context.app.cookies.clientId}<span class="hljs-tag">&lt;/<span class="hljs-name">em</span>&gt;</span>
-</code></pre>
+<span class="hljs-tag">&lt;<span class="hljs-name">em</span>&gt;</span>${context.app.cookies.clientId}<span class="hljs-tag">&lt;/<span class="hljs-name">em</span>&gt;</span></code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/9e479395534119b194b4e1166b144fba1227e8d8/src/app/index.litcoffee#dict-appcookies"><code>Source</code></a></p>
 
     </main>

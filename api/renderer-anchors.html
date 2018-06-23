@@ -440,8 +440,7 @@ always in the same position as a line of the second item.</p>
         color: <span class="hljs-string">'red'</span>
         anchors.left: rect1.right
     }
-}
-</code></pre>
+}</code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/renderer/types/basics/item/anchors.litcoffee"><code>Source</code></a></p>
 <pre><code class="hljs javascript">Rectangle {
     <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>
@@ -453,8 +452,7 @@ always in the same position as a line of the second item.</p>
         color: <span class="hljs-string">'red'</span>
         anchors.left: parent.right
     }
-}
-</code></pre>
+}</code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/renderer/types/basics/item/anchors.litcoffee"><code>Source</code></a></p>
 <p>Horizontal anchors can&#39;t point to the vertical lines (and vice versa),
 so <code>anchors.top = parent.left</code> is not allowed.</p>
@@ -481,8 +479,7 @@ so <code>anchors.top = parent.left</code> is not allowed.</p>
 <pre><code class="hljs svg">&lt;svg viewBox=&quot;0 0 1 1&quot;&gt;
     &lt;rect x=&quot;0.2&quot; y=&quot;0.2&quot; width=&quot;0.6&quot; height=&quot;0.6&quot; fill=&quot;lightgray&quot; /&gt;
     &lt;line x1=&quot;0.5&quot; y1=&quot;0&quot; x2=&quot;0.5&quot; y2=&quot;1&quot; stroke=&quot;black&quot; stroke-width=&quot;0.01&quot; /&gt;
-&lt;/svg&gt;
-</code></pre>
+&lt;/svg&gt;</code></pre>
 <pre><code class="hljs javascript">Item {
     <span class="hljs-attr">height</span>: <span class="hljs-number">100</span>
     Rectangle { <span class="hljs-attr">id</span>: rect1; color: <span class="hljs-string">'green'</span>; width: <span class="hljs-number">100</span>; height: <span class="hljs-number">100</span>; }
@@ -490,8 +487,7 @@ so <code>anchors.top = parent.left</code> is not allowed.</p>
         <span class="hljs-attr">color</span>: <span class="hljs-string">'red'</span>; width: <span class="hljs-number">40</span>; height: <span class="hljs-number">40</span>
         anchors.horizontalCenter: rect1.horizontalCenter
     }
-}
-</code></pre>
+}</code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/renderer/types/basics/item/anchors.litcoffee#array-anchorshorizontalcenter"><code>Source</code></a></p>
 <h2 id="anchors-onhorizontalcenterchange-oldvalue-">Anchors::<strong>onHorizontalCenterChange</strong>(<em>oldValue</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Array</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
@@ -502,8 +498,7 @@ so <code>anchors.top = parent.left</code> is not allowed.</p>
 <pre><code class="hljs svg">&lt;svg viewBox=&quot;0 0 1 1&quot;&gt;
     &lt;rect x=&quot;0.2&quot; y=&quot;0.2&quot; width=&quot;0.6&quot; height=&quot;0.6&quot; fill=&quot;lightgray&quot; /&gt;
     &lt;line x1=&quot;0&quot; y1=&quot;0.2&quot; x2=&quot;1&quot; y2=&quot;0.2&quot; stroke=&quot;black&quot; stroke-width=&quot;0.01&quot; /&gt;
-&lt;/svg&gt;
-</code></pre>
+&lt;/svg&gt;</code></pre>
 <pre><code class="hljs javascript">Item {
     <span class="hljs-attr">height</span>: <span class="hljs-number">100</span>
     Rectangle { <span class="hljs-attr">id</span>: rect1; color: <span class="hljs-string">'green'</span>; width: <span class="hljs-number">100</span>; height: <span class="hljs-number">100</span>; }
@@ -511,8 +506,7 @@ so <code>anchors.top = parent.left</code> is not allowed.</p>
         <span class="hljs-attr">color</span>: <span class="hljs-string">'red'</span>; width: <span class="hljs-number">40</span>; height: <span class="hljs-number">40</span>
         anchors.top: rect1.verticalCenter
     }
-}
-</code></pre>
+}</code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/renderer/types/basics/item/anchors.litcoffee#array-anchorstop"><code>Source</code></a></p>
 <h2 id="anchors-ontopchange-oldvalue-">Anchors::<strong>onTopChange</strong>(<em>oldValue</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Array</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
@@ -523,8 +517,7 @@ so <code>anchors.top = parent.left</code> is not allowed.</p>
 <pre><code class="hljs svg">&lt;svg viewBox=&quot;0 0 1 1&quot;&gt;
     &lt;rect x=&quot;0.2&quot; y=&quot;0.2&quot; width=&quot;0.6&quot; height=&quot;0.6&quot; fill=&quot;lightgray&quot; /&gt;
     &lt;line x1=&quot;0&quot; y1=&quot;0.8&quot; x2=&quot;1&quot; y2=&quot;0.8&quot; stroke=&quot;black&quot; stroke-width=&quot;0.01&quot; /&gt;
-&lt;/svg&gt;
-</code></pre>
+&lt;/svg&gt;</code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsbottom"><code>Source</code></a></p>
 <h2 id="anchors-onbottomchange-oldvalue-">Anchors::<strong>onBottomChange</strong>(<em>oldValue</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Array</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
@@ -535,8 +528,7 @@ so <code>anchors.top = parent.left</code> is not allowed.</p>
 <pre><code class="hljs svg">&lt;svg viewBox=&quot;0 0 1 1&quot;&gt;
     &lt;rect x=&quot;0.2&quot; y=&quot;0.2&quot; width=&quot;0.6&quot; height=&quot;0.6&quot; fill=&quot;lightgray&quot; /&gt;
     &lt;line x1=&quot;0&quot; y1=&quot;0.5&quot; x2=&quot;1&quot; y2=&quot;0.5&quot; stroke=&quot;black&quot; stroke-width=&quot;0.01&quot; /&gt;
-&lt;/svg&gt;
-</code></pre>
+&lt;/svg&gt;</code></pre>
 <pre><code class="hljs javascript">Item {
     <span class="hljs-attr">height</span>: <span class="hljs-number">100</span>
     Rectangle { <span class="hljs-attr">id</span>: rect1; color: <span class="hljs-string">'green'</span>; width: <span class="hljs-number">100</span>; height: <span class="hljs-number">100</span>; }
@@ -544,8 +536,7 @@ so <code>anchors.top = parent.left</code> is not allowed.</p>
         <span class="hljs-attr">color</span>: <span class="hljs-string">'red'</span>; width: <span class="hljs-number">40</span>; height: <span class="hljs-number">40</span>
         anchors.verticalCenter: rect1.verticalCenter
     }
-}
-</code></pre>
+}</code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsverticalcenter"><code>Source</code></a></p>
 <h2 id="anchors-onverticalcenterchange-oldvalue-">Anchors::<strong>onVerticalCenterChange</strong>(<em>oldValue</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Array</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
@@ -566,8 +557,7 @@ so <code>anchors.top = parent.left</code> is not allowed.</p>
         color: <span class="hljs-string">'red'</span>
         anchors.centerIn: parent
     }
-}
-</code></pre>
+}</code></pre>
 <h2 id="anchors-oncenterinchange-oldvalue-">Anchors::<strong>onCenterInChange</strong>(<em>oldValue</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Array</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
 
@@ -586,8 +576,7 @@ so <code>anchors.top = parent.left</code> is not allowed.</p>
         opacity: <span class="hljs-number">0.5</span>
         anchors.fill: rect1
     }
-}
-</code></pre>
+}</code></pre>
 <h2 id="anchors-onfillchange-oldvalue-">Anchors::<strong>onFillChange</strong>(<em>oldValue</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Array</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
 

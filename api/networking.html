@@ -423,8 +423,7 @@
 <p>This module cares about communication client-server and client internally.</p>
 <p>Currently only the HTTP protocol is supported.</p>
 <p>Access it with:</p>
-<pre><code class="hljs javascript"><span class="hljs-keyword">var</span> Networking = <span class="hljs-built_in">require</span>(<span class="hljs-string">'networking'</span>);
-</code></pre>
+<pre><code class="hljs javascript"><span class="hljs-keyword">var</span> Networking = <span class="hljs-built_in">require</span>(<span class="hljs-string">'networking'</span>);</code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee"><code>Source</code></a></p>
 <h2 id="networking-constructor-options-">Networking::<strong>constructor</strong>(<em>options</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>options — <code>Object</code></li></ul></dd></dl>
@@ -486,8 +485,7 @@ Otherwise it&#39;s created automatically.</p>
     <span class="hljs-attr">callback</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>)</span>{
         res.raise(<span class="hljs-keyword">new</span> Networking.Response.Error(Networking.Response.NOT_IMPLEMENTED));
     }
-});
-</code></pre>
+});</code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee#networkinghandler-networkingcreatehandlerobject-options"><code>Source</code></a></p>
 <h2 id="networking-createrequest-options-">Networking::<strong>createRequest</strong>(<em>options</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>options — <code>Object|Networking.Request</code></li></ul></dd><dt>Returns:</dt><dd><code>Networking.Request</code></dd></dl>
@@ -535,8 +533,7 @@ Otherwise it&#39;s created automatically.</p>
             <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Error: "</span> + err);
         }
     }
-});
-</code></pre>
+});</code></pre>
 <h3 id="requests-to-the-server">Requests to the server</h3>
 <pre><code class="hljs javascript">app.networking.createRequest({
     <span class="hljs-attr">method</span>: <span class="hljs-string">'post'</span>,
@@ -547,8 +544,7 @@ Otherwise it&#39;s created automatically.</p>
             <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Comment has been added!"</span>);
         }
     }
-});
-</code></pre>
+});</code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/09b693b72ef00d698443ee651b20a9baa34cf7f5/src/networking/index.litcoffee"><code>Source</code></a></p>
 
     </main>

@@ -161,8 +161,7 @@
             <span class="hljs-attr">"file"</span>: <span class="hljs-string">"default_background.png"</span>
         }
     }
-}
-</code></pre>
+}</code></pre>
 <h3 id="image-resolutions">Image resolutions</h3>
 <p>Different devices have different resolutions and pixel ratios.</p>
 <p>For instance on Apple devices with Retina screens, the pixel ratio is equal <code>2</code>. It means, all images needs to be two times bigger to show them sharp, not blurry.</p>
@@ -180,8 +179,7 @@
             <span class="hljs-attr">"resolutions"</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
         }
     }
-}
-</code></pre>
+}</code></pre>
 <h3 id="color-value">Color value</h3>
 <p>Use <code>color</code> instead of <code>file</code> to store color value under a name.</p>
 <pre><code class="hljs json">{
@@ -190,15 +188,13 @@
             <span class="hljs-attr">"color"</span>: <span class="hljs-string">"#ff00cc"</span>
         }
     }
-}
-</code></pre>
+}</code></pre>
 <h2 id="using-resources">Using resources</h2>
 <p>Prefix resource name by <code>rsc:</code> to use it in styles or views.</p>
 <p>To use previously defined <code>logo</code> resource, you should specify <a href="/api/renderer-image.html#source">Image::source</a> as <code>rsc:logo</code>.</p>
 <pre><code class="hljs javascript">Image {
     <span class="hljs-attr">source</span>: <span class="hljs-string">'rsc:logo'</span>
-}
-</code></pre>
+}</code></pre>
 
     </main>
 </div>

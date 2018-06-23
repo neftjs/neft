@@ -150,8 +150,7 @@
 <p>This method accepts short description and function with your test case.</p>
 <pre><code class="hljs javascript">it(<span class="hljs-string">'1+1 is 2'</span>, () =&gt; {
     assert(<span class="hljs-number">1</span>+<span class="hljs-number">1</span> === <span class="hljs-number">2</span>);
-});
-</code></pre>
+});</code></pre>
 <p>If your test throws an exception (using <code>throw new Error(&#39;...&#39;)</code> or by <a href="/api/assert.html">assertions</a>), it&#39;s automatically marked as failed.</p>
 <h2 id="nesting">Nesting</h2>
 <p>Use global <code>describe</code> function and declare a container for tests.</p>
@@ -162,8 +161,7 @@ describe(<span class="hljs-string">'sum method'</span>, () =&gt; {
     it(<span class="hljs-string">'adds both parameters'</span>, () =&gt; {
         assert(sum(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>) === <span class="hljs-number">3</span>);
     });
-});
-</code></pre>
+});</code></pre>
 <h2 id="assertions">Assertions</h2>
 <p>Writing conditions and throwing errors each time your result is wrong can be boring.</p>
 <p>Boring coding is bad.</p>
@@ -189,8 +187,7 @@ describe(<span class="hljs-string">'sum method'</span>, () =&gt; {
 <span class="hljs-keyword">this</span>.onRender(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
     <span class="hljs-keyword">this</span>.state.set(<span class="hljs-string">'value'</span>, <span class="hljs-number">0</span>);
 });
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-</code></pre>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>... and we want to test whether <code>increment</code> method works like a charm.</p>
 <pre><code class="hljs javascript">describe(<span class="hljs-string">'PlusButton'</span>, () =&gt; {
     <span class="hljs-keyword">let</span> view;
@@ -208,8 +205,7 @@ describe(<span class="hljs-string">'sum method'</span>, () =&gt; {
             <span class="hljs-comment">// hooray !</span>
         });
     });
-});
-</code></pre>
+});</code></pre>
 <h2 id="asynchronous-test">Asynchronous test</h2>
 <p>Global function <code>it</code> can provide <code>callback</code> parameter.</p>
 <p>Use it to run asynchronous tests.</p>
@@ -223,8 +219,7 @@ describe(<span class="hljs-string">'sum method'</span>, () =&gt; {
             callback();
         }
     }, <span class="hljs-number">100</span>);
-});
-</code></pre>
+});</code></pre>
 <h2 id="before-and-after">Before and after</h2>
 <p>Global <code>beforeEach</code> and <code>afterEach</code> function can be used to run piece of code before and after each test in <code>describe</code>.</p>
 <pre><code class="hljs javascript">describe(<span class="hljs-string">'foo'</span>, () =&gt; {
@@ -242,8 +237,7 @@ describe(<span class="hljs-string">'sum method'</span>, () =&gt; {
     it(<span class="hljs-string">'is one; Mr obvious?'</span>, () =&gt; {
         assert.is(foo, <span class="hljs-number">1</span>);
     });
-});
-</code></pre>
+});</code></pre>
 <h2 id="different-environments">Different environments</h2>
 <p>All tests by default are running as Node server (<code>npm run node</code>).</p>
 <p>By typing <code>neft test</code> you can run your tests just like client runs your application.</p>
@@ -261,8 +255,7 @@ describe(<span class="hljs-string">'sum method'</span>, () =&gt; {
             <span class="hljs-attr">"browser"</span>: <span class="hljs-string">"chrome"</span>
         }
     ]
-}
-</code></pre>
+}</code></pre>
 
     </main>
 </div>

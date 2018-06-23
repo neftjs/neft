@@ -161,8 +161,7 @@ Use it in your JavaScript code to send data and to receive it.</p>
 <p>To send and receive native messages, use <a href="/api/native.html">native</a> module.</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { callNativeFunction, onNativeEvent } = Neft.native;
 callNativeFunction(<span class="hljs-string">"functionName"</span>, <span class="hljs-string">"arg1"</span>, <span class="hljs-string">"arg2"</span>, <span class="hljs-string">"argMore..."</span>);
-onNativeEvent(<span class="hljs-string">"eventName"</span>, (arg1, arg2, arg3) -&gt; {});
-</code></pre>
+onNativeEvent(<span class="hljs-string">"eventName"</span>, (arg1, arg2, arg3) -&gt; {});</code></pre>
 <h2 id="ios">iOS</h2>
 <p>Create a <code>native/ios/CustomApp.swift</code> file in your main application folder.</p>
 <pre><code class="hljs swift"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CustomApp</span> </span>{
@@ -172,8 +171,7 @@ onNativeEvent(<span class="hljs-string">"eventName"</span>, (arg1, arg2, arg3) -
             (args: [<span class="hljs-type">Any</span>?]) <span class="hljs-keyword">in</span> ()
         }
     }
-}
-</code></pre>
+}</code></pre>
 <h2 id="android">Android</h2>
 <p>Create a <code>native/android/CustomApp.java</code> file in your main application folder.</p>
 <pre><code class="hljs java"><span class="hljs-keyword">package</span> io.neft.customapp;
@@ -189,8 +187,7 @@ onNativeEvent(<span class="hljs-string">"eventName"</span>, (arg1, arg2, arg3) -
             <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">accept</span><span class="hljs-params">(Object[] args)</span> </span>{}
         });
     }
-}
-</code></pre>
+}</code></pre>
 
     </main>
 </div>

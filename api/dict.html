@@ -421,8 +421,7 @@
 <p><strong>API</strong> ▸ <strong>Dict</strong></p>
 </blockquote>
 <p>Access it with:</p>
-<pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { Dict } = Neft
-</code></pre>
+<pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { Dict } = Neft</code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/add1038f11f2a49df0357632b5d98b210c09842b/src/dict/index.litcoffee"><code>Source</code></a></p>
 <h2 id="dict-fromjson-json-">Dict.<strong>fromJSON</strong>(<em>json</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>json — <code>Object</code> or <code>String</code></li></ul></dd><dt>Returns:</dt><dd><code>Dict</code></dd></dl>
@@ -430,8 +429,7 @@
 <p>Returns a new <em>Dict</em> based on the given <em>json</em>.</p>
 <p>Example:</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">const</span> dict = Dict.fromJSON(<span class="hljs-string">'{"param": "value"}'</span>);
-dict.param; <span class="hljs-comment">// value</span>
-</code></pre>
+dict.param; <span class="hljs-comment">// value</span></code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/add1038f11f2a49df0357632b5d98b210c09842b/src/dict/index.litcoffee#dict-dictfromjsonstringobject-json"><code>Source</code></a></p>
 <h2 id="dict-constructor-data-">Dict::<strong>constructor</strong>(<em>data</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>data — <code>Object</code> — <i>optional</i></li></ul></dd></dl>
@@ -442,8 +440,7 @@ dict.param; <span class="hljs-comment">// value</span>
 <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> data = <span class="hljs-keyword">new</span> Dict({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'xyz'</span>
 });
-data.name; <span class="hljs-comment">// xyz</span>
-</code></pre>
+data.name; <span class="hljs-comment">// xyz</span></code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/add1038f11f2a49df0357632b5d98b210c09842b/src/dict/index.litcoffee#dictconstructorobject-data"><code>Source</code></a></p>
 <h2 id="dict-length">Dict::<strong>length</strong></h2>
 <dl><dt>Type:</dt><dd><code>Integer</code></dd><dt>Read Only</dt></dl>
@@ -452,8 +449,7 @@ data.name; <span class="hljs-comment">// xyz</span>
 <p>This property cannot be changed manually.</p>
 <p>Example:</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> dict = Dict({ <span class="hljs-attr">prop</span>: <span class="hljs-number">1</span> });
-dict.length; <span class="hljs-comment">// 1</span>
-</code></pre>
+dict.length; <span class="hljs-comment">// 1</span></code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/add1038f11f2a49df0357632b5d98b210c09842b/src/dict/index.litcoffee#readonly-integer-dictlength"><code>Source</code></a></p>
 <h2 id="dict-onchange-key-oldvalue-">Dict::<strong>onChange</strong>(<em>key</em>, <em>oldValue</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>key — <code>String</code></li><li>oldValue — <code>Any</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
@@ -469,8 +465,7 @@ user.onChange.connect(<span class="hljs-function"><span class="hljs-keyword">fun
 });
 
 user.set(<span class="hljs-string">'country'</span>, <span class="hljs-string">'US'</span>);
-<span class="hljs-comment">// country property changed from Germany to US</span>
-</code></pre>
+<span class="hljs-comment">// country property changed from Germany to US</span></code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/add1038f11f2a49df0357632b5d98b210c09842b/src/dict/index.litcoffee#signal-dictonchangestring-key-any-oldvalue"><code>Source</code></a></p>
 <h2 id="dict-set-key-value-">Dict::<strong>set</strong>(<em>key</em>, <em>value</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>key — <code>String</code></li><li>value — <code>Any</code></li></ul></dd><dt>Returns:</dt><dd><code>Any</code></dd></dl>
@@ -489,8 +484,7 @@ links.onChange.connect(<span class="hljs-function"><span class="hljs-keyword">fu
 });
 
 links.set(<span class="hljs-string">'googlePlus'</span>, <span class="hljs-string">'https://plus.google.com/+NeftIo-for-apps/'</span>);
-<span class="hljs-comment">// googlePlus changed from undefined to https://...</span>
-</code></pre>
+<span class="hljs-comment">// googlePlus changed from undefined to https://...</span></code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/add1038f11f2a49df0357632b5d98b210c09842b/src/dict/index.litcoffee#any-dictsetstring-key-any-value"><code>Source</code></a></p>
 <h2 id="dict-has-key-">Dict::<strong>has</strong>(<em>key</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>key — <code>String</code></li></ul></dd><dt>Returns:</dt><dd><code>Boolean</code></dd></dl>
@@ -521,8 +515,7 @@ data.onChange.connect(<span class="hljs-function"><span class="hljs-keyword">fun
 });
 
 data.pop(<span class="hljs-string">'name'</span>);
-<span class="hljs-comment">// name property has been removed</span>
-</code></pre>
+<span class="hljs-comment">// name property has been removed</span></code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/add1038f11f2a49df0357632b5d98b210c09842b/src/dict/index.litcoffee#any-dictpopstring-key"><code>Source</code></a></p>
 <h2 id="dict-clear-">Dict::<strong>clear</strong>()</h2>
 <p>Removes all stored keys from this <em>Dict</em>.</p>
@@ -539,8 +532,7 @@ data.pop(<span class="hljs-string">'name'</span>);
   <span class="hljs-attr">x</span>: <span class="hljs-number">10</span>,
   <span class="hljs-attr">y</span>: <span class="hljs-number">30</span>
 });
-data.keys(); <span class="hljs-comment">// ['x', 'y']</span>
-</code></pre>
+data.keys(); <span class="hljs-comment">// ['x', 'y']</span></code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/add1038f11f2a49df0357632b5d98b210c09842b/src/dict/index.litcoffee#readonly-array-dictkeys"><code>Source</code></a></p>
 <h2 id="dict-values-">Dict::<strong>values</strong>()</h2>
 <dl><dt>Returns:</dt><dd><code>Array</code></dd></dl>
@@ -553,8 +545,7 @@ data.keys(); <span class="hljs-comment">// ['x', 'y']</span>
   <span class="hljs-attr">x</span>: <span class="hljs-number">10</span>,
   <span class="hljs-attr">y</span>: <span class="hljs-number">30</span>
 });
-data.values(); <span class="hljs-comment">// [10, 30]</span>
-</code></pre>
+data.values(); <span class="hljs-comment">// [10, 30]</span></code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/add1038f11f2a49df0357632b5d98b210c09842b/src/dict/index.litcoffee#array-dictvalues"><code>Source</code></a></p>
 <h2 id="dict-items-">Dict::<strong>items</strong>()</h2>
 <dl><dt>Returns:</dt><dd><code>Array</code></dd></dl>
@@ -567,8 +558,7 @@ data.values(); <span class="hljs-comment">// [10, 30]</span>
   <span class="hljs-attr">x</span>: <span class="hljs-number">10</span>,
   <span class="hljs-attr">y</span>: <span class="hljs-number">30</span>
 });
-data.items(); <span class="hljs-comment">// [['x', 10], ['y', 30]]</span>
-</code></pre>
+data.items(); <span class="hljs-comment">// [['x', 10], ['y', 30]]</span></code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/add1038f11f2a49df0357632b5d98b210c09842b/src/dict/index.litcoffee#array-dictitems"><code>Source</code></a></p>
 
     </main>

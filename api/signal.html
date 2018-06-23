@@ -422,8 +422,7 @@
 </blockquote>
 <p>Signal is a function with listeners which can be emitted.</p>
 <p>Access it with:</p>
-<pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { signal } = Neft;
-</code></pre>
+<pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { signal } = Neft;</code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/6c76d4c87bfd89e2c17bacc27a9eeb4b640b82c5/src/signal/index.litcoffee"><code>Source</code></a></p>
 <h2 id="signal-stop_propagation">signal.<strong>STOP_PROPAGATION</strong></h2>
 <dl><dt>Type:</dt><dd><code>Integer</code></dd></dl>
@@ -444,8 +443,7 @@ obj.onPress(<span class="hljs-function"><span class="hljs-keyword">function</spa
 });
 
 obj.onPress.emit();
-<span class="hljs-comment">// listener 1</span>
-</code></pre>
+<span class="hljs-comment">// listener 1</span></code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/6c76d4c87bfd89e2c17bacc27a9eeb4b640b82c5/src/signal/index.litcoffee#integer-signalstoppropagation"><code>Source</code></a></p>
 <h2 id="signal-create-object-name-">signal.<strong>create</strong>(<em>object</em>, <em>name</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>object — <code>NotPrimitive</code> — <i>optional</i></li><li>name — <code>String</code> — <i>optional</i></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
@@ -461,8 +459,7 @@ obj.onRename.connect(<span class="hljs-function"><span class="hljs-keyword">func
 });
 
 obj.onRename.emit(<span class="hljs-string">'Max'</span>, <span class="hljs-string">'George'</span>);
-<span class="hljs-comment">// {0: "Max", 1: "George"}</span>
-</code></pre>
+<span class="hljs-comment">// {0: "Max", 1: "George"}</span></code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/6c76d4c87bfd89e2c17bacc27a9eeb4b640b82c5/src/signal/index.litcoffee#signal-signalcreatenotprimitive-object-string-name"><code>Source</code></a></p>
 <h2 id="signal-isempty-signal-">signal.<strong>isEmpty</strong>(<em>signal</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>signal — <code>Signal</code></li></ul></dd><dt>Returns:</dt><dd><code>Boolean</code></dd></dl>
@@ -492,8 +489,7 @@ obj.onPress.connect(<span class="hljs-function"><span class="hljs-keyword">funct
 
 obj.onPress.emit()
 <span class="hljs-comment">// listener 1</span>
-<span class="hljs-comment">// listener 2</span>
-</code></pre>
+<span class="hljs-comment">// listener 2</span></code></pre>
 <p>The given context will be used as a context in listener calling.
 By default, the listener is called with the object on which the signal is created.</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> obj = {<span class="hljs-attr">standard</span>: <span class="hljs-literal">true</span>};
@@ -510,8 +506,7 @@ obj.onPress(<span class="hljs-function"><span class="hljs-keyword">function</spa
 
 obj.onPress.emit();
 <span class="hljs-comment">// {fake: true}</span>
-<span class="hljs-comment">// {standard: true}</span>
-</code></pre>
+<span class="hljs-comment">// {standard: true}</span></code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/6c76d4c87bfd89e2c17bacc27a9eeb4b640b82c5/src/signal/index.litcoffee#signalconnectfunction-listener-any-context"><code>Source</code></a></p>
 <h2 id="signal-connectonce-listener-context-">Signal::<strong>connectOnce</strong>(<em>listener</em>, <em>context</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>listener — <code>Function</code></li><li>context — <code>Any</code> — <i>optional</i></li></ul></dd></dl>
@@ -534,8 +529,7 @@ obj.onPress.connect(listener);
 obj.onPress.disconnect(listener);
 
 obj.onPress.emit()
-<span class="hljs-comment">// no loggs...</span>
-</code></pre>
+<span class="hljs-comment">// no loggs...</span></code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/6c76d4c87bfd89e2c17bacc27a9eeb4b640b82c5/src/signal/index.litcoffee#signaldisconnectfunction-listener-any-context"><code>Source</code></a></p>
 <h2 id="signal-disconnectall-">Signal::<strong>disconnectAll</strong>()</h2>
 <p>Removes all the signal listeners.</p>

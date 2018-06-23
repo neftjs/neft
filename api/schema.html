@@ -422,16 +422,14 @@
 </blockquote>
 <p>Module used to validate structures.</p>
 <p>Access it with:</p>
-<pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { Schema } = Neft;
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/schema/index.litcoffee"><code>Source</code></a></p>
+<pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { Schema } = Neft;</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/schema/index.litcoffee"><code>Source</code></a></p>
 <h2 id="-class-schemaerror-"><strong>**Class</strong> SchemaError**()</h2>
 <p>Raised by <code>Schema::validate()</code> if given data doesn&#39;t pass the schema.</p>
 <p>Access it with:</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> Schema = <span class="hljs-built_in">require</span>(<span class="hljs-string">'schema'</span>);
-<span class="hljs-keyword">var</span> SchemaError = Schema.Error;
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/schema/index.litcoffee#class-schemaerror"><code>Source</code></a></p>
+<span class="hljs-keyword">var</span> SchemaError = Schema.Error;</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/schema/index.litcoffee#class-schemaerror"><code>Source</code></a></p>
 <h2 id="schema-constructor-schema-">Schema::<strong>constructor</strong>(<em>schema</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>schema — <code>Object</code></li></ul></dd></dl>
 
@@ -445,15 +443,14 @@
         <span class="hljs-attr">optional</span>: <span class="hljs-literal">true</span>,
         <span class="hljs-attr">type</span>: <span class="hljs-string">'boolean'</span>
     }
-});
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/schema/index.litcoffee#schemaconstructorobject-schema"><code>Source</code></a></p>
+});</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/schema/index.litcoffee#schemaconstructorobject-schema"><code>Source</code></a></p>
 <h2 id="schema-schema">Schema::<strong>schema</strong></h2>
 <dl><dt>Type:</dt><dd><code>Object</code></dd></dl>
 
 <p>Saved schema object from the constructor.</p>
 <p>It&#39;s allowed to change this object in runtime.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/schema/index.litcoffee#object-schemaschema"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/schema/index.litcoffee#object-schemaschema"><code>Source</code></a></p>
 <h2 id="schema-validate-data-">Schema::<strong>validate</strong>(<em>data</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>data — <code>Object</code></li></ul></dd><dt>Returns:</dt><dd><code>Boolean</code></dd></dl>
 
@@ -483,8 +480,7 @@
 <span class="hljs-comment">// false</span>
 
 <span class="hljs-built_in">console</span>.log(utils.tryFunction(schema.validate, schema, [{<span class="hljs-attr">age</span>: <span class="hljs-number">5</span>}], <span class="hljs-literal">false</span>));
-<span class="hljs-comment">// true</span>
-</code></pre>
+<span class="hljs-comment">// true</span></code></pre>
 <h3 id="nested-properties">Nested properties</h3>
 <p>Use dot in the property name to valdiate deep objects.</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> schema = <span class="hljs-keyword">new</span> Schema({
@@ -500,8 +496,7 @@
 <span class="hljs-comment">// "SchemaError: obj.prop1.name must be a string"</span>
 
 <span class="hljs-built_in">console</span>.log(schema.validate({<span class="hljs-attr">obj</span>: {<span class="hljs-attr">prop1</span>: {<span class="hljs-attr">name</span>: <span class="hljs-string">'Lily'</span>}}}));
-<span class="hljs-comment">// true</span>
-</code></pre>
+<span class="hljs-comment">// true</span></code></pre>
 <p>This function uses <em>utils.get()</em> internally.</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> schema = <span class="hljs-keyword">new</span> Schema({
   <span class="hljs-attr">names</span>: {
@@ -516,9 +511,8 @@
 <span class="hljs-comment">// "SchemaError: names[] must be a string"</span>
 
 <span class="hljs-built_in">console</span>.log(schema.validate({<span class="hljs-attr">names</span>: [<span class="hljs-string">'Lily'</span>, <span class="hljs-string">'Max'</span>]}));
-<span class="hljs-comment">// true</span>
-</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/696908fe1e6ff868e9bf13c80e9fd2e732a04f0f/src/schema/index.litcoffee"><code>Source</code></a></p>
+<span class="hljs-comment">// true</span></code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/61221da8b25e90cf9782e03ff3fa0bc20f0c913a/src/schema/index.litcoffee"><code>Source</code></a></p>
 
     </main>
 </div>

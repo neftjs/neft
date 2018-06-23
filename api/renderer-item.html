@@ -438,16 +438,14 @@
     <span class="hljs-title">Text</span> {
         <span class="hljs-attribute">text</span>: <span class="hljs-string">"Life: "</span> + main.currentLife
     }
-}
-</code></pre>
+}</code></pre>
 <h3 id="custom-signals">Custom signals</h3>
 <pre><code class="hljs nml"><span class="hljs-title">Item</span> {
     <span class="hljs-keyword">signal</span><span class="hljs-string"> onPlayerCollision</span>
     onPlayerCollision(){
         <span class="hljs-comment">// boom!</span>
     }
-}
-</code></pre>
+}</code></pre>
 <h2 id="item-query">Item::<strong>query</strong></h2>
 <dl><dt>Type:</dt><dd><code>String</code></dd><dt>Read Only</dt></dl>
 
@@ -461,14 +459,12 @@
 
 <pre><code class="hljs javascript">Text {
     <span class="hljs-attr">text</span>: <span class="hljs-keyword">this</span>.node.props.value
-}
-</code></pre>
+}</code></pre>
 <pre><code class="hljs javascript">Text {
     <span class="hljs-attr">onNodeChange</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
         <span class="hljs-keyword">var</span> inputs = <span class="hljs-keyword">this</span>.node.queryAll(<span class="hljs-string">'input[type=string]'</span>);
     }
-}
-</code></pre>
+}</code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemonnodechangedocumentelement-oldvalue"><code>Source</code></a></p>
 <h2 id="item-ready-">Item::<strong>ready</strong>()</h2>
 <dl><dt>Type:</dt><dd><code>Signal</code></dd></dl>
@@ -488,8 +484,7 @@ properties have been set and it&#39;s ready to use.</p>
             <span class="hljs-comment">// 100, 25</span>
         }
     }
-}
-</code></pre>
+}</code></pre>
 <p><a href="https://github.com/Neft-io/neft/blob/cc9a1f61468fd65aaac0c672c9394983a6c698e6/src/renderer/types/basics/item.litcoffee#signal-itemready"><code>Source</code></a></p>
 <h2 id="item-onanimationframe-miliseconds-">Item::<strong>onAnimationFrame</strong>(<em>miliseconds</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>miliseconds — <code>Integer</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
@@ -636,8 +631,7 @@ will be added into the <code>target</code> item.</p>
         <span class="hljs-attribute">text</span>: <span class="hljs-string">"Click to hide"</span>
         <span class="hljs-attribute">anchors.centerIn</span>: <span class="hljs-built_in">parent</span>
     }
-}
-</code></pre>
+}</code></pre>
 <h2 id="item-onvisiblechange-oldvalue-">Item::<strong>onVisibleChange</strong>(<em>oldValue</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Boolean</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
 
@@ -707,8 +701,7 @@ will be added into the <code>target</code> item.</p>
     <span class="hljs-attribute">height</span>: <span class="hljs-number">100</span>
     <span class="hljs-attribute">color</span>: <span class="hljs-string">'red'</span>
     <span class="hljs-attribute">rotation</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span>
-}
-</code></pre>
+}</code></pre>
 <h2 id="item-onrotationchange-oldvalue-">Item::<strong>onRotationChange</strong>(<em>oldValue</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>oldValue — <code>Float</code></li></ul></dd><dt>Type:</dt><dd><code>Signal</code></dd></dl>
 

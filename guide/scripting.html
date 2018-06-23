@@ -145,13 +145,11 @@
 <p>Each component file and <a href="/components.html#component">component</a> can be scripted.</p>
 <p>The whole <em>JavaScript</em> code put inside the <code>&lt;script /&gt;</code> tag.</p>
 <p>In the component file:</p>
-<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-</code></pre>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>or in a <a href="/components.html#component">component</a>:</p>
 <pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">component</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"Avatar"</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">component</span>&gt;</span>
-</code></pre>
+<span class="hljs-tag">&lt;/<span class="hljs-name">component</span>&gt;</span></code></pre>
 <h2 id="component-lifecycle">Component lifecycle</h2>
 <p>Inside the <code>&lt;sript /&gt;</code> tag you can connect to four <a href="/data-binding.html#signal">signals</a>:</p>
 <ul>
@@ -174,8 +172,7 @@
 <span class="hljs-keyword">this</span>.plusOne = <span class="hljs-function">(<span class="hljs-params">number</span>) =&gt;</span> {
     <span class="hljs-keyword">return</span> number + <span class="hljs-number">1</span>;
 };
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-</code></pre>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <h2 id="this-state"><code>this.state</code></h2>
 <p><code>this.state</code> is a <a href="/data-binding.html#dict">Dict</a>.
 Use it to store custom data for a rendered component.</p>
@@ -193,8 +190,7 @@ Use it to store custom data for a rendered component.</p>
     <span class="hljs-keyword">this</span>.state.set(<span class="hljs-string">'counterValue'</span>, <span class="hljs-number">1</span>);
     <span class="hljs-keyword">this</span>.increment();
 });
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-</code></pre>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <h2 id="this-refs"><code>this.refs</code></h2>
 <p>All nodes with <a href="/components.html#ref"><code>ref</code></a> tags are available under the <code>this.refs</code> object.</p>
 <pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="actionscript">
@@ -202,8 +198,7 @@ Use it to store custom data for a rendered component.</p>
     <span class="hljs-keyword">this</span>.refs.image.props.set(<span class="hljs-string">'src'</span>, <span class="hljs-string">"rsc:background"</span>);
 });
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">"image"</span> /&gt;</span> <span class="hljs-comment">&lt;!-- &lt;img src="rsc:background" /&gt; --&gt;</span>
-</code></pre>
+<span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">"image"</span> /&gt;</span> <span class="hljs-comment">&lt;!-- &lt;img src="rsc:background" /&gt; --&gt;</span></code></pre>
 <p>If node with <code>ref</code> tag renders a <a href="/components.html#component">component</a>, it refers to the <code>this</code> context and not no the <a href="/components/virtual-dom.html">Virtual DOM</a> element.</p>
 <pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">component</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"Issue"</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
@@ -221,8 +216,7 @@ Use it to store custom data for a rendered component.</p>
     <span class="hljs-tag">&lt;<span class="hljs-name">Issue</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">"firstIssue"</span> /&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">component</span>&gt;</span>
 
-<span class="hljs-tag">&lt;<span class="hljs-name">IssueList</span> /&gt;</span>
-</code></pre>
+<span class="hljs-tag">&lt;<span class="hljs-name">IssueList</span> /&gt;</span></code></pre>
 <p>This object is available in <a href="/components.html#string-interpolation">String Interpolation</a> as <code>${refs}</code>.</p>
 <h2 id="this-node"><code>this.node</code></h2>
 <p>It refers to the main component or component <a href="/components/virtual-dom.html">element</a>.</p>
@@ -234,8 +228,7 @@ Use it to store custom data for a rendered component.</p>
     <span class="hljs-comment">// [&lt;span&gt;first&lt;/span&gt;, &lt;span&gt;third&lt;/span&gt;]</span>
 });
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>first<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span> second <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>third<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
-</code></pre>
+<span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>first<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span> second <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>third<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></code></pre>
 <h2 id="this-props"><code>this.props</code></h2>
 <p><code>this.props</code> object contains properties used to create a <a href="/components.html#component">component</a>.</p>
 <p>You should not change it.</p>
@@ -252,8 +245,7 @@ Use it to store custom data for a rendered component.</p>
     <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>${props.nick}<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">component</span>&gt;</span>
 
-<span class="hljs-tag">&lt;<span class="hljs-name">User</span> <span class="hljs-attr">nick</span>=<span class="hljs-string">"testslover32"</span> /&gt;</span>
-</code></pre>
+<span class="hljs-tag">&lt;<span class="hljs-name">User</span> <span class="hljs-attr">nick</span>=<span class="hljs-string">"testslover32"</span> /&gt;</span></code></pre>
 <p><code>this.props</code> is an instance of <a href="/data-binding.html#dict">Dict</a> and can be changed in runtime. Connect to <a href="/api/dict.html#onchange"><code>this.props.onChange()</code></a> signal if you want to detect it manually.</p>
 <h2 id="this-context"><code>this.context</code></h2>
 <p>This property refers to a <a href="/routing.html">route</a> used to render this component.</p>
@@ -262,22 +254,19 @@ Use it to store custom data for a rendered component.</p>
 <span class="hljs-keyword">this</span>.onBeforeRender(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">this</span>.context.app.networking.get(<span class="hljs-string">'/users'</span>, (err, resp) =&gt; {});
 });
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-</code></pre>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>... or to get a <a href="/api/app-route.html#data">route.data</a>.</p>
 <p>More about it you&#39;ll learn in <a href="/routing.html">Routing</a> chapter.</p>
 <p>This object is available in <a href="/components.html#string-interpolation">String Interpolation</a> as <code>${context}</code>.</p>
 <h2 id="script-file">Script file</h2>
 <p>You can move your <em>JavaScript</em> code to separated file.</p>
 <p><code>&lt;script /&gt;</code> accepts <code>src</code> attribute. Use is with relative path.</p>
-<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"./scriptFile.js"</span> /&gt;</span><span class="undefined"></span>
-</code></pre>
+<pre><code class="hljs xhtml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"./scriptFile.js"</span> /&gt;</span><span class="undefined"></span></code></pre>
 <h2 id="coffeescript-support">CoffeeScript support</h2>
 <p>If you like to use <em>CoffeeScript</em>, you can do it by specifying the <code>filename</code> attribute with the <em>.coffee</em> extension.</p>
 <pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">filename</span>=<span class="hljs-string">"component.coffee"</span>&gt;</span><span class="javascript">
 @sum = <span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a + b
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-</code></pre>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 
     </main>
 </div>
