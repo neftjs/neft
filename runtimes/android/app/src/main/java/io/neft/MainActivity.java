@@ -35,6 +35,11 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public void onBackPressed() {
+        onBackPress.emit();
+    }
+
+    @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         App.getInstance().processTouchEvent(event);
         return super.dispatchTouchEvent(event);

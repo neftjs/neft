@@ -8,6 +8,7 @@
 
     module.exports = (Renderer, Impl, itemUtils) ->
         StatusBar = require('./screen/statusBar') Renderer, Impl, itemUtils
+        NavigationBar = require('./screen/navigationBar') Renderer, Impl, itemUtils
 
         class Screen extends signal.Emitter
             constructor: ->
@@ -18,6 +19,7 @@
                 @_height = 800
                 @_orientation = 'Portrait'
                 @_statusBar = new StatusBar
+                @_navigationBar = new NavigationBar
 
                 Object.preventExtensions @
 
@@ -62,6 +64,12 @@ May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape.
 
             utils.defineProperty @::, 'statusBar', null, ->
                 @_statusBar
+            , null
+
+## ReadOnly *NavigationBar* Screen.navigationBar
+
+            utils.defineProperty @::, 'navigationBar', null, ->
+                @_navigationBar
             , null
 
         screen = new Screen

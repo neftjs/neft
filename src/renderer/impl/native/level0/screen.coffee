@@ -18,7 +18,11 @@ module.exports = (impl) ->
         return
 
     bridge.listen bridge.inActions.SCREEN_STATUSBAR_HEIGHT, (reader) ->
-        screen.statusBar._height = reader.getFloat()
+        screen.statusBar.height = reader.getFloat()
+        return
+
+    bridge.listen bridge.inActions.SCREEN_NAVIGATIONBAR_HEIGHT, (reader) ->
+        screen.navigationBar.height = reader.getFloat()
         return
 
     initScreenNamespace: (_callback) ->
