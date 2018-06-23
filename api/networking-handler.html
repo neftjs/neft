@@ -427,27 +427,27 @@
 <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> Networking = <span class="hljs-built_in">require</span>(<span class="hljs-string">'networking'</span>);
 <span class="hljs-keyword">var</span> Handler = Networking.Handler;
 </code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/57dd3c863c4ff7a3b8fa56ae74c50742c9e5a6fd/src/networking/handler.litcoffee"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/0862c5738a07152d838005ef742af75dd3a2b6cc/src/networking/handler.litcoffee"><code>Source</code></a></p>
 <h2 id="handler-constructor-options-">Handler::<strong>constructor</strong>(<em>options</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>options — <code>Object</code></li></ul></dd></dl>
 
 
-<p><a href="https://github.com/Neft-io/neft/blob/57dd3c863c4ff7a3b8fa56ae74c50742c9e5a6fd/src/networking/handler.litcoffee#handlerconstructorobject-options"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/0862c5738a07152d838005ef742af75dd3a2b6cc/src/networking/handler.litcoffee#handlerconstructorobject-options"><code>Source</code></a></p>
 <h2 id="handler-method">Handler::<strong>method</strong></h2>
 <dl><dt>Type:</dt><dd><code>String</code></dd></dl>
 
 <p>Describes which type of the request, this handler can handle.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/57dd3c863c4ff7a3b8fa56ae74c50742c9e5a6fd/src/networking/handler.litcoffee#string-handlermethod"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/0862c5738a07152d838005ef742af75dd3a2b6cc/src/networking/handler.litcoffee#string-handlermethod"><code>Source</code></a></p>
 <h2 id="handler-uri">Handler::<strong>uri</strong></h2>
 <dl><dt>Type:</dt><dd><code>Networking.Uri</code></dd></dl>
 
 <p>This property is compared with the request uri.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/57dd3c863c4ff7a3b8fa56ae74c50742c9e5a6fd/src/networking/handler.litcoffee#networkinguri-handleruri"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/0862c5738a07152d838005ef742af75dd3a2b6cc/src/networking/handler.litcoffee#networkinguri-handleruri"><code>Source</code></a></p>
 <h2 id="handler-schema">Handler::<strong>schema</strong></h2>
 <dl><dt>Type:</dt><dd><code>Schema</code></dd><dt>Default value:</dt><dd><code>null</code></dd></dl>
 
 <p>Used to determine whether the request uri is valid and can be handled by the handler callback.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/57dd3c863c4ff7a3b8fa56ae74c50742c9e5a6fd/src/networking/handler.litcoffee#schema-handlerschema--null"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/0862c5738a07152d838005ef742af75dd3a2b6cc/src/networking/handler.litcoffee#schema-handlerschema--null"><code>Source</code></a></p>
 <h2 id="handler-callback">Handler::<strong>callback</strong></h2>
 <dl><dt>Type:</dt><dd><code>Function</code></dd></dl>
 
@@ -455,7 +455,7 @@
 <p>It&#39;s called with three parameters: <em>Networking.Request</em>, <em>Networking.Response</em> and
 a <em>next</em> function.</p>
 <p>If the <em>next</em> function is called, the next handler is checked.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/57dd3c863c4ff7a3b8fa56ae74c50742c9e5a6fd/src/networking/handler.litcoffee#function-handlercallback"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/0862c5738a07152d838005ef742af75dd3a2b6cc/src/networking/handler.litcoffee#function-handlercallback"><code>Source</code></a></p>
 <h2 id="handler-exec-request-response-next-">Handler::<strong>exec</strong>(<em>request</em>, <em>response</em>, <em>next</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>request — <code>Networking.Request</code></li><li>response — <code>Networking.Response</code></li><li>next — <code>Function</code></li></ul></dd></dl>
 
@@ -466,14 +466,14 @@ a <em>next</em> function.</p>
 <li>calls the handler callback.</li>
 </ul>
 <p>It&#39;s internally called by the <code>createRequest()</code>.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/57dd3c863c4ff7a3b8fa56ae74c50742c9e5a6fd/src/networking/handler.litcoffee#handlerexecnetworkingrequest-request-networkingresponse-response-function-next"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/0862c5738a07152d838005ef742af75dd3a2b6cc/src/networking/handler.litcoffee#handlerexecnetworkingrequest-request-networkingresponse-response-function-next"><code>Source</code></a></p>
 <h2 id="handler-tostring-">Handler::<strong>toString</strong>()</h2>
 <dl><dt>Returns:</dt><dd><code>String</code></dd></dl>
 
 <p>Returns a string describing the handler.</p>
 <pre><code class="hljs javascript"><span class="hljs-string">"get /users/{name}"</span>
 </code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/57dd3c863c4ff7a3b8fa56ae74c50742c9e5a6fd/src/networking/handler.litcoffee#string-handlertostring"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/0862c5738a07152d838005ef742af75dd3a2b6cc/src/networking/handler.litcoffee#string-handlertostring"><code>Source</code></a></p>
 
     </main>
 </div>
