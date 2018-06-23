@@ -2,9 +2,12 @@
 
 pathUtils = require 'path'
 glob = require 'glob'
+log = require 'src/log'
 utils = require 'src/utils'
 moduleCache = require 'lib/module-cache'
 appBundleBuilder = require './appBundleBuilder'
+
+log = log.scope 'hot-reloader'
 
 MAIN_STAT_FOLDERS = ['styles']
 
@@ -88,6 +91,7 @@ exports.prepare = (options, result, callback) ->
 
 exports.resolve = (platform, options, result, callback) ->
     {hotReloads} = result
+    log.info "Preparing hot reload for `#{platform}`"
     stack = new utils.async.Stack
 
     appendHotReload = (path, callback) ->

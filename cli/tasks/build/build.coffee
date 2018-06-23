@@ -11,8 +11,10 @@ hotReloader = require './hotReloader'
 
 log = log.scope 'cli', 'build'
 
+LOG_PREFIX = "✏️  "
+
 module.exports = (platform, options, callback) ->
-    logLine = log.line().timer().repeat().loading "Building **#{platform}**"
+    logLine = log.line().timer().repeat().loading "#{LOG_PREFIX}Building **#{platform}**"
 
     # create build folder
     fs.ensureDirSync './build'
@@ -69,8 +71,8 @@ module.exports = (platform, options, callback) ->
             if err?.stack then log.error err.stack
             if not err?.message and not err?.stack
                 log.error err
-            logLine.error "**Cannot build #{platform}**"
+            logLine.error "#{LOG_PREFIX}**Cannot build #{platform}**"
         else
-            logLine.ok "**Built #{platform}**"
+            logLine.ok "#{LOG_PREFIX}**Built #{platform}**"
         logLine.stop()
         callback err

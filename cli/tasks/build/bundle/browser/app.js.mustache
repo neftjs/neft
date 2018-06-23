@@ -19,7 +19,7 @@
                 app.reload(JSON.parse(this.responseText).hotReloads);
             };
             xhr.onerror = function () {
-                setTimeout(watchOnBundle, 1000);
+                setTimeout(watchOnBundle, 5000);
             };
             xhr.send();
         }
