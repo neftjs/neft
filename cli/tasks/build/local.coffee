@@ -12,10 +12,6 @@ DEFAULT_LOCAL_FILE =
         port: 3001
     android:
         sdkDir: '$ANDROID_HOME'
-        compileSdkVersion: 25
-        targetSdkVersion: 25
-        buildToolsVersion: '25'
-        dependencies: []
 
 exports.normalizeLocalFile = ->
     if fs.existsSync('./local.json')

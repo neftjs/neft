@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="{{&package.android.package}}" >
+    package="{{&manifest.package}}" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="{{&package.android.application.label}}"
+        android:label="{{&manifest.label}}"
         android:theme="@style/NeftTheme"
         android:hardwareAccelerated="true" >
         <activity
             android:name=".MainActivity"
-            android:label="{{&package.android.application.label}}"
+            android:label="{{&manifest.label}}"
             android:screenOrientation="portrait"
             android:resizeableActivity="true"
             android:windowSoftInputMode="adjustResize" >
@@ -22,6 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        {{&manifest.applicationXmlManifest}}
     </application>
-
 </manifest>

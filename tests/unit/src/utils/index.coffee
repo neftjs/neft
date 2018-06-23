@@ -135,7 +135,23 @@ describe 'utils', ->
         # TODO
 
     describe 'mergeDeep()', ->
-        # TODO
+        it 'merges objects deeply', ->
+            source = {a: {aa: '', ac: 0}, c: 4}
+            obj = {a: {aa: 1, ab: 2}, b: 3}
+            expected = {a: {aa: 1, ab: 2, ac: 0}, b: 3, c: 4}
+            assert.isEqual utils.mergeDeep(source, obj), expected
+
+        it 'merges lists', ->
+            source = [1, 2]
+            obj = [3]
+            expected = [1, 2, 3]
+            assert.isEqual utils.mergeDeep(source, obj), expected
+
+        it 'merges lists deeply', ->
+            source = {a: [1, 2]}
+            obj = {a: [3]}
+            expected = {a: [1, 2, 3]}
+            assert.isEqual utils.mergeDeep(source, obj), expected
 
     describe 'fill()', ->
         # TODO

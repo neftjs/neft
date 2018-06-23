@@ -4,9 +4,22 @@ fs = require 'fs'
 appBundleBuilder = require './appBundleBuilder'
 pathUtils = require 'path'
 log = require 'src/log'
+utils = require 'src/utils'
 
+REALPATH = fs.realpathSync('.')
 INDEX_PATH = 'build/index.js'
-INDEX_ABS_PATH = pathUtils.resolve fs.realpathSync('.'), INDEX_PATH
+INDEX_ABS_PATH = pathUtils.resolve REALPATH, INDEX_PATH
+
+getManifestFile = (platform, path = '') ->
+    try require pathUtils.resolve REALPATH, path, './manifest/', platform
+
+getManifest = (platform, extensions) ->
+    files = []
+    files.push(getManifestFile platform)
+    for extension in extensions
+        files.push(getManifestFile(platform, extension.path))
+
+    utils.mergeDeepAll {}, files...
 
 module.exports = (platform, options, app, callback) ->
     mode = if options.release then 'release' else 'develop'
@@ -52,6 +65,7 @@ module.exports = (platform, options, app, callback) ->
                 appCode: file
                 package: app.package
                 local: JSON.parse fs.readFileSync('./local.json')
+                manifest: getManifest(platform, app.allExtensions)
                 allExtensions: app.allExtensions
                 extensions: app.extensions
                 buildBundleOnly: !!options.buildBundleOnly

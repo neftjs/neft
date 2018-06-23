@@ -275,7 +275,7 @@ console.log(config);
         null
         `//<development>`
         if isPrimitive(source)
-            throw new Error 'utils.merge source cannot be primitive'
+            throw new Error 'utils.mergeAll source cannot be primitive'
         `//</development>`
 
         for i in [1...arguments.length] by 1
@@ -286,8 +286,7 @@ console.log(config);
                 if source is obj
                     throw new Error 'utils.mergeAll source and object are the same'
                 `//</development>`
-                for key, value of obj when obj.hasOwnProperty(key)
-                    source[key] = value
+                merge source, obj
 
         source
 
@@ -329,14 +328,38 @@ console.log(user);
             throw new Error 'utils.mergeDeep source and object are the same'
         `//</development>`
 
-        for key, value of obj when hasOwnProp.call obj, key
-            sourceValue = source[key]
+        if isArray(source) and isArray(obj)
+            Array::push.apply source, obj
+        else
+            for key, value of obj when hasOwnProp.call obj, key
+                sourceValue = source[key]
 
-            if value and typeof value is 'object' and not isArray(value) and sourceValue and typeof sourceValue is 'object' and not isArray(sourceValue)
-                mergeDeep sourceValue, value
-                continue
+                if isObject(value) and isObject(sourceValue)
+                    mergeDeep sourceValue, value
+                    continue
 
-            source[key] = value
+                source[key] = value
+
+        source
+
+## *NotPrimitive* utils.mergeDeepAll(*NotPrimitive* source, *NotPrimitive* objects...)
+
+    exports.mergeDeepAll = (source) ->
+        null
+        `//<development>`
+        if isPrimitive(source)
+            throw new Error 'utils.mergeDeepAll source cannot be primitive'
+        `//</development>`
+
+        for i in [1...arguments.length] by 1
+            if (obj = arguments[i])?
+                `//<development>`
+                if isPrimitive(obj)
+                    throw new Error 'utils.mergeDeepAll object cannot be primitive'
+                if source is obj
+                    throw new Error 'utils.mergeDeepAll source and object are the same'
+                `//</development>`
+                mergeDeep source, obj
 
         source
 

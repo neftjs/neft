@@ -20,6 +20,8 @@ ICON_OUT_DIR = "#{OUT_DIR}app/src/main/res"
 JS_FILE_PATH = "app/src/main/assets/javascript/neft.coffee.mustache"
 BUNDLE_DIR = './build/android/'
 RUNTIME_PATH = pathUtils.resolve __dirname, '../../../../runtimes/android'
+APP_DIR = './manifest/android/app'
+APP_OUT_DIR = './build/android/app'
 
 mustacheFiles = []
 
@@ -93,6 +95,12 @@ module.exports = (config, callback) ->
         logLine.ok "Icons copied into `#{ICON_OUT_DIR}`"
         logLine.stop()
 
+    if fs.existsSync(APP_DIR)
+        logLine = log.line().timer().loading "Copying app files into `#{APP_OUT_DIR}`"
+        fs.copySync APP_DIR, APP_OUT_DIR
+        logLine.ok "App files copied into `#{APP_OUT_DIR}`"
+        logLine.stop()
+
     logLine = log.line().timer().loading 'Copying extensions...'
     config.androidExtensions = []
     for ext in config.allExtensions
@@ -114,7 +122,7 @@ module.exports = (config, callback) ->
     logLine.ok 'Android files prepared'
 
     # main activity
-    androidPackagePath = config.package.android.package.replace /\./g, '/'
+    androidPackagePath = config.manifest.package.replace /\./g, '/'
     classFrom = "#{BUNDLE_DIR}app/src/main/java/__MainActivity__.java"
     classTo = "#{BUNDLE_DIR}app/src/main/java/#{androidPackagePath}/MainActivity.java"
     fs.move classFrom, classTo, (err) ->
