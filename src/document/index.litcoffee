@@ -221,7 +221,7 @@ Corresponding node handler: *n-onRevert=""*.
         @parse = do ->
             unless process.env.NEFT_PLATFORM is 'node'
                 return (file) ->
-                    throw new Error "Document.parse() is available only on the server"
+                    throw new Error "Document.parse() is available only on a server"
 
             components = require('./file/parse/components') Document
             scripts = require('./file/parse/scripts') Document

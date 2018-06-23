@@ -18,9 +18,6 @@ module.exports = (File) ->
                 InputRE.lastIndex = 0
                 if text and InputRE.test(text)
                     if funcBody = Input.parse(text)
-                        `//<production>`
-                        text = ''
-                        `//</production>`
                         input = new Input.Text file, elem, text, funcBody
                         elem.text = ''
                         inputs.push input
@@ -30,11 +27,7 @@ module.exports = (File) ->
                 for name, val of elem.props
                     if elem.props.hasOwnProperty(name) and Input.test(val)
                         if funcBody = Input.parse(val)
-                            text = ''
-                            `//<development>`
-                            text = val
-                            `//</development>`
-                            input = new Input.Prop file, elem, text, funcBody, name
+                            input = new Input.Prop file, elem, val, funcBody, name
                             elem.props.set name, null
                             if name[0] is 'n' and name[1] is '-'
                                 inputs.unshift input
