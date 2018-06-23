@@ -45,4 +45,4 @@ module.exports = (signal) -> class SignalsEmitter
         SignalsEmitter.createSignalOnObject ctor::, name, onInitialized
 
     constructor: ->
-        @_signals = {}
+        utils.defineProperty @, '_signals', null, {}

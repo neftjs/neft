@@ -70,7 +70,6 @@ data.name; // xyz
 
             super()
 
-            utils.defineProperty @, '_signals', utils.WRITABLE, @_signals
             utils.defineProperty @, '_keys', utils.WRITABLE, null
             utils.defineProperty @, '_values', utils.WRITABLE, null
             utils.defineProperty @, '_items', utils.WRITABLE, null
