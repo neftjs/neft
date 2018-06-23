@@ -31,7 +31,7 @@ FILE_SCOPE = """(function(){
         var initialized = new Array(__modules.length);
 
         function requireFunc(paths, name){
-            var path = paths[name] || name;
+            var path = paths[name] === undefined ? name : paths[name];
             var module = __modules[path];
             if (module) {
                 if (!initialized[path]) {

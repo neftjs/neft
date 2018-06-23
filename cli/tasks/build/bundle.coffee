@@ -26,7 +26,7 @@ module.exports = (platform, options, app, callback) ->
         platform: platform
         path: INDEX_PATH
         release: options.release
-        minify: options.release
+        minify: options.minify
         removeLogs: options.release
         watch: options.watch
         changedFiles: changedFiles
