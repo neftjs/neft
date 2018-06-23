@@ -420,7 +420,7 @@
 <blockquote>
 <p><strong>API</strong> ▸ <a href="/api/networking.html">Networking</a> ▸ <strong>Response</strong></p>
 </blockquote>
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee"><code>Source</code></a></p>
 <h2 id="response-statuses">Response.<strong>STATUSES</strong></h2>
 <dl><dt>Type:</dt><dd><code>Array</code></dd></dl>
 
@@ -451,14 +451,14 @@ Check <a href="">http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html</a> for 
 </ul>
 <pre><code class="hljs javascript"><span class="hljs-built_in">console</span>.log(Networking.Response.OK);
 <span class="hljs-built_in">console</span>.log(Networking.Response.BAD_REQUEST);</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#array-responsestatuses"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee#array-responsestatuses"><code>Source</code></a></p>
 <h2 id="response-constructor-options-">Response::<strong>constructor</strong>(<em>options</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>options — <code>Object</code></li></ul></dd></dl>
 
 <p>Access it with:</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> Networking = <span class="hljs-built_in">require</span>(<span class="hljs-string">'networking'</span>);
 <span class="hljs-keyword">var</span> Response = Networking.Response;</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#responseconstructorobject-options"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee#responseconstructorobject-options"><code>Source</code></a></p>
 <h2 id="response-onsend-">Response::<strong>onSend</strong>()</h2>
 <dl><dt>Type:</dt><dd><code>Signal</code></dd></dl>
 
@@ -466,17 +466,17 @@ Check <a href="">http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html</a> for 
 <pre><code class="hljs javascript">res.onSend(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Response has been sent!"</span>);
 });</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#signal-responseonsend"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee#signal-responseonsend"><code>Source</code></a></p>
 <h2 id="response-pending">Response::<strong>pending</strong></h2>
 <dl><dt>Type:</dt><dd><code>Boolean</code></dd><dt>Read Only</dt></dl>
 
 <p>Indicates whether the response is not destroyed.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#readonly-boolean-responsepending"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee#readonly-boolean-responsepending"><code>Source</code></a></p>
 <h2 id="response-request">Response::<strong>request</strong></h2>
 <dl><dt>Type:</dt><dd><code>Networking.Request</code></dd><dt>Read Only</dt></dl>
 
 <p>Refers to the [Request][networking/Request].</p>
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#readonly-networkingrequest-responserequest"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee#readonly-networkingrequest-responserequest"><code>Source</code></a></p>
 <h2 id="response-status">Response::<strong>status</strong></h2>
 <dl><dt>Type:</dt><dd><code>Integer</code></dd><dt>Default value:</dt><dd><code>Response.OK</code></dd></dl>
 
@@ -484,7 +484,7 @@ Check <a href="">http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html</a> for 
 <p>It refers to one of the <em>Response.STATUSES</em> values.</p>
 <pre><code class="hljs javascript">res.status = Networking.Response.CREATED;
 res.status = Networking.Response.PAYMENT_REQUIRED;</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#integer-responsestatus--responseok"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee#integer-responsestatus--responseok"><code>Source</code></a></p>
 <h2 id="response-data">Response::<strong>data</strong></h2>
 <dl><dt>Type:</dt><dd><code>Any</code></dd></dl>
 
@@ -492,27 +492,27 @@ res.status = Networking.Response.PAYMENT_REQUIRED;</code></pre>
 <pre><code class="hljs javascript">res.data = {<span class="hljs-attr">items</span>: [<span class="hljs-string">'superhero toy'</span>, <span class="hljs-string">'book'</span>]};
 res.data = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"Wrong order"</span>);
 res.data = Document.fromJSON(...);</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#any-responsedata"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee#any-responsedata"><code>Source</code></a></p>
 <h2 id="response-headers">Response::<strong>headers</strong></h2>
 <dl><dt>Type:</dt><dd><code>Object</code></dd></dl>
 
 
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#object-responseheaders"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee#object-responseheaders"><code>Source</code></a></p>
 <h2 id="response-cookies">Response::<strong>cookies</strong></h2>
 <dl><dt>Type:</dt><dd><code>Object</code></dd></dl>
 
 
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#object-responsecookies"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee#object-responsecookies"><code>Source</code></a></p>
 <h2 id="response-encoding">Response::<strong>encoding</strong></h2>
 <dl><dt>Type:</dt><dd><code>String</code></dd><dt>Default value:</dt><dd><code>&#39;utf-8&#39;</code></dd></dl>
 
 
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#string-responseencoding--39utf839"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee#string-responseencoding--39utf839"><code>Source</code></a></p>
 <h2 id="response-setheader-name-value-">Response::<strong>setHeader</strong>(<em>name</em>, <em>value</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>name — <code>String</code></li><li>value — <code>String</code></li></ul></dd><dt>Returns:</dt><dd><code>Response</code></dd></dl>
 
 <pre><code class="hljs javascript">res.setHeader(<span class="hljs-string">'Location'</span>, <span class="hljs-string">'/redirect/to/url'</span>);</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#response-responsesetheaderstring-name-string-value"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee#response-responsesetheaderstring-name-string-value"><code>Source</code></a></p>
 <h2 id="response-send-status-data-">Response::<strong>send</strong>(<em>status</em>, <em>data</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>status — <code>Integer</code> — <i>optional</i></li><li>data — <code>Any</code> — <i>optional</i></li></ul></dd></dl>
 
@@ -522,25 +522,25 @@ res.data = Document.fromJSON(...);</code></pre>
 });
 
 res.send(Networking.Response.OK, {<span class="hljs-attr">user</span>: <span class="hljs-string">'Max'</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">43</span>});</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#responsesendinteger-status-any-data"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee#responsesendinteger-status-any-data"><code>Source</code></a></p>
 <h2 id="response-redirect-status-uri-">Response::<strong>redirect</strong>(<em>status</em>, <em>uri</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>status — <code>Integer</code> — <code>= Response.FOUND</code></li><li>uri — <code>String</code></li></ul></dd></dl>
 
 <p>The <em>Response.FOUND</em> status is typically used for temporary redirection.
 The <em>Response.MOVED</em> is a permanent redirection.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#responseredirectinteger-status--responsefound-string-uri"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee#responseredirectinteger-status--responsefound-string-uri"><code>Source</code></a></p>
 <h2 id="response-raise-error-">Response::<strong>raise</strong>(<em>error</em>)</h2>
 <dl><dt>Parameters:</dt><dd><ul><li>error — <code>Any</code></li></ul></dd></dl>
 
 <p>Finishes the response with an error.</p>
 <pre><code class="hljs javascript">res.raise(<span class="hljs-keyword">new</span> Networking.Response.Error(<span class="hljs-string">"Login first"</span>));
 res.raise(<span class="hljs-keyword">new</span> Networking.Response.Error(Networking.Response.UNAUTHORIZED, <span class="hljs-string">"Login first"</span>));</code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#responseraiseany-error"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee#responseraiseany-error"><code>Source</code></a></p>
 <h2 id="response-issucceed-">Response::<strong>isSucceed</strong>()</h2>
 <dl><dt>Returns:</dt><dd><code>Boolean</code></dd></dl>
 
 <p>Returns <code>true</code> if the response status is in range from 200 to 299.</p>
-<p><a href="https://github.com/Neft-io/neft/blob/0babb76a167fa62ae76c5e11b3e82fe5292f4a43/src/networking/response.litcoffee#boolean-responseissucceed"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/9c273eaab013ff5256f1b71eb77055bc13947a4f/src/networking/response.litcoffee#boolean-responseissucceed"><code>Source</code></a></p>
 
     </main>
 </div>
