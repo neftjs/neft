@@ -370,7 +370,7 @@
         </a>
     </li>
     <li>
-        <a href="/api/schema-type-validator.html" class="active">
+        <a href="/api/schema-type-validator.html" class="">
             Type Validator
         </a>
     </li>
@@ -382,7 +382,7 @@
         </a>
     </li>
     <li>
-        <a href="/api/struct.html" class="">
+        <a href="/api/struct.html" class="active">
             Struct
         </a>
     </li>
@@ -416,29 +416,29 @@
 </ul>
     </aside>
     <main class="content" id="api">
-        <h1 id="type-validator">Type Validator</h1>
+        <h1 id="struct">Struct</h1>
 <blockquote>
-<p><strong>API</strong> ▸ <a href="/api/schema.html">Schema</a> ▸ <strong>Type Validator</strong></p>
+<p><strong>API</strong> ▸ <strong>Struct</strong></p>
 </blockquote>
-<p>Verifies the tested value type using the <code>typeof</code>.</p>
-<pre><code class="hljs javascript"><span class="hljs-keyword">var</span> schema = <span class="hljs-keyword">new</span> Schema({
-  <span class="hljs-attr">desc</span>: {
-    <span class="hljs-attr">type</span>: <span class="hljs-string">'object'</span>
-  }
-});
-
-<span class="hljs-built_in">console</span>.log(utils.catchError(schema.validate, schema, [{<span class="hljs-attr">desc</span>: <span class="hljs-number">231</span>}])+<span class="hljs-string">''</span>);
-<span class="hljs-comment">// "SchemaError: desc must be a object"</span>
-
-<span class="hljs-built_in">console</span>.log(schema.validate({<span class="hljs-attr">desc</span>: {}}));
-<span class="hljs-comment">// true</span>
-
-<span class="hljs-built_in">console</span>.log(schema.validate({<span class="hljs-attr">desc</span>: []}));
-<span class="hljs-comment">// true</span>
-<span class="hljs-comment">// because in js `typeof []` is `object` ...</span>
-<span class="hljs-comment">// you should use array validator instead ...</span>
+<p>Access it with:</p>
+<pre><code class="hljs javascript"><span class="hljs-keyword">const</span> { Struct } = Neft;
 </code></pre>
-<p><a href="https://github.com/Neft-io/neft/blob/57dd3c863c4ff7a3b8fa56ae74c50742c9e5a6fd/src/schema/validators/type.litcoffee"><code>Source</code></a></p>
+<p><a href="https://github.com/Neft-io/neft/blob/add1038f11f2a49df0357632b5d98b210c09842b/src/struct/index.litcoffee"><code>Source</code></a></p>
+<h2 id="struct-constructor-object-">Struct::<strong>constructor</strong>(<em>object</em>)</h2>
+<dl><dt>Parameters:</dt><dd><ul><li>object — <code>Object</code></li></ul></dd></dl>
+
+<p>Creates a new struct instance with the given properties.</p>
+<p>Once created struct keys cannot be added or removed.</p>
+<p>Each key is created with his onChange signal.</p>
+<pre><code class="hljs javascript"><span class="hljs-keyword">var</span> struct = <span class="hljs-keyword">new</span> Struct({ <span class="hljs-attr">name</span>: <span class="hljs-string">'Max'</span> });
+struct.name; <span class="hljs-comment">// 'Max'</span>
+struct.onNameChange.connect(<span class="hljs-function">(<span class="hljs-params">oldValue</span>) =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Name changed from <span class="hljs-subst">${oldValue}</span> to <span class="hljs-subst">${struct.name}</span>`</span>)
+})
+struct.name = <span class="hljs-string">'Bob'</span>
+<span class="hljs-comment">// prints 'Name changed from Max to Bob'</span>
+</code></pre>
+<p><a href="https://github.com/Neft-io/neft/blob/add1038f11f2a49df0357632b5d98b210c09842b/src/struct/index.litcoffee#structconstructorobject-object"><code>Source</code></a></p>
 
     </main>
 </div>
