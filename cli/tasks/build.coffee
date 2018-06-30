@@ -22,7 +22,6 @@ stdinLogLine = log.line()
 startWatcher = (watchHandler, buildsStack, platform, options) ->
     buildPlatform = (buildOptions, onBuilt) ->
         buildsStack.add (callback) ->
-            localOpts = utils.mergeAll {}, buildOptions, buildBundleOnly: true
             build platform, buildOptions, (err, result) ->
                 watchHandler.send platform, result
                 onBuilt result
@@ -35,7 +34,11 @@ startWatcher = (watchHandler, buildsStack, platform, options) ->
 
     # force whole reload on stdin
     stdin.on 'line', ->
-        buildPlatform options, utils.NOP
+        log.info '🛎  Full reload forced manually'
+        localOpts = utils.mergeAll {}, options,
+            buildBundleOnly: true
+            disableHotReloader: true
+        buildPlatform localOpts, utils.NOP
 
     return
 

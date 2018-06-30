@@ -43,6 +43,9 @@ getStatPath = (cwd, folders, dir = '') ->
     pathUtils.join(cwd, dir, "*(#{folders.join('|')})", '**/*.?(js|nml)')
 
 exports.canUse = (platform, options, result) ->
+    if options.disableHotReloader
+        return false
+
     # srcChangedFiles
     unless srcChangedFiles = options.srcChangedFiles
         return false
