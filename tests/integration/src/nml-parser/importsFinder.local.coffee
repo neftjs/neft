@@ -85,3 +85,18 @@ describe 'nml-parser imports', ->
             DEFAULT_IMPORTS...,
         ]
         assert.isEqual getImports(code), expected
+
+    it 'submodules', ->
+        code = '''
+        import Neft.Extensions.DefaultStyles
+
+        DefaultStyles.Img {}
+        '''
+        expected = [
+            {
+                name: 'DefaultStyles',
+                path: 'extensions/defaultStyles/renderer/defaultStyles'
+            },
+            DEFAULT_IMPORTS...,
+        ]
+        assert.isEqual getImports(code), expected

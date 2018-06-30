@@ -82,8 +82,9 @@ class ImportsFinder
             (index, elem) -> elem.name.split('.')[0],
             -> true
         for type in @usedTypes
-            unless imported[type]
-                throw new Error "Not imported type '#{type}'"
+            typeNs = type.split('.')[0]
+            unless imported[typeNs]
+                throw new Error "Not imported type '#{typeNs}'"
         return
 
     findAll: ->
