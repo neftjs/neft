@@ -9,4 +9,4 @@ for pattern in PATHS_TO_COPY
             output = pathUtils.join OUTPUT_DIR, path
         else
             output = pathUtils.join OUTPUT_DIR, DOCS_DIR, path
-        fs.copy path, output
+        fs.copySync path, output
