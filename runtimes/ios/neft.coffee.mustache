@@ -12,8 +12,9 @@ Global object
 Console
 ###
 do =>
+    inspect = `{{&libs.inspect}}`
     getMessage = (type, args) ->
-        "[#{type}] " + Array::join.call args, ' '
+        "[#{type}] " + inspect(args)
 
     console.log = do (_super = console.log) -> ->
         ios.log getMessage('LOG', arguments)

@@ -12,8 +12,9 @@ Global object
 Console
 ###
 do =>
+    inspect = `{{&libs.inspect}}`
     sendLog = (type, args) ->
-        msg = "[#{type}] " + Array::join.call args, ' '
+        msg = "[#{type}] " + inspect(args)
         webkit?.messageHandlers.log.postMessage msg
         return
 
