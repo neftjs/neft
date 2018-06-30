@@ -70,6 +70,8 @@ module.exports = (platform, options, app, callback) ->
                 extensions: app.extensions
                 buildBundleOnly: !!options.buildBundleOnly
                 buildServerUrl: options.buildServerUrl
+                libs:
+                    inspect: require('./libs/inspect').toString()
 
             platformBundle = require "./bundle/#{platform}"
             platformBundle config, (err) ->

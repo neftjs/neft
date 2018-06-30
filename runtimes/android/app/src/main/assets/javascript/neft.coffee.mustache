@@ -7,25 +7,23 @@ Global object
 Console
 ###
 console = do ->
-    getMessage = (args) ->
-        Array::join.call args, ' '
-
+    inspect = `{{&libs.inspect}}`
     Object.preventExtensions
         assert: (assertion, msg) ->
             unless assertion
                 throw new Error msg
         log: ->
-            _neft.console.log getMessage(arguments)
+            _neft.console.log inspect(arguments)
         info: ->
-            _neft.console.info getMessage(arguments)
+            _neft.console.info inspect(arguments)
         warn: ->
-            _neft.console.warn getMessage(arguments)
+            _neft.console.warn inspect(arguments)
         error: ->
-            _neft.console.error getMessage(arguments)
+            _neft.console.error inspect(arguments)
         trace: ->
             err = new Error
             err.name = 'Trace'
-            err.message = getMessage arguments
+            err.message = inspect arguments
             Error.captureStackTrace err, console.trace
             console.error err.stack
 

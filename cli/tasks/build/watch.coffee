@@ -41,6 +41,7 @@ module.exports = (platform, options, onBuild) ->
         buildOptions = utils.mergeAll {}, options,
             srcChangedFiles: srcChangedFiles
             changedFiles: changedFiles
+            buildBundleOnly: true
             lastResult: lastResult
         srcChangedFiles = []
         onBuild buildOptions, (result) ->
