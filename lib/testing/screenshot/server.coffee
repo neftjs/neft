@@ -13,10 +13,9 @@ targets = require '../cli/targets'
 
 DEST = 'tests_results'
 INITIALIZATION_FILE_PATH = pathUtils.join DEST, 'initialization.png'
-INITIALIZATION_TRIES = 20
-
-INITIALIZATION_TRY_DELAY_SEC = 1
-CUSTOM_SCREENSHOT_MAX_DELAY_MS = 1000
+SCREENSHOT_TRIES = 100
+SCREENSHOT_TRY_DELAY_SEC = 0.2
+CUSTOM_SCREENSHOT_MAX_DELAY_MS = 2000
 {LOG_SCREENSHOT_DATA_URI} = process.env
 
 if LOG_SCREENSHOT_DATA_URI
@@ -59,6 +58,17 @@ getScreenshotError = (opts) ->
         Expected: #{expectedUri}
     """
 
+waitForScreenshot = (path, maxDelay) ->
+    startTime = Date.now()
+    itertion = 0
+    while Date.now() < startTime + maxDelay
+        try
+            stats = fs.statSync path
+            if stats?.size
+                return true
+        childProcess.execSync "sleep 0.1"
+    return false
+
 takeScreenshot = (opts) ->
     # use target-specified screenshot function
     if opts.env
@@ -66,17 +76,9 @@ takeScreenshot = (opts) ->
         handler.focusWindow?()
         if handler.takeScreenshot
             startTime = Date.now()
+            handler.takeScreenshot opts
             maxDelay = handler.TAKE_SCREENSHOT_DELAY_MS ? CUSTOM_SCREENSHOT_MAX_DELAY_MS
-            itertion = 0
-            while Date.now() < startTime + maxDelay
-                if itertion++ % 10 is 0
-                    handler.takeScreenshot opts
-                try
-                    stats = fs.statSync opts.path
-                    if stats?.size
-                        break
-                childProcess.execSync "sleep 0.1"
-            if stats?.size
+            if waitForScreenshot(opts.path, maxDelay)
                 return
             else
                 log.warn """
@@ -87,7 +89,17 @@ takeScreenshot = (opts) ->
 
     # take the whole screen screenshot
     driver.takeScreenshot opts
+    waitForScreenshot(opts.path, CUSTOM_SCREENSHOT_MAX_DELAY_MS)
     return
+
+tryTakeScreenshot = (opts, isOk) ->
+    tryNo = 0
+    while tryNo++ < SCREENSHOT_TRIES
+        takeScreenshot opts
+        if result = isOk(opts)
+            return result
+        childProcess.execSync "sleep #{SCREENSHOT_TRY_DELAY_SEC}"
+    undefined
 
 server.onInitializeScreenshots (opts) ->
     if exports.verbose
@@ -103,13 +115,7 @@ server.onInitializeScreenshots (opts) ->
         handler.onInitializeScreenshots? opts.env
 
     opts.path = INITIALIZATION_FILE_PATH
-    tryNo = 0
-    while not rect and tryNo++ < INITIALIZATION_TRIES
-        takeScreenshot opts
-        rect = findWindow opts
-        unless rect
-            log.log "Cannot initialize screenshots; try #{tryNo} / #{INITIALIZATION_TRIES}"
-        childProcess.execSync "sleep #{INITIALIZATION_TRY_DELAY_SEC}"
+    rect = tryTakeScreenshot opts, findWindow
 
     if LOG_SCREENSHOT_DATA_URI
         imgur.uploadFile(INITIALIZATION_FILE_PATH)
@@ -133,8 +139,7 @@ server.onScreenshot (opts) ->
     unless opts.rect
         throw new Error "Screenshots are not initialized"
 
-    takeScreenshot opts
-    if testScreenshot(opts)
+    if tryTakeScreenshot(opts, testScreenshot)
         fs.unlinkSync opts.diff
         fs.unlinkSync opts.path
     else

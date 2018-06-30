@@ -88,7 +88,7 @@ matrix:
         # OSX iOS
         -
             os: osx
-            osx_image: xcode8.3
+            osx_image: xcode9.3
             env:
                 - TEST_IOS=1
             before_script:
@@ -100,7 +100,7 @@ matrix:
         # OSX Node and MacOS
         -
             os: osx
-            osx_image: xcode8.3
+            osx_image: xcode9.3
             env:
                 - TEST_NODE=1
                 - TEST_MACOS=1
