@@ -26,7 +26,7 @@ compileFile = (path, view = {}, outputName) ->
         dir: pathProps.dir
         name: outputName or pathProps.name
         ext: OUTPUT_EXTNAME
-    fs.outputFile outPath, html
+    fs.outputFileSync outPath, html
 
 getFileView = (view) ->
     view: view

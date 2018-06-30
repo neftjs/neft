@@ -17,4 +17,4 @@ less.render file, opts, (err, result) ->
         dir: pathProps.dir
         name: pathProps.name
         ext: OUTPUT_EXTNAME
-    fs.outputFile outPath, result.css
+    fs.outputFileSync outPath, result.css
