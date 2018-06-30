@@ -13,9 +13,8 @@ targets = require '../cli/targets'
 
 DEST = 'tests_results'
 INITIALIZATION_FILE_PATH = pathUtils.join DEST, 'initialization.png'
-INITIALIZATION_TRIES = 20
-
-INITIALIZATION_TRY_DELAY_SEC = 1
+SCREENSHOT_TRIES = 100
+SCREENSHOT_TRY_DELAY_SEC = 0.2
 CUSTOM_SCREENSHOT_MAX_DELAY_MS = 1000
 {LOG_SCREENSHOT_DATA_URI} = process.env
 
@@ -89,6 +88,15 @@ takeScreenshot = (opts) ->
     driver.takeScreenshot opts
     return
 
+tryTakeScreenshot = (opts, isOk) ->
+    tryNo = 0
+    while tryNo++ < SCREENSHOT_TRIES
+        takeScreenshot opts
+        if result = isOk(opts)
+            return result
+        childProcess.execSync "sleep #{SCREENSHOT_TRY_DELAY_SEC}"
+    undefined
+
 server.onInitializeScreenshots (opts) ->
     if exports.verbose
         log.log "🎞  Initialize screenshots"
@@ -103,13 +111,7 @@ server.onInitializeScreenshots (opts) ->
         handler.onInitializeScreenshots? opts.env
 
     opts.path = INITIALIZATION_FILE_PATH
-    tryNo = 0
-    while not rect and tryNo++ < INITIALIZATION_TRIES
-        takeScreenshot opts
-        rect = findWindow opts
-        unless rect
-            log.log "Cannot initialize screenshots; try #{tryNo} / #{INITIALIZATION_TRIES}"
-        childProcess.execSync "sleep #{INITIALIZATION_TRY_DELAY_SEC}"
+    rect = tryTakeScreenshot opts, findWindow
 
     if LOG_SCREENSHOT_DATA_URI
         imgur.uploadFile(INITIALIZATION_FILE_PATH)
@@ -133,8 +135,7 @@ server.onScreenshot (opts) ->
     unless opts.rect
         throw new Error "Screenshots are not initialized"
 
-    takeScreenshot opts
-    if testScreenshot(opts)
+    if tryTakeScreenshot(opts, testScreenshot)
         fs.unlinkSync opts.diff
         fs.unlinkSync opts.path
     else

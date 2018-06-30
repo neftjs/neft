@@ -67,7 +67,8 @@ exports.take = (opts, callback) ->
     opts.clientUid = UID
     opts.env = environment
     url = "#{app.config.testingServerUrl}/takeScreenshot"
-    setTimeout ->
-        app.networking.post url, opts, callback
-    , REQUEST_DELAY
+    requestAnimationFrame ->
+        setTimeout ->
+            app.networking.post url, opts, callback
+        , REQUEST_DELAY
     return
