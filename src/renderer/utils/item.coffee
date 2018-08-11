@@ -138,7 +138,6 @@ module.exports = (Renderer, Impl) ->
             @_impl = null
             @_bindings = null
             unless @ instanceof Renderer.Class
-                @_classExtensions = null
                 @_classList = []
                 @_classQueue = []
                 @_extensions = []

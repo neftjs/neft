@@ -234,38 +234,6 @@ module.exports = (File, data) -> class Style
 
             return true
 
-    ###
-    Updates item classes comparing changes between given values.
-    Classes order is preserved.
-    ###
-    syncClassProp: (val, oldVal) ->
-        {item} = @
-        {classes} = item
-
-        if typeof val is 'string' and val isnt ''
-            newClasses = val.split ' '
-        if typeof oldVal is 'string' and oldVal isnt ''
-            oldClasses = oldVal.split ' '
-
-        # remove all
-        if oldClasses
-            for name in oldClasses
-                if classes.has(name)
-                    classes.remove name
-        if newClasses
-            for name in newClasses
-                if classes.has(name)
-                    classes.remove name
-
-        # add new classes
-        if newClasses
-            for name, i in newClasses when name isnt ''
-                if newClasses.indexOf(name, i + 1) isnt -1
-                    continue
-                classes.append name
-
-        return
-
     findAndSetLinkUri: ->
         assert.isDefined @item
 
@@ -545,10 +513,6 @@ module.exports = (File, data) -> class Style
                 for key of @props
                     unless isHandler(@node, key)
                         @setProp key, @node.props[key], null
-
-            # set class prop
-            if classAttr = @node.props['class']
-                @syncClassProp classAttr, ''
 
         # render children
         for style in @children
