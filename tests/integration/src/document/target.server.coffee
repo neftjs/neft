@@ -5,7 +5,7 @@
 describe 'Document n-target', ->
     it 'is replaced by the use body', ->
         source = createView '''
-            <n-component n-name="a">
+            <n-component name="a">
                 <a1 />
                 <n-target />
                 <a2 />
@@ -19,7 +19,7 @@ describe 'Document n-target', ->
 
     it 'can be hidden', ->
         source = createView '''
-            <n-component n-name="a">
+            <n-component name="a">
                 <n-target n-if="${props.x === 1}" />
             </n-component>
             <n-use n-component="a" x="0"><b></b></n-use>

@@ -19,7 +19,7 @@ describe 'Document n-if', ->
 
     it 'supports runtime updates', ->
         source = createView '''
-            <n-component n-name="a">
+            <n-component name="a">
                 <b n-if="${props.x > 1}">OK</b>
                 <b n-if="${props.x === 1}">FAIL</b>
             </n-component>

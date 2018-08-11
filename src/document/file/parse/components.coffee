@@ -38,7 +38,7 @@ module.exports = (File) ->
                     forEachNodeRec child
                     continue
 
-                unless name = child.props['n-name']
+                unless name = child.props['name']
                     continue
 
                 # remove node from file

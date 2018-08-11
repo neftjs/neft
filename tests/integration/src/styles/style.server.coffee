@@ -449,7 +449,7 @@ describe 'styles', ->
 
         it "is properly synchronized on 'n-use'", ->
             doc = render
-                html: '''<n-component n-name="a">
+                html: '''<n-component name="a">
                     <b n-style="renderer:Item" />
                     <i n-style="renderer:Item" />
                 </n-component>

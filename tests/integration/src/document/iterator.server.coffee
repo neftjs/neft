@@ -78,19 +78,19 @@ describe 'Document n-each', ->
 
     it 'access component `props`', ->
         source = createView """
-            <n-component n-name="a" a="a">
-                <ul n-each="[1,2]">${props.a}${props.b}</ul>
+            <n-component name="a">
+                <ul n-each="[1,2]">${props.a}</ul>
             </n-component>
-            <n-use n-component="a" b="b" />
+            <n-use n-component="a" a="a" />
         """
         view = source.clone()
 
         renderParse view
-        assert.is view.node.stringify(), '<ul>abab</ul>'
+        assert.is view.node.stringify(), '<ul>aa</ul>'
 
     it 'uses parent `this` scope', ->
         source = createView """
-            <n-component n-name="a">
+            <n-component name="a">
                 <script>
                     this.self = this;
                     this.getX = function(){
@@ -158,7 +158,7 @@ describe 'Document n-each', ->
 
     it 'reverts components when comes invisible', ->
         view = createView '''
-            <n-component n-name="abc">
+            <n-component name="abc">
                 <script>
                 this.onBeforeRevert(function () {
                     this.props.onRevertCalled();

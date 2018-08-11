@@ -5,31 +5,9 @@
 
 describe 'Document string interpolation', ->
     describe '`props`', ->
-        it 'lookup component', ->
-            source = createView '''
-                <n-component n-name="a" x="2">${props.x}</n-component>
-                <n-use n-component="a" />
-            '''
-            view = source.clone()
-
-            renderParse view
-            assert.is view.node.stringify(), '2'
-
-        it 'is accessible by scope', ->
-            source = createView '''
-                <n-component n-name="a" x="2">
-                    ${this.props.x}
-                </n-component>
-                <n-use n-component="a" />
-            '''
-            view = source.clone()
-
-            renderParse view
-            assert.is view.node.stringify(), '2'
-
         it 'lookup use', ->
             source = createView '''
-                <n-component n-name="a" x="1">${props.x}</n-component>
+                <n-component name="a" x="1">${props.x}</n-component>
                 <n-use n-component="a" x="2" />
             '''
             view = source.clone()
@@ -39,8 +17,8 @@ describe 'Document string interpolation', ->
 
         it 'always keeps proper sources order', ->
             source = createView '''
-                <n-component n-name="a" x="1">
-                    <n-component n-name="b" x="1">
+                <n-component name="a">
+                    <n-component name="b">
                         ${props.x}
                     </n-component>
                     <n-use n-component="b" x="4" />
@@ -57,41 +35,27 @@ describe 'Document string interpolation', ->
             componentB = useB.children[0]
             assert.is view.node.stringify(), '4'
 
-            componentA.props.set 'x', -1
             useA.props.set 'x', -1
-            componentB.props.set 'x', -1
             assert.is view.node.stringify(), '4'
 
-            componentA.props.set 'x', 1
             useA.props.set 'x', 3
-            componentB.props.set 'x', 1
-
             useB.props.set 'x', undefined
-            assert.is view.node.stringify(), '1'
+            assert.is view.node.stringify(), ''
 
             useA.props.set 'x', undefined
-            assert.is view.node.stringify(), '1'
-
-            componentB.props.set 'x', 2
-            assert.is view.node.stringify(), '2'
-
-            componentA.props.set 'x', 3
-            assert.is view.node.stringify(), '2'
-
-            componentA.props.set 'x', undefined
-            assert.is view.node.stringify(), '2'
+            assert.is view.node.stringify(), ''
 
         it 'does not contain internal properties', ->
             source = createView '''
-                <n-component n-name="a" x="2">
+                <n-component name="a">
                     ${Object.keys(props).sort()}
                 </n-component>
-                <n-use n-component="a" y="1" n-style="renderer:Rectangle" />
+                <n-use n-component="a" x="1" n-style="renderer:Rectangle" />
             '''
             view = source.clone()
 
             renderParse view
-            assert.is view.node.stringify(), 'x,y'
+            assert.is view.node.stringify(), 'x'
 
     describe '`refs`', ->
         it 'refers to nodes', ->
@@ -122,7 +86,7 @@ describe 'Document string interpolation', ->
 
         it 'refers to used components', ->
             source = createView '''
-                <n-component n-name="a">
+                <n-component name="a">
                     <script>
                         this.onRender(function () {
                             this.state.set('name', 'a');
@@ -146,7 +110,7 @@ describe 'Document string interpolation', ->
     it 'file `refs` are not accessed in components', ->
         source = createView '''
             <a n-ref="first" label="12" visible="false" />
-            <n-component n-name="a">
+            <n-component name="a">
                 ${typeof refs.first}
             </n-component>
             <n-use n-component="a" />
@@ -189,7 +153,7 @@ describe 'Document string interpolation', ->
 
         it 'lookup use', ->
             source = createView '''
-                <n-component n-name="a">${context.a}</n-component>
+                <n-component name="a">${context.a}</n-component>
                 <n-use n-component="a" />
             '''
             view = source.clone()
@@ -379,7 +343,7 @@ describe 'Document string interpolation', ->
     describe 'support real-time changes', ->
         it 'on `props`', ->
             source = createView '''
-                <n-component n-name="a">${props.x}</n-component>
+                <n-component name="a">${props.x}</n-component>
                 <n-use n-component="a" x="2" y="1" />
             '''
             view = source.clone()
@@ -391,7 +355,7 @@ describe 'Document string interpolation', ->
 
         it 'on `props` list element', ->
             source = createView '''
-                <n-component n-name="a">${props.list[0]}</n-component>
+                <n-component name="a">${props.list[0]}</n-component>
                 <n-use n-component="a" list="List()" />
             '''
             view = source.clone()
@@ -429,7 +393,7 @@ describe 'Document string interpolation', ->
 
         it 'on `context` use', ->
             source = createView '''
-                <n-component n-name="a">${context.a}</n-component>
+                <n-component name="a">${context.a}</n-component>
                 <n-use n-component="a" />
             '''
             view = source.clone()
