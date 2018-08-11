@@ -18,9 +18,11 @@
 
 ## ReadOnly *Float* StatusBar.height = `0`
 
-            utils.defineProperty @::, 'height', null, ->
-                @_height
-            , null
+## *Signal* StatusBar.onHeightChange(*Float* oldValue)
+
+            itemUtils.defineProperty
+                constructor: @
+                name: 'height'
 
 ## ReadOnly *String* StatusBar.color = `'Dark'`
 

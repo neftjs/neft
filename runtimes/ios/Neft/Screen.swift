@@ -27,6 +27,12 @@ class Screen {
         // SCREEN_STATUSBAR_HEIGHT
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
         app.client.pushAction(.screenStatusBarHeight, statusBarHeight)
+
+        // SCREEN_NAVIGATIONBAR_HEIGHT
+        if #available(iOS 11.0, *) {
+            let navigationBarHeight = UIApplication.shared.delegate?.window??.safeAreaInsets.bottom ?? 0
+            app.client.pushAction(.screenNavigationBarHeight, navigationBarHeight)
+        }
     }
 }
 

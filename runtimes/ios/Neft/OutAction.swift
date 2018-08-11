@@ -7,6 +7,7 @@ enum OutAction: Int {
     screenSize,
     screenOrientation,
     screenStatusBarHeight,
+    screenNavigationBarHeight,
     navigatorLanguage,
     navigatorOnline,
     devicePixelRatio,
