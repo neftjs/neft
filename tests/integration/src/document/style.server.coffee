@@ -73,7 +73,7 @@ describe 'Document style', ->
 
     it 'can be placed in <n-component />', ->
         view = createView '''
-            <n-component n-name="TestComp">
+            <n-component name="TestComp">
                 <style>
                     Item {
                         id: firstItem

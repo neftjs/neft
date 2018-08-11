@@ -15,7 +15,7 @@ describe 'Document n-import', ->
     describe 'components from external file', ->
         it 'without namespace', ->
             first = "namespace#{uid()}"
-            view1 = createView '<n-component n-name="a">1</n-component>', first
+            view1 = createView '<n-component name="a">1</n-component>', first
             view2 = createView """
                 <n-import href="#{first}" />
                 <a />
@@ -27,7 +27,7 @@ describe 'Document n-import', ->
 
         it 'with namespace', ->
             first = uid()
-            view1 = createView '<n-component n-name="a">1</n-component>', first
+            view1 = createView '<n-component name="a">1</n-component>', first
             view2 = createView """
                 <n-import href="#{first}" as="ns">
                 <ns:a />
@@ -41,7 +41,7 @@ describe 'Document n-import', ->
         it 'with namespace', ->
             first = uid()
             view1 = createView '''
-                <n-component n-name="a">1</n-component>
+                <n-component name="a">1</n-component>
                 file<a />2
             ''', first
             view2 = createView """

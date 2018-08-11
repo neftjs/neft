@@ -6,7 +6,7 @@
 describe 'Document n-use', ->
     it 'is replaced by component', ->
         view = createView '''
-            <n-component n-name="a"><b></b></n-component>
+            <n-component name="a"><b></b></n-component>
             <n-use n-component="a" />
         '''
         view = view.clone()
@@ -16,8 +16,8 @@ describe 'Document n-use', ->
 
     it 'is replaced in component', ->
         source = createView '''
-            <n-component n-name="b">1</n-component>
-            <n-component n-name="a"><n-use n-component="b" /></n-component>
+            <n-component name="b">1</n-component>
+            <n-component name="a"><n-use n-component="b" /></n-component>
             <n-use n-component="a" />
         '''
         view = source.clone()
@@ -27,7 +27,7 @@ describe 'Document n-use', ->
 
     it 'can be rendered recursively', ->
         source = createView '''
-            <n-component n-name="a">
+            <n-component name="a">
                 1
                 <n-use
                   n-component="a"
@@ -44,7 +44,7 @@ describe 'Document n-use', ->
 
     it 'can be rendered using short syntax', ->
         view = createView '''
-            <n-component n-name="a-b"><b></b></n-component>
+            <n-component name="a-b"><b></b></n-component>
             <a-b />
         '''
         view = view.clone()
@@ -59,7 +59,7 @@ describe 'Document n-use', ->
                 this.logs = [];
             });
             </script>
-            <n-component n-name="a-b">
+            <n-component name="a-b">
                 <script>
                 this.onRender(function () {
                     this.props.logs.push(this.props.name);
@@ -80,7 +80,7 @@ describe 'Document n-use', ->
                 this.logs = [];
             });
             </script>
-            <n-component n-name="a-b">
+            <n-component name="a-b">
                 <script>
                 this.onRender(function () {
                     this.props.logs.push(this.props.name);
@@ -98,7 +98,7 @@ describe 'Document n-use', ->
 
     it 'is reverted when comes invisible', ->
         view = createView '''
-            <n-component n-name="abc">
+            <n-component name="abc">
                 <script>
                 this.onRevert(function () {
                     this.reverted = (this.reverted + 1) || 1;
