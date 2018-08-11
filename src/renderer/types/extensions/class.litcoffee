@@ -47,45 +47,9 @@
                 @_priority = 0
                 @_inheritsPriority = 0
                 @_nestingPriority = 0
-                @_name = ''
                 @_changes = null
                 @_document = null
                 @_children = null
-
-## *String* Class::name
-
-This property is used in the *Item*::classes list
-to identify various classes.
-
-## *Signal* Class::onNameChange(*String* oldValue)
-
-            itemUtils.defineProperty
-                constructor: @
-                name: 'name'
-                developmentSetter: (val) ->
-                    assert.isString val
-                    assert.notLengthOf val, 0
-                setter: (_super) -> (val) ->
-                    {target, name} = @
-
-                    if name is val
-                        return
-
-                    if target
-                        if target.classes.has(name)
-                            @running = false
-                        target._classExtensions[name] = null
-                        target._classExtensions[val] = @
-
-                    _super.call @, val
-
-                    if target
-                        if val
-                            target._classExtensions ?= {}
-
-                        if target._classes?.has(val)
-                            @running = true
-                    return
 
 ## *Item* Class::target
 
@@ -103,7 +67,6 @@ If state is created inside the *Item*, this property is set automatically.
                         assert.instanceOf val, itemUtils.Object
                 setter: (_super) -> (val) ->
                     oldVal = @_target
-                    {name} = @
 
                     if oldVal is val
                         return
@@ -117,18 +80,12 @@ If state is created inside the *Item*, this property is set automatically.
                         utils.remove oldVal._extensions, @
                         if @_running and not @_document?._query
                             unloadObjects @, oldVal
-                    if name
-                        if oldVal
-                            oldVal._classExtensions[name] = null
-                        if val
-                            val._classExtensions ?= {}
-                            val._classExtensions[name] = @
 
                     _super.call @, val
 
                     if val
                         val._extensions.push @
-                        if val._classes?.has(name) or (@_priority isnt -1 and !@_name and !@_bindings?.running and !@_document?._query)
+                        if @_priority isnt -1 and !@_bindings?.running and !@_document?._query
                             @running = true
 
                     if isRunning
@@ -188,9 +145,6 @@ This objects contains all properties to change on the target item.
 ## *Boolean* Class::running
 
 Indicates whether the class is active or not.
-
-When it's `true`, this state is appended on the
-end of the *Item*::classes list.
 
 Mostly used with bindings.
 
@@ -385,7 +339,6 @@ Grid {
             clone = Class.New()
             clone.id = @id
             clone._classUid = @_classUid
-            clone._name = @_name
             clone._priority = @_priority
             clone._inheritsPriority = @_inheritsPriority
             clone._nestingPriority = @_nestingPriority
@@ -787,91 +740,5 @@ Grid {
                     watcher.onAdd onNodeAdd, @
                     watcher.onRemove onNodeRemove, @
                 return
-
-## *List* Item::classes
-
-Classes at the end of the list have the highest priority.
-
-This property has a setter, which accepts a string and an array of strings.
-
-## *Signal* Item::onClassesChange(*String* added, *String* removed)
-
-        normalizeClassesValue = (val) ->
-            if typeof val is 'string'
-                if val.indexOf(',') isnt -1
-                    val = val.split ','
-                else
-                    val = val.split ' '
-            else if val instanceof List
-                val = val.items()
-            val
-
-        class ClassesList extends List
-            constructor: ->
-                super()
-
-            utils.defineProperty @::, 'append', null, do (_super = @::append) ->
-                -> _super
-            , (val) ->
-                val = normalizeClassesValue val
-                if Array.isArray(val)
-                    for name in val
-                        if name = name.trim()
-                            @append name
-                return
-
-            utils.defineProperty @::, 'remove', null, do (_super = @::remove) ->
-                -> _super
-            , (val) ->
-                val = normalizeClassesValue val
-                if Array.isArray(val)
-                    for name in val
-                        if name = name.trim()
-                            @remove name
-                return
-
-        Renderer.onReady ->
-            itemUtils.defineProperty
-                constructor: Renderer.Item
-                name: 'classes'
-                defaultValue: null
-                getter: do ->
-                    onChange = (oldVal, index) ->
-                        val = @_classes.get(index)
-                        onPop.call @, oldVal, index
-                        onInsert.call @, val, index
-                        @onClassesChange.emit val, oldVal
-                        return
-
-                    onInsert = (val, index) ->
-                        @_classExtensions[val]?.running = true
-                        @onClassesChange.emit val
-                        return
-
-                    onPop = (oldVal, index) ->
-                        unless @_classes.has(oldVal)
-                            @_classExtensions[oldVal]?.running = false
-                        @onClassesChange.emit null, oldVal
-                        return
-
-                    (_super) -> ->
-                        unless @_classes
-                            @_classExtensions ?= {}
-                            list = @_classes = new ClassesList
-                            list.onChange onChange, @
-                            list.onInsert onInsert, @
-                            list.onPop onPop, @
-
-                        _super.call @
-                setter: (_super) -> (val) ->
-                    val = normalizeClassesValue val
-                    {classes} = @
-
-                    classes.clear()
-                    if Array.isArray(val)
-                        for name in val
-                            if name = name.trim()
-                                classes.append name
-                    return
 
         Class

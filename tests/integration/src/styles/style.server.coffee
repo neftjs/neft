@@ -320,24 +320,6 @@ describe 'styles', ->
             assert.is item.x, 2
             assert.isEqual oldVals, [2, 0, 4, 0]
 
-    describe "'class' attribute", ->
-        it 'sets item classes', ->
-            doc = render
-                html: '<b n-style="renderer:Item" class="a b c" />'
-
-            {node, item} = doc.styles[0]
-
-            assert.isEqual item.classes.toArray(), node.props.class.split(' ')
-
-        it 'synchronizes item classes on add and remove', ->
-            doc = render
-                html: '<b n-style="renderer:Item" class="a b c" />'
-
-            {node, item} = doc.styles[0]
-
-            node.props.set 'class', 'g a c'
-            assert.isEqual item.classes.toArray(), node.props.class.split(' ')
-
     describe 'item visible', ->
         it "is 'true' by default", ->
             doc = render
