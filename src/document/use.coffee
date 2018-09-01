@@ -141,12 +141,10 @@ module.exports = (File) -> class Use
 
         # signal
         usedComponent.parentUse = @
-        usedComponent.onReplaceByUse.emit @
-        File.emitNodeSignal usedComponent, 'n-onReplaceByUse', @
 
         # ref
         if @refName
-            @file.inputRefs._set @refName, usedComponent.scope
+            @file.inputRefs._set @refName, usedComponent.exported
 
         return
 

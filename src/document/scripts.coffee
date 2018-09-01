@@ -3,39 +3,40 @@
 log = require 'src/log'
 utils = require 'src/utils'
 assert = require 'src/assert'
+Struct = require 'src/struct'
 signal = require 'src/signal'
 
 {Emitter} = signal
 {emitSignal} = Emitter
 assert = assert.scope 'View.Scripts'
 
-class FileContext extends Emitter
+class ScriptExported extends Struct
     PROP_OPTS = 0
 
-    constructor: (file) ->
-        super()
-        utils.defineProperty @, '_signals', PROP_OPTS, @_signals
+    constructor: (file, obj) ->
         utils.defineProperty @, 'node', PROP_OPTS, file.node
-        utils.defineProperty @, 'props', PROP_OPTS, file.inputProps
         utils.defineProperty @, 'refs', PROP_OPTS, file.inputRefs
-        utils.defineProperty @, 'context', PROP_OPTS, ->
-            file.context
-        , null
-        utils.defineProperty @, 'state', PROP_OPTS, file.inputState
+        utils.defineProperty @, 'context', PROP_OPTS, (-> file.context), null
+
+        obj = utils.merge {}, obj
+        for key, val of obj
+            if typeof val is 'function'
+                obj[key] = val.bind @
+
+        super obj
 
     utils.defineProperty @::, 'constructor', PROP_OPTS, @
 
-    Emitter.createSignal @, 'onBeforeRender'
-    Emitter.createSignal @, 'onRender'
-    Emitter.createSignal @, 'onBeforeRevert'
-    Emitter.createSignal @, 'onRevert'
+    Emitter.createSignal @, 'onContextChange'
 
 module.exports = (File) -> class Scripts
     @__name__ = 'Scripts'
     @__path__ = 'File.Scripts'
 
+    _initialized = false
     _scripts = {}
     @initialize = (scripts) ->
+        _initialized = true
         _scripts = scripts or {}
         Scripts.initialize = ->
             throw new Error "Document.Scripts has been already initialized"
@@ -51,26 +52,62 @@ module.exports = (File) -> class Scripts
             obj = new Scripts file, arr[JSON_NAMES]
         obj
 
-    constructor: (@file, @names) ->
+    constructor: (@file, @names, @object) ->
         assert.instanceOf @file, File
         assert.isArray @names
+
+        @defaults = {}
+
+        @object or= @combineObject()
+        @exported = new ScriptExported @file, @object
 
         `//<development>`
         if @constructor is Scripts
             Object.seal @
         `//</development>`
 
-    createScope: (file) ->
-        ctx = new FileContext file
-        for name in @names
-            if typeof _scripts[name] is 'function'
-                _scripts[name].call ctx
-            else
-                log.error "Cannot find document script '#{name}'"
-        ctx
+    combineObject: ->
+        return {} unless _initialized
 
-    createCloneScope: (file) ->
-        @createScope file
+        obj = null
+        for name, index in @names
+            exported = _scripts[name]?.default
+            if utils.isObject(exported)
+                if index is 0
+                    obj = exported
+                else
+                    obj = utils.mergeAll {}, obj, exported
+
+                for key, val of exported
+                    if utils.isObject(val)
+                        log.warn "Document script '#{name}' exports a structure under \
+                        the `#{key}` key; it's dangerous because complex structures are \
+                        shared; \ initialize this key in the `onRender()` method to fix \
+                        this warning"
+            else
+                log.error "Document script '#{name}' doesn't export anything; \
+                did you use 'export default'?"
+
+        obj or= {}
+
+        for prop in @file.props
+            unless prop of obj
+                obj[prop] = null
+
+        obj
+
+    provideDefaults: ->
+        for key, val of @exported
+            if typeof val isnt 'function'
+                @defaults[key] = val
+
+        return
+
+    clear: (exported) ->
+        utils.merge exported, @defaults
+
+    clone: (original, file) ->
+        new Scripts file, @names, @object
 
     toJSON: (key, arr) ->
         unless arr

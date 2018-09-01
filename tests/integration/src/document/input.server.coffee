@@ -7,7 +7,10 @@ describe 'Document string interpolation', ->
     describe '`props`', ->
         it 'lookup use', ->
             source = createView '''
-                <n-component name="a" x="1">${props.x}</n-component>
+                <n-component name="a">
+                    ${x}
+                    <n-props x />
+                </n-component>
                 <n-use n-component="a" x="2" />
             '''
             view = source.clone()
@@ -19,9 +22,11 @@ describe 'Document string interpolation', ->
             source = createView '''
                 <n-component name="a">
                     <n-component name="b">
-                        ${props.x}
+                        ${x}
+                        <n-props x />
                     </n-component>
                     <n-use n-component="b" x="4" />
+                    <n-props x />
                 </n-component>
                 <n-use n-component="a" x="3" />
             '''
@@ -48,7 +53,8 @@ describe 'Document string interpolation', ->
         it 'does not contain internal properties', ->
             source = createView '''
                 <n-component name="a">
-                    ${Object.keys(props).sort()}
+                    ${Object.keys(this)}
+                    <n-props x />
                 </n-component>
                 <n-use n-component="a" x="1" n-style="renderer:Rectangle" />
             '''
@@ -71,7 +77,7 @@ describe 'Document string interpolation', ->
             view.node.children[0].props.set 'label', 23
             assert.is view.node.stringify(), '23'
 
-        it 'are accessible by scope', ->
+        it 'are accessible by exported', ->
             source = createView '''
                 <a n-ref="first" label="12" visible="false" />
                 ${this.refs.first.props.label}
@@ -86,18 +92,21 @@ describe 'Document string interpolation', ->
 
         it 'refers to used components', ->
             source = createView '''
-                <n-component name="a">
+                <n-component name="Test">
                     <script>
-                        this.onRender(function () {
-                            this.state.set('name', 'a');
-                        });
-                        this.update = function () {
-                            this.state.set('name', 'b');
-                        };
+                    exports.default = {
+                        name: '',
+                        onRender() {
+                            this.name = 'a'
+                        },
+                        update() {
+                            this.name = 'b'
+                        },
+                    }
                     </script>
                 </n-component>
-                <a n-ref="first" />
-                ${refs.first && refs.first.state.name}
+                <Test n-ref="first" />
+                ${refs.first && refs.first.name}
             '''
             view = source.clone()
 
@@ -109,11 +118,11 @@ describe 'Document string interpolation', ->
 
     it 'file `refs` are not accessed in components', ->
         source = createView '''
-            <a n-ref="first" label="12" visible="false" />
-            <n-component name="a">
+            <div n-ref="first" label="12" visible="false" />
+            <n-component name="Test">
                 ${typeof refs.first}
             </n-component>
-            <n-use n-component="a" />
+            <n-use n-component="Test" />
         '''
         view = source.clone()
 
@@ -136,7 +145,7 @@ describe 'Document string interpolation', ->
                 storage: a: '2'
             assert.is view.node.stringify(), '2'
 
-        it 'is accesible by scope', ->
+        it 'is accesible by exported', ->
             source = createView '''
                 ${this.context.a}
             '''
@@ -188,25 +197,31 @@ describe 'Document string interpolation', ->
         it 'is accessed in rendered file', ->
             source = createView '''
                 <script>
-                    this.onRender(function(){
-                        this.state.set('a', 1);
-                    });
+                exports.default = {
+                    a: 0,
+                    onRender() {
+                        this.a = 1
+                    },
+                }
                 </script>
-                ${state.a}
+                ${a}
             '''
             view = source.clone()
 
             renderParse view
             assert.is view.node.stringify(), '1'
 
-        it 'is accessible by scope', ->
+        it 'is accessible by exported', ->
             source = createView '''
                 <script>
-                    this.onRender(function(){
-                        this.state.set('a', 1);
-                    });
+                exports.default = {
+                    a: 0,
+                    onRender() {
+                        this.a = 1
+                    },
+                }
                 </script>
-                ${this.state.a}
+                ${this.a}
             '''
             view = source.clone()
 
@@ -216,11 +231,14 @@ describe 'Document string interpolation', ->
         it 'is cleared on revert', ->
             source = createView '''
                 <script>
-                    this.onRender(function(){
-                        this.state.set('a', (this.state.a || 0) + 1);
-                    });
+                exports.default = {
+                    a: 0,
+                    onRender() {
+                        this.a = this.a + 1
+                    },
+                }
                 </script>
-                ${state.a}
+                ${a}
             '''
             view = source.clone()
 
@@ -231,26 +249,17 @@ describe 'Document string interpolation', ->
             renderParse view
             assert.is view.node.stringify(), '1'
 
-        it 'is accessible in created document', ->
-            source = createView '''
-                <script>
-                    this.a = !!this.state;
-                </script>
-                ${this.a}
-            '''
-            view = source.clone()
-
-            renderParse view
-            assert.is view.node.stringify(), 'true'
-
         it 'binding is not updated on reverted component', ->
             source = createView '''
                 <script>
-                    this.onRender(function(){
-                        this.state.set('obj', { a: 1 });
-                    });
+                exports.default = {
+                    obj: null,
+                    onRender() {
+                        this.obj = { a: 1 }
+                    },
+                }
                 </script>
-                ${state.obj.a || '0'}
+                ${obj.a || '0'}
             '''
             view = source.clone()
 
@@ -277,7 +286,7 @@ describe 'Document string interpolation', ->
         view.node.children[0].props.set 'x', 2
         assert.is calls, 1
 
-    it 'returned handler is called on signal with scope and parameters', ->
+    it 'returned handler is called on signal with exported and parameters', ->
         source = createView '''
             <span x="1" onPropsChange="${context.onPropsChange}" />
         '''
@@ -296,13 +305,14 @@ describe 'Document string interpolation', ->
         assert.is calls, 1
 
     describe 'prop handler', ->
-        it 'is called with proper scope and parameters', ->
+        it 'is called with proper exported and parameters', ->
             source = createView '''
                 <span
                   x="1"
                   n-ref="a1"
-                  onPropsChange="${context.test(refs.a1.props.x, props.y)}"
+                  onPropsChange="${context.test(refs.a1.props.x, y)}"
                 />
+                <n-props y />
             '''
             view = source.clone()
 
@@ -343,7 +353,10 @@ describe 'Document string interpolation', ->
     describe 'support real-time changes', ->
         it 'on `props`', ->
             source = createView '''
-                <n-component name="a">${props.x}</n-component>
+                <n-component name="a">
+                    ${x}
+                    <n-props x />
+                </n-component>
                 <n-use n-component="a" x="2" y="1" />
             '''
             view = source.clone()
@@ -355,7 +368,10 @@ describe 'Document string interpolation', ->
 
         it 'on `props` list element', ->
             source = createView '''
-                <n-component name="a">${props.list[0]}</n-component>
+                <n-component name="a">
+                    ${list[0]}
+                    <n-props list />
+                </n-component>
                 <n-use n-component="a" list="List()" />
             '''
             view = source.clone()

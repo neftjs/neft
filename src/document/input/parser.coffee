@@ -1,23 +1,15 @@
 'use strict'
 
+utils = require 'src/utils'
 log = require 'src/log'
 bindingParser = require 'src/binding/parser'
 
-{BINDING_THIS_TO_TARGET_OPTS} = bindingParser
-
 PARSER_OPTS =
-    globalIdToThis:
-        context: true
-        state: true
-    modifyBindingPart: (elem) ->
-        # File scope doesn't have signal on 'context' change, so
-        # we need to use short '${context}' syntax which uses Input::context.
-        if elem[0] is 'this' and elem[1] is 'context'
-            elem.shift()
-        return
+    shouldPrefixByThis: (key) ->
+        key not in ['this', 'global', 'Neft', 'typeof'] and not (key of global)
 
 isPublicId = (id) ->
-    id in ['this', 'refs', 'props', 'context', 'state']
+    id in ['this']
 
 shouldBeUpdatedOnCreate = (connection) ->
     [key] = connection
@@ -26,7 +18,7 @@ shouldBeUpdatedOnCreate = (connection) ->
     else
         not (key in ['this', 'context'])
 
-exports.parse = (text) ->
+exports.parse = (text, scopeProps) ->
     text = text.replace(/[\t\n]/gm, '')
     func = ""
 
@@ -68,7 +60,9 @@ exports.parse = (text) ->
     else
         func += '"'+str+'"'
 
-    parsed = bindingParser.parse func, isPublicId, BINDING_THIS_TO_TARGET_OPTS, PARSER_OPTS
+    parserOpts = utils.mergeAll {}, PARSER_OPTS,
+        shouldPrefixByScope: (key) -> scopeProps and key in scopeProps
+    parsed = bindingParser.parse func, isPublicId, 0, parserOpts
 
     funcBody = "return #{parsed.hash}"
 

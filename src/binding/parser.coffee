@@ -64,10 +64,14 @@ exports.parse = (val, isPublicId, opts = 0, objOpts = {}, isVariableId) ->
     # filter by ids
     for elem, i in binding when typeof elem isnt 'string'
         elem = objOpts.modifyBindingPart?(elem) or elem
-        useThis = elem[0] in ['parent', 'nextSibling', 'previousSibling', 'target']
-        useThis or= objOpts.globalIdToThis?[elem[0]]
-        if useThis
-            elem.unshift "this"
+        if objOpts.shouldPrefixByScope?(elem[0])
+            elem.unshift 'scope'
+        else
+            useThis = elem[0] in ['parent', 'nextSibling', 'previousSibling', 'target']
+            useThis or= objOpts.globalIdToThis?[elem[0]]
+            useThis or= objOpts.shouldPrefixByThis?(elem[0])
+            if useThis
+                elem.unshift "this"
         if opts & BINDING_THIS_TO_TARGET_OPTS and elem[0] is 'this'
             elem.splice 1, 0, 'target'
         if isPublicId(elem[0]) and (i is 0 or binding[i - 1][binding[i - 1].length - 1] isnt '.')

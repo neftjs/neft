@@ -238,22 +238,22 @@ describe 'styles', ->
             aNode.props.set 'href', '/123'
             assert.is bNode.style.linkUri, aNode.props.href
 
-        it 'updates n-each styles', ->
+        it 'updates n-for styles', ->
             test = ->
                 for child in ulNode.children
                     assert.is child.query('#text').style?.linkUri, child.query('a').props.href
                 return
 
             doc = render
-                html: '''<ul n-each="[1,2]">
-                    <a href="/${props.item}">${props.item}</a>
+                html: '''<ul n-for="item in [1,2]">
+                    <a href="/${item}">${item}</a>
                 </ul>'''
 
             ulNode = doc.node.query 'ul'
 
             test()
 
-            ulNode.props.set 'n-each', [5, 6, 7]
+            ulNode.props.set 'n-for', [5, 6, 7]
             test()
 
     describe "'style:' attributes", ->
@@ -278,27 +278,27 @@ describe 'styles', ->
         it 'set event handlers', ->
             doc = render
                 html: '''
-                    <b n-style="renderer:Item" style:onXChange="${this.calls += 1}" />
-                    <script>this.calls = 0</script>
+                    <b n-style="renderer:Item" style:onXChange="${calls += 1}" />
+                    <script>exports.default = { calls: 0 }</script>
                 '''
 
             {node, item} = doc.styles[0]
 
-            assert.is doc.scope.calls, 0
+            assert.is doc.exported.calls, 0
             item.x = 10
-            assert.is doc.scope.calls, 1
+            assert.is doc.exported.calls, 1
 
             doc.revert()
             doc.render()
 
             item.x = 20
-            assert.is doc.scope.calls, 2
+            assert.is doc.exported.calls, 1
 
         it "is not updated when file is reverting", ->
             doc = render
                 html: '''
-                <b n-style="renderer:Item" style:x="${state.x}" />
-                <script>this.defaultState = { x: 2 }</script>
+                <b n-style="renderer:Item" style:x="${x}" />
+                <script>exports.default = { x: 2 }</script>
                 '''
 
             {item} = doc.styles[0]
@@ -309,7 +309,7 @@ describe 'styles', ->
             assert.is item.x, 2
             assert.isEqual oldVals, []
 
-            doc.scope.state.set 'x', 4
+            doc.exported.x = 4
             assert.is item.x, 4
             assert.isEqual oldVals, [2, 0]
 
@@ -501,24 +501,24 @@ describe 'styles', ->
                 iNode.parent = emNode
                 assert.is iNode.style.nextSibling, bNode.style
 
-        it "is valid in n-each", ->
+        it "is valid in n-for", ->
             test = ->
                 childItem = divNode.style.children.firstChild
-                for item in divNode.props['n-each']
+                for item in divNode.props['n-for']
                     assert.is childItem.text, item + ''
                     childItem = childItem.nextSibling
                 return
 
             doc = render
-                html: """<div n-style="renderer:Item" n-each="[1,2,3]">
-                    <b>${props.item}</b>
+                html: """<div n-style="renderer:Item" n-for="item in [1,2,3]">
+                    <b>${item}</b>
                 </div>"""
 
             divNode = doc.node.query 'div'
 
             test()
 
-            divNode.props.set 'n-each', [5, 6, 7, 8]
+            divNode.props.set 'n-for', [5, 6, 7, 8]
             test()
             return
 

@@ -17,7 +17,6 @@
     log = log.scope 'View'
 
     {Emitter} = signal
-    {emitSignal} = Emitter
 
     module.exports = class Document extends Emitter
         files = {}
@@ -41,11 +40,10 @@
         JSON_PATH = i++
         JSON_NODE = i++
         JSON_TARGET_NODE = i++
+        JSON_PROPS = i++
         JSON_PROPS_TO_PARSE = i++
         JSON_COMPONENTS = i++
         JSON_SCRIPTS = i++
-        JSON_WHEN_LISTENERS = i++
-        JSON_STATE_CHANGES = i++
         JSON_INPUTS = i++
         JSON_CONDITIONS = i++
         JSON_ITERATORS = i++
@@ -73,38 +71,12 @@
         signal.create @, 'onStyle'
         signal.create @, 'onScript'
 
-## *Signal* Document.onBeforeRender(*Document* file)
-
-Corresponding node handler: *n-onBeforeRender=""*.
-
-        signal.create @, 'onBeforeRender'
-
-## *Signal* Document.onRender(*Document* file)
-
-Corresponding node handler: *n-onRender=""*.
-
-        signal.create @, 'onRender'
-
-## *Signal* Document.onBeforeRevert(*Document* file)
-
-Corresponding node handler: *n-onBeforeRevert=""*.
-
-        signal.create @, 'onBeforeRevert'
-
-## *Signal* Document.onRevert(*Document* file)
-
-Corresponding node handler: *n-onRevert=""*.
-
-        signal.create @, 'onRevert'
-
         @Element = require('./element/index')
-        @WhenListener = require('./whenListener') @
-        @StateChange = require('./stateChange') @
         @Use = require('./use') @
         @Scripts = require('./scripts') @
         @Input = require('./input') @
         @Condition = require('./condition') @
-        @Iterator = require('./iterator') @
+        @Iterator = require('./iterator') @, files
         @Log = require('./log') @
         @PropsToSet = require('./propsToSet') @
 
@@ -186,6 +158,9 @@ Corresponding node handler: *n-onRevert=""*.
                 if arr[JSON_TARGET_NODE]
                     obj.targetNode = node.getChildByAccessPath arr[JSON_TARGET_NODE]
 
+                # props
+                obj.props = arr[JSON_PROPS]
+
                 # propsToParse
                 {propsToParse} = obj
                 jsonPropsToParse = arr[JSON_PROPS_TO_PARSE]
@@ -194,10 +169,8 @@ Corresponding node handler: *n-onRevert=""*.
                     propsToParse.push jsonPropsToParse[i + 1]
 
                 utils.merge obj.components, arr[JSON_COMPONENTS]
-                if (scripts = arr[JSON_SCRIPTS])?
-                    obj.scripts = Document.JSON_CTORS[scripts[0]]._fromJSON(obj, scripts)
-                parseArray obj, arr[JSON_WHEN_LISTENERS], obj.whenListeners
-                parseArray obj, arr[JSON_STATE_CHANGES], obj.stateChanges
+                scripts = arr[JSON_SCRIPTS]
+                obj.scripts = Document.JSON_CTORS[scripts[0]]._fromJSON(obj, scripts)
                 parseArray obj, arr[JSON_INPUTS], obj.inputs
                 parseArray obj, arr[JSON_CONDITIONS], obj.conditions
                 parseArray obj, arr[JSON_ITERATORS], obj.iterators
@@ -227,8 +200,7 @@ Corresponding node handler: *n-onRevert=""*.
             scripts = require('./file/parse/scripts') Document
             styles = require('./file/parse/styles') Document
             props = require('./file/parse/props') Document
-            whenListeners = require('./file/parse/whenListeners') Document
-            stateChanges = require('./file/parse/stateChanges') Document
+            propsToParse = require('./file/parse/propsToParse') Document
             iterators = require('./file/parse/iterators') Document
             target = require('./file/parse/target') Document
             uses = require('./file/parse/uses') Document
@@ -238,7 +210,7 @@ Corresponding node handler: *n-onRevert=""*.
             logs = require('./file/parse/logs') Document
             propSetting = require('./file/parse/propSetting') Document
 
-            (file) ->
+            (file, options) ->
                 assert.instanceOf file, Document
                 assert.notOk files[file.path]?
 
@@ -251,13 +223,12 @@ Corresponding node handler: *n-onRevert=""*.
                 components file
                 styles file
                 scripts file
-                iterators file
+                iterators file, options
                 props file
-                whenListeners file
-                stateChanges file
+                propsToParse file
                 target file
                 uses file
-                storage file
+                storage file, options
                 conditions file
                 refs file
                 propSetting file
@@ -289,11 +260,6 @@ Corresponding node handler: *n-onRevert=""*.
 
 ## *Document* Document::constructor(*String* path, *Element* element)
 
-        @emitNodeSignal = emitNodeSignal = (file, propName, prop1, prop2) ->
-            if nodeSignal = file.node.props[propName]
-                nodeSignal?.call? file, prop1, prop2
-            return
-
         constructor: (@path, @node) ->
             assert.isString @path
             assert.notLengthOf @path, 0
@@ -304,19 +270,20 @@ Corresponding node handler: *n-onRevert=""*.
             @isClone = false
             @uid = utils.uid()
             @isRendered = false
+            @isShallow = false
             @targetNode = null
+            @scope = {}
             @parent = null
-            @scope = null
+            @exported = null
             @scripts = null
-            @props = null
+            @renderProps = null
             @context = null
             @source = null
             @parentUse = null
 
+            @props = []
             @propsToParse = []
             @components = {}
-            @whenListeners = []
-            @stateChanges = []
             @inputs = []
             @conditions = []
             @iterators = []
@@ -326,9 +293,6 @@ Corresponding node handler: *n-onRevert=""*.
             @logs = []
             @styles = []
             @inputRefs = new ImmutableInputDict @, 'refs'
-            @inputProps = new ImmutableInputDict @, 'props'
-            @inputState = new EventLoopDict
-            @inputArgs = [@inputRefs, @inputProps, @inputState]
 
             `//<development>`
             if @constructor is Document
@@ -337,11 +301,11 @@ Corresponding node handler: *n-onRevert=""*.
 
 # *Document* Document::render([*Any* props, *Any* context, *Document* source])
 
-        render: (props, context, source, refs) ->
+        render: (props, context, source, refs, scope) ->
             unless @isClone
-                @clone().render props, context, source, refs
+                @clone().render props, context, source, refs, scope
             else
-                @_render(props, context, source, refs)
+                @_render(props, context, source, refs, scope)
 
         isInternalProp = (prop) ->
             prop[0] is 'n' and prop[1] is '-'
@@ -352,80 +316,64 @@ Corresponding node handler: *n-onRevert=""*.
         Internal props (started with 'n-') are omitted.
         ###
         _setInputProp: (key, val) ->
-            if val isnt undefined and not isInternalProp(key)
-                @inputProps._set key, val
+            return if isInternalProp(key)
+            if key of @exported
+                @exported?[key] = val
+            else
+                log.warn "Cannot set prop `#{key}` on component `#{@path}`; \
+                the given prop is not registered; did you use `<n-props #{key} />`?"
             return
 
         _updateInputPropsKey: (key) ->
-            {source, props} = @
+            {source, renderProps} = @
 
             if source
                 val = source.node.props[key]
-                if val is undefined and props
-                    val = props[key]
+                if val is undefined and renderProps
+                    val = renderProps[key]
             else
-                if props
-                    val = props[key]
+                if renderProps
+                    val = renderProps[key]
 
             if val is undefined
-                @inputProps._pop key
-            else
-                @_setInputProp key, val
-            return
-
-        _warnPropSchema: (error) ->
-            log.error "Invalid props passed to component `#{@path}`: `#{error.message}`"
-            return
-
-        validateProps = (doc) ->
-            if propsSchema = doc.scope.propsSchema
-                if utils.isPlainObject(propsSchema)
-                    propsSchema = new Schema propsSchema
-                assert.instanceOf propsSchema, Schema, '''
-                    propsSchema needs to be an instance of Neft.Schema
-                '''
-                if error = utils.catchError(propsSchema.validate, propsSchema, [doc.inputProps])
-                    doc._warnPropSchema error
+                val = @scripts.defaults[key]
+            @_setInputProp key, val
             return
 
         _render: do ->
             renderTarget = require('./file/render/parse/target') Document
 
-            eventLoop.bindInLock (props = true, context = null, source, refs) ->
+            eventLoop.bindInLock (renderProps = true, context = null, source, refs, scope) ->
                 assert.notOk @isRendered
 
-                @props = props
+                @renderProps = renderProps
                 @source = source
-                @context = context
 
-                # @scope can be changed before render;
-                # given scope will be used as already rendered;
-                # some of fields from external scope will be available
-                isScopeRender = @scope?.node is @node
+                if scope
+                    utils.merge @scope, scope
 
-                {inputProps, inputRefs} = @
+                if @context isnt context
+                    oldContext = @context
+                    @context = context
+                    @exported.onContextChange.emit oldContext
 
-                if props instanceof Dict
-                    props.onChange @_updateInputPropsKey, @
+                {inputRefs, isShallow} = @
+
+                if renderProps instanceof Dict
+                    renderProps.onChange @_updateInputPropsKey, @
 
                 if source?
                     # props
                     sourceProps = source.node.props
                     source.node.onPropsChange @_updateInputPropsKey, @
-                    for prop, val of inputProps
-                        if props[prop] is sourceProps[prop] is undefined
-                            inputProps._pop prop
-                    for prop, val of props
+                    for prop, val of renderProps
                         if sourceProps[prop] is undefined
                             @_setInputProp prop, val
                     for prop, val of sourceProps
                         @_setInputProp prop, val
                 else
                     # props
-                    for prop, val of inputProps
-                        if props[prop] is undefined
-                            inputProps._pop prop
-                    for prop, val of props
+                    for prop, val of renderProps
                         @_setInputProp prop, val
 
                 # refs
@@ -440,40 +388,8 @@ Corresponding node handler: *n-onRevert=""*.
                     for prop, val of viewRefs
                         inputRefs._set prop, val
 
-                # defaultProps
-                if isScopeRender and @scope.defaultProps isnt undefined
-                    assert.isPlainObject @scope.defaultProps, '''
-                        defaultProps needs to be a plain object
-                    '''
-                    for prop, val of @scope.defaultProps
-                        if inputProps[prop] is undefined
-                            @_setInputProp prop, val
-
-                # propsSchema
-                if isScopeRender
-                    validateProps @
-
-                Document.onBeforeRender.emit @
-                emitNodeSignal @, 'n-onBeforeRender'
-
-                # defaultState
-                if isScopeRender and @scope.defaultState isnt undefined
-                    assert.isPlainObject @scope.defaultState, '''
-                        defaultState needs to be a plain object
-                    '''
-                    @inputState.extend @scope.defaultState
-
-                # stateChanges
-                if isScopeRender
-                    for stateChange in @stateChanges
-                        stateChange.render()
-
-                # if set scope is original, prepare it
-                if isScopeRender
-                    emitSignal @scope, 'onBeforeRender'
-                else
-                    # treat given scope as pointer
-                    @inputArgs[2] = @scope.state
+                unless isShallow
+                    @exported.onBeforeRender?()
 
                 # inputs
                 for input in @inputs
@@ -506,10 +422,8 @@ Corresponding node handler: *n-onRevert=""*.
                 `//</development>`
 
                 @isRendered = true
-                Document.onRender.emit @
-                emitNodeSignal @, 'n-onRender'
-                if isScopeRender
-                    emitSignal @scope, 'onRender'
+                unless isShallow
+                    @exported.onRender?()
 
                 @
 
@@ -520,15 +434,13 @@ Corresponding node handler: *n-onRevert=""*.
             ->
                 assert.ok @isRendered
 
-                isScopeRender = @scope?.node is @node
+                {isShallow} = @
 
-                Document.onBeforeRevert.emit @
-                emitNodeSignal @, 'n-onBeforeRevert'
-                if isScopeRender
-                    emitSignal @scope, 'onBeforeRevert'
+                unless isShallow
+                    @exported.onBeforeRevert?()
 
-                if @props instanceof Dict
-                    @props.onChange.disconnect @_updateInputPropsKey, @
+                if @renderProps instanceof Dict
+                    @renderProps.onChange.disconnect @_updateInputPropsKey, @
 
                 # props
                 if @source
@@ -559,19 +471,18 @@ Corresponding node handler: *n-onRevert=""*.
                 for style in @styles
                     style.revert()
 
-                @props = null
+                @renderProps = null
                 @source = null
                 @context = null
-                @inputState.clear()
+                utils.clear @scope
+
+                unless isShallow
+                    @scripts.clear @exported
 
                 @isRendered = false
 
-                Document.onRevert.emit @
-                emitNodeSignal @, 'n-onRevert'
-                if isScopeRender
-                    emitSignal @scope, 'onRevert'
-                else
-                    @inputArgs[2] = @inputState
+                unless isShallow
+                    @exported.onRevert?()
 
                 @
 
@@ -591,23 +502,17 @@ Corresponding node handler: *n-onRevert=""*.
 
             @
 
-## *Signal* Document::onReplaceByUse(*Document.Use* use)
-
-Corresponding node handler: *n-onReplaceByUse=""*.
-
-        Emitter.createSignal @, 'onReplaceByUse'
-
 ## *Document* Document::clone()
 
-        clone: ->
+        clone: (opts) ->
             # from pool
-            if r = getFromPool(@path)
+            if !opts and r = getFromPool(@path)
                 r
             else
                 if @isClone and (original = files[@path])
-                    original._clone()
+                    original._clone opts
                 else
-                    @_clone()
+                    @_clone opts
 
         parseProp = do ->
             cache = Object.create null
@@ -615,10 +520,11 @@ Corresponding node handler: *n-onReplaceByUse=""*.
                 func = cache[val] ?= new Function 'Dict', 'List', "return #{val}"
                 func Dict, List
 
-        _clone: ->
+        _clone: (opts) ->
             clone = new Document @path, @node.cloneDeep()
             clone.isClone = true
             clone.components = @components
+            clone.isShallow = !!opts?.shallow
 
             if @targetNode
                 clone.targetNode = @node.getCopiedElement @targetNode, clone.node
@@ -630,19 +536,18 @@ Corresponding node handler: *n-onReplaceByUse=""*.
                 propName = propsToParse[i + 1]
                 propNode.props.set propName, parseProp(propNode.props[propName])
 
-            # whenListeners
-            for whenListener in @whenListeners
-                clone.whenListeners.push whenListener.clone @, clone
-
-            # stateChanges
-            for stateChange in @stateChanges
-                clone.stateChanges.push stateChange.clone @, clone
-
             # refs
             for ref, node of @refs
                 clone.refs[ref] = @node.getCopiedElement node, clone.node
             for key, val of clone.refs
                 clone.inputRefs._set key, val
+
+            # exported
+            if clone.isShallow
+                clone.exported = opts.exported
+            else
+                clone.scripts = @scripts.clone @, clone
+                clone.exported = clone.scripts.exported
 
             # inputs
             for input in @inputs
@@ -668,13 +573,13 @@ Corresponding node handler: *n-onReplaceByUse=""*.
             for logElem in @logs
                 clone.logs.push logElem.clone @, clone
 
-            # scope
-            if @scripts
-                clone.scope = @scripts.createCloneScope clone
-
             # styles
             for style in @styles
                 clone.styles.push style.clone @, clone
+
+            unless clone.isShallow
+                clone.exported.onCreate?()
+                clone.scripts.provideDefaults()
 
             clone
 
@@ -710,6 +615,9 @@ Corresponding node handler: *n-onReplaceByUse=""*.
                 if @targetNode
                     arr[JSON_TARGET_NODE] = @targetNode.getAccessPath @node
 
+                # props
+                arr[JSON_PROPS] = @props
+
                 # propsToParse
                 propsToParse = arr[JSON_PROPS_TO_PARSE] = new Array @propsToParse.length
                 for propNode, i in @propsToParse by 2
@@ -718,8 +626,6 @@ Corresponding node handler: *n-onReplaceByUse=""*.
 
                 arr[JSON_COMPONENTS] = @components
                 arr[JSON_SCRIPTS] = @scripts
-                arr[JSON_WHEN_LISTENERS] = @whenListeners.map callToJSON
-                arr[JSON_STATE_CHANGES] = @stateChanges.map callToJSON
                 arr[JSON_INPUTS] = @inputs.map callToJSON
                 arr[JSON_CONDITIONS] = @conditions.map callToJSON
                 arr[JSON_ITERATORS] = @iterators.map callToJSON
