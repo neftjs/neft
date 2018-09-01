@@ -29,7 +29,7 @@ describe 'Document n-import', ->
             first = uid()
             view1 = createView '<n-component name="a">1</n-component>', first
             view2 = createView """
-                <n-import href="#{first}" as="ns">
+                <n-import href="#{first}" as="ns" />
                 <ns:a />
             """
             view2 = view2.clone()
@@ -45,7 +45,7 @@ describe 'Document n-import', ->
                 file<a />2
             ''', first
             view2 = createView """
-                <n-import href="#{first}" as="ns">
+                <n-import href="#{first}" as="ns" />
                 <ns />
             """
             view2 = view2.clone()
