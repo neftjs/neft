@@ -13,33 +13,27 @@ assert = assert.scope 'View.Input'
 log = log.scope 'View', 'Input'
 
 class DocumentBinding extends Binding
-    @New = (binding, ctx, target) ->
-        target ?= new DocumentBinding binding, ctx
-        Binding.New binding, ctx, target
+    @New = (binding, input, target) ->
+        target ?= new DocumentBinding binding, input
+        Binding.New binding, input.target, target
 
-    constructor: (binding, ctx) ->
-        super binding, ctx
-        @args = ctx.file.inputArgs
+    constructor: (binding, @input) ->
+        super binding, @input.target
+        @args = [@input.file.scope]
 
     getItemById: (item) ->
         if item is 'this'
             @ctx
-        else if item is 'refs'
-            @args[0]
-        else if item is 'props'
-            @args[1]
-        else if item is 'state'
-            @args[2]
 
     `//<development>`
     onError: (err) ->
-        log.error "Failed `#{@ctx.text}` binding in file `#{@ctx.file.path}`: `#{err}`"
+        log.error "Failed `#{@input.text}` binding in file `#{@input.file.path}`: `#{err}`"
         return
     `//</development>`
 
     update: ->
         # disable updates for reverted files
-        if not @ctx.isRendered
+        if not @input.isRendered
             return
         eventLoop.lock()
         super()
@@ -47,10 +41,10 @@ class DocumentBinding extends Binding
         return
 
     getValue: ->
-        @ctx.getValue()
+        @input.getValue()
 
     setValue: (val) ->
-        @ctx.setValue val
+        @input.setValue val
 
 module.exports = (File) -> class Input extends signal.Emitter
     {Element} = File
@@ -83,7 +77,7 @@ module.exports = (File) -> class Input extends signal.Emitter
         @parse = require('./input/parser').parse
 
     initBindingConfig = (cfg) ->
-        cfg.func ?= new Function 'refs', 'props', 'state', cfg.body
+        cfg.func ?= new Function 'scope', cfg.body
         cfg.tree ?= [cfg.func, cfg.connections]
         return
 
@@ -96,8 +90,7 @@ module.exports = (File) -> class Input extends signal.Emitter
         super()
 
         @isRendered = false
-        @target = null
-        @context = null
+        @target = @file.exported
         @binding = null
 
         initBindingConfig @bindingConfig
@@ -107,23 +100,12 @@ module.exports = (File) -> class Input extends signal.Emitter
             Object.seal @
         `//</development>`
 
-    signal.Emitter.createSignal @, 'onTargetChange'
-    signal.Emitter.createSignal @, 'onContextChange'
-
     registerBinding: ->
         assert.isNotDefined @binding
         @binding = DocumentBinding.New @bindingConfig.tree, @
         return
 
     render: ->
-        oldTarget = @target
-        oldContext = @context
-        @target = @file.scope
-        @context = @file.context
-        if oldTarget isnt @target
-            @onTargetChange.emit()
-        if oldContext isnt @context
-            @onContextChange.emit()
         @isRendered = true
         @binding?.update()
         return

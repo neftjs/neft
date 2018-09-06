@@ -31,9 +31,10 @@ describe 'Document n-use', ->
                 1
                 <n-use
                   n-component="a"
-                  n-if="${props.loops > 0}"
-                  loops="${props.loops - 1}"
+                  n-if="${loops > 0}"
+                  loops="${loops - 1}"
                 />
+                <n-props loops />
             </n-component>
             <n-use n-component="a" loops="3" />
         '''
@@ -55,37 +56,49 @@ describe 'Document n-use', ->
     it 'does not render hidden component', ->
         view = createView '''
             <script>
-            this.onBeforeRender(function () {
-                this.logs = [];
-            });
+            exports.default = {
+                logs: null,
+                onBeforeRender() {
+                    this.logs = []
+                },
+            }
             </script>
             <n-component name="a-b">
                 <script>
-                this.onRender(function () {
-                    this.props.logs.push(this.props.name);
-                });
+                exports.default = {
+                    onRender() {
+                        this.logs.push(this.name);
+                    },
+                }
                 </script>
+                <n-props logs name />
             </n-component>
             <a-b logs="${this.logs}" name="fail" n-if="${false}" />
             <a-b logs="${this.logs}" name="ok" />
         '''
         view = view.clone()
         renderParse view
-        assert.isEqual view.scope.logs, ['ok']
+        assert.isEqual view.exported.logs, ['ok']
 
     it 'does not render component inside hidden element', ->
         view = createView '''
             <script>
-            this.onBeforeRender(function () {
-                this.logs = [];
-            });
+            exports.default = {
+                logs: null,
+                onBeforeRender() {
+                    this.logs = []
+                },
+            }
             </script>
             <n-component name="a-b">
                 <script>
-                this.onRender(function () {
-                    this.props.logs.push(this.props.name);
-                });
+                exports.default = {
+                    onRender() {
+                        this.logs.push(this.name);
+                    },
+                }
                 </script>
+                <n-props logs name />
             </n-component>
             <div n-if="${false}">
                 <a-b logs="${this.logs}" name="fail" />
@@ -94,32 +107,38 @@ describe 'Document n-use', ->
         '''
         view = view.clone()
         renderParse view
-        assert.isEqual view.scope.logs, ['ok']
+        assert.isEqual view.exported.logs, ['ok']
 
     it 'is reverted when comes invisible', ->
         view = createView '''
             <n-component name="abc">
                 <script>
-                this.onRevert(function () {
-                    this.reverted = (this.reverted + 1) || 1;
-                });
+                exports.default = {
+                    reverted: 0,
+                    onRevert() {
+                        this.reverted = (this.reverted + 1) || 1
+                    },
+                }
                 </script>
             </n-component>
             <script>
-            this.onBeforeRender(function () {
-                this.state.set('visible', true);
-            });
+            exports.default = {
+                visible: false,
+                onBeforeRender() {
+                    this.visible = true
+                },
+            }
             </script>
-            <div n-ref="container" n-if="${state.visible}">
+            <div n-ref="container" n-if="${visible}">
                 <abc n-ref="abc" />
             </div>
         '''
         view = view.clone()
         view.render()
-        {scope} = view
-        {abc} = scope.refs
+        {exported} = view
+        {abc} = exported.refs
 
-        assert.is abc.reverted, undefined
-        scope.state.set 'visible', false
+        assert.is abc.reverted, 0
+        exported.visible = false
         assert.is abc.reverted, 1
-        assert.is scope.refs.abc, null
+        assert.is exported.refs.abc, null

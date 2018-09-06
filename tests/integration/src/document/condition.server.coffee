@@ -19,11 +19,12 @@ describe 'Document n-if', ->
 
     it 'supports runtime updates', ->
         source = createView '''
-            <n-component name="a">
-                <b n-if="${props.x > 1}">OK</b>
-                <b n-if="${props.x === 1}">FAIL</b>
+            <n-component name="Test">
+                <b n-if="${x > 1}">OK</b>
+                <b n-if="${x === 1}">FAIL</b>
+                <n-props x />
             </n-component>
-            <n-use n-component="a" x="1" />
+            <Test x="1" />
         '''
         view = source.clone()
         elem = view.node.children[0]
@@ -32,3 +33,23 @@ describe 'Document n-if', ->
         assert.is view.node.stringify(), '<b>FAIL</b>'
         elem.props.set 'x', 2
         assert.is view.node.stringify(), '<b>OK</b>'
+
+    it 'synchronizes changes with n-else', ->
+        source = createView '''
+            <n-component name="Test">
+                <b n-if="${x > 1}">YES</b>
+                <b n-else>NO</b>
+                <n-props x />
+            </n-component>
+            <Test x="1" />
+        '''
+        view = source.clone()
+        elem = view.node.children[0]
+
+        renderParse view
+        assert.is view.node.stringify(), '<b>NO</b>'
+        elem.props.set 'x', 2
+        assert.is view.node.stringify(), '<b>YES</b>'
+
+        elem.props.set 'x', 1
+        assert.is view.node.stringify(), '<b>NO</b>'

@@ -8,11 +8,10 @@ pathUtils = require 'path'
 
 DEFAULT_FILE_EXT = '.js'
 
-isCoffee = (path) -> /\.(?:coffee|litcoffee|coffee\.md)$/.test(path)
-
 module.exports = (File) ->
     (file) ->
         if file instanceof File.Iterator
+            file.scripts = new File.Scripts file, []
             return
 
         scripts = []
@@ -39,10 +38,6 @@ module.exports = (File) ->
                 # tag
                 script = tag.stringifyChildren()
                 {filename} = tag.props
-                if isCoffee(filename)
-                    script = "`module.exports = function(){`\n\n#{script}\n\n`};`"
-                else
-                    script = "module.exports = function(){\n\n#{script}\n\n};"
 
             filePath = file.path
 

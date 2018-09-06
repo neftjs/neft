@@ -20,7 +20,8 @@ describe 'Document n-target', ->
     it 'can be hidden', ->
         source = createView '''
             <n-component name="a">
-                <n-target n-if="${props.x === 1}" />
+                <n-target n-if="${x === 1}" />
+                <n-props x />
             </n-component>
             <n-use n-component="a" x="0"><b></b></n-use>
         '''

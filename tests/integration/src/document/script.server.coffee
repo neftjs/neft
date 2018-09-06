@@ -24,35 +24,41 @@ describe 'Document script', ->
         view = view.clone()
 
         renderParse view
-        assert.is view.scope.a, undefined
+        assert.is view.exported.a, undefined
 
     it 'is called on a view clone', ->
         view = createView '''
             <script>
-                this.a = 1;
+            exports.default = {
+                a: 1,
+            }
             </script>
         '''
         view = view.clone()
 
         renderParse view
-        {scope} = view
-        assert.is scope.a, 1
+        {exported} = view
+        assert.is exported.a, 1
 
         view.revert()
         renderParse view
-        assert.is view.scope, scope
+        assert.is view.exported, exported
 
         view2 = view.clone()
         renderParse view2
-        assert.isNot view2.scope, scope
-        assert.is view2.scope.a, 1
+        assert.isNot view2.exported, exported
+        assert.is view2.exported.a, 1
 
     it 'is called with props in beforeRender', ->
         view = createView '''
+            <n-props a />
             <script>
-                this.onBeforeRender(() => {
-                    this.a = this.props.a;
-                });
+            exports.default = {
+                b: null,
+                onBeforeRender() {
+                    this.b = this.a
+                },
+            }
             </script>
         '''
         view = view.clone()
@@ -60,81 +66,90 @@ describe 'Document script', ->
         renderParse view,
             props:
                 a: 1
-        assert.is view.scope.a, 1
+        assert.is view.exported.b, 1
 
-    it 'is called with refs in scope', ->
+    it 'is called with refs in exported', ->
         view = createView '''
             <script>
-                this.a = this.refs.x.props.a;
+            exports.default = {
+                a: null,
+                onCreate() {
+                    this.a = this.refs.x.props.a
+                }
+            }
             </script>
             <b n-ref="x" a="1" />
         '''
         view = view.clone()
 
         renderParse view
-        assert.is view.scope.a, 1
+        assert.is view.exported.a, 1
 
-    it 'is called with file node in scope', ->
+    it 'is called with file node in exported', ->
         view = createView '''
             <script>
-                this.aNode = this.node;
-            </script>
-        '''
-        view = view.clone()
-
-        renderParse view
-        assert.is view.scope.aNode, view.node
-
-    describe '[filename]', ->
-        it 'supports .coffee files', ->
-            view = Document.fromHTML uid(), '''
-                <script filename="a.coffee">
-                    @a = 1
-                </script>
-            '''
-            Document.parse view
-            view = view.clone()
-
-            renderParse view
-            assert.is view.scope.a, 1
-
-    it 'predefined scope properties are not enumerable', ->
-        view = createView '''
-            <script>
-                var keys = [];
-                this.keys = keys;
-                for (var key in this) {
-                    keys.push(key);
+            exports.default = {
+                aNode: null,
+                onCreate() {
+                    this.aNode = this.node
                 }
+            }
             </script>
         '''
         view = view.clone()
 
         renderParse view
-        assert.isEqual view.scope.keys, ['keys']
+        assert.is view.exported.aNode, view.node
+
+    it 'predefined exported properties are not enumerable', ->
+        view = createView '''
+            <script>
+            exports.default = {
+                keys: null,
+                onCreate() {
+                    var keys = [];
+                    this.keys = keys;
+                    for (var key in this) {
+                        keys.push(key);
+                    }
+                },
+            }
+            </script>
+        '''
+        view = view.clone()
+
+        renderParse view
+        assert.isEqual view.exported.keys, ['keys', 'onCreate']
 
     it 'further tags are properly called', ->
         view = createView '''
             <script>
-                this.aa = 1;
+            exports.default = {
+                aa: 1,
+            }
             </script>
             <script>
-                this.bb = 1;
-                this.bbaa = this.aa;
+            exports.default = {
+                bb: 1,
+            }
             </script>
         '''
         view = view.clone()
 
         renderParse view
-        {scope} = view
-        assert.is scope.aa, 1
-        assert.is scope.bb, 1
-        assert.is scope.bbaa, 1
+        {exported} = view
+        assert.is exported.aa, 1
+        assert.is exported.bb, 1
 
     it 'can contains XML text', ->
         source = createView """
             <script>
-                this.a = '<&&</b>';
+            exports.default = {
+                a: null,
+                onCreate() {
+                    this.a = '<&&</b>'
+                },
+            }
             </script>
             ${this.a}
         """
@@ -146,7 +161,7 @@ describe 'Document script', ->
     it 'accepts `src` attribute', ->
         filename = "tmp#{uid()}.js"
         path = "#{os.tmpdir()}/#{filename}"
-        file = 'module.exports = function(){ this.a = 1; }'
+        file = 'exports.default = { a: 1 }'
         fs.writeFileSync path, file, 'utf-8'
 
         source = Document.fromHTML uid(), """
@@ -162,7 +177,7 @@ describe 'Document script', ->
     it 'accepts relative `src` attribute', ->
         scriptFilename = "tmp#{uid()}.js"
         scriptPath = "#{os.tmpdir()}/#{scriptFilename}"
-        file = 'module.exports = function(){ this.a = 1; }'
+        file = 'exports.default = { a: 1 }'
         fs.writeFileSync scriptPath, file, 'utf-8'
 
         viewFilename = "tmp#{uid()}"
@@ -182,24 +197,26 @@ describe 'Document script', ->
     it 'properly calls events', ->
         view = createView """
             <script>
-                this.events = [];
-                this.onBeforeRender(function(){
+            exports.default = {
+                events: [],
+                onBeforeRender() {
                     this.events.push('onBeforeRender');
-                });
-                this.onRender(function(){
+                },
+                onRender() {
                     this.events.push('onRender');
-                });
-                this.onBeforeRevert(function(){
+                },
+                onBeforeRevert() {
                     this.events.push('onBeforeRevert');
-                });
-                this.onRevert(function(){
+                },
+                onRevert() {
                     this.events.push('onRevert');
-                });
+                },
+            }
             </script>
         """
         view = view.clone()
 
-        {events} = view.scope
+        {events} = view.exported
         assert.isEqual events, []
 
         view.render()
@@ -210,41 +227,46 @@ describe 'Document script', ->
             'onBeforeRender', 'onRender', 'onBeforeRevert', 'onRevert'
         ]
 
-    it 'onBeforeRender is called with context in scope', ->
+    it 'onBeforeRender is called with context in exported', ->
         view = createView '''
             <script>
-                this.onBeforeRender(() => {
-                    this.a = this.context.a;
-                });
+            exports.default = {
+                a: null,
+                onBeforeRender() {
+                    this.a = this.context.a
+                },
+            }
             </script>
         '''
         view = view.clone()
 
         renderParse view, storage: a: 1
-        assert.is view.scope.a, 1
+        assert.is view.exported.a, 1
 
-    it 'does not call events for foreign scope', ->
+    it 'does not call events for foreign exported', ->
         view = createView """
             <script>
-                this.events = [];
-                this.onBeforeRender(function(){
+            exports.default = {
+                events: [],
+                onBeforeRender() {
                     this.events.push('onBeforeRender');
-                });
-                this.onRender(function(){
+                },
+                onRender() {
                     this.events.push('onRender');
-                });
-                this.onBeforeRevert(function(){
+                },
+                onBeforeRevert() {
                     this.events.push('onBeforeRevert');
-                });
-                this.onRevert(function(){
+                },
+                onRevert() {
                     this.events.push('onRevert');
-                });
+                },
+            }
             </script>
-            <ul n-each="[1,2]">${props.item}</ul>
+            <ul n-each="[1,2]">${item}</ul>
         """
         view = view.clone()
 
-        {events} = view.scope
+        {events} = view.exported
         assert.isEqual events, []
 
         view.render()
@@ -254,111 +276,3 @@ describe 'Document script', ->
         assert.isEqual events, [
             'onBeforeRender', 'onRender', 'onBeforeRevert', 'onRevert'
         ]
-
-    describe 'propsSchema', ->
-        N_EACH_HTML = """
-            <blank n-each="[1, 2]">
-                ${props.item}
-            </blank>
-            <script>
-                this.propsSchema = {
-                    id: {
-                        type: 'string'
-                    }
-                };
-            </script>
-        """
-
-        warnPropSchema = Document::_warnPropSchema
-
-        beforeEach ->
-            @prepareView = (html) ->
-                @view = createView(html).clone()
-
-                @errors = []
-                Document::_warnPropSchema = (error) => @errors.push error
-
-            @prepareView """
-                <script>
-                    this.propsSchema = {
-                        id: {
-                            type: 'string'
-                        }
-                    };
-                </script>
-            """
-
-        afterEach ->
-            Document::_warnPropSchema = warnPropSchema
-
-        it 'passes on valid props', ->
-            @view.render id: 'abc'
-            assert.lengthOf @errors, 0
-
-        it 'fails on invalid prop', ->
-            @view.render id: 2
-            assert.lengthOf @errors, 1
-
-        it 'fails on unknown prop', ->
-            @view.render()
-            assert.lengthOf @errors, 1
-
-        it 'passes on valid props in n-each', ->
-            @prepareView N_EACH_HTML
-            @view.render id: 'abc'
-            assert.lengthOf @errors, 0
-
-    describe 'defaultState', ->
-        beforeEach ->
-            @view = createView """
-                <script>
-                    this.defaultState = {
-                        abc: 123
-                    };
-                    this.onBeforeRender(() => {
-                        this.savedState = this.state;
-                    });
-                </script>
-            """
-            @view = @view.clone()
-
-        it 'is not applied on created document', ->
-            assert.notOk @view.inputState.abc
-
-        it 'is applied on rendered document', ->
-            @view.render()
-            assert.is @view.inputState.abc, 123
-
-        it 'is not applied on reverted document', ->
-            @view.render()
-            @view.revert()
-            assert.notOk @view.inputState.abc
-
-        it 'is applied in onBeforeRender signal', ->
-            @view.render()
-            assert.is @view.scope.savedState.abc, 123
-
-    describe 'defaultProps', ->
-        beforeEach ->
-            @view = createView """
-                <script>
-                    this.defaultProps = {
-                        abc: 123
-                    };
-                    this.onBeforeRender(() => {
-                        this.savedProps = this.props;
-                    });
-                </script>
-            """
-            @view = @view.clone()
-
-        it 'is not applied on created document', ->
-            assert.notOk @view.inputProps.abc
-
-        it 'is applied on rendered document', ->
-            @view.render()
-            assert.is @view.inputProps.abc, 123
-
-        it 'is applied in onBeforeRender signal', ->
-            @view.render()
-            assert.is @view.scope.savedProps.abc, 123

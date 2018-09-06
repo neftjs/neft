@@ -11,7 +11,7 @@ eventLoop = require 'src/eventLoop'
 assert = assert.scope 'View.Iterator'
 log = log.scope 'View', 'Iterator'
 
-module.exports = (File) -> class Iterator
+module.exports = (File, files) -> class Iterator
     @__name__ = 'Iterator'
     @__path__ = 'File.Iterator'
 
@@ -21,17 +21,18 @@ module.exports = (File) -> class Iterator
     JSON_NAME = i++
     JSON_NODE = i++
     JSON_TEXT = i++
+    JSON_SCOPE_PROPS = i++
     JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
     @_fromJSON = (file, arr, obj) ->
         unless obj
             node = file.node.getChildByAccessPath arr[JSON_NODE]
-            obj = new Iterator file, node, arr[JSON_NAME]
+            obj = new Iterator file, node, arr[JSON_NAME], arr[JSON_SCOPE_PROPS]
         obj.text = arr[JSON_TEXT]
         obj
 
     propsChangeListener = (name) ->
-        if @file.isRendered and name is 'n-each'
+        if @file.isRendered and name is 'n-for'
             @revert()
             @renderImmediate()
 
@@ -45,19 +46,19 @@ module.exports = (File) -> class Iterator
             @revert()
         return
 
-    constructor: (@file, @node, @name) ->
+    constructor: (@file, @node, @name, @scopeProps) ->
         assert.instanceOf @file, File
         assert.instanceOf @node, File.Element
         assert.isString @name
         assert.notLengthOf @name, 0
 
+        @pool = []
         @usedComponents = []
         @text = ''
         @data = null
         @isRendered = false
         @isRenderPending = false
         @hiddenDepth = 0
-        @inputProps = Object.create @file.inputProps
         @_renderImmediateCallback = utils.bindFunctionContext @_renderImmediateCallback, @
 
         @node.onPropsChange propsChangeListener, @
@@ -89,7 +90,7 @@ module.exports = (File) -> class Iterator
     render: ->
         return if @hiddenDepth > 0
 
-        each = @node.props['n-each']
+        each = @node.props['n-for']
 
         # stop if nothing changed
         if each is @data
@@ -163,9 +164,9 @@ module.exports = (File) -> class Iterator
         assert.isObject @data
         assert.isInteger i
 
-        {data} = @
+        {data, scopeProps} = @
 
-        usedComponent = File.factory @name
+        usedComponent = @pool.pop() or files[@name].clone shallow: true, exported: @file.exported
         @usedComponents.splice i, 0, usedComponent
 
         each = data
@@ -177,15 +178,14 @@ module.exports = (File) -> class Iterator
         newChild.index = i
 
         # render component
-        @inputProps.each = each
-        @inputProps.index = i
-        @inputProps.item = item
-        usedComponent.scope = @file.scope
-        usedComponent.render @inputProps, @file.context, null, @file.inputRefs
-
-        # signal
-        usedComponent.onReplaceByUse.emit @
-        File.emitNodeSignal usedComponent, 'n-onReplaceByUse', @
+        scope = utils.merge {}, @file.scope
+        if scopeProps.length > 0
+            scope[scopeProps[0]] = item
+        if scopeProps.length > 1
+            scope[scopeProps[1]] = i
+        if scopeProps.length > 2
+            scope[scopeProps[2]] = each
+        usedComponent.render null, @file.context, null, null, scope
 
         @
 
@@ -197,8 +197,8 @@ module.exports = (File) -> class Iterator
         assert.isInteger i
 
         usedComponent = @usedComponents[i]
-        usedComponent.scope = null
-        usedComponent.revert().destroy()
+        usedComponent.revert()
+        @pool.push usedComponent
         @usedComponents.splice i, 1
 
         usedComponent.node.parent = undefined
@@ -208,7 +208,7 @@ module.exports = (File) -> class Iterator
     clone: (original, file) ->
         node = original.node.getCopiedElement @node, file.node
 
-        new Iterator file, node, @name
+        new Iterator file, node, @name, @scopeProps
 
     toJSON: (key, arr) ->
         unless arr
@@ -217,4 +217,5 @@ module.exports = (File) -> class Iterator
         arr[JSON_NAME] = @name
         arr[JSON_NODE] = @node.getAccessPath @file.node
         arr[JSON_TEXT] = @text
+        arr[JSON_SCOPE_PROPS] = @scopeProps
         arr

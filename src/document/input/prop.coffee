@@ -23,8 +23,6 @@ module.exports = (File, Input) -> class InputProp extends Input
     @isHandler = isHandler = (node, propName) ->
         if /(?:^|:)on[A-Z][A-Za-z0-9_$]*$/.test(propName)
             true
-        else if node.name is 'n-when' and propName is 'call'
-            true
         else
             false
 
@@ -57,7 +55,7 @@ module.exports = (File, Input) -> class InputProp extends Input
         ->
             unless input.file.isRendered
                 return
-            r = input.bindingConfig.func.apply input, input.file.inputArgs
+            r = input.bindingConfig.func.apply input.target, input.file.scope
             if typeof r is 'function'
                 r = r.apply @, arguments
             r
