@@ -6,7 +6,6 @@
     signal = require 'src/signal'
     assert = require 'src/assert'
     log = require 'src/log'
-    Schema = require 'src/schema'
     Networking = require 'src/networking'
     Document = require 'src/document'
     Renderer = require 'src/renderer'
@@ -98,11 +97,6 @@ Acceptable syntaxes:
             assert.ok utils.has(Networking.Request.METHODS, opts.method)
             , "Networking doesn't provide a `#{opts.method}` method"
 
-            if opts.schema?
-                if utils.isPlainObject(opts.schema)
-                    opts.schema = new Schema opts.schema
-                assert.instanceOf opts.schema, Schema
-
             if opts.redirect?
                 if typeof opts.redirect is 'string'
                     opts.redirect = new Networking.Uri opts.redirect
@@ -121,7 +115,6 @@ Acceptable syntaxes:
             app.networking.createHandler
                 method: @method
                 uri: @uri
-                schema: @schema
                 callback: utils.bindFunctionContext(handleRequest, @)
 
         getRouteName = (route) ->
@@ -342,8 +335,6 @@ Acceptable syntaxes:
 ## *App.Route* Route::route
 
 ## *String* Route::name
-
-## *Schema* Route::schema
 
 ## *Any* Route::data
 

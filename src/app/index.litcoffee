@@ -7,7 +7,6 @@
     signal = require 'src/signal'
     db = require 'src/db'
     assert = require 'src/assert'
-    Schema = require 'src/schema'
     Networking = require 'src/networking'
     Document = require 'src/document'
     Renderer = require 'src/renderer'
