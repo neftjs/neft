@@ -147,12 +147,6 @@ Use this method to create a new *Networking.Handler*.
 app.networking.createHandler({
     method: 'get',
     uri: '/users/{name}',
-    schema: new Schema({
-        name: {
-            type: 'string',
-            min: 3
-        },
-    }),
     callback: function(req, res, next){
         res.raise(new Networking.Response.Error(Networking.Response.NOT_IMPLEMENTED));
     }
@@ -171,7 +165,6 @@ app.networking.createHandler({
             handler = new Networking.Handler
                 method: opts.method
                 uri: uri
-                schema: opts.schema
                 callback: opts.callback
 
             stack = @_handlers[opts.method] ?= []

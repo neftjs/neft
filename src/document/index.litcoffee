@@ -10,7 +10,6 @@
     EventLoopDict = require 'src/eventLoop/dict'
     Dict = require 'src/dict'
     List = require 'src/list'
-    Schema = require 'src/schema'
     ImmutableInputDict = require './input/immutableDict'
 
     assert = assert.scope 'View'
