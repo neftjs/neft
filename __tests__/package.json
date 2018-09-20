@@ -1,0 +1,10 @@
+{
+  "name": "@neft/tests",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "@neft/core": "^0.0.1",
+    "@neft/webpack-loader": "^0.0.1",
+    "@neft/default-styles": "^0.0.1"
+  }
+}

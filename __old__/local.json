@@ -1,0 +1,14 @@
+{
+    "buildServer": {
+        "protocol": "http",
+        "host": "localhost",
+        "port": 3001
+    },
+    "android": {
+        "sdkDir": "/Volumes/KrystianDysk/android-tools/",
+        "compileSdkVersion": 27,
+        "targetSdkVersion": 25,
+        "buildToolsVersion": "27",
+        "dependencies": []
+    }
+}

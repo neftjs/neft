@@ -1,79 +1,43 @@
 {
   "name": "neft",
-  "version": "0.11.23",
-  "preferGlobal": true,
+  "private": true,
   "description": "Universal Platform",
   "keywords": [
     "framework",
     "native",
     "android",
     "ios",
-    "webgl"
+    "macos"
   ],
-  "bin": {
-    "neft": "bin/neft.js"
-  },
-  "main": "index.coffee",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
-  "author": "Krystian Kruk <krystian@neft.io>",
-  "contributors": [],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Neft-io/neft.git"
-  },
-  "bugs": "https://github.com/Neft-io/neft/issues",
-  "engines": {
-    "node": ">=8.1.2"
-  },
   "scripts": {
-    "bundle": "cross-env NODE_PATH=./ coffee --nodejs --harmony scripts/bundle.coffee",
-    "test": "node ./bin/neft.js test",
-    "update-api-docs": "cross-env NODE_PATH=./ coffee scripts/api-docs.coffee",
-    "generate-docs": "coffee ./scripts/docs/",
-    "prepublishOnly": "npm run bundle",
-    "postinstall": "coffee scripts/ensure-bundle.coffee"
+    "test": "make test",
+    "lint": "make lint"
   },
-  "dependencies": {
-    "acorn": "^5.7.1",
-    "babel-core": "^6.26.3",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-es2016": "^6.24.1",
-    "babel-preset-es2017": "^6.24.1",
-    "chalk": "^2.4.1",
-    "chokidar": "^2.0.4",
-    "coffee-script": "^1.12.7",
-    "cross-env": "^5.2.0",
-    "form-data": "^2.3.2",
-    "fs-extra": "^6.0.1",
-    "glob": "^7.1.2",
-    "http-server": "^0.11.1",
-    "image-size": "^0.6.3",
-    "jimp": "^0.2.28",
-    "js-yaml": "^3.12.0",
-    "mkdirp": "^0.5.1",
-    "mustache": "^2.3.0",
-    "node-notifier": "^5.2.1",
-    "node-static": "^0.7.10",
-    "not-so-smart-xhtml-parser": "^0.0.3",
-    "open": "^0.0.5",
-    "pegjs": "^0.10.0",
-    "pngjs": "^3.3.3",
-    "prismjs": "^1.15.0",
-    "qs": "^6.5.2",
-    "semver": "^5.5.0",
-    "slash": "^2.0.0",
-    "string-hash": "^1.1.3",
-    "uglify-js": "^3.4.1",
-    "which": "^1.3.1",
-    "xcode": "^1.0.0"
+  "jest": {
+    "setupTestFrameworkScriptFile": "./jest-setup.js",
+    "testPathIgnorePatterns": ["/node_modules/", "utils.js"],
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|coffee)$",
+    "moduleFileExtensions": [
+      "js",
+      "coffee",
+      "litcoffee"
+    ],
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest",
+      ".*": "./jest-preprocessor.js"
+    }
   },
   "devDependencies": {
-    "escape-html": "^1.0.3",
-    "highlight.js": "^9.12.0",
-    "imgur": "^0.2.1",
-    "istanbul": "^0.4.5",
-    "less": "^3.0.4",
-    "marked": "^0.4.0"
+    "coffee-script": "^1.12.7",
+    "eslint": "^5.5.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "jest": "^23.6.0",
+    "lerna": "^3.3.1"
   }
 }

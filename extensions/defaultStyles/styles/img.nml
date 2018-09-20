@@ -1,4 +1,0 @@
-Image {
-    query: 'img'
-    source: this.node.props.src
-}

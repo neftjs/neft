@@ -1,10 +1,4 @@
-/cli/bundle
-coverage
-*.log
-/build
-tmp
-_book
-node_modules
-npm-debug.log*
-tests_results
-/local.json
+.DS_Store
+/node_modules
+/packages/*/node_modules
+.idea/

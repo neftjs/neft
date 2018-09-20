@@ -1,0 +1,28 @@
+{
+  "name": "@neft/cli",
+  "version": "0.0.1",
+  "bin": {
+    "neft": "bin/neft.js"
+  },
+  "dependencies": {
+    "@neft/core": "0.0.1",
+    "@neft/webpack-loader": "0.0.1",
+    "@neft/runtime-android": "0.0.1",
+    "@neft/runtime-ios": "0.0.1",
+    "@neft/runtime-macos": "0.0.1",
+    "coffee-script": "^1.12.7",
+    "fs-extra": "^7.0.0",
+    "fs-promise-native": "^1.0.0",
+    "hard-source-webpack-plugin": "^0.12.0",
+    "html-webpack-plugin": "^3.2.0",
+    "http-server": "^0.11.1",
+    "jimp": "^0.5.3",
+    "js-yaml": "^3.12.0",
+    "loader-utils": "^1.1.0",
+    "mustache": "^3.0.0",
+    "npm": "^6.4.1",
+    "opn": "^5.4.0",
+    "rimraf": "^2.6.2",
+    "webpack": "^4.20.2"
+  }
+}

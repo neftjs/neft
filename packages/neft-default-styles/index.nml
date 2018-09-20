@@ -1,0 +1,126 @@
+// https://www.w3.org/TR/CSS2/sample.html
+
+@Flow div, dl, dt, li, pre {
+    layout.fillWidth: true
+}
+
+@Flow address {
+    layout.fillWidth: true
+
+    #text {
+		layout.fillWidth: true
+        font.italic: true
+    }
+}
+
+@Flow h1 {
+    padding.vertical: 18.76
+    layout.fillWidth: true
+
+    #text {
+		layout.fillWidth: true
+        font.pixelSize: 28
+        font.weight: 0.7
+    }
+}
+
+@Flow h2 {
+    padding.vertical: 21
+    layout.fillWidth: true
+
+    #text {
+		layout.fillWidth: true
+        font.pixelSize: 21
+        font.weight: 0.7
+    }
+}
+
+@Flow h3 {
+    padding.vertical: 23.24
+    layout.fillWidth: true
+
+    #text {
+		layout.fillWidth: true
+        font.pixelSize: 16.38
+        font.weight: 0.7
+    }
+}
+
+@Flow h4, p, fieldset, form, dl {
+    padding.vertical: 31.36
+    layout.fillWidth: true
+
+    #text {
+		layout.fillWidth: true
+        font.weight: 0.7
+    }
+}
+
+@Flow h5 {
+    padding.vertical: 42
+    layout.fillWidth: true
+
+    #text {
+		layout.fillWidth: true
+        font.pixelSize: 11.62
+        font.weight: 0.7
+    }
+}
+
+@Flow h6 {
+    padding.vertical: 46.76
+    layout.fillWidth: true
+
+    #text {
+		layout.fillWidth: true
+        font.pixelSize: 10.5
+        font.weight: 0.7
+    }
+}
+
+@Flow b, strong {
+    #text {
+		layout.fillWidth: true
+        font.weight: 0.7
+    }
+}
+
+@Flow blockquote {
+    padding: '31.36 40 31.36 40'
+    layout.fillWidth: true
+
+    #text {
+		layout.fillWidth: true
+	}
+}
+
+@Flow i, cite, em, var {
+    #text {
+		layout.fillWidth: true
+        font.italic: true
+    }
+}
+
+@Flow pre, tt, code, kbd, samp {
+    #text {
+		layout.fillWidth: true
+        font.family: 'monospace'
+    }
+}
+
+@Flow ol, ul, menu {
+    padding.vertical: 31.36
+    padding.left: 40
+    layout.fillWidth: true
+
+    ul, ol {
+        margin.vertical: 0
+    }
+}
+
+@Flow dd {
+    padding.left: 40
+    layout.fillWidth: true
+}
+
+@Image img {}

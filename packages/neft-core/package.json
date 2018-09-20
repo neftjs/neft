@@ -1,0 +1,7 @@
+{
+  "name": "@neft/core",
+  "version": "0.0.1",
+  "dependencies": {
+    "coffee-script": "^1.12.7"
+  }
+}

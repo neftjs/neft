@@ -1,0 +1,25 @@
+package io.neft;
+
+import android.content.Context;
+import android.content.Intent;
+import com.jakewharton.processphoenix.ProcessPhoenix;
+
+class AppConfig {
+    {{^buildServerUrl}}
+    static final String CODE_WATCH_CHANGES_URL = null;
+    {{/buildServerUrl}}
+    {{#buildServerUrl}}
+    static final String CODE_WATCH_CHANGES_URL = "{{&buildServerUrl}}";
+    {{/buildServerUrl}}
+
+    static void initExtensions() {
+        {{#extensions}}
+        io.neft.extensions.{{&packageName}}.{{&name}}Extension.register();
+        {{/extensions}}
+    }
+
+    static void restart() {
+        Context context = App.getInstance().getActivity().getBaseContext();
+        ProcessPhoenix.triggerRebirth(context, new Intent(context, {{&manifest.package}}.MainActivity.class));
+    }
+}

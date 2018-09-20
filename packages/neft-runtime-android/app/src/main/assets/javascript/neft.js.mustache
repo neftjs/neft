@@ -1,0 +1,154 @@
+/* Global object */
+this.global = this
+
+/* Console */
+const console = (function () {
+  const valueToString = function (value) {
+    var result
+    if (typeof value === 'object' && value !== null && !(value instanceof RegExp)) {
+      try {
+        result = JSON.stringify(value)
+      } catch (_error) {}
+    }
+    return result || String(value)
+  }
+
+  const inspect = function (args) {
+    const strings = Array.prototype.map.call(args, valueToString)
+    return Array.prototype.join.call(strings, ' ');
+  }
+
+  return Object.preventExtensions({
+    assert(assertion, msg) {
+      if (!assertion) throw new Error(msg)
+    },
+    log() {
+      _neft.console.log(inspect(arguments))
+    },
+    info() {
+      _neft.console.info(inspect(arguments))
+    },
+    warn() {
+      _neft.console.warn(inspect(arguments))
+    },
+    error() {
+      _neft.console.error(inspect(arguments))
+    },
+    trace() {
+      err = new Error()
+      err.name = 'Trace'
+      err.message = inspect(arguments)
+      Error.captureStackTrace(err, console.trace)
+      console.error(err.stack)
+    },
+  })
+})()
+
+/* Timers */
+var setTimeout
+var clearTimeout
+(function () {
+  const shots = Object.create(null)
+
+  _neft.timers.registerCallback(function (id) {
+    const timer = shots[id]
+    if (timer) {
+      delete shots[id]
+      timer()
+    }
+  })
+
+  setTimeout = function (func, delay, arg1, arg2, arg3) {
+    if (typeof func !== 'function') {
+      throw new TypeError('callback argument must be a function')
+    }
+
+    if (typeof delay !== 'number') {
+      delay = parseInt(delay, 10)
+    }
+    if (isNaN(delay)) {
+      delay = 4
+    }
+
+    const argc = arguments.length
+    var callFunc
+    switch (argc) {
+      case 1:
+      case 2:
+        callFunc = func
+        break
+      case 3:
+        callFunc = function () {
+          func(arg1)
+        }
+        break
+      case 4:
+        callFunc = function () {
+          func(arg1, arg2)
+        }
+        break
+      case 5:
+        callFunc = function () {
+          func(arg1, arg2, arg3)
+        }
+        break
+      default:
+        const args = new Array(argc - 2)
+        for (var i = 2; i < argc; i += 1) {
+          args[i - 2] = arguments[i]
+        }
+        callFunc = function () {
+          func.apply(this, args)
+        }
+    }
+
+    const id = _neft.timers.shot(delay)
+    shots[id] = callFunc
+    return id
+  }
+
+  clearTimeout = function (id) {
+    delete shots[id]
+  }
+})()
+
+const setImmediate = function (func, arg1, arg2, arg3) {
+  if (typeof func !== 'function') {
+    throw new TypeError("callback argument must be a function")
+  }
+  const argc = arguments.length
+  var callFunc
+  switch (argc) {
+    case 1:
+      callFunc = func
+      break
+    case 2:
+      callFunc = function() {
+        func(arg1)
+      }
+      break
+    case 3:
+      callFunc = function() {
+        func(arg1, arg2)
+      }
+      break
+    case 4:
+      callFunc = function() {
+        func(arg1, arg2, arg3)
+      }
+      break
+    default:
+      const args = new Array(argc - 1)
+      for (var i = 1; i < argc; i += 1) {
+        args[i - 1] = arguments[i]
+      }
+      callFunc = function() {
+        func.apply(this, args)
+      }
+  }
+  _neft.timers.immediate(callFunc)
+  return -1
+}
+
+/* Application code */
+{{&bundle}}

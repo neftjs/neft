@@ -1,0 +1,9 @@
+{
+  "name": "@neft/webpack-loader",
+  "version": "0.0.1",
+  "dependencies": {
+    "@neft/core": "0.0.1",
+    "not-so-smart-xhtml-parser": "0.0.3",
+    "pegjs": "^0.10.0"
+  }
+}
