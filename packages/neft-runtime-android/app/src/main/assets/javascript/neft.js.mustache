@@ -42,7 +42,7 @@ const console = (function () {
       console.error(err.stack)
     },
   })
-})()
+})();
 
 /* Timers */
 var setTimeout
@@ -110,7 +110,7 @@ var clearTimeout
   clearTimeout = function (id) {
     delete shots[id]
   }
-})()
+})();
 
 const setImmediate = function (func, arg1, arg2, arg3) {
   if (typeof func !== 'function') {
@@ -148,7 +148,7 @@ const setImmediate = function (func, arg1, arg2, arg3) {
   }
   _neft.timers.immediate(callFunc)
   return -1
-}
+};
 
 /* Application code */
 {{&bundle}}

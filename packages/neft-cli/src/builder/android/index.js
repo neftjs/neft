@@ -3,7 +3,7 @@ const { build } = require('./builder')
 exports.webpackConfig = {}
 
 exports.defaultManifest = {
-  package: 'com.example.app',
+  package: 'io.neft.example.app',
   versionCode: 1,
   versionName: '1.0',
   label: 'Neft.io App',

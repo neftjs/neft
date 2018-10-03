@@ -3,6 +3,7 @@ const cp = require('child_process')
 const path = require('path')
 const Mustache = require('mustache')
 const util = require('@neft/core/src/util')
+const log = require('@neft/core/src/log')
 const { outputDir } = require('../../config')
 
 const runtime = path.join(__dirname, '../../../node_modules/@neft/runtime-android/')
@@ -115,6 +116,8 @@ exports.build = async ({
     throw new Error('ANDROID_HOME environment variable need to be set to the Android SDK location')
   }
 
+  log.info('Preparing Android build')
+
   const bundle = await fs.readFile(filepath, 'utf-8')
   const androidExtensions = await getAndroidExtensions(extensions)
 
@@ -135,5 +138,6 @@ exports.build = async ({
 
   await prepareMainActivity(manifest, output)
 
+  log.info('Building Android APK')
   await assembleApk(production, output)
 }

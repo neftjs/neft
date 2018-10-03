@@ -9,6 +9,7 @@ module.exports = async (argv) => {
   if (operation === 'init') {
     initialize()
   }
+
   if (operation === 'build' || operation === 'run') {
     try {
       await build(target, args)
@@ -18,7 +19,7 @@ module.exports = async (argv) => {
     }
   }
   if (operation === 'run') {
-    run(target)
+    run(target, args)
   }
   if (operation === 'clean') {
     clean()

@@ -72,16 +72,27 @@ exports.build = async (target, args) => {
   const production = !!args.production
   const extensions = findExtensions()
   const defaultWebpackConfig = {
+    entry: [
+      './src/index.js',
+      require.resolve('webpack-hot-middleware/client'),
+    ],
     output: {
       path: output,
       filename: 'bundle.js',
+      publicPath: '/',
     },
-    target: 'web',
+    devtool: 'inline-source-map',
+    devServer: {
+      contentBase: './dist',
+    },
+    // devtool: false,
+    target: 'node',
     mode: production ? 'production' : 'development',
     resolve: {
       extensions: ['.js', '.xhtml', '.html', '.coffee', '.litcoffee'],
     },
     plugins: [
+      new webpack.HotModuleReplacementPlugin(),
       new webpack.DefinePlugin(getDefines(production, target)),
       new HardSourceWebpackPlugin({ info: { mode: 'none', level: 'error' } }),
     ],
@@ -98,16 +109,47 @@ exports.build = async (target, args) => {
           test: /\.(coffee|coffee\.md|litcoffee)$/,
           use: [require.resolve('./webpack-coffee-loader')],
         },
+        {
+          test: /\.js$/,
+          exclude: /(node_modules)/,
+          use: {
+            loader: require.resolve('babel-loader'),
+            options: {
+              presets: [require.resolve('@babel/preset-env')],
+            },
+          },
+        },
       ],
     },
   }
   const webpackConfig = util.mergeDeepAll(defaultWebpackConfig, targetBuilder.webpackConfig)
   const compiler = webpack(webpackConfig)
 
-  await compile(compiler)
-  const manifest = await produceManifest({ ...targetBuilder, target, output })
-  await generateIcons({ ...targetBuilder, target, manifest })
-  await targetBuilder.build({
-    manifest, output, filepath, production, extensions,
+  const Express = require('express')
+  const webpackDevMiddleware = require('webpack-dev-middleware')
+  const app = new Express()
+  app.use(webpackDevMiddleware(compiler, {
+    // noInfo: true,
+    publicPath: webpackConfig.output.publicPath,
+  }))
+  app.use(require("webpack-hot-middleware")(compiler))
+  app.listen(3001, (err) => {
+    console.log('LISTEN', err)
   })
+
+  // compiler.watch({
+  //   watch: true,
+  //   watchOptions: {
+  //     ignored: /node_modules/,
+  //   },
+  // }, (err, stats) => {
+  //   console.log(err, stats.toJson(webpackStatsToString))
+  // })
+
+  // await compile(compiler)
+  // const manifest = await produceManifest({ ...targetBuilder, target, output })
+  // await generateIcons({ ...targetBuilder, target, manifest })
+  // await targetBuilder.build({
+  //   manifest, output, filepath, production, extensions,
+  // })
 }

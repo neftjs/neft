@@ -5,12 +5,16 @@
     "neft": "bin/neft.js"
   },
   "dependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
     "@neft/core": "0.0.1",
-    "@neft/webpack-loader": "0.0.1",
     "@neft/runtime-android": "0.0.1",
     "@neft/runtime-ios": "0.0.1",
     "@neft/runtime-macos": "0.0.1",
+    "@neft/webpack-loader": "0.0.1",
+    "babel-loader": "^8.0.4",
     "coffee-script": "^1.12.7",
+    "express": "^4.16.3",
     "fs-extra": "^7.0.0",
     "fs-promise-native": "^1.0.0",
     "hard-source-webpack-plugin": "^0.12.0",
@@ -23,6 +27,8 @@
     "npm": "^6.4.1",
     "opn": "^5.4.0",
     "rimraf": "^2.6.2",
-    "webpack": "^4.20.2"
+    "webpack": "^4.20.2",
+    "webpack-dev-middleware": "^3.4.0",
+    "webpack-hot-middleware": "^2.24.2"
   }
 }

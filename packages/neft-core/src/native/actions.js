@@ -1,5 +1,5 @@
 {
-  let i = 0
+  let i = -1
   exports.in = {
     EVENT: i += 1,
     SCREEN_SIZE: i += 1,
@@ -31,7 +31,7 @@
 }
 
 {
-  let i = 0
+  let i = -1
   exports.out = {
     CALL_FUNCTION: i += 1,
     SET_SCREEN_STATUSBAR_COLOR: i += 1,
