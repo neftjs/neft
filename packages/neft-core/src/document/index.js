@@ -11,6 +11,16 @@ const Target = require('./target')
 const Iterator = require('./iterator')
 const StyleItem = require('./style-item')
 
+const parseComponents = (components) => {
+  Object.keys(components).forEach((name) => {
+    const file = components[name]
+    if (typeof file === 'object' && file != null) {
+      components[name] = file.default
+    }
+  })
+  return components
+}
+
 const parseRefs = (refs, element) => Object.create(Object.keys(refs).reduce((result, key) => {
   result[key] = element.getChildByAccessPath(refs[key])
   return result
@@ -27,6 +37,18 @@ const getComponentGenerator = Symbol('getComponentGenerator')
 const componentsPool = Symbol('componentsPool')
 const renderProps = Symbol('renderProps')
 const renderOnPropsChange = Symbol('renderOnPropsChange')
+const renderSourceElement = Symbol('renderSourceElement')
+
+let instances
+let saveInstance
+if (process.env.NODE_ENV === 'development') {
+  instances = {}
+  saveInstance = (document) => {
+    const { path } = document
+    instances[path] = instances[path] || []
+    instances[path].push(document)
+  }
+}
 
 class Document {
   constructor(path, options) {
@@ -36,7 +58,7 @@ class Document {
     this.path = path
     this.parent = options.parent || null
     this.element = options.element
-    this.components = options.components || {}
+    this.components = options.components ? parseComponents(options.components) : {}
 
     this.refs = options.refs ? parseRefs(options.refs, this.element) : {}
     this.props = options.props || {}
@@ -64,11 +86,16 @@ class Document {
     this[componentsPool] = {}
     this[renderProps] = null
     this[renderOnPropsChange] = null
+    this[renderSourceElement] = null
 
     this.uid = utils.uid()
     Object.seal(this)
 
     if (this.script) this.script.afterCreate()
+
+    if (process.env.NODE_ENV === 'development') {
+      saveInstance(this)
+    }
   }
 
   [getComponentGenerator](name) {
@@ -111,7 +138,7 @@ class Document {
   }
 
   render({
-    context = null, props, onPropsChange, sourceElement,
+    context = null, props = null, onPropsChange, sourceElement = null,
   } = {}) {
     eventLoop.lock()
     assert.notOk(this.rendered, 'Document is already rendered')
@@ -131,6 +158,8 @@ class Document {
       onPropsChange.connect(this.reloadProp, this)
     }
 
+    this[renderSourceElement] = sourceElement
+
     if (this.script) this.script.beforeRender()
     this.inputs.forEach(input => input.render())
     this.conditions.forEach(condition => condition.render())
@@ -149,10 +178,12 @@ class Document {
     assert.ok(this.rendered, 'Document is not rendered')
     eventLoop.lock()
     if (this.script) this.script.beforeRevert()
+    this[renderProps] = null
     if (this[renderOnPropsChange]) {
       this[renderOnPropsChange].disconnect(this.reloadProp, this)
       this[renderOnPropsChange] = null
     }
+    this[renderSourceElement] = null
     this.inputs.forEach(input => input.revert())
     this.conditions.forEach(condition => condition.revert())
     this.uses.forEach(use => use.revert())
@@ -162,6 +193,36 @@ class Document {
     this.rendered = false
     if (this.script) this.script.afterRevert()
     eventLoop.release()
+  }
+}
+
+if (process.env.NODE_ENV === 'development') {
+  Document.reload = (path, options) => {
+    const documents = instances[path]
+    if (documents) {
+      eventLoop.lock()
+      documents.forEach(document => document.reload(options))
+      eventLoop.release()
+    }
+  }
+
+  Document.prototype.reload = function (options) {
+    const { rendered, context } = this
+    const props = this[renderProps]
+    const onPropsChange = this[renderOnPropsChange]
+    const sourceElement = this[renderSourceElement]
+
+    if (rendered) this.revert()
+
+    const newComponents = options.components ? parseComponents(options.components) : {}
+    this.components = Object.assign(this.components, newComponents)
+    this[componentsPool] = {}
+
+    if (rendered) {
+      this.render({
+        context, props, onPropsChange, sourceElement,
+      })
+    }
   }
 }
 

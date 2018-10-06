@@ -52,7 +52,7 @@ module.exports = (element, parser) => {
   const queries = {}
 
   const getFileSync = (href) => {
-    const filePath = require.resolve(href)
+    const filePath = require.resolve(href, { paths: [parser.context] })
     return String(parser.fs.readFileSync(filePath, 'utf-8'))
   }
 
@@ -73,10 +73,10 @@ module.exports = (element, parser) => {
   if (docStyle) {
     docStyle.parent = null
     bare = !!docStyle.props.bare
-    addStyle('__default__', docStyle.stringifyChildren())
   }
 
   if (!bare) parser.defaultStyles.forEach((name) => { addStyle(name) })
+  if (docStyle) addStyle('__default__', docStyle.stringifyChildren())
   if (styles.length) applyStyleQueriesInElement(element, queries, parser)
 
   parser.addProp('style', () => getStyleFiles(styles))

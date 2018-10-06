@@ -31,5 +31,18 @@ module.exports = function (element, parser) {
     components += `"${name}": ${parser.parseComponentElement(child)}, `
   })
 
+  // add prop
   if (components.length) parser.addProp('components', () => `{${components}}`)
+
+  // reload for development
+  if (links.length > 0) {
+    const linkSources = links.map(link => link.src)
+    parser.addFooterCode(`if (process.env.NODE_ENV === 'development') {
+  if (module.hot) {
+    module.hot.accept(${JSON.stringify(linkSources)}, () => {
+      Document.reload('${parser.resourcePath}', { components: {${components}} })
+    })
+  }
+}`)
+  }
 }

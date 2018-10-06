@@ -30,7 +30,7 @@ exports.parseArgv = ([operation, target, ...rest]) => {
     process.exit(1)
   }
 
-  const foundArgs = {}
+  const foundArgs = { [operation]: true }
   rest.forEach((arg) => {
     if (!arg.startsWith('--')) {
       log.warning(`Argument \`${arg}\` must starts with --`)

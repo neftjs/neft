@@ -2,11 +2,15 @@ const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
+const Express = require('express')
+const webpackDevMiddleware = require('webpack-dev-middleware')
+const webpackHotMiddleware = require('webpack-hot-middleware')
 const util = require('@neft/core/src/util')
+const log = require('@neft/core/src/log')
 const { produceManifest } = require('./manifest')
 const { generateIcons } = require('./icon')
 const {
-  realpath, outputDir, packageFile, targets, targetEnvs,
+  realpath, outputDir, packageFile, targets, targetEnvs, devServerPort,
 } = require('../config')
 
 const targetBuilders = {
@@ -61,6 +65,25 @@ const compile = compiler => new Promise((resolve, reject) => {
   })
 })
 
+const watchAndCompile = (compiler, webpackConfig) => new Promise((resolve, reject) => {
+  const app = new Express()
+  app.use(webpackDevMiddleware(compiler, {
+    publicPath: webpackConfig.output.publicPath,
+  }))
+  app.use(webpackHotMiddleware(compiler))
+
+  let firstCall = true
+  compiler.hooks.done.tap('NeftWatchAndCompile', () => {
+    if (!firstCall) return
+    firstCall = false
+    app.listen(devServerPort, (error) => {
+      if (error) return reject(error)
+      log.info(`Start development server on port \`${devServerPort}\``)
+      return resolve()
+    })
+  })
+})
+
 const findExtensions = () => Object.keys(packageFile.dependencies)
   .filter(name => name.startsWith('@neft/'))
   .map(name => path.join(realpath, './node_modules', name))
@@ -72,24 +95,22 @@ exports.build = async (target, args) => {
   const production = !!args.production
   const extensions = findExtensions()
   const defaultWebpackConfig = {
-    entry: [
-      './src/index.js',
-      require.resolve('webpack-hot-middleware/client'),
-    ],
+    entry: ['./src/index.js'],
     output: {
       path: output,
       filename: 'bundle.js',
-      publicPath: '/',
+      publicPath: '',
     },
     devtool: 'inline-source-map',
     devServer: {
       contentBase: './dist',
     },
-    // devtool: false,
-    target: 'node',
+    // webpack doesn't put polyfills for node target;
+    // hot module replacement works only for web
+    target: production ? 'node' : 'web',
     mode: production ? 'production' : 'development',
     resolve: {
-      extensions: ['.js', '.xhtml', '.html', '.coffee', '.litcoffee'],
+      extensions: ['.js', '.xhtml', '.html', '.coffee', '.litcoffee', '.nml'],
     },
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
@@ -123,33 +144,17 @@ exports.build = async (target, args) => {
     },
   }
   const webpackConfig = util.mergeDeepAll(defaultWebpackConfig, targetBuilder.webpackConfig)
-  const compiler = webpack(webpackConfig)
 
-  const Express = require('express')
-  const webpackDevMiddleware = require('webpack-dev-middleware')
-  const app = new Express()
-  app.use(webpackDevMiddleware(compiler, {
-    // noInfo: true,
-    publicPath: webpackConfig.output.publicPath,
-  }))
-  app.use(require("webpack-hot-middleware")(compiler))
-  app.listen(3001, (err) => {
-    console.log('LISTEN', err)
+  if (production || !args.run) {
+    await compile(webpack(webpackConfig))
+  } else {
+    webpackConfig.entry.push(require.resolve('webpack-hot-middleware/client'))
+    await watchAndCompile(webpack(webpackConfig), webpackConfig)
+  }
+
+  const manifest = await produceManifest({ ...targetBuilder, target, output })
+  await generateIcons({ ...targetBuilder, target, manifest })
+  await targetBuilder.build({
+    manifest, output, filepath, production, extensions,
   })
-
-  // compiler.watch({
-  //   watch: true,
-  //   watchOptions: {
-  //     ignored: /node_modules/,
-  //   },
-  // }, (err, stats) => {
-  //   console.log(err, stats.toJson(webpackStatsToString))
-  // })
-
-  // await compile(compiler)
-  // const manifest = await produceManifest({ ...targetBuilder, target, output })
-  // await generateIcons({ ...targetBuilder, target, manifest })
-  // await targetBuilder.build({
-  //   manifest, output, filepath, production, extensions,
-  // })
 }

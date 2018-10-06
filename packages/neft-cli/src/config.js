@@ -67,3 +67,5 @@ exports.targetEnvs = {
     apple: true,
   },
 }
+
+exports.devServerPort = 3000

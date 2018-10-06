@@ -27,19 +27,25 @@ const propsToAdd = Symbol('propsToAdd')
 
 class ComponentParser {
   constructor({
-    fs, error, warning, resourcePath, defaultStyles,
+    fs, context, error, warning, resourcePath, defaultStyles,
   }) {
     this.fs = fs
+    this.context = context
     this.error = error
     this.warning = warning
     this.resourcePath = path.relative(realpath, resourcePath)
     this.defaultStyles = defaultStyles
+    this.footerCode = ''
     this[props] = {}
     this[propsToAdd] = {}
   }
 
   addProp(name, generator) {
     this[propsToAdd][name] = generator
+  }
+
+  addFooterCode(code) {
+    this.footerCode += `${code}\n`
   }
 
   propsToCode() {
@@ -52,14 +58,19 @@ class ComponentParser {
   }
 
   parseComponentElement(element, options) {
-    return new ComponentParser({ ...this, ...options }).toCode(element)
+    const componentCode = new ComponentParser({ ...this, ...options }).toCode(element)
+    if (componentCode.footerCode) this.addFooterCode(componentCode.footerCode)
+    return componentCode.exports
   }
 
   toCode(element) {
     PARSERS.forEach(parser => parser(element, this))
     this.addProp('element', () => `Element.fromJSON(${JSON.stringify(element)})`)
     Object.keys(this[propsToAdd]).forEach((key) => { this[props][key] = this[propsToAdd][key]() })
-    return `(options) => new Document('${this.resourcePath}', Object.assign(${this.propsToCode()}, options))`
+    return {
+      exports: `(options) => new Document('${this.resourcePath}', Object.assign(${this.propsToCode()}, options))`,
+      footerCode: this.footerCode,
+    }
   }
 }
 
@@ -72,13 +83,15 @@ const parseComponent = (parser, code) => {
   const documentCode = parser.toCode(parseXHTML(code))
   return `const Document = require('@neft/core/src/document')
 const Element = require('@neft/core/src/document/element')
-module.exports = ${documentCode}`
+module.exports = ${documentCode.exports}
+${documentCode.footerCode}`
 }
 
 module.exports = function (code) {
   const defaultStyles = (this.query && this.query.defaultStyles) || []
   const parser = new ComponentParser({
     fs: this.fs,
+    context: this.context,
     error: this.emitError,
     warning: this.emitWarning,
     resourcePath: this.resourcePath,

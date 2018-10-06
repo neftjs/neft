@@ -17,7 +17,10 @@
   },
   "jest": {
     "setupTestFrameworkScriptFile": "./jest-setup.js",
-    "testPathIgnorePatterns": ["/node_modules/", "utils.js"],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "utils.js"
+    ],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|coffee)$",
     "moduleFileExtensions": [
       "js",
