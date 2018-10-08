@@ -1,5 +1,7 @@
 /* Global object */
 this.global = this
+this.window = this
+this.self = this
 
 /* Console */
 const console = (function () {
@@ -44,7 +46,7 @@ const console = (function () {
   })
 })();
 
-/* Timers */
+/* Timeout Timer */
 var setTimeout
 var clearTimeout
 (function () {
@@ -109,6 +111,34 @@ var clearTimeout
 
   clearTimeout = function (id) {
     delete shots[id]
+  }
+})();
+
+/* Interval Timer */
+var setInterval
+var clearInterval
+(function () {
+  let lastId = 0
+  const timers = Object.create(null)
+
+  setInterval = function (func) {
+    const intervalArguments = Array.prototype.slice.call(arguments)
+    const id = lastId
+    lastId += 1
+
+    intervalArguments[0] = function(callArgs) {
+      timers[id] = setTimeout.apply(this, intervalArguments)
+      func.apply(this, callArgs)
+    }
+
+    timers[id] = setTimeout.apply(this, intervalArguments)
+
+    return id
+  }
+
+  clearInterval = function (id) {
+    clearTimeout(timers[id])
+    delete timers[id]
   }
 })();
 

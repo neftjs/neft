@@ -1,8 +1,7 @@
 exports['./src/index.js'] = `import Neft from '@neft/core'
-import App from './components/App'
 
 const render = () => {
-  Neft.render(App, { context: null })
+  Neft.render(require('./components/App').default, { context: null })
 }
 
 if (module.hot) {

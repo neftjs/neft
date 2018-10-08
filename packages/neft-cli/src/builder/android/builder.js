@@ -1,6 +1,7 @@
 const fs = require('fs-extra')
 const cp = require('child_process')
 const path = require('path')
+const yaml = require('js-yaml')
 const Mustache = require('mustache')
 const util = require('@neft/core/src/util')
 const log = require('@neft/core/src/log')
@@ -26,14 +27,16 @@ const mainActivity = 'app/src/main/java/__MainActivity__.java'
 const mainActivityDirOut = 'app/src/main/java/'
 
 const getAndroidExtensions = async (extensions) => {
-  const promises = extensions.map(async (extension) => {
-    const dirpath = path.join(extension, 'native/android')
-    if (!(await fs.exists(dirpath))) return null
-    let name = /@neft\/([^/]+)/.exec(extension)[1]
+  const promises = extensions.map(async (dirpath) => {
+    const nativeDirpath = path.join(dirpath, 'native/android')
+    if (!(await fs.exists(nativeDirpath))) return null
+    let name = /@neft\/([^/]+)/.exec(dirpath)[1]
     name = util.kebabToCamel(name)
     name = util.capitalize(name)
     const packageName = `${name.toLowerCase()}_extension`
-    return { dirpath, name, packageName }
+    return {
+      dirpath, nativeDirpath, name, packageName,
+    }
   })
   return (await Promise.all(promises))
     .filter(result => result != null)
@@ -70,8 +73,48 @@ const copyStaticFiles = async (output) => {
 }
 
 const copyExtensions = async (output, extensions) => {
-  await Promise.all(extensions.map(async ({ dirpath, packageName }) => {
-    await fs.copy(dirpath, path.join(extensionsDirOut, packageName))
+  await Promise.all(extensions.map(async ({ nativeDirpath, packageName }) => {
+    await fs.copy(nativeDirpath, path.join(output, extensionsDirOut, packageName))
+  }))
+}
+
+const assignManifest = (target, source) => {
+  // project.dependencies
+  if (source.project && Array.isArray(source.project.dependencies)) {
+    target.project = target.project || {}
+    target.project.dependencies = target.project.dependencies || []
+    target.project.dependencies.push(...source.project.dependencies)
+  }
+
+  // app.dependencies
+  if (source.app && Array.isArray(source.app.dependencies)) {
+    target.app = target.app || {}
+    target.app.dependencies = target.app.dependencies || []
+    target.app.dependencies.push(...source.app.dependencies)
+  }
+
+  // app.plugins
+  if (source.app && Array.isArray(source.app.plugins)) {
+    target.app = target.app || {}
+    target.app.plugins = target.app.plugins || []
+    target.app.plugins.push(...source.app.plugins)
+  }
+
+  // applicationXmlManifest
+  if (source.applicationXmlManifest) {
+    target.applicationXmlManifest = target.applicationXmlManifest || ''
+    target.applicationXmlManifest += source.applicationXmlManifest
+  }
+}
+
+const assignExtenionManifests = async (manifest, extensions) => {
+  await Promise.all(extensions.map(async ({ dirpath }) => {
+    const manifestPath = path.join(dirpath, 'manifest/android.yaml')
+    try {
+      assignManifest(manifest, yaml.safeLoad(await fs.readFile(manifestPath, 'utf-8')))
+    } catch (error) {
+      // NOP
+    }
   }))
 }
 
@@ -124,10 +167,10 @@ exports.build = async ({
   await fs.emptyDir(output)
   const { mustacheFiles } = await copyRuntime(output)
 
-  // add static
   await Promise.all([
     copyNativeDir(output), copyIcons(output), copyManifestApp(output),
     copyStaticFiles(output), copyExtensions(output, androidExtensions),
+    assignExtenionManifests(manifest, androidExtensions),
   ])
 
   await processMustacheFiles(mustacheFiles, {

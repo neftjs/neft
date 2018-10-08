@@ -168,33 +168,8 @@ public class App {
     }
 
     private void loadCode() {
-        if (AppConfig.CODE_WATCH_CHANGES_URL == null) {
-            String code = getAssetFile(ASSET_FILE_PATH);
-            Native.Bridge.init(code);
-        } else {
-            loadRemoteCode();
-        }
-    }
-
-    private void loadRemoteCode() {
-        final String[] codeArray = {null};
-        Thread reqThread = getUrlDataAsync(AppConfig.CODE_WATCH_CHANGES_URL + "/bundle/android", new UrlResponse() {
-            @Override
-            public void run(String response) {
-                codeArray[0] = response;
-            }
-        });
-        try {
-            reqThread.join();
-        } catch (InterruptedException error) {
-            error.printStackTrace();
-        }
-        String code = codeArray[0];
-        if (code == null) {
-            code = getAssetFile(ASSET_FILE_PATH);
-        }
+        String code = getAssetFile(ASSET_FILE_PATH);
         Native.Bridge.init(code);
-        watchOnBundleChange(AppConfig.CODE_WATCH_CHANGES_URL + "/onNewBundle/android");
     }
 
     private String getAssetFile(String path) {
@@ -205,56 +180,5 @@ public class App {
             Log.d(TAG, error.toString());
         }
         return "";
-    }
-
-    private Thread getUrlDataAsync(final String path, final UrlResponse onResponse) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String resp = null;
-                try {
-                    URL url = new URL(path);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setUseCaches(false);
-                    conn.setConnectTimeout(1000);
-                    resp = Http.getStringFromInputStream(conn.getInputStream());
-                } catch (IOException err) {
-                    Log.w(TAG, "Watch mode does not work; cannot connect to " + path);
-                }
-                onResponse.run(resp);
-            }
-        });
-
-        thread.start();
-
-        return thread;
-    }
-
-    private void watchOnBundleChange(final String path) {
-        getUrlDataAsync(path, new UrlResponse() {
-            @Override
-            public void run(final String response) {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (response == null) {
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    watchOnBundleChange(path);
-                                }
-                            }, 30000);
-                            return;
-                        }
-                        if (response.isEmpty()) {
-                            AppConfig.restart();
-                            return;
-                        }
-                        client.pushEvent("__neftHotReload", response);
-                        watchOnBundleChange(path);
-                    }
-                });
-            }
-        });
     }
 }

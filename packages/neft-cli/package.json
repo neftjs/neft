@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.1.2",
+    "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@neft/core": "0.0.1",
     "@neft/runtime-android": "0.0.1",

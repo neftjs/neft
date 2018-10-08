@@ -1,5 +1,7 @@
 const fs = require('fs')
 const path = require('path')
+const cp = require('child_process')
+const log = require('@neft/core/src/log')
 
 exports.realpath = fs.realpathSync('.')
 
@@ -69,3 +71,24 @@ exports.targetEnvs = {
 }
 
 exports.devServerPort = 3000
+
+exports.localIp = (() => {
+  let result
+  const command = 'ifconfig | '
+    + "grep -Eo 'inet (addr:)?([0-9]*\\.){3}[0-9]*' | "
+    + "grep -Eo '([0-9]*\\.){3}[0-9]*' | "
+    + "grep -v '127.0.0.1'"
+
+  try {
+    result = cp.execSync(command, { stdio: 'pipe' })
+  } catch (error) {
+    try {
+      result = cp.execSync('ipconfig getifaddr en0', { stdio: 'pipe' })
+    } catch (error2) {
+      log.warn('Cannot resolve local IP address; is ifconfig or ipconfig commands available?')
+      return 'localhost'
+    }
+  }
+
+  return String(result).split('\n')[0].trim()
+})()

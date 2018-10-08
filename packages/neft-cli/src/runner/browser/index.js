@@ -1,9 +1,9 @@
 const { createServer } = require('http-server')
 const opn = require('opn')
 const log = require('@neft/core/src/log')
-const { devServerPort } = require('../../config')
+const { localIp, devServerPort } = require('../../config')
 
-const host = 'localhost'
+const host = localIp
 
 module.exports = ({ production }) => {
   if (production) {

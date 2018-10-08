@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
+const querystring = require('querystring')
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 const Express = require('express')
 const webpackDevMiddleware = require('webpack-dev-middleware')
@@ -10,7 +11,7 @@ const log = require('@neft/core/src/log')
 const { produceManifest } = require('./manifest')
 const { generateIcons } = require('./icon')
 const {
-  realpath, outputDir, packageFile, targets, targetEnvs, devServerPort,
+  realpath, outputDir, packageFile, targets, targetEnvs, devServerPort, localIp,
 } = require('../config')
 
 const targetBuilders = {
@@ -68,7 +69,13 @@ const compile = compiler => new Promise((resolve, reject) => {
 const watchAndCompile = (compiler, webpackConfig) => new Promise((resolve, reject) => {
   const app = new Express()
   app.use(webpackDevMiddleware(compiler, {
+    noInfo: true,
+    writeToDisk: true,
     publicPath: webpackConfig.output.publicPath,
+    headers: {
+      'Access-Control-Allow-Credentials': true,
+      'Access-Control-Allow-Origin': webpackConfig.output.publicPath,
+    },
   }))
   app.use(webpackHotMiddleware(compiler))
 
@@ -94,20 +101,21 @@ exports.build = async (target, args) => {
   const filepath = path.join(output, 'bundle.js')
   const production = !!args.production
   const extensions = findExtensions()
+  let webpackTarget = 'webworker' // for HMR
+  if (targetEnvs[target].browser) webpackTarget = 'web' // for HMR
+  if (production) webpackTarget = 'node' // webpack doesn't put polyfills for node target
   const defaultWebpackConfig = {
-    entry: ['./src/index.js'],
+    entry: [require.resolve('@babel/polyfill'), './src/index.js'],
     output: {
       path: output,
       filename: 'bundle.js',
-      publicPath: '',
+      publicPath: `http://${localIp}:${devServerPort}/`,
     },
     devtool: 'inline-source-map',
     devServer: {
       contentBase: './dist',
     },
-    // webpack doesn't put polyfills for node target;
-    // hot module replacement works only for web
-    target: production ? 'node' : 'web',
+    target: webpackTarget,
     mode: production ? 'production' : 'development',
     resolve: {
       extensions: ['.js', '.xhtml', '.html', '.coffee', '.litcoffee', '.nml'],
@@ -148,7 +156,12 @@ exports.build = async (target, args) => {
   if (production || !args.run) {
     await compile(webpack(webpackConfig))
   } else {
-    webpackConfig.entry.push(require.resolve('webpack-hot-middleware/client'))
+    const hmrQuery = querystring.stringify({ localIp, devServerPort })
+    if (targetEnvs[target].browser) {
+      webpackConfig.entry.push(require.resolve('webpack-hot-middleware/client'))
+    } else {
+      webpackConfig.entry.push(`${require.resolve('./webpack-hot-middleware-native-client')}?${hmrQuery}`)
+    }
     await watchAndCompile(webpack(webpackConfig), webpackConfig)
   }
 

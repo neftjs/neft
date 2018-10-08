@@ -4,6 +4,7 @@ const NATIVE_PREFIX = 'NeftRequest'
 const REQUEST = `${NATIVE_PREFIX}/request`
 const ON_RESPONSE = `${NATIVE_PREFIX}/response`
 const METHODS = ['get', 'post', 'put', 'patch', 'delete', 'head', 'options']
+const DEFAULT_TIMEOUT = 1000 * 30 // 30 seconds
 
 const callbacks = Object.create(null)
 
@@ -27,7 +28,7 @@ const request = (optionsOrUri, optionsOrNull, defaultMethod) => new Promise((res
   let headers = util.isObject(options.headers) ? options.headers : {}
   let body = String(options.body == null ? '' : options.body)
   const json = Boolean(options.json || false)
-  const timeout = Math.max(0, parseInt(options.timeout || 0, 10))
+  const timeout = Math.max(0, parseInt(options.timeout || DEFAULT_TIMEOUT, 10))
 
   if (json) {
     body = JSON.stringify(body)
@@ -35,7 +36,7 @@ const request = (optionsOrUri, optionsOrNull, defaultMethod) => new Promise((res
   }
   headers = JSON.stringify(headers)
 
-  callbacks[uid] = (error, { statusCode, resBody, resHaders }) => {
+  callbacks[uid] = (error, { statusCode, body: resBody, headers: resHeaders }) => {
     if (error) {
       reject(new Error(error))
       return
@@ -43,7 +44,7 @@ const request = (optionsOrUri, optionsOrNull, defaultMethod) => new Promise((res
     resolve({
       statusCode,
       body: json && resBody ? JSON.parse(resBody) : resBody,
-      headers: JSON.parse(resHaders),
+      headers: JSON.parse(resHeaders),
     })
   }
 
