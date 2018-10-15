@@ -1,7 +1,7 @@
 'use strict'
 
-{utils, signal} = Neft
-{Impl} = Neft.Renderer
+{util, signal} = require('@neft/core')
+{Impl} = require('@neft/core/src/renderer')
 {Item} = Impl.Types
 
 WHEEL_DIVISOR = 3
@@ -265,7 +265,7 @@ exports.create = (data) ->
     return
 
 exports.createData = ->
-    utils.merge
+    util.merge
         contentItem: null
         globalScale: 1
     , Item.DATA

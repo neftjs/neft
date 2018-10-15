@@ -31,20 +31,8 @@ class ImportsFinder
                     ref: "Renderer.#{key}"
         result
 
-    validateNoMissedImports: (importedList) ->
-        imported = utils.arrayToObject importedList,
-            (index, elem) -> elem.name.split('.')[0],
-            -> true
-        for type in @usedTypes
-            typeNs = type.split('.')[0]
-            unless imported[typeNs]
-                throw new Error "Not imported type '#{typeNs}'"
-        return
-
     findAll: ->
-        result = @getDefaultImports()
-        @validateNoMissedImports result
-        result
+        @getDefaultImports()
 
 exports.getImports = ({objects}) ->
     new ImportsFinder(objects).findAll()

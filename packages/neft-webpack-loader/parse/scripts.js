@@ -4,7 +4,10 @@ module.exports = function (element, parser) {
 
   script.parent = null
 
-  parser.addProp('script', () => `(() => {\n${script.stringifyChildren()}\n})()`)
+  parser.addProp('script', () => {
+    const code = script.stringifyChildren()
+    return `((module) => {\n(() => {${code}})()\n return module.exports})({})`
+  })
 
   const nextScript = element.query('script')
   if (nextScript) {

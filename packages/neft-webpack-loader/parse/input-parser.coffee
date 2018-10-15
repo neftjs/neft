@@ -21,10 +21,10 @@ shouldBeUpdatedOnCreate = (connection) ->
 
 module.exports = (text, scopeProps) ->
     text = text.replace(/[\t\n]/gm, '')
-    func = ""
 
     str = ''
-    func = ''
+    hash = ''
+    connections = []
     isString = isBlock = false
     blocks = 0
     innerBlocks = 0
@@ -36,7 +36,7 @@ module.exports = (text, scopeProps) ->
             isBlock = true
             blocks += 1
             if str isnt '' or blocks > 1
-                func += '"'+str+'" + '
+                hash += '"'+str+'" + '
             str = ''
             i++
         else if charStr is '{'
@@ -47,7 +47,9 @@ module.exports = (text, scopeProps) ->
                 innerBlocks -= 1
                 str += charStr
             else if isBlock
-                func += "(#{str}) + "
+                parsed = bindingParser.parse str, isPublicId, PARSER_FLAGS, PARSER_OPTS
+                hash += "(#{parsed.hash}) + "
+                connections.push eval(parsed.connections)
                 str = ''
             else
                 log.error "Interpolated string parse error: '#{text}'"
@@ -57,22 +59,16 @@ module.exports = (text, scopeProps) ->
         i++
 
     if str is ''
-        func = func.slice 0, -3
+        hash = hash.slice 0, -3
     else
-        func += '"'+str+'"'
+        hash += '"'+str+'"'
 
-    parsed = bindingParser.parse func, isPublicId, PARSER_FLAGS, PARSER_OPTS
-
-    funcBody = "return #{parsed.hash}"
+    funcBody = "return #{hash}"
 
     try
         new Function funcBody
     catch err
         log.error "Can't parse string literal:\n#{text}\n#{err.message}"
 
-    connections = eval "[#{parsed.connections}]"
-
-    func: null
-    tree: null
     body: funcBody
     connections: connections

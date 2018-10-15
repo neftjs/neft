@@ -189,7 +189,7 @@ it 'prefixes Renderer types in bindings', ->
     expected = '''
         const _i0 = NumberAnimation.New()
         _RendererObject.setOpts(_i0, {"updateProperty": [function(){\
-        return Neft.Renderer.PropertyAnimation.ALWAYS}, []]})
+        return Renderer.PropertyAnimation.ALWAYS}, []]})
         return { objects: {"_i0": _i0}, item: _i0 }
     '''
     assert.is getObjectCode(code), expected

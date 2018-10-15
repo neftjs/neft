@@ -4,6 +4,15 @@
 {createView, renderParse} = require './utils'
 
 describe 'Document string interpolation', ->
+    it 'works in a text', ->
+        view = createView '''
+            Hello ${context.name}!
+        '''
+
+        renderParse view,
+            context: name: 'Max'
+        assert.is view.element.stringify(), 'Hello Max!'
+
     describe '`props`', ->
         it 'lookup use', ->
             view = createView '''
@@ -89,7 +98,7 @@ describe 'Document string interpolation', ->
             view = createView '''
                 <n-component name="Test">
                     <script>
-                    return {
+                    module.exports = {
                         name: '',
                         onRender() {
                             this.name = 'a'
@@ -186,7 +195,7 @@ describe 'Document string interpolation', ->
         it 'is accessed in rendered file', ->
             view = createView '''
                 <script>
-                return {
+                module.exports = {
                     a: 0,
                     onRender() {
                         this.a = 1
@@ -202,7 +211,7 @@ describe 'Document string interpolation', ->
         it 'is accessible by exported', ->
             view = createView '''
                 <script>
-                return {
+                module.exports = {
                     a: 0,
                     onRender() {
                         this.a = 1
@@ -218,7 +227,7 @@ describe 'Document string interpolation', ->
         it 'is cleared on revert', ->
             view = createView '''
                 <script>
-                return {
+                module.exports = {
                     a: 0,
                     onRender() {
                         this.a = this.a + 1
@@ -238,7 +247,7 @@ describe 'Document string interpolation', ->
         it 'binding is not updated on reverted component', ->
             view = createView '''
                 <script>
-                return {
+                module.exports = {
                     obj: null,
                     onRender() {
                         this.obj = { a: 1 }

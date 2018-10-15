@@ -40,7 +40,7 @@
             defaultValue: 0
             namespace: 'spacing'
             parentConstructor: ctor
-            implementation: Impl["set#{ctor.__name__}ColumnSpacing"]
+            implementation: Impl["set#{ctor.name}ColumnSpacing"]
             developmentSetter: (val) ->
                 assert.isFloat val
 
@@ -54,7 +54,7 @@
             defaultValue: 0
             namespace: 'spacing'
             parentConstructor: ctor
-            implementation: Impl["set#{ctor.__name__}RowSpacing"]
+            implementation: Impl["set#{ctor.name}RowSpacing"]
             developmentSetter: (val) ->
                 assert.isFloat val
 

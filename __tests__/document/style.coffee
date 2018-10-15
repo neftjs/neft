@@ -148,7 +148,7 @@ describe "attributes", ->
     it 'set event handlers', ->
         view = createViewAndRender '''
         <b onXChange="${calls += 1}" />
-        <script>return { calls: 0 }</script>
+        <script>module.exports = { calls: 0 }</script>
         <style bare>@Item b {}</style>
         '''
 
@@ -168,7 +168,7 @@ describe "attributes", ->
     it "is not updated when file is reverting", ->
         view = createViewAndRender '''
         <b x="${x}" />
-        <script>return { x: 2 }</script>
+        <script>module.exports = { x: 2 }</script>
         <style bare>@Item b {}</style>
         '''
 

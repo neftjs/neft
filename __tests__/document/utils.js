@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 const loader = require('@neft/webpack-loader')
 
 const requireNmlFile = (filepath) => {
@@ -35,6 +36,7 @@ exports.createView = (html) => {
     query: {
       defaultStyles: ['@neft/default-styles'],
     },
+    context: path.join(__dirname, '../'),
   }, html)
   new Function('module', 'require', viewFuncBody)(module, localRequire)
   return module.exports()

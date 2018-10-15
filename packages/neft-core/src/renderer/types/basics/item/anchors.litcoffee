@@ -97,7 +97,7 @@ Item {
 
             Object.preventExtensions @
 
-        implMethod = Impl["set#{ctor.__name__}Anchor"]
+        implMethod = Impl["set#{ctor.name}Anchor"]
         stringValuesCache = Object.create null
         createAnchorProp = (type, opts=0, getter) ->
             setter = (_super) -> (val=null) ->

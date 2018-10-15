@@ -43,7 +43,7 @@
 
             Object.preventExtensions @
 
-        setFontFamilyImpl = Impl["set#{ctor.__name__}FontFamily"]
+        setFontFamilyImpl = Impl["set#{ctor.name}FontFamily"]
         reloadFontFamily = (font) ->
             name = Renderer.FontLoader.getInternalFontName font._family, font._weight, font._italic
             name ||= 'sans-serif'
@@ -78,7 +78,7 @@
             defaultValue: 14
             namespace: 'font'
             parentConstructor: ctor
-            implementation: Impl["set#{ctor.__name__}FontPixelSize"]
+            implementation: Impl["set#{ctor.name}FontPixelSize"]
             developmentSetter: (val) ->
                 assert.isFloat val, "Font.pixelSize needs to be a float, but #{val} given"
 
@@ -112,7 +112,7 @@ In range from 0 to 1.
             defaultValue: 0
             namespace: 'font'
             parentConstructor: ctor
-            implementation: Impl["set#{ctor.__name__}FontWordSpacing"]
+            implementation: Impl["set#{ctor.name}FontWordSpacing"]
             developmentSetter: (val) ->
                 assert.isFloat val, "Font.wordSpacing needs to be a float, but #{val} given"
 
@@ -126,7 +126,7 @@ In range from 0 to 1.
             defaultValue: 0
             namespace: 'font'
             parentConstructor: ctor
-            implementation: Impl["set#{ctor.__name__}FontLetterSpacing"]
+            implementation: Impl["set#{ctor.name}FontLetterSpacing"]
             developmentSetter: (val) ->
                 assert.isFloat val, "Font.letterSpacing needs to be a float, but #{val} given"
 

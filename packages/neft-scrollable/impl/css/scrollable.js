@@ -1,7 +1,7 @@
 // when=NEFT_HTML
 
-const { utils, signal } = Neft
-const { Impl } = Neft.Renderer
+const { util, signal } = require('@neft/core')
+const { Impl } = require('@neft/core/src/renderer')
 const { Item } = Impl.Types
 
 exports.create = function (data) {
@@ -67,7 +67,7 @@ exports.create = function (data) {
 }
 
 exports.createData = function () {
-  return utils.merge({
+  return util.merge({
     contentItem: null,
     scrollElem: null,
     yScrollbar: false,

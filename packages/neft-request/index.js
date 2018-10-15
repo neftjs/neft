@@ -1,4 +1,5 @@
 const { util, callNativeFunction, onNativeEvent } = require('@neft/core')
+const xhr = process.env.NEFT_BROWSER ? require('./xhr') : null
 
 const NATIVE_PREFIX = 'NeftRequest'
 const REQUEST = `${NATIVE_PREFIX}/request`
@@ -8,13 +9,35 @@ const DEFAULT_TIMEOUT = 1000 * 30 // 30 seconds
 
 const callbacks = Object.create(null)
 
-onNativeEvent(ON_RESPONSE, (uid, error, statusCode, body, headers) => {
-  const callback = callbacks[uid]
-  if (callback) {
-    delete callbacks[uid]
-    callback(error, { statusCode, body, headers })
+if (process.env.NEFT_NATIVE) {
+  onNativeEvent(ON_RESPONSE, (uid, error, statusCode, body, headers) => {
+    const callback = callbacks[uid]
+    if (callback) {
+      delete callbacks[uid]
+      callback(error, { statusCode, body, headers: JSON.parse(headers) })
+    }
+  })
+}
+
+const createCallback = ({ json, resolve, reject }) => (error, { statusCode, body, headers }) => {
+  if (error) {
+    reject(new Error(error))
+    return
   }
-})
+  let finalBody = body
+  if (json) {
+    try {
+      finalBody = JSON.parse(body)
+    } catch (parseError) {
+      // NOP
+    }
+  }
+  resolve({
+    statusCode,
+    body: finalBody,
+    headers,
+  })
+}
 
 const request = (optionsOrUri, optionsOrNull, defaultMethod) => new Promise((resolve, reject) => {
   let options = optionsOrUri
@@ -34,21 +57,18 @@ const request = (optionsOrUri, optionsOrNull, defaultMethod) => new Promise((res
     body = JSON.stringify(body)
     headers['Content-type'] = 'application/json'
   }
-  headers = JSON.stringify(headers)
 
-  callbacks[uid] = (error, { statusCode, body: resBody, headers: resHeaders }) => {
-    if (error) {
-      reject(new Error(error))
-      return
-    }
-    resolve({
-      statusCode,
-      body: json && resBody ? JSON.parse(resBody) : resBody,
-      headers: JSON.parse(resHeaders),
+  const callback = createCallback({ json, resolve, reject })
+
+  if (process.env.NEFT_NATIVE) {
+    callbacks[uid] = callback
+    headers = JSON.stringify(headers)
+    callNativeFunction(REQUEST, uid, uri, method, headers, body, timeout)
+  } else {
+    xhr.send({
+      method, uri, headers, body, callback,
     })
   }
-
-  callNativeFunction(REQUEST, uid, uri, method, headers, body, timeout)
 })
 
 module.exports = optionsOrUri => request(optionsOrUri, null, 'get')

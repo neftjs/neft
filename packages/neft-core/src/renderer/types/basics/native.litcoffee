@@ -103,13 +103,10 @@ where `XYZ` is the given name.
                         val
 
             @defineProperty = (config) ->
-                itemName = @__name__
+                itemName = @name
                 properties = @_properties ||= []
                 config = utils.clone config
 
-                assert.isString itemName, '''
-                    NativeItem.__name__ unique name must be specified
-                '''
                 assert.isObject config, '''
                     NativeItem.defineProperty config parameter must be an object
                 '''
@@ -200,7 +197,7 @@ where `XYZ` is the given name.
             set: (name, val) ->
                 assert.isString name, "NativeItem.set name must be a string, but #{name} given"
 
-                ctorName = utils.capitalize @constructor.__name__
+                ctorName = utils.capitalize @constructor.name
                 id = @_impl.id
                 name = utils.capitalize name
 
@@ -217,7 +214,7 @@ where `XYZ` is the given name.
             call: (name, args...) ->
                 assert.isString name, "NativeItem.call name must be a string, but #{name} given"
 
-                ctorName = utils.capitalize @constructor.__name__
+                ctorName = utils.capitalize @constructor.name
                 id = @_impl.id
                 name = utils.capitalize name
 
@@ -262,7 +259,7 @@ where `XYZ` is the given name.
                 name = utils.capitalize name
 
                 if IS_NATIVE
-                    ctorName = utils.capitalize @constructor.__name__
+                    ctorName = utils.capitalize @constructor.name
                     eventName = "rendererOn#{ctorName}#{name}"
 
                     unless listeners = eventListeners[eventName]

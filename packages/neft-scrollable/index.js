@@ -1,8 +1,8 @@
-const {
-  Renderer, assert, utils, signal, log,
-} = Neft
+const log = require('@neft/core/src/log')
+const assert = require('@neft/core/src/assert')
+const Renderer = require('@neft/core/src/renderer')
+
 const { setPropertyValue } = Renderer.itemUtils
-const { emitSignal } = signal.Emitter
 const { Impl } = Renderer
 
 const PREVENT_CLICK_MIN_PX = 10

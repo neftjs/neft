@@ -25,7 +25,7 @@ describe 'Document script', ->
         view = createView '''
             <n-props a />
             <script>
-            return {
+            module.exports = {
                 b: null,
                 onBeforeRender() {
                     this.b = this.a
@@ -42,7 +42,7 @@ describe 'Document script', ->
     it 'is called with refs in exported', ->
         view = createView '''
             <script>
-            return {
+            module.exports = {
                 a: null,
                 onCreate() {
                     this.a = this.refs.x.props.a
@@ -58,7 +58,7 @@ describe 'Document script', ->
     it 'is called with file node in exported', ->
         view = createView '''
             <script>
-            return {
+            module.exports = {
                 aNode: null,
                 onCreate() {
                     this.aNode = this.node
@@ -73,7 +73,7 @@ describe 'Document script', ->
     it 'predefined exported properties are not enumerable', ->
         view = createView '''
             <script>
-            return {
+            module.exports = {
                 keys: null,
                 onCreate() {
                     var keys = [];
@@ -92,12 +92,12 @@ describe 'Document script', ->
     it 'further tags are ignored', ->
         view = createView '''
             <script>
-            return {
+            module.exports = {
                 aa: 1,
             }
             </script>
             <script>
-            return {
+            module.exports = {
                 bb: 1,
             }
             </script>
@@ -110,7 +110,7 @@ describe 'Document script', ->
     it 'can contains XML text', ->
         view = createView """
             <script>
-            return {
+            module.exports = {
                 a: null,
                 onCreate() {
                     this.a = '<&&</b>'
@@ -126,7 +126,7 @@ describe 'Document script', ->
     it 'properly calls events', ->
         view = createView """
             <script>
-            return {
+            module.exports = {
                 events: [],
                 onBeforeRender() {
                     this.events.push('onBeforeRender');
@@ -158,7 +158,7 @@ describe 'Document script', ->
     it 'onBeforeRender is called with context in exported', ->
         view = createView '''
             <script>
-            return {
+            module.exports = {
                 a: null,
                 onBeforeRender() {
                     this.a = this.context.a
@@ -173,7 +173,7 @@ describe 'Document script', ->
     it 'does not call events for foreign exported', ->
         view = createView """
             <script>
-            return {
+            module.exports = {
                 events: [],
                 onBeforeRender() {
                     this.events.push('onBeforeRender');

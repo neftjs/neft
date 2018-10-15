@@ -16,7 +16,7 @@ module.exports = (Renderer, Impl) ->
     NOP = ->
 
     getObjAsString = (item) ->
-        ctorName = item.constructor.__name__
+        ctorName = item.constructor.name
         attrs = []
         if item.id
             attrs.push "id=#{item.id}"
@@ -123,7 +123,7 @@ module.exports = (Renderer, Impl) ->
             object
 
         @initialize = (object, opts) ->
-            Impl.initializeObject object, object.constructor.__name__
+            Impl.initializeObject object, object.constructor.name
             if opts
                 UtilsObject.setOpts object, opts
             return
@@ -142,7 +142,7 @@ module.exports = (Renderer, Impl) ->
                 @_classQueue = []
                 @_extensions = []
 
-            Impl.createObject @, @constructor.__name__
+            Impl.createObject @, @constructor.name
 
         createBinding: (prop, val, ctx = @) ->
             assert.isString prop

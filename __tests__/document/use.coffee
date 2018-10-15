@@ -48,7 +48,7 @@ describe 'Document n-use', ->
     it 'does not render hidden component', ->
         view = createView '''
             <script>
-            return {
+            module.exports = {
                 logs: null,
                 onBeforeRender() {
                     this.logs = []
@@ -57,7 +57,7 @@ describe 'Document n-use', ->
             </script>
             <n-component name="Abc">
                 <script>
-                return {
+                module.exports = {
                     onRender() {
                         this.logs.push(this.name);
                     },
@@ -74,7 +74,7 @@ describe 'Document n-use', ->
     it 'does not render component inside hidden element', ->
         view = createView '''
             <script>
-            return {
+            module.exports = {
                 logs: null,
                 onBeforeRender() {
                     this.logs = []
@@ -83,7 +83,7 @@ describe 'Document n-use', ->
             </script>
             <n-component name="Abc">
                 <script>
-                return {
+                module.exports = {
                     onRender() {
                         this.logs.push(this.name);
                     },
@@ -103,7 +103,7 @@ describe 'Document n-use', ->
         view = createView '''
             <n-component name="Abc">
                 <script>
-                return {
+                module.exports = {
                     reverted: 0,
                     onRevert() {
                         this.reverted = (this.reverted + 1) || 1
@@ -112,7 +112,7 @@ describe 'Document n-use', ->
                 </script>
             </n-component>
             <script>
-            return {
+            module.exports = {
                 visible: false,
                 onBeforeRender() {
                     this.visible = true

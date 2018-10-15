@@ -107,7 +107,7 @@ describe 'Document n-for', ->
         view = createView """
             <n-component name="a">
                 <script>
-                return {
+                module.exports = {
                     self1: null,
                     onCreate() {
                         this.self1 = this
@@ -128,7 +128,7 @@ describe 'Document n-for', ->
     it 'access parent component `state` object', ->
         view = createView '''
             <script>
-            return {
+            module.exports = {
                 a: 0,
                 onBeforeRender() {
                     this.a = 1
@@ -145,7 +145,7 @@ describe 'Document n-for', ->
     it 'updates parent component `state` object bindings', ->
         view = createView '''
             <script>
-            return {
+            module.exports = {
                 a: 0,
             }
             </script>
@@ -183,7 +183,7 @@ describe 'Document n-for', ->
         view = createView '''
             <n-component name="Abc">
                 <script>
-                return {
+                module.exports = {
                     onBeforeRevert() {
                         this.onRevertCalled();
                     },
@@ -192,7 +192,7 @@ describe 'Document n-for', ->
                 <n-props onRevertCalled />
             </n-component>
             <script>
-            return {
+            module.exports = {
                 reverted: 0,
                 visible: false,
                 onChildRevert() {

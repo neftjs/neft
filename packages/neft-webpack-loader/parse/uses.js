@@ -8,15 +8,14 @@ module.exports = (element, parser) => {
     child.children.forEach(forChild)
     const { name } = child
 
-    // change short syntax to long formula
+    // short syntax
     if (name.length > 0 && name[0].toUpperCase() === name[0]) {
-      child.name = 'n-use'
       child.props['n-component'] = name
+      nUses.push(child)
     }
 
-    // get uses
+    // long formula
     if (child.name === 'n-use') {
-      child.name = ''
       nUses.push(child)
     }
   }

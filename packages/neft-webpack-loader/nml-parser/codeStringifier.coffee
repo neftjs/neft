@@ -21,7 +21,7 @@ BINDING_PARSER_OPTS =
     modifyBindingPart: (elem) ->
         # Prefix all Renderer.* direct access by the namespace accessible in style file
         if Renderer[elem[0]]
-            elem.unshift 'Neft', 'Renderer'
+            elem.unshift 'Renderer'
         elem
 
 class Stringifier

@@ -3,6 +3,7 @@ const path = require('path')
 const webpack = require('webpack')
 const querystring = require('querystring')
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
+const InjectWebpackPlugin = require('webpack-inject-plugin').default
 const Express = require('express')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
@@ -10,6 +11,7 @@ const util = require('@neft/core/src/util')
 const log = require('@neft/core/src/log')
 const { produceManifest } = require('./manifest')
 const { generateIcons } = require('./icon')
+const { loadStaticFiles } = require('./static')
 const {
   realpath, outputDir, packageFile, targets, targetEnvs, devServerPort, localIp,
 } = require('../config')
@@ -61,6 +63,7 @@ const compile = compiler => new Promise((resolve, reject) => {
     } else if (stats.hasErrors() || stats.hasWarnings()) {
       reject(new Error(stats.toString(webpackStatsToString)))
     } else {
+      log.log(stats.toString(webpackStatsToString))
       resolve()
     }
   })
@@ -96,6 +99,10 @@ const findExtensions = () => Object.keys(packageFile.dependencies)
   .map(name => path.join(realpath, './node_modules', name))
 
 exports.build = async (target, args) => {
+  console.log(await loadStaticFiles())
+  process.exit(0)
+
+  log.info(`Starting \`${target}\` build`)
   const targetBuilder = targetBuilders[target]
   const output = path.join(outputDir, target)
   const filepath = path.join(output, 'bundle.js')
@@ -124,9 +131,19 @@ exports.build = async (target, args) => {
       new webpack.HotModuleReplacementPlugin(),
       new webpack.DefinePlugin(getDefines(production, target)),
       new HardSourceWebpackPlugin({ info: { mode: 'none', level: 'error' } }),
+      new InjectWebpackPlugin(loadStaticFiles()),
     ],
     module: {
       rules: [
+        {
+          exclude: /(node_modules)/,
+          use: {
+            loader: require.resolve('babel-loader'),
+            options: {
+              presets: [require.resolve('@babel/preset-env')],
+            },
+          },
+        },
         {
           test: /\.(xhtml|html|nml)$/,
           loader: require.resolve('@neft/webpack-loader'),
@@ -137,16 +154,6 @@ exports.build = async (target, args) => {
         {
           test: /\.(coffee|coffee\.md|litcoffee)$/,
           use: [require.resolve('./webpack-coffee-loader')],
-        },
-        {
-          test: /\.js$/,
-          exclude: /(node_modules)/,
-          use: {
-            loader: require.resolve('babel-loader'),
-            options: {
-              presets: [require.resolve('@babel/preset-env')],
-            },
-          },
         },
       ],
     },

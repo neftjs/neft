@@ -1,6 +1,7 @@
 const utils = require('../util')
 const assert = require('../assert')
 const eventLoop = require('../event-loop')
+const log = require('../log')
 const Use = require('./use')
 const Log = require('./log')
 const Condition = require('./condition')
@@ -124,6 +125,10 @@ class Document {
 
   reloadProp(name) {
     if (isInternalProp(name)) return
+    if (!this.props[name]) {
+      log.warn(`Trying to set unknown \`${name}\` prop on component \`${this.path}\``)
+      return
+    }
     this.exported[name] = this[renderProps][name]
   }
 

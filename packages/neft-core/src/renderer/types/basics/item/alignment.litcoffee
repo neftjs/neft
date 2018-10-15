@@ -41,7 +41,7 @@
             defaultValue: 'left'
             namespace: 'alignment'
             parentConstructor: ctor
-            implementation: Impl["set#{ctor.__name__}AlignmentHorizontal"]
+            implementation: Impl["set#{ctor.name}AlignmentHorizontal"]
             developmentSetter: (val) ->
                 assert.isString val
             setter: (_super) -> (val='left') ->
@@ -57,7 +57,7 @@
             defaultValue: 'top'
             namespace: 'alignment'
             parentConstructor: ctor
-            implementation: Impl["set#{ctor.__name__}AlignmentVertical"]
+            implementation: Impl["set#{ctor.name}AlignmentVertical"]
             developmentSetter: (val) ->
                 assert.isString val
             setter: (_super) -> (val='top') ->
