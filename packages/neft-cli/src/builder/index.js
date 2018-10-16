@@ -3,7 +3,7 @@ const path = require('path')
 const webpack = require('webpack')
 const querystring = require('querystring')
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
-const InjectWebpackPlugin = require('webpack-inject-plugin').default
+const injectWebpackPlugin = require('webpack-inject-plugin')
 const Express = require('express')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
@@ -15,6 +15,9 @@ const { loadStaticFiles } = require('./static')
 const {
   realpath, outputDir, packageFile, targets, targetEnvs, devServerPort, localIp,
 } = require('../config')
+
+const InjectWebpackPlugin = injectWebpackPlugin.default
+const { ENTRY_ORDER } = injectWebpackPlugin
 
 const targetBuilders = {
   html: require('./browser'),
@@ -71,6 +74,8 @@ const compile = compiler => new Promise((resolve, reject) => {
 
 const watchAndCompile = (compiler, webpackConfig) => new Promise((resolve, reject) => {
   const app = new Express()
+  app.use('/static', Express.static('static'))
+  app.use('/static', Express.static('dist/static'))
   app.use(webpackDevMiddleware(compiler, {
     noInfo: true,
     writeToDisk: true,
@@ -98,6 +103,13 @@ const findExtensions = () => Object.keys(packageFile.dependencies)
   .filter(name => name.startsWith('@neft/'))
   .map(name => path.join(realpath, './node_modules', name))
 
+const staticFileLoader = function () {
+  this.async(true)
+  this.cacheable(false)
+  loadStaticFiles()
+    .then((result) => { this.callback(null, result) }, (error) => { this.callback(error) })
+}
+
 exports.build = async (target, args) => {
   log.info(`Starting \`${target}\` build`)
   const targetBuilder = targetBuilders[target]
@@ -105,7 +117,6 @@ exports.build = async (target, args) => {
   const filepath = path.join(output, 'bundle.js')
   const production = !!args.production
   const extensions = findExtensions()
-  const staticFile = await loadStaticFiles()
   let webpackTarget = 'webworker' // for HMR
   if (targetEnvs[target].browser) webpackTarget = 'web' // for HMR
   if (production) webpackTarget = 'node' // webpack doesn't put polyfills for node target
@@ -128,7 +139,7 @@ exports.build = async (target, args) => {
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
       new webpack.DefinePlugin(getDefines(production, target)),
-      new InjectWebpackPlugin(() => staticFile),
+      new InjectWebpackPlugin(staticFileLoader, { order: ENTRY_ORDER.First }),
       new HardSourceWebpackPlugin({ info: { mode: 'none', level: 'error' } }),
     ],
     module: {

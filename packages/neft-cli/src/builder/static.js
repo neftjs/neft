@@ -63,7 +63,7 @@ const processImage = async (file, dir, base, fullName, ext, target) => {
   const metadata = await sharp(file).metadata()
   await Promise.all(resolutions.map(async (resolution) => {
     if (initialResolution === resolution) {
-      paths[resolution] = path.join(dir, base)
+      paths[resolution] = path.join('static', dir, base)
       return
     }
     const lowResName = path.join(dir, `${name}@${resolution}x${ext}`)
@@ -76,14 +76,14 @@ const processImage = async (file, dir, base, fullName, ext, target) => {
       initialResolution,
       output: path.join(outputDir, './static', lowResName),
     })
-    paths[resolution] = lowResName
+    paths[resolution] = path.join('static', lowResName)
   }))
 
   const resource = new Resource()
   resource.file = path.join(dir, name)
   resource.name = name
-  resource.width = metadata.width
-  resource.height = metadata.height
+  resource.width = metadata.width / initialResolution
+  resource.height = metadata.height / initialResolution
   resource.formats = [ext]
   resource.resolutions = resolutions
   resource.paths = { [ext]: paths }
@@ -95,7 +95,7 @@ const processAnyFile = (file, dir, base, name, ext, target) => {
   resource.file = path.join(dir, name)
   resource.name = name
   resource.formats = [ext]
-  resource.paths = { [ext]: path.join(dir, base) }
+  resource.paths = { [ext]: path.join('static', dir, base) }
   target[name] = resource
 }
 
