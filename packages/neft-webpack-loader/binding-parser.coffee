@@ -49,7 +49,7 @@ exports.parse = (val, isPublicId, opts = 0, objOpts = {}, isVariableId) ->
 
         if lastBinding and (isString or ///[a-zA-Z_0-9$]///.test(char))
             lastBinding[lastBinding.length - 1] += char
-        else if ///[a-zA-Z_$]///.test(char)
+        else if not isString and ///[a-zA-Z_$]///.test(char)
             lastBinding = [char]
             binding.push lastBinding
         else

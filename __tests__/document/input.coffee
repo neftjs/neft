@@ -13,6 +13,19 @@ describe 'Document string interpolation', ->
             context: name: 'Max'
         assert.is view.element.stringify(), 'Hello Max!'
 
+    it 'may contain expression code', ->
+        view = createView '''
+            <b visible="${context.page !== 'Loading'}" />
+        '''
+        context = new Struct page: 'Loading'
+        renderParse view,
+            context: context
+        tag = view.element.query 'b'
+        assert.is tag.props.visible, false
+
+        context.page = 'Welcome'
+        assert.is tag.props.visible, true
+
     describe '`props`', ->
         it 'lookup use', ->
             view = createView '''
