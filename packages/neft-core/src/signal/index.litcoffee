@@ -11,6 +11,7 @@ const { signal } = Neft;
 
     utils = require '../util'
     assert = require '../assert'
+    eventLoop = require '../event-loop'
 
 ## *Integer* signal.STOP_PROPAGATION
 
@@ -82,6 +83,8 @@ Returns `true` if the given signal has no listeners.
         return true
 
     callSignal = (obj, listeners, arg1, arg2) ->
+        eventLoop.lock()
+
         i = 0
         n = listeners.length
         result = 0
@@ -92,10 +95,13 @@ Returns `true` if the given signal has no listeners.
                 containsGaps = true
             else
                 ctx = listeners[i + 1]
-                if func.call(ctx or obj, arg1, arg2) is STOP_PROPAGATION
-                    result = STOP_PROPAGATION
-                    if containsGaps
-                        break
+                try
+                    if func.call(ctx or obj, arg1, arg2) is STOP_PROPAGATION
+                        result = STOP_PROPAGATION
+                        if containsGaps
+                            break
+                catch error
+                    log.error 'Uncaught error thrown in signal listener', error
             i += 2
 
         if containsGaps
@@ -113,6 +119,7 @@ Returns `true` if the given signal has no listeners.
                     listeners[i + 1] = null
                 i += 2
 
+        eventLoop.release()
         result
 
     createSignalFunction = (obj) ->

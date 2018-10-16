@@ -23,10 +23,12 @@ class Condition {
   }
 
   render() {
-    return this.update()
+    this.update()
   }
 
-  revert() {}
+  revert() {
+    // NOP
+  }
 }
 
 module.exports = Condition

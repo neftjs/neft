@@ -1,5 +1,6 @@
 'use strict'
 
+Struct = require '@neft/core/src/struct'
 {createView, renderParse} = require './utils'
 
 describe 'Document n-use', ->
@@ -49,6 +50,7 @@ describe 'Document n-use', ->
         view = createView '''
             <script>
             module.exports = {
+                data: null,
                 logs: null,
                 onBeforeRender() {
                     this.logs = []
@@ -56,6 +58,7 @@ describe 'Document n-use', ->
             }
             </script>
             <n-component name="Abc">
+                <n-props logs name />
                 <script>
                 module.exports = {
                     onRender() {
@@ -63,12 +66,39 @@ describe 'Document n-use', ->
                     },
                 }
                 </script>
-                <n-props logs name />
             </n-component>
-            <Abc logs="${this.logs}" name="fail" n-if="${false}" />
-            <Abc logs="${this.logs}" name="ok" />
+            <Abc logs="${logs}" name="fail" n-if=${data} />
+            <Abc logs="${logs}" name="ok" />
         '''
         renderParse view
+        assert.isEqual view.exported.logs, ['ok']
+
+    it 'renders unhidden component with ready props', ->
+        view = createView '''
+            <script>
+            module.exports = {
+                logs: null,
+                onBeforeRender() {
+                    this.logs = []
+                },
+            }
+            </script>
+            <n-component name="Abc">
+                <n-props logs status />
+                <script>
+                module.exports = {
+                    onRender() {
+                        this.logs.push(this.status);
+                    },
+                }
+                </script>
+            </n-component>
+            <Abc logs="${logs}" status=${context.status} n-if=${context.status} />
+        '''
+        context = new Struct status: null
+        renderParse view,
+            context: context
+        context.status = 'ok'
         assert.isEqual view.exported.logs, ['ok']
 
     it 'does not render component inside hidden element', ->
