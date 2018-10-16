@@ -145,7 +145,6 @@ class Document {
   render({
     context = null, props = null, onPropsChange, sourceElement = null,
   } = {}) {
-    eventLoop.lock()
     assert.notOk(this.rendered, 'Document is already rendered')
 
     if (this.context !== context) {
@@ -172,16 +171,14 @@ class Document {
     this.iterators.forEach(iterator => iterator.render())
     if (this.target) this.target.render(sourceElement)
     this.styleItems.forEach(styleItem => styleItem.render())
-    this.logs.forEach(log => log.render())
+    this.logs.forEach(docLog => docLog.render())
 
     this.rendered = true
     if (this.script) this.script.afterRender()
-    eventLoop.release()
   }
 
   revert() {
     assert.ok(this.rendered, 'Document is not rendered')
-    eventLoop.lock()
     if (this.script) this.script.beforeRevert()
     this[renderProps] = null
     if (this[renderOnPropsChange]) {
@@ -197,17 +194,19 @@ class Document {
     this.styleItems.forEach(styleItem => styleItem.revert())
     this.rendered = false
     if (this.script) this.script.afterRevert()
-    eventLoop.release()
   }
 }
+
+Document.prototype.render = eventLoop.bindInLock(Document.prototype.render)
+Document.prototype.revert = eventLoop.bindInLock(Document.prototype.revert)
 
 if (process.env.NODE_ENV === 'development') {
   Document.reload = (path, options) => {
     const documents = instances[path]
     if (documents) {
-      eventLoop.lock()
-      documents.forEach(document => document.reload(options))
-      eventLoop.release()
+      eventLoop.callInLock(() => {
+        documents.forEach(document => document.reload(options))
+      })
     }
   }
 

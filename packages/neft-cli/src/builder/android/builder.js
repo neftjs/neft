@@ -5,7 +5,7 @@ const yaml = require('js-yaml')
 const Mustache = require('mustache')
 const util = require('@neft/core/src/util')
 const log = require('@neft/core/src/log')
-const { outputDir } = require('../../config')
+const { realpath, outputDir } = require('../../config')
 
 const runtime = path.join(__dirname, '../../../node_modules/@neft/runtime-android/')
 
@@ -18,7 +18,7 @@ const iconsDirOut = 'app/src/main/res'
 const manifestAppDir = './manifest/android/app'
 const manifestAppDirOut = 'app'
 
-const staticDirs = ['./static', path.join(outputDir, 'static')]
+const staticDirs = [path.join(realpath, 'static'), path.join(outputDir, 'static')]
 const staticDirOut = 'app/src/main/assets/static'
 
 const extensionsDirOut = 'app/src/main/java/io/neft/extensions'
@@ -68,8 +68,13 @@ const copyIcons = output => copyIfExists(iconsDir, path.join(output, iconsDirOut
 const copyManifestApp = output => copyIfExists(manifestAppDir, path.join(output, manifestAppDirOut))
 
 const copyStaticFiles = async (output) => {
-  const promises = staticDirs.map(dir => copyIfExists(dir, path.join(output, staticDirOut)))
-  await Promise.all(promises)
+  // statics are saved into one folder so needs to be copied synchronously
+  // in other case we will get EEXIST exception from fs-extra
+  // eslint-disable-next-line no-restricted-syntax
+  for (const dir of staticDirs) {
+    // eslint-disable-next-line no-await-in-loop
+    await copyIfExists(dir, path.join(output, staticDirOut))
+  }
 }
 
 const copyExtensions = async (output, extensions) => {

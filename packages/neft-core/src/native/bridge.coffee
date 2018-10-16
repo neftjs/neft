@@ -49,7 +49,6 @@ reader =
         `//</development>`
         @strings[@stringsIndex++]
 Object.preventExtensions reader
-readerArgs = [reader]
 
 exports.onData = (actions, booleans, integers, floats, strings) ->
     reader.booleans = booleans
@@ -64,8 +63,11 @@ exports.onData = (actions, booleans, integers, floats, strings) ->
     eventLoop.lock()
     for action in actions
         func = listeners[action]
-        assert.isFunction func, "unknown native action got '#{action}'"
-        func readerArgs...
+        try
+            assert.isFunction func, "unknown native action got '#{action}'"
+            func reader
+        catch error
+            log.error 'Uncaught error when processing native events', error
     eventLoop.release()
 
     exports.sendData()

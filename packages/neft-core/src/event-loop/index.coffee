@@ -1,6 +1,7 @@
 'use strict'
 
 assert = require '../assert'
+log = require '../log'
 
 immediate = []
 pending = 0
@@ -14,15 +15,36 @@ exports.release = ->
     if pending is 0 and immediate.length > 0
         exports.lock()
         while immediate.length > 0
-            immediate.shift()()
+            try
+                immediate.shift()()
+            catch error
+                log.error 'Uncaught error when executing event-loop', error
         exports.release()
     return
 
+exports.callInLock = (func, ctx, args) ->
+    error = null
+    exports.lock()
+    try
+        result = func.apply ctx, args
+    catch callError
+        error = callError
+    exports.release()
+    if error
+        throw error
+    result
+
 exports.bindInLock = (func) ->
     ->
+        error = null
         exports.lock()
-        result = func.apply @, arguments
+        try
+            result = func.apply @, arguments
+        catch callError
+            error = callError
         exports.release()
+        if error
+            throw error
         result
 
 # Register a function which will be called when all locks will be released.
@@ -33,7 +55,10 @@ exports.setImmediate = (callback) ->
     """
     if pending is 0
         exports.lock()
-        callback()
+        try
+            callback()
+        catch error
+            log.error 'Uncaught error during setImmediate in the event-loop', error
         exports.release()
     else
         immediate.push callback

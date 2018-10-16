@@ -49,10 +49,6 @@ const { AssertionError } = Neft.assert;
 
             Error.captureStackTrace? @, opts.stackStartFunction
 
-            # TODO: fix this issues in platform runtimes
-            if process.env.NEFT_PLATFORM is 'android'
-                console.error @stack or @message
-
     createFailFunction = (assert) ->
         func = (actual, expected, msg, operator, stackStartFunction) ->
             throw new assert.AssertionError
