@@ -1,17 +1,11 @@
 const fs = require('fs-promise-native')
 const path = require('path')
-const Jimp = require('jimp')
+const sharp = require('sharp')
 const { realpath, outputDir } = require('../config')
 
-const resizeImage = (filepath, width, height, output) => new Promise((resolve, reject) => {
-  Jimp.read(filepath, (err, image) => {
-    if (err) return reject(err)
-    return image.resize(width, height).write(output, (err2) => {
-      if (err2) return reject(err2)
-      return resolve()
-    })
-  })
-})
+const resizeImage = (filepath, width, height, output) => sharp(filepath)
+  .resize(width, height)
+  .toFile(output)
 
 exports.generateIcons = async ({ target, icons, manifest }) => {
   if (!manifest.icon) return

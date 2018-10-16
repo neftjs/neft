@@ -99,15 +99,13 @@ const findExtensions = () => Object.keys(packageFile.dependencies)
   .map(name => path.join(realpath, './node_modules', name))
 
 exports.build = async (target, args) => {
-  console.log(await loadStaticFiles())
-  process.exit(0)
-
   log.info(`Starting \`${target}\` build`)
   const targetBuilder = targetBuilders[target]
   const output = path.join(outputDir, target)
   const filepath = path.join(output, 'bundle.js')
   const production = !!args.production
   const extensions = findExtensions()
+  const staticFile = await loadStaticFiles()
   let webpackTarget = 'webworker' // for HMR
   if (targetEnvs[target].browser) webpackTarget = 'web' // for HMR
   if (production) webpackTarget = 'node' // webpack doesn't put polyfills for node target
@@ -130,8 +128,8 @@ exports.build = async (target, args) => {
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
       new webpack.DefinePlugin(getDefines(production, target)),
+      new InjectWebpackPlugin(() => staticFile),
       new HardSourceWebpackPlugin({ info: { mode: 'none', level: 'error' } }),
-      new InjectWebpackPlugin(loadStaticFiles()),
     ],
     module: {
       rules: [
