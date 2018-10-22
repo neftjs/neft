@@ -93,7 +93,7 @@ const watchAndCompile = (compiler, webpackConfig) => new Promise((resolve, rejec
     firstCall = false
     app.listen(devServerPort, (error) => {
       if (error) return reject(error)
-      log.info(`Start development server on port \`${devServerPort}\``)
+      log.info(`Start development server on host \`${devServerPort}\``)
       return resolve()
     })
   })

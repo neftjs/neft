@@ -49,7 +49,7 @@ const createLowResImage = async ({
     }
     return null
   } catch (error) {
-    log.debug(`Resize \`${name}\` into @${resolution}x`)
+    log.debug(`Resize \`${name}\``)
     await fs.ensureDir(path.dirname(output))
     return sharp(file).resize(lowRestWidth, lowRestHeight).toFile(output)
   }
@@ -95,7 +95,8 @@ const processAnyFile = (file, dir, base, name, ext, target) => {
   resource.file = path.join(dir, name)
   resource.name = name
   resource.formats = [ext]
-  resource.paths = { [ext]: path.join('/static', dir, base) }
+  resource.resolutions = [1]
+  resource.paths = { [ext]: { 1: path.join('/static', dir, base) } }
   target[name] = resource
 }
 

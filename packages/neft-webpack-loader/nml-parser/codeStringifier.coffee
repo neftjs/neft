@@ -9,7 +9,7 @@ PRIMITIVE_TYPE = 'primitive'
 
 PUBLIC_BINDING_VARIABLES =
     __proto__: null
-    app: true
+    Renderer: true
 
 RESERVED_MAIN_IDS =
     __proto__: null
@@ -40,8 +40,7 @@ class Stringifier
         PUBLIC_BINDING_VARIABLES[id] or utils.has(@publicIds, id)
 
     isBindingPublicId: (id) =>
-        id is 'this' or
-        @isBindingPublicVariable(id) or Renderer[id]?
+        id is 'this' or @isBindingPublicVariable(id)
 
     stringifyObject: (ast) ->
         ids = []

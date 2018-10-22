@@ -59,6 +59,7 @@ class Use {
     if (this.hiddenDepth > 0) return
 
     const name = this.element.props['n-component']
+    if (!name) return
     const component = this.document.getComponent(name)
     if (!component) {
       log.warning(`Cannot find ${name} component to render`)

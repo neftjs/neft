@@ -9,6 +9,7 @@ const { signal } = Neft;
 
     'use strict'
 
+    log = require '../log'
     utils = require '../util'
     assert = require '../assert'
     eventLoop = require '../event-loop'

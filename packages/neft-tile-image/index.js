@@ -1,9 +1,8 @@
-const {
-  Renderer, assert, utils, Resources,
-} = Neft
-const { Impl } = Renderer
+const Resources = require('@neft/core/src/resources')
+const Renderer = require('@neft/core/src/renderer')
+const log = require('@neft/core/src/log').scope('Extensions', 'TileImage')
 
-const log = Neft.log.scope('Extensions', 'TileImage')
+const { Impl } = Renderer
 
 class TileImage extends Renderer.Native {}
 

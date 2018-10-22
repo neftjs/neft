@@ -35,10 +35,7 @@ FontLoader {
 
     log = log.scope 'Renderer', 'FontLoader'
 
-    module.exports = (Renderer, Impl, itemUtils) -> class FontLoader extends itemUtils.FixedObject
-        @__name__ = 'FontLoader'
-        @__path__ = 'Renderer.FontLoader'
-
+    module.exports = (Renderer, Impl, itemUtils) -> class FontLoader
         # loader.name -> italic -> weight[] -> internal name
         fontsByName = Object.create null
 
@@ -60,62 +57,23 @@ FontLoader {
             /ultra.*black|ultra/i
         ]
 
-        loadFont = do ->
-            getFontWeight = (source) ->
-                for re, i in WEIGHTS
-                    if re.test(source)
-                        return i / (WEIGHTS.length - 1)
+        getFontWeight = (source) ->
+            found = -1
+            for re, i in WEIGHTS
+                if re.test(source)
+                    # regex negative lookbehind may not be supported yet, so we are choosing
+                    # first occurence for first half, and last occurence for second half
+                    found = i
+                    if i <= WEIGHTS.length / 2
+                        break
+            if found >= 0
+                return found / (WEIGHTS.length - 1)
 
-                log.warn "Can't find font weight in the got source; `#{source}` got."
-                0.4
+            log.warn "Can't find font weight in the got source; `#{source}` got"
+            0.4
 
-            isItalic = (source) ->
-                /italic|oblique/i.test source
-
-            (loader) ->
-                # get best source
-                source = Impl.resources?.resolve(loader.source) or loader.source
-
-                # get all sources
-                if rsc = Impl.resources?.getResource(source)
-                    sources = []
-                    for _, path of rsc.paths
-                        sources.push path[1]
-                else
-                    sources = [source]
-
-                # detect weight and style
-                weight = 0.4
-                italic = false
-
-                for source, i in sources
-                    if weight isnt (weight = getFontWeight(source)) and i > 0
-                        log.warn "'#{loader.source}' sources have different weights"
-                    if italic isnt (italic = isItalic(source)) and i > 0
-                        log.warn "'#{loader.source}' sources have different 'italic' styles"
-
-                # get internal name
-                weightInt = Math.round weight * WEIGHTS.length
-                italicStr = if italic then 'italic' else 'normal'
-                name = "neft-#{loader.name}-#{weightInt}-#{italicStr}"
-                obj = fontsByName[loader.name] ?= {}
-                obj = obj[italic] ?= new Array WEIGHTS.length
-                obj[weightInt] = name
-
-                # load font
-                Impl.loadFont name, source, sources, (err) ->
-                    loader._loaded = true
-                    loader.onLoadedChange.emit false
-                    if err
-                        loader.onError.emit err
-                    else
-                        loader.onLoad.emit()
-                return
-
-        loadFontIfReady = (loader) ->
-            if loader.name and loader.source
-                setImmediate ->
-                    loadFont loader
+        isItalic = (source) ->
+            /italic|oblique/i.test source
 
         @getInternalFontName = (name, weight, italic) ->
             result = ''
@@ -152,31 +110,18 @@ FontLoader {
 
             result
 
-## *FontLoader* FontLoader.New([*Object* options])
+        constructor: (@name, @source) ->
+            assert.isString @name, "FontLoader.name needs to be a string, but #{@name} given"
+            assert.notLengthOf @name, 0, "FontLoader.name cannot be an empty string"
 
-        @New = (opts) ->
-            item = new FontLoader
-            itemUtils.Object.initialize item, opts
-            item
+            assert.isString @source, "FontLoader.source needs to be a string, but #{@source} given"
+            assert.notLengthOf @source, 0, "FontLoader.source cannot be an empty string"
 
-        constructor: ->
-            super()
-            @_name = ''
-            @_source = ''
-            @_loaded = false
+            Object.freeze @
 
 ## *String* FontLoader::name
 
-        utils.defineProperty @::, 'name', null, ->
-            @_name
-        , (val) ->
-            assert.isString val, "FontLoader.name needs to be a string, but #{val} given"
-            assert.notLengthOf val, 0, "FontLoader.name cannot be an empty string"
-            assert.lengthOf @_source, 0
-
-            @_name = val
-
-            loadFontIfReady @
+Use `sans-serif` to make the given font a default one.
 
 ## *String* FontLoader::source
 
@@ -201,32 +146,39 @@ Must contains one of:
 
 Italic font filename must contains 'italic'.
 
-        utils.defineProperty @::, 'source', null, ->
-            @_source
-        , (val) ->
-            assert.isString val, "FontLoader.source needs to be a string, but #{val} given"
-            assert.notLengthOf val, 0, "FontLoader.source cannot be an empty string"
-            assert.lengthOf @_source, 0
+## FontLoader::load()
 
-            @_source = val
+        load: (callback) ->
+            # get best source
+            source = Impl.resources?.resolve(@source) or @source
 
-            loadFontIfReady @
+            # get all sources
+            if rsc = Impl.resources?.getResource(source)
+                sources = []
+                for _, path of rsc.paths
+                    sources.push path[1]
+            else
+                sources = [source]
+
+            # detect weight and style
+            weight = 0.4
+            italic = false
+
+            for source, i in sources
+                if weight isnt (weight = getFontWeight(source)) and i > 0
+                    log.warn "'#{@source}' sources have different weights"
+                if italic isnt (italic = isItalic(source)) and i > 0
+                    log.warn "'#{@source}' sources have different 'italic' styles"
+
+            # get internal name
+            weightInt = Math.round weight * WEIGHTS.length
+            italicStr = if italic then 'italic' else 'normal'
+            log.debug "Font file #{source} recognized weight = #{weight}"
+            name = "neft-#{@name}-#{weightInt}-#{italicStr}"
+            obj = fontsByName[@name] ?= {}
+            obj = obj[italic] ?= new Array WEIGHTS.length
+            obj[weightInt] = name
+
+            # load font
+            Impl.loadFont name, source, sources, callback
             return
-
-## ReadOnly *Boolean* FontLoader::loaded = `false`
-
-        utils.defineProperty @::, 'loaded', null, ->
-            @_loaded
-        , null
-
-## *Signal* FontLoader::onLoadedChange(*Boolean* oldValue)
-
-        signal.Emitter.createSignal @, 'onLoadedChange'
-
-## *Signal* FontLoader::onLoad()
-
-        signal.Emitter.createSignal @, 'onLoad'
-
-## *Signal* FontLoader::onError(*Error* error)
-
-        signal.Emitter.createSignal @, 'onError'

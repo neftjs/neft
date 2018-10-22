@@ -62,8 +62,6 @@ exports.Row = require('./types/layout/row')(exports, Impl, itemUtils)
 
 exports.Flow = require('./types/layout/flow')(exports, Impl, itemUtils)
 
-exports.ResourcesLoader = require('./types/loader/resources')(exports, Impl, itemUtils)
-
 exports.FontLoader = require('./types/loader/font')(exports, Impl, itemUtils)
 
 exports.setWindowItem = function (val) {
@@ -81,8 +79,15 @@ exports.setResources = function (val) {
 }
 
 exports.getResource = function (path) {
-  let ref
-  return (ref = Impl.resources) != null ? ref.getResource(path) : void 0
+  return Impl.resources != null ? Impl.resources.getResource(path) : null
 }
+
+exports.loadFont = ({ name, source }) => new Promise((resolve, reject) => {
+  const loader = new exports.FontLoader(name, source)
+  loader.load((err) => {
+    if (err) reject(err)
+    else resolve()
+  })
+})
 
 exports.onReady.emit()

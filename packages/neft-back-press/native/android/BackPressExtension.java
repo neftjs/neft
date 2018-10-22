@@ -1,9 +1,9 @@
-package io.neft.extensions.back_extension;
+package io.neft.extensions.backpress_extension;
 
 import io.neft.App;
 import io.neft.utils.Consumer;
 
-public final class BackExtension {
+public final class BackPressExtension {
     private final static App APP = App.getInstance();
 
     public static void register() {
