@@ -23,6 +23,7 @@ const targetBuilders = {
   html: require('./browser'),
   webgl: require('./browser'),
   android: require('./android'),
+  ios: require('./ios'),
 }
 const webpackStatsToString = {
   chunks: false,
@@ -93,7 +94,7 @@ const watchAndCompile = (compiler, webpackConfig) => new Promise((resolve, rejec
     firstCall = false
     app.listen(devServerPort, (error) => {
       if (error) return reject(error)
-      log.info(`Start development server on host \`${devServerPort}\``)
+      log.info(`Start development server on port \`${devServerPort}\``)
       return resolve()
     })
   })

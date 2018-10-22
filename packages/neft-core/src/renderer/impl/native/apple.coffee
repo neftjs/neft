@@ -1,7 +1,3 @@
-`// when=NEFT_APPLE`
-
-'use strict'
-
 utils = require '../../../util'
 assert = require '../../../assert'
 

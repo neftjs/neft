@@ -15,7 +15,7 @@ module.exports = async (argv) => {
     try {
       await build(target, args)
     } catch (error) {
-      log.error(error.message)
+      log.error(error.constructor === Error ? error.message : error.stack)
       process.exit(1)
     }
   }

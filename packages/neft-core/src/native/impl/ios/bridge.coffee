@@ -1,7 +1,3 @@
-`// when=NEFT_IOS`
-
-'use strict'
-
 utils = require '../../../util'
 
 module.exports = (bridge) ->

@@ -1,14 +1,11 @@
-`// when=NEFT_NATIVE`
-
-'use strict'
-
 utils = require '../../../util'
 assert = require '../../../assert'
 
 module.exports = (impl) ->
-    platform = try require('./android') impl
-    platform or= try require('./apple') impl
-    platform or= try require('./android') impl
+    if process.env.NEFT_ANDROID
+        platform = require('./android') impl
+    if process.env.NEFT_APPLE
+        platform = require('./apple') impl
     {bridge} = platform
 
     bridge.listen bridge.inActions.WINDOW_RESIZE, (reader) ->

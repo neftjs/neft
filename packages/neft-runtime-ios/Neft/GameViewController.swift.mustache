@@ -16,9 +16,9 @@ extension String {
 }
 
 struct Extension {
-    {{#iosExtensions}}
+    {{#extensions}}
     struct {{&name}} {}
-    {{/iosExtensions}}
+    {{/extensions}}
 }
 
 class GameViewController: UIViewController {
@@ -116,9 +116,9 @@ class GameViewController: UIViewController {
     }
 
     private func initExtensions() {
-        {{#iosExtensions}}
+        {{#extensions}}
         Extension.{{&name}}.register()
-        {{/iosExtensions}}
+        {{/extensions}}
     }
 
     private func runJsBundle(code: String) {

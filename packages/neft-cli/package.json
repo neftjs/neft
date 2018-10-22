@@ -32,6 +32,7 @@
     "webpack": "^4.20.2",
     "webpack-dev-middleware": "^3.4.0",
     "webpack-hot-middleware": "^2.24.2",
-    "webpack-inject-plugin": "^0.5.0"
+    "webpack-inject-plugin": "^0.5.0",
+    "xcode": "^1.0.0"
   }
 }

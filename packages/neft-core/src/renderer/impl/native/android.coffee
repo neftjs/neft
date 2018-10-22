@@ -1,7 +1,3 @@
-`// when=NEFT_ANDROID`
-
-'use strict'
-
 assert = require '../../../assert'
 
 nativeActions = require '../../../native/actions'

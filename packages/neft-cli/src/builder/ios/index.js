@@ -1,3 +1,5 @@
+const { build } = require('./builder')
+
 exports.webpackConfig = {}
 
 exports.defaultManifest = {
@@ -22,4 +24,4 @@ exports.icons = [
   { width: 1024, height: 1024, out: 'default.png' },
 ]
 
-exports.build = () => {}
+exports.build = build

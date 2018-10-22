@@ -93,10 +93,12 @@ exports.pushFloat = (val) ->
 
 exports.pushString = (val) ->
 
-
-impl = try require './impl/android/bridge'
-impl or= try require './impl/ios/bridge'
-impl or= try require './impl/macos/bridge'
+if process.env.NEFT_ANDROID
+    impl = require './impl/android/bridge'
+if process.env.NEFT_IOS
+    impl = require './impl/ios/bridge'
+if process.env.NEFT_MACOS
+    impl = require './impl/macos/bridge'
 if impl?
     utils.merge exports, impl(exports)
 
