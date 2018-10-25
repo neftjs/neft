@@ -228,6 +228,8 @@ if (process.env.NODE_ENV === 'development') {
       })
     }
   }
+
+  Document.prototype.reload = eventLoop.bindInLock(Document.prototype.reload)
 }
 
 module.exports = Document

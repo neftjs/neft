@@ -11,13 +11,6 @@ module.exports = (impl) ->
 
         lastId = 0
 
-        vsync = ->
-            requestAnimationFrame vsync
-            nativeBridge.sendData()
-            return
-
-        requestAnimationFrame vsync
-
         inActions: nativeActions.in
         outActions: nativeActions.out
         listen: nativeBridge.addActionListener

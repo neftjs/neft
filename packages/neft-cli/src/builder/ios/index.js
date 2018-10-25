@@ -5,6 +5,8 @@ exports.webpackConfig = {}
 exports.defaultManifest = {
   package: 'io.neft.example.app',
   label: 'Neft.io App',
+  version: '1.0',
+  bundleVersion: 1,
 }
 
 exports.icons = [

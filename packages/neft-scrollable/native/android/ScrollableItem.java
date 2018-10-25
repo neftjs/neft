@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
@@ -121,16 +122,28 @@ public class ScrollableItem extends NativeItem {
 
     @OnSet("contentX")
     public void setContentX(int val) {
-        int px = Math.round(dpToPx(val));
-        getItemView().hScroll.scrollTo(px, 0);
-        sendContentX();
+        final int px = Math.round(dpToPx(val));
+        getItemView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                getItemView().hScroll.scrollTo(px, 0);
+                sendContentX();
+                getItemView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
     }
 
     @OnSet("contentY")
     public void setContentY(int val) {
-        int px = Math.round(dpToPx(val));
-        getItemView().scrollTo(0, px);
-        sendContentY();
+        final int px = Math.round(dpToPx(val));
+        getItemView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                getItemView().scrollTo(0, px);
+                sendContentY();
+                getItemView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
     }
 
     @OnSet("horizontalScrollBar")
