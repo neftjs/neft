@@ -1,4 +1,4 @@
-const fs = require('fs-promise-native')
+const fs = require('fs-extra')
 const path = require('path')
 const sharp = require('sharp')
 const { realpath, outputDir } = require('../config')
@@ -13,17 +13,13 @@ exports.generateIcons = async ({ target, icons, manifest }) => {
   const output = path.join(outputDir, '/icon/', target)
 
   // create output
-  try {
-    await fs.mkdir(path.join(outputDir, '/icon/'))
-    await fs.mkdir(output)
-  } catch (_error) {
-    // already exists
-  }
+  await fs.ensureDir(output)
 
   // create icon files
-  const promises = icons.map((definition) => {
+  const promises = icons.map(async (definition) => {
     const fileOutput = path.join(output, definition.out)
-    return resizeImage(icon, definition.width, definition.height, fileOutput)
+    await fs.ensureDir(path.dirname(fileOutput))
+    await resizeImage(icon, definition.width, definition.height, fileOutput)
   })
 
   await Promise.all(promises)

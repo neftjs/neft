@@ -100,7 +100,7 @@ const watchAndCompile = (compiler, webpackConfig) => new Promise((resolve, rejec
   })
 })
 
-const findExtensions = () => Object.keys(packageFile.dependencies)
+const findExtensions = () => Object.keys(packageFile.dependencies || {})
   .filter(name => name.startsWith('@neft/'))
   .map(name => path.join(realpath, './node_modules', name))
 
