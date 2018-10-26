@@ -9,6 +9,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
+import android.util.Base64;
 import android.util.Log;
 
 import com.caverock.androidsvg.SVG;
@@ -144,6 +145,12 @@ public class Image extends Item {
         }
     }
 
+    static private Bitmap loadDataSource(String val) {
+        String base64 = val.substring(val.indexOf(","));
+        byte[] imageAsBytes = Base64.decode(base64.getBytes(), 0);
+        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+    }
+
     static private Bitmap loadUrlSource(String val) {
         try {
             InputStream in = new URL(val).openStream();
@@ -152,7 +159,7 @@ public class Image extends Item {
             }
             return BitmapFactory.decodeStream(in);
         } catch (Exception e) {
-            Log.e("Neft", "Can't load image from url '"+val+"'");
+            Log.e("Neft", "Can't load image from url: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -210,6 +217,8 @@ public class Image extends Item {
                 Bitmap bitmap;
                 if (val.startsWith("/static")) {
                     bitmap = loadResourceSource(val);
+                } else if (val.startsWith("data:")) {
+                    bitmap = loadDataSource(val);
                 } else {
                     bitmap = loadUrlSource(val);
                 }
