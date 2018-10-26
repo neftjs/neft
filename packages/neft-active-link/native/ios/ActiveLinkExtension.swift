@@ -16,6 +16,14 @@ extension Extension.ActiveLink {
             let number = args[0] as? String
             tel(number: number)
         }
+
+        app.client.addCustomFunction("NeftActiveLink/geo") {
+            (args: [Any?]) in
+            let latitude = (args[0] as? Number)?.float()
+            let longitude = (args[1] as? Number)?.float()
+            let address = args[2] as? String
+            geo(latitude, longitude, address)
+        }
     }
 
     private static func mailto(address: String?, subject: String?) {
@@ -27,6 +35,22 @@ extension Extension.ActiveLink {
     private static func tel(number: String?) {
         if let url = URL(string: "tel:\(number ?? "")") {
             UIApplication.shared.openURL(url)
+        }
+    }
+
+    private static func geo(_ latitude: CGFloat?, _ longitude: CGFloat?, _ address: String?) {
+        var url = URLComponents(string: "http://maps.apple.com/")
+        var query: [URLQueryItem] = []
+        if address != nil {
+            query.append(URLQueryItem(name: "q", value: address ?? ""))
+        }
+        if latitude != nil && longitude != nil {
+            query.append(URLQueryItem(name: "sll", value: "\(latitude ?? 0),\(longitude ?? 0)"))
+        }
+        url?.queryItems = query
+
+        if let appUrl = url?.url {
+            UIApplication.shared.openURL(appUrl)
         }
     }
 }
