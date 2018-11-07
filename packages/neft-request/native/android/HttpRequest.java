@@ -92,7 +92,7 @@ class HttpRequest {
 
             try {
                 // set data
-                if (!method.equals("GET")) {
+                if (!method.toUpperCase().equals("GET")) {
                     conn.setDoOutput(true);
                     DataOutputStream out = new DataOutputStream(conn.getOutputStream());
                     out.write(body.getBytes());

@@ -49,7 +49,7 @@ const request = (optionsOrUri, optionsOrNull, defaultMethod) => new Promise((res
   const uri = String(options.uri || options.url)
   const method = String(options.method || defaultMethod).toUpperCase()
   let headers = util.isObject(options.headers) ? options.headers : {}
-  let body = String(options.body == null ? '' : options.body)
+  let body = options.body == null ? '' : options.body
   const json = Boolean(options.json || false)
   const timeout = Math.max(0, parseInt(options.timeout || DEFAULT_TIMEOUT, 10))
 
@@ -57,6 +57,7 @@ const request = (optionsOrUri, optionsOrNull, defaultMethod) => new Promise((res
     body = JSON.stringify(body)
     headers['Content-type'] = 'application/json'
   }
+  body = String(body)
 
   const callback = createCallback({ json, resolve, reject })
 

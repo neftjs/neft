@@ -7,7 +7,7 @@ public final class BackPressExtension {
     private final static App APP = App.getInstance();
 
     public static void register() {
-        APP.getActivity().onBackPress.connect(new Runnable() {
+        APP.onBackPress.connect(new Runnable() {
             @Override
             public void run() {
                 APP.getClient().pushEvent("extensionBackOnBackPress");

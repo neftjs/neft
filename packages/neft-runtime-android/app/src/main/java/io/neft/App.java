@@ -1,6 +1,5 @@
 package io.neft;
 
-import android.os.Handler;
 import android.util.Log;
 import android.view.Choreographer;
 import android.view.KeyEvent;
@@ -9,12 +8,11 @@ import android.view.ViewTreeObserver;
 import io.neft.client.Client;
 import io.neft.customapp.CustomApp;
 import io.neft.renderer.*;
+import io.neft.utils.Signal;
 import lombok.Getter;
 import lombok.NonNull;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +45,9 @@ public class App {
     private final FrameCallback frameCallback;
     private final List<MotionEvent> touchEvents = new ArrayList<>();
     private final List<FullKeyEvent> keyEvents = new ArrayList<>();
+    public Signal onBackPress = new Signal();
+    @Getter String intentData = null;
+    public Signal onIntentDataChange = new Signal();
 
     public static App getInstance() {
         return INSTANCE;

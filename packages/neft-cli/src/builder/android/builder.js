@@ -105,6 +105,12 @@ const assignManifest = (target, source) => {
     target.app.plugins.push(...source.app.plugins)
   }
 
+  // activityXmlManifest
+  if (source.activityXmlManifest) {
+    target.activityXmlManifest = target.activityXmlManifest || ''
+    target.activityXmlManifest += source.activityXmlManifest
+  }
+
   // applicationXmlManifest
   if (source.applicationXmlManifest) {
     target.applicationXmlManifest = target.applicationXmlManifest || ''

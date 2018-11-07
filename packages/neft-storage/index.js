@@ -3,7 +3,7 @@ const { callNativeFunction, onNativeEvent } = require('@neft/core')
 const NATIVE_PREFIX = 'NeftStorage'
 const GET = `${NATIVE_PREFIX}/get`
 const SET = `${NATIVE_PREFIX}/set`
-const REMOVE = `${NATIVE_PREFIX}/set`
+const REMOVE = `${NATIVE_PREFIX}/remove`
 const ON_RESPONSE = `${NATIVE_PREFIX}/response`
 
 let nextUid = 0

@@ -1,8 +1,6 @@
-const {
-  Renderer, assert, utils, signal,
-} = Neft
+const Renderer = require('@neft/core/src/renderer')
+
 const { setPropertyValue } = Renderer.itemUtils
-const { emitSignal } = signal.Emitter
 const { Impl } = Renderer
 
 class TextInput extends Renderer.Native {
