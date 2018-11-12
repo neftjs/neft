@@ -18,7 +18,7 @@ extension Extension.Storage {
             (args: [Any?]) in
             let uid = args[0] as? String ?? ""
             let key = args[1] as? String ?? ""
-            let value = args[1] as? String ?? ""
+            let value = args[2] as? String ?? ""
             resolve(uid, key) {
                 (url: URL) throws in
                 try value.write(to: url, atomically: true, encoding: .utf8)

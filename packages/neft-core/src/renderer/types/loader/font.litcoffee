@@ -173,7 +173,6 @@ Italic font filename must contains 'italic'.
             # get internal name
             weightInt = Math.round weight * WEIGHTS.length
             italicStr = if italic then 'italic' else 'normal'
-            log.debug "Font file #{source} recognized weight = #{weight}"
             name = "neft-#{@name}-#{weightInt}-#{italicStr}"
             obj = fontsByName[@name] ?= {}
             obj = obj[italic] ?= new Array WEIGHTS.length

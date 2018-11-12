@@ -13,6 +13,7 @@ import JavaScriptCore
     var httpResponseCallback: JSValue? { get set }
     func httpRequest(_ uri: String, _ method: String, _ headers: NSArray, _ data: JSValue) -> Int
     func log(_ message: String) -> Void
+    func nop() -> Void
 }
 
 /**
@@ -121,6 +122,8 @@ import JavaScriptCore
     func log(_ message: String) -> Void {
         NSLog("%@", message)
     }
+
+    func nop() -> Void {}
 
     func destroy() {
         timerCallbackValue = nil

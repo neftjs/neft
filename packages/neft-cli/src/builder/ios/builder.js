@@ -1,6 +1,8 @@
 const fs = require('fs-extra')
 const cp = require('child_process')
 const path = require('path')
+const glob = require('glob')
+const yaml = require('js-yaml')
 const xcode = require('xcode')
 const Mustache = require('mustache')
 const { promisify } = require('util')
@@ -15,6 +17,9 @@ const nativeDirOut = 'Neft/'
 
 const iconsDir = path.join(outputDir, 'icon/ios')
 const iconsDirOut = 'Neft/Assets.xcassets/AppIcon.appiconset'
+
+const manifestAppDir = './manifest/ios/app'
+const manifestAppDirOut = 'Neft'
 
 const staticDirs = [path.join(realpath, 'static'), path.join(outputDir, 'static')]
 const staticDirOut = 'static'
@@ -77,6 +82,8 @@ const copyNativeDir = output => copyIfExists(nativeDir, path.join(output, native
 
 const copyIcons = output => copyIfExists(iconsDir, path.join(output, iconsDirOut))
 
+const copyManifestApp = output => copyIfExists(manifestAppDir, path.join(output, manifestAppDirOut))
+
 const copyStaticFiles = async (output, { fontsSupported }) => {
   const fonts = []
 
@@ -125,16 +132,62 @@ const processMustacheFile = async ({ source, destination }, config) => {
   await fs.writeFile(properDestination, properFile)
 }
 
+const assignManifest = (target, source) => {
+  // infoPlist
+  if (source.infoPlist) {
+    target.infoPlist = target.infoPlist || ''
+    target.infoPlist += `${source.infoPlist}\n`
+  }
+  // pods
+  if (source.pods) {
+    target.pods = target.pods || []
+    target.pods.push(...source.pods)
+  }
+  // applicationDidFinishLaunching
+  if (source.applicationDidFinishLaunching) {
+    target.applicationDidFinishLaunching = target.applicationDidFinishLaunching || ''
+    target.applicationDidFinishLaunching += `${source.applicationDidFinishLaunching}\n`
+  }
+}
+
+const assignExtenionManifests = async (manifest, extensions) => {
+  await Promise.all(extensions.map(async ({ dirpath }) => {
+    const manifestPath = path.join(dirpath, 'manifest/ios.yaml')
+    try {
+      assignManifest(manifest, yaml.safeLoad(await fs.readFile(manifestPath, 'utf-8')))
+    } catch (error) {
+      // NOP
+    }
+  }))
+}
+
 const processMustacheFiles = (files, config) => {
   const promises = files.map(file => processMustacheFile(file, config))
   return Promise.all(promises)
 }
+
+const installPods = ({ output }) => new Promise((resolve, reject) => {
+  const child = cp.spawn('pod', ['install'], { cwd: output, stdio: 'inherit' })
+  child.on('exit', (code) => {
+    if (code !== 0) {
+      reject(new Error(`Cannot install CocoaPods packages;
+make sure you've installed CocoaPods; e.g. brew install cocoapods`))
+    } else {
+      resolve()
+    }
+  })
+})
 
 const prepareXcodeProject = async ({ output, iosExtensions }) => {
   const pbxproj = path.join(output, pbxProject)
   const project = xcode.project(pbxproj)
   await promisify(project.parse).call(project)
   const mainGroupId = project.findPBXGroupKey({ path: 'Neft' })
+  const extraFiles = await promisify(glob)(`${manifestAppDir}/*`)
+  await Promise.all(extraFiles.map(async (source) => {
+    const filename = path.relative(manifestAppDir, source)
+    project.addSourceFile(filename, null, mainGroupId)
+  }))
   await Promise.all(iosExtensions.map(async ({ nativeDirpath, name }) => {
     const fullName = `Extension${name}`
     const groupId = project.pbxCreateGroup(fullName, `Extension/${name}`)
@@ -161,7 +214,8 @@ exports.build = async ({
 
   const [{ fonts: fontPaths }] = await Promise.all([
     copyStaticFiles(output, { fontsSupported }), copyNativeDir(output),
-    copyIcons(output), copyExtensions(output, iosExtensions),
+    copyIcons(output), copyManifestApp(output), copyExtensions(output, iosExtensions),
+    assignExtenionManifests(manifest, iosExtensions),
   ])
 
   const fonts = await resolveFonts(fontPaths)
@@ -172,6 +226,8 @@ exports.build = async ({
     manifest,
     extensions: iosExtensions,
   })
+
+  if (manifest.pods && manifest.pods.length > 0) await installPods({ output })
 
   await prepareXcodeProject({ output, iosExtensions })
 }

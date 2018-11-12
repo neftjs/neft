@@ -1,4 +1,6 @@
-const { Renderer, assert, utils } = Neft
+const { assert } = require('@neft/core')
+const Renderer = require('@neft/core/src/renderer')
+
 const { setPropertyValue } = Renderer.itemUtils
 
 class Switch extends Renderer.Native {

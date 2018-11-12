@@ -27,13 +27,19 @@ class GameViewController: UIViewController {
     var customApp: CustomApp!
     var frameDelay: Double = 0
     var frameTime: Double = 0
+    var openUrl = "" {
+        didSet {
+            onOpenUrlChange.emit()
+        }
+    }
+    let onOpenUrlChange = Signal()
 
     @objc private func animationFrame() {
         let time = CACurrentMediaTime()
         frameDelay = (time - frameTime) * 1000
         frameTime = time
-        client.sendData()
         client.js.callAnimationFrame()
+        client.sendData()
         client.js.blockUntilFree()
     }
 

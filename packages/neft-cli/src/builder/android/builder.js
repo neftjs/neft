@@ -108,13 +108,13 @@ const assignManifest = (target, source) => {
   // activityXmlManifest
   if (source.activityXmlManifest) {
     target.activityXmlManifest = target.activityXmlManifest || ''
-    target.activityXmlManifest += source.activityXmlManifest
+    target.activityXmlManifest += `${source.activityXmlManifest}\n`
   }
 
   // applicationXmlManifest
   if (source.applicationXmlManifest) {
     target.applicationXmlManifest = target.applicationXmlManifest || ''
-    target.applicationXmlManifest += source.applicationXmlManifest
+    target.applicationXmlManifest += `${source.applicationXmlManifest}\n`
   }
 }
 

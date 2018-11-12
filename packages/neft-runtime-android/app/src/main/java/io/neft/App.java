@@ -87,8 +87,8 @@ public class App {
                 renderer.getDevice().onKeyEvent(fullKeyEvent.keyCode, fullKeyEvent.keyEvent);
             }
         }
-        client.sendData();
         Native.Bridge.callRendererAnimationFrame();
+        client.sendData();
         windowView.windowItem.measure();
         Item.onAnimationFrame();
     }

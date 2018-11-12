@@ -18,6 +18,11 @@ module.exports = (bridge) ->
         if actionsIndex <= 0
             return
 
+        # I don't really know what is happening here, but without the line below,
+        # Swift may drop some of the array elements we're going to send,
+        # especially on large objects;
+        ios.nop()
+
         outDataObject =
             actions: actions
             booleans: booleans

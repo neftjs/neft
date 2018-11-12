@@ -15,7 +15,7 @@ exports.setTimeout = shot => (func, delay, arg1, arg2, arg3) => {
     throw new TypeError('callback argument must be a function')
   }
 
-  let numberDelay
+  let numberDelay = delay
   if (typeof delay !== 'number') {
     numberDelay = parseInt(delay, 10)
   }
