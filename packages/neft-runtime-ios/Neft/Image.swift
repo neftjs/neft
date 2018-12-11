@@ -1,7 +1,7 @@
 import UIKit
 
 class Image: Item {
-    static var cache: [String: UIImage] = Dictionary()
+    static var cache: NSMapTable<NSString, UIImage> = NSMapTable()
     static var loadingHandlers: [String: [(_ result: UIImage?) -> Void]] = Dictionary()
 
     override class func register() {
@@ -73,7 +73,7 @@ class Image: Item {
         }
 
         // get image from cache
-        let img = Image.cache[val]
+        let img = Image.cache.object(forKey: val as NSString)
         if img != nil {
             onCompletion(img)
             return
@@ -111,7 +111,7 @@ class Image: Item {
         }) {
             (img: UIImage?) in
             if img != nil && !val.hasPrefix("data:") {
-                Image.cache[val] = img
+                Image.cache.setObject(img, forKey: val as NSString)
             }
 
             let loading = Image.loadingHandlers[val]

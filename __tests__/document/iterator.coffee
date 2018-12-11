@@ -215,3 +215,22 @@ describe 'Document n-for', ->
         assert.is exported.reverted, 0
         exported.visible = false
         assert.is exported.reverted, 1
+
+    it 'populates `n-ref`', ->
+        view = createView """
+            <ul n-for="i in ${[1,2]}"><div elem=${i} n-ref="deepElem" /></ul>
+        """
+
+        renderParse view
+        assert.ok Array.isArray(view.refs.deepElem)
+        assert.isEqual Array.from(view.refs.deepElem.map((elem) => elem.props.elem)), [1, 2]
+
+    it 'populates `n-ref` comes from `n-use`', ->
+        view = createView """
+            <n-component name="Abc"><n-props elem /></n-component>
+            <ul n-for="i in ${[1, 2]}"><Abc elem=${i} n-ref="deepElem" /></ul>
+        """
+
+        renderParse view
+        assert.ok Array.isArray(view.refs.deepElem)
+        assert.isEqual Array.from(view.refs.deepElem.map((elem) => elem.elem)), [1, 2]

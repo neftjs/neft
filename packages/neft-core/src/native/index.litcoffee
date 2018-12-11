@@ -1,5 +1,3 @@
-    `// when=NEFT_NATIVE`
-
 # Native
 
     'use strict'
@@ -8,21 +6,12 @@
     assert = require '../assert'
     log = require '../log'
 
-    assert process.env.NEFT_NATIVE, '''
-        native module is supported only in a native environment
-    '''
-
     actions = require './actions'
+    eventTypes = require './event-types'
     bridge = require './bridge'
 
     {CALL_FUNCTION, CALL_FUNCTION_WITH_CALLBACK} = actions.out
-
-    i = 0
-    EVENT_NULL_TYPE = i++
-    EVENT_BOOLEAN_TYPE = i++
-    EVENT_INTEGER_TYPE = i++
-    EVENT_FLOAT_TYPE = i++
-    EVENT_STRING_TYPE = i++
+    {EVENT_NULL_TYPE, EVENT_BOOLEAN_TYPE, EVENT_INTEGER_TYPE, EVENT_FLOAT_TYPE, EVENT_STRING_TYPE} = eventTypes
 
     listeners = Object.create null
 
@@ -95,9 +84,9 @@
                             "integer, float or a string, but '#{arg}' given"
                     bridge.pushInteger EVENT_NULL_TYPE
 
-        unless pushPending
-            pushPending = true
-            setImmediate sendData
+        # unless pushPending
+        #     pushPending = true
+        #     setImmediate sendData
         return
 
     exports.callFunction = utils.deprecate exports.callNativeFunction, '''
@@ -120,3 +109,7 @@
     exports.on = utils.deprecate exports.onNativeEvent, '''
         Neft.native.on is deprecated; use onNativeEvent instead
     '''
+
+    exports.registerNativeFunction = bridge.registerNativeFunction
+
+    exports.publishNativeEvent = bridge.publishNativeEvent

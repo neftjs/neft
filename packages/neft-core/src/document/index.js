@@ -39,6 +39,8 @@ const componentsPool = Symbol('componentsPool')
 const renderProps = Symbol('renderProps')
 const renderOnPropsChange = Symbol('renderOnPropsChange')
 const renderSourceElement = Symbol('renderSourceElement')
+const renderListeners = Symbol('renderListeners')
+const callRenderListener = Symbol('callRenderListener')
 
 let instances
 let saveInstance
@@ -88,6 +90,7 @@ class Document {
     this[renderProps] = null
     this[renderOnPropsChange] = null
     this[renderSourceElement] = null
+    this[renderListeners] = null
 
     this.uid = utils.uid()
     Object.seal(this)
@@ -103,6 +106,13 @@ class Document {
     const { components } = this
     if (components[name]) return components[name]
     return name.split(':').reduce((object, namePart) => object && object[namePart], components)
+  }
+
+  [callRenderListener](name, arg1, arg2) {
+    const listeners = this[renderListeners]
+    if (listeners && typeof listeners[name] === 'function') {
+      listeners[name](arg1, arg2)
+    }
   }
 
   getComponent(name) {
@@ -133,17 +143,24 @@ class Document {
   }
 
   setRef(ref, value) {
+    if (!value) return
+    const oldValue = this.refs[ref]
+    if (oldValue) this[callRenderListener]('refDelete', ref, oldValue)
     this.refs[ref] = value
+    this[callRenderListener]('refSet', ref, value)
     this.exported.onRefsChange.emit()
   }
 
   deleteRef(ref) {
+    const oldValue = this.refs[ref]
     delete this.refs[ref]
+    this[callRenderListener]('refDelete', ref, oldValue)
     this.exported.onRefsChange.emit()
   }
 
   render({
     context = null, props = null, onPropsChange, sourceElement = null,
+    listeners = null,
   } = {}) {
     assert.notOk(this.rendered, 'Document is already rendered')
 
@@ -163,6 +180,7 @@ class Document {
     }
 
     this[renderSourceElement] = sourceElement
+    this[renderListeners] = listeners
 
     if (this.script) this.script.beforeRender()
     this.inputs.forEach(input => input.render())
@@ -194,6 +212,7 @@ class Document {
     this.styleItems.forEach(styleItem => styleItem.revert())
     this.rendered = false
     if (this.script) this.script.afterRevert()
+    this[renderListeners] = null
   }
 }
 

@@ -15,11 +15,13 @@ import android.util.Log;
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGParseException;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.WeakHashMap;
 
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
@@ -68,10 +70,7 @@ public class Image extends Item {
         }
     }
 
-    private static final int MAX_WIDTH = 1280;
-    private static final int MAX_HEIGHT = 960;
-
-    private static final HashMap<String, Bitmap> CACHE = new HashMap<>();
+    private static final WeakHashMap<String, Bitmap> CACHE = new WeakHashMap<>();
     private static final HashMap<String, ArrayList<Consumer<Bitmap>>> LOADING = new HashMap<>();
 
     private String source;
@@ -151,37 +150,45 @@ public class Image extends Item {
         return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
 
+    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int width = options.outWidth;
+        final int height = options.outHeight;
+        int inSampleSize = 1;
+
+        while ((height / inSampleSize) >= reqHeight && (width / inSampleSize) >= reqWidth) {
+            inSampleSize *= 2;
+        }
+
+        return inSampleSize;
+    }
+
+    private static Bitmap decodeSampledBitmap(InputStream in) throws IOException {
+        BufferedInputStream stream = new BufferedInputStream(in);
+        stream.mark(1);
+
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(stream, null, options);
+        stream.reset();
+
+        options.inSampleSize = calculateInSampleSize(options, MAX_GPU_WIDTH, MAX_GPU_HEIGHT);
+
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeStream(stream, null, options);
+    }
+
     static private Bitmap loadUrlSource(String val) {
         try {
             InputStream in = new URL(val).openStream();
             if (val.endsWith(".svg")) {
                 return getBitmapFromSVG(in);
             }
-            return BitmapFactory.decodeStream(in);
-        } catch (Exception e) {
+            return decodeSampledBitmap(in);
+        } catch (Exception|OutOfMemoryError e) {
             Log.e("Neft", "Can't load image from url: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
-    }
-
-    static private Bitmap validateBitmap(Bitmap bitmap) {
-        // resize too large bitmaps
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        if (width > MAX_WIDTH && height > MAX_HEIGHT) {
-            if (width > height) {
-                height = height * MAX_WIDTH / width;
-                width = MAX_WIDTH;
-            } else {
-                width = width * MAX_HEIGHT / height;
-                height = MAX_HEIGHT;
-            }
-
-            return Bitmap.createScaledBitmap(bitmap, width, height, false);
-        }
-
-        return bitmap;
     }
 
     public static void getImageFromSource(final String val, final Consumer<Bitmap> callback) {
@@ -223,11 +230,6 @@ public class Image extends Item {
                     bitmap = loadUrlSource(val);
                 }
 
-                // validate bitmap
-                if (bitmap != null) {
-                    bitmap = validateBitmap(bitmap);
-                }
-
                 // save to CACHE
                 if (bitmap != null && !val.startsWith("data:")) {
                     CACHE.put(val, bitmap);
@@ -267,6 +269,7 @@ public class Image extends Item {
                     return;
                 }
                 shape.setBitmap(bitmap);
+
                 if (bitmap != null) {
                     self.onLoad();
                 } else {

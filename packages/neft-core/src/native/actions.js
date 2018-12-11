@@ -33,6 +33,8 @@
 {
   let i = -1
   exports.out = {
+    LOCK: i += 1,
+    RELEASE_LOCK: i += 1,
     CALL_FUNCTION: i += 1,
     SET_SCREEN_STATUSBAR_COLOR: i += 1,
     DEVICE_LOG: i += 1,

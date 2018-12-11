@@ -1,10 +1,14 @@
 const { render } = require('./src/initializer')
-const { callNativeFunction, onNativeEvent } = process.env.NEFT_NATIVE ? require('./src/native') : {}
+const {
+  callNativeFunction, onNativeEvent, registerNativeFunction, publishNativeEvent,
+} = require('./src/native')
 const Resources = require('./src/resources')
 const Renderer = require('./src/renderer')
 
 exports.callNativeFunction = callNativeFunction
 exports.onNativeEvent = onNativeEvent
+exports.registerNativeFunction = registerNativeFunction
+exports.publishNativeEvent = publishNativeEvent
 
 exports.util = require('./src/util')
 exports.signal = require('./src/signal')

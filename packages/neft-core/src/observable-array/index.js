@@ -37,9 +37,9 @@ class ObservableArray extends Array {
     return result
   }
 
-  splice(start, deleteCound, ...elements) {
-    const popped = this.slice(start, start + deleteCound)
-    const result = super.splice(start, deleteCound, ...elements)
+  splice(start, deleteCount, ...elements) {
+    const popped = this.slice(start, start + deleteCount)
+    const result = super.splice(start, deleteCount, ...elements)
     popped.forEach((element, index) => {
       this.onPop.emit(element, start + index)
     })

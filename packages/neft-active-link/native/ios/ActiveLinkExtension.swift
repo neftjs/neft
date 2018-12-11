@@ -4,11 +4,17 @@ extension Extension.ActiveLink {
     static let app = App.getApp()
 
     static func register() {
+        app.client.addCustomFunction("NeftActiveLink/web") {
+            (args: [Any?]) in
+            let url = args[0] as? String
+            web(url: url)
+        }
+
         app.client.addCustomFunction("NeftActiveLink/mailto") {
             (args: [Any?]) in
             let address = args[0] as? String
             let subject = args[1] as? String
-            mailto(address: address, subject: nil)
+            mailto(address: address, subject: subject)
         }
 
         app.client.addCustomFunction("NeftActiveLink/tel") {
@@ -26,6 +32,12 @@ extension Extension.ActiveLink {
         }
     }
 
+    private static func web(url: String?) {
+        if let url = URL(string: url ?? "") {
+            UIApplication.shared.openURL(url)
+        }
+    }
+
     private static func mailto(address: String?, subject: String?) {
         if let url = URL(string: "mailto:\(address ?? "")?subject=\(subject ?? "")") {
             UIApplication.shared.openURL(url)
@@ -33,7 +45,8 @@ extension Extension.ActiveLink {
     }
 
     private static func tel(number: String?) {
-        if let url = URL(string: "tel:\(number ?? "")") {
+        let urlNumber = number?.replacingOccurrences(of: " ", with: "")
+        if let url = URL(string: "tel://\(urlNumber ?? "")") {
             UIApplication.shared.openURL(url)
         }
     }

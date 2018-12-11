@@ -54,21 +54,26 @@ module.exports = (impl) ->
 
     bridge.listen bridge.inActions.KEY_PRESS, (reader) ->
         keyboard.key = reader.getString()
+        keyboard.text = ''
         device.onKeyPress.emit keyboard
         return
 
     bridge.listen bridge.inActions.KEY_HOLD, (reader) ->
         keyboard.key = reader.getString()
+        keyboard.text = ''
         device.onKeyHold.emit keyboard
         return
 
     bridge.listen bridge.inActions.KEY_INPUT, (reader) ->
+        keyboard.key = ''
         keyboard.text = reader.getString()
         device.onKeyInput.emit keyboard
         return
 
     bridge.listen bridge.inActions.KEY_RELEASE, (reader) ->
         keyboard.key = reader.getString()
+        keyboard.text = ''
+        console.log('KEY RELEASE', keyboard.key)
         device.onKeyRelease.emit keyboard
         return
 

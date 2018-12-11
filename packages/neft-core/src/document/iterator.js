@@ -1,3 +1,4 @@
+const util = require('../util')
 const assert = require('../assert')
 const eventLoop = require('../event-loop')
 const ObservableArray = require('../observable-array')
@@ -12,21 +13,26 @@ class Iterator {
     this.data = null
     this.pool = []
     this.usedComponents = []
+    this.refs = {}
     this.hiddenDepth = 0
     this.immediateRenderPending = false
+    this.componentListeners = {
+      refSet: this.setRef.bind(this),
+      refDelete: this.deleteRef.bind(this),
+    }
 
-    this.element.onPropsChange.connect(this.whenElementPropsChange, this)
+    this.element.onPropsChange.connect(this.handleElementPropsChange, this)
 
     let anyElement = this.element
     while (anyElement) {
       if ('n-if' in anyElement.props) {
-        anyElement.onVisibleChange.connect(this.whenElementVisibleChange, this)
+        anyElement.onVisibleChange.connect(this.handleElementVisibleChange, this)
       }
       anyElement = anyElement.parent
     }
   }
 
-  whenElementVisibleChange(oldValue) {
+  handleElementVisibleChange(oldValue) {
     const value = !oldValue
     const hiddenInc = value ? -1 : 1
     this.hiddenDepth += hiddenInc
@@ -37,11 +43,32 @@ class Iterator {
     }
   }
 
-  whenElementPropsChange(propName) {
+  handleElementPropsChange(propName) {
     if (propName !== 'n-for') return
     if (!this.document.rendered) return
     this.revert()
     this.renderImmediate()
+  }
+
+  setRef(name, value) {
+    let array = this.document.refs[name]
+    if (!array) {
+      array = new ObservableArray()
+      this.document.setRef(name, array)
+    }
+    array.push(value)
+  }
+
+  deleteRef(name, value) {
+    const array = this.document.refs[name]
+    if (Array.isArray(array)) {
+      util.remove(array, value)
+    }
+  }
+
+  forEachComponentBaseRef(component, func) {
+    const refs = Object.getPrototypeOf(component.refs)
+    Object.keys(refs).forEach((ref) => { this[func](ref, refs[ref]) })
   }
 
   renderImmediate() {
@@ -97,10 +124,11 @@ class Iterator {
 
   getComponent() {
     if (this.pool.length) return this.pool.pop()
-    return this.component({
+    const component = this.component({
       parent: this.document,
       exported: Object.create(this.document.exported),
     })
+    return component
   }
 
   insertItem(elem, index = elem) {
@@ -120,13 +148,15 @@ class Iterator {
     const newChild = usedComponent.element
     newChild.parent = this.element
     newChild.index = index
-    usedComponent.render({ context: this.document.context })
+    this.forEachComponentBaseRef(usedComponent, 'setRef')
+    usedComponent.render({ context: this.document.context, listeners: this.componentListeners })
   }
 
   popItem(elem, index = elem) {
     assert.isObject(this.data)
     assert.isInteger(index)
     const usedComponent = this.usedComponents[index]
+    this.forEachComponentBaseRef(usedComponent, 'deleteRef')
     usedComponent.revert()
     usedComponent.element.parent = null
     this.pool.push(usedComponent)

@@ -93,12 +93,21 @@ exports.pushFloat = (val) ->
 
 exports.pushString = (val) ->
 
+exports.registerNativeFunction = () ->
+
+exports.publishNativeEvent = () ->
+
+exports.sendDataInLock = ->
+    exports.sendData()
+
 if process.env.NEFT_ANDROID
     impl = require './impl/android/bridge'
 if process.env.NEFT_IOS
     impl = require './impl/ios/bridge'
 if process.env.NEFT_MACOS
     impl = require './impl/macos/bridge'
+if process.env.NEFT_BROWSER
+    impl = require './impl/browser/bridge'
 if impl?
     utils.merge exports, impl(exports)
 

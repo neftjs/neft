@@ -1,9 +1,14 @@
 const { util, callNativeFunction } = require('@neft/core')
 
 const NATIVE_PREFIX = 'NeftActiveLink'
+const WEB = `${NATIVE_PREFIX}/web`
 const MAILTO = `${NATIVE_PREFIX}/mailto`
 const TEL = `${NATIVE_PREFIX}/tel`
 const GEO = `${NATIVE_PREFIX}/geo`
+
+exports.web = (url) => {
+  callNativeFunction(WEB, String(url))
+}
 
 exports.mailto = (opts) => {
   const isOpts = util.isObject(opts)

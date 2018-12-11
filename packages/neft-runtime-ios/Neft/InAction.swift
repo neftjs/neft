@@ -1,7 +1,9 @@
 enum InAction: Int {
     case
     // basic
-    callFunction = 0,
+    lock = 0,
+    releaseLock,
+    callFunction,
 
     // renderer
     setScreenStatusBarColor,

@@ -1,8 +1,9 @@
-// when=NEFT_HTML
 
-const { utils } = Neft
-const { setPropertyValue } = Neft.Renderer.itemUtils
-const { Item } = Neft.Renderer.Impl.Types
+const { util } = require('@neft/core')
+const Renderer = require('@neft/core/src/renderer')
+
+const { setPropertyValue } = Renderer.itemUtils
+const { Item } = Renderer.Impl.Types
 
 exports.create = function (data) {
   Item.create.call(this, data)
@@ -18,7 +19,7 @@ exports.create = function (data) {
 }
 
 exports.createData = function () {
-  return utils.merge({
+  return util.merge({
     innerElem: null,
     innerElemStyle: null,
   }, Item.DATA)

@@ -15,6 +15,8 @@ import io.neft.renderer.annotation.OnCreate;
 import io.neft.renderer.annotation.OnSet;
 
 public class ScrollableItem extends NativeItem {
+    private enum ScrollField { X, Y }
+
     private static class ScrollableView extends ScrollView {
         private ScrollableItem scrollable;
         private HorizontalScrollView hScroll;
@@ -61,8 +63,6 @@ public class ScrollableItem extends NativeItem {
 
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-            // disable default animation on activity size change
-            smoothScrollBy(0, 0);
         }
 
         @Override
@@ -79,6 +79,43 @@ public class ScrollableItem extends NativeItem {
 
         void addContentView(View view) {
             content.addView(view);
+        }
+    }
+
+    private class ScrollToAction {
+        final ViewTreeObserver observer = getItemView().getViewTreeObserver();
+        final ViewTreeObserver.OnGlobalLayoutListener listener = new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                doAction.run();
+            }
+        };
+        final Runnable doAction;
+        boolean executed = false;
+
+        ScrollToAction(final View viewToScroll, final ScrollField field, final int value) {
+            doAction = new Runnable() {
+                @Override
+                public void run() {
+                    observer.removeOnGlobalLayoutListener(listener);
+                    if (!executed) {
+                         executed = true;
+                        if (field == ScrollField.X) {
+                            viewToScroll.scrollTo(value, 0);
+                            sendContentX();
+                        } else {
+                            viewToScroll.scrollTo(0, value);
+                            sendContentY();
+                        }
+                    }
+                }
+            };
+        }
+
+        void execute() {
+            // scroll on layout or with some delay
+            observer.addOnGlobalLayoutListener(listener);
+            getItemView().post(doAction);
         }
     }
 
@@ -123,27 +160,13 @@ public class ScrollableItem extends NativeItem {
     @OnSet("contentX")
     public void setContentX(int val) {
         final int px = Math.round(dpToPx(val));
-        getItemView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                getItemView().hScroll.scrollTo(px, 0);
-                sendContentX();
-                getItemView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        });
+        new ScrollToAction(getItemView().hScroll, ScrollField.X, px).execute();
     }
 
     @OnSet("contentY")
-    public void setContentY(int val) {
+    public void setContentY(final int val) {
         final int px = Math.round(dpToPx(val));
-        getItemView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                getItemView().scrollTo(0, px);
-                sendContentY();
-                getItemView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        });
+        new ScrollToAction(getItemView(), ScrollField.Y, px).execute();
     }
 
     @OnSet("horizontalScrollBar")

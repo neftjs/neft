@@ -19,6 +19,8 @@ import java.util.List;
 
 public class Item {
     protected static final App APP = App.getInstance();
+    protected static final int MAX_GPU_WIDTH = 1280;
+    protected static final int MAX_GPU_HEIGHT = 960;
     private static final RectF TEMP_RECT_F = new RectF();
     private static final int LAYER_MIN_OPERATIONS = 5;
     private static final int LAYER_GC_DELAY = 5000;
@@ -383,6 +385,10 @@ public class Item {
 
     public void setKeysFocus(boolean val) {}
 
+    private boolean canUseGpu() {
+        return optimized && width <= MAX_GPU_WIDTH && height <= MAX_GPU_HEIGHT;
+    }
+
     private void useGpu() {
         if (!optimized) {
             return;
@@ -455,6 +461,7 @@ public class Item {
 
         // optimize if possible
         boolean optimize = clip || size.contains(childrenBounds);
+        optimize = optimize && canUseGpu();
         if (visible && optimized != optimize) {
             optimized = optimize;
             view.setClipChildren(optimized && childrenOptimized);

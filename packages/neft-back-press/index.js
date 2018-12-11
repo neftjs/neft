@@ -4,6 +4,8 @@ exports.onBackPress = signal.create()
 
 exports.killApp = () => callNativeFunction('extensionBackKillApp')
 
-onNativeEvent('extensionBackOnBackPress', () => {
-  exports.onBackPress.emit()
-})
+if (process.env.NEFT_NATIVE) {
+  onNativeEvent('extensionBackOnBackPress', () => {
+    exports.onBackPress.emit()
+  })
+}

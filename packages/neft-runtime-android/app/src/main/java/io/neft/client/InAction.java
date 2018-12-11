@@ -2,6 +2,8 @@ package io.neft.client;
 
 public enum InAction {
     // basic
+    LOCK,
+    RELEASE_LOCK,
     CALL_FUNCTION,
 
     // renderer

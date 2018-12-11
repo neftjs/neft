@@ -1,12 +1,16 @@
 const valueToString = function (value) {
   let result
-  if (typeof value === 'object' && value !== null && !(value instanceof RegExp)) {
+  let useJson = typeof value === 'object' && value !== null
+    && value.toString === Object.prototype.toString
+  useJson = useJson || Array.isArray(value)
+  if (useJson) {
     try {
       result = JSON.stringify(value)
     } catch (error) {
       // NOP
     }
   }
+  if (value instanceof Error) result = value.stack
   return result || String(value)
 }
 

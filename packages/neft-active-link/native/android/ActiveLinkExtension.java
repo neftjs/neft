@@ -14,6 +14,13 @@ public final class ActiveLinkExtension {
     private final static App APP = App.getInstance();
 
     public static void register() {
+        APP.getClient().addCustomFunction("NeftActiveLink/web", new Consumer<Object[]>() {
+            @Override
+            public void accept(Object[] var) {
+                web((String) var[0]);
+            }
+        });
+
         APP.getClient().addCustomFunction("NeftActiveLink/mailto", new Consumer<Object[]>() {
             @Override
             public void accept(Object[] var) {
@@ -34,6 +41,15 @@ public final class ActiveLinkExtension {
                 geo(((Number) var[0]).floatValue(), ((Number) var[1]).floatValue(), (String) var[2]);
             }
         });
+    }
+
+    public static void web(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        try {
+            APP.getActivity().startActivity(intent);
+        } catch (ActivityNotFoundException error) {
+            Log.e("NEFT", "Cannot web in ActiveLink extension", error);
+        }
     }
 
     public static void mailto(String address) {

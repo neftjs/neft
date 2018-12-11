@@ -1,4 +1,6 @@
-const { callNativeFunction, onNativeEvent } = require('@neft/core')
+const {
+  callNativeFunction, onNativeEvent, registerNativeFunction, publishNativeEvent,
+} = require('@neft/core')
 
 const NATIVE_PREFIX = 'NeftStorage'
 const GET = `${NATIVE_PREFIX}/get`
@@ -15,6 +17,18 @@ onNativeEvent(ON_RESPONSE, (uid, error, value) => {
   delete requests[uid]
   if (error) request.reject(error)
   else request.resolve(value)
+})
+
+registerNativeFunction(GET, (uid) => {
+  publishNativeEvent(ON_RESPONSE, uid, 'Not implemented')
+})
+
+registerNativeFunction(SET, (uid) => {
+  publishNativeEvent(ON_RESPONSE, uid, 'Not implemented')
+})
+
+registerNativeFunction(REMOVE, (uid) => {
+  publishNativeEvent(ON_RESPONSE, uid, 'Not implemented')
 })
 
 exports.get = key => new Promise((resolve, reject) => {
