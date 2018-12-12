@@ -18,7 +18,7 @@ Rectangle {
     'use strict'
 
     utils = require '../../../../util'
-    signal = require '../../../../signal'
+    {SignalsEmitter} = require '../../../../signal'
     assert = require '../../../../assert'
 
     module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class Keys extends itemUtils.DeepObject
@@ -60,7 +60,7 @@ Rectangle {
         @SIGNALS = ['onPress', 'onHold', 'onRelease', 'onInput']
 
         for signalName in @SIGNALS
-            signal.Emitter.createSignal @, signalName
+            SignalsEmitter.createSignal @, signalName
 
 ## *Boolean* Keys::focus = `false`
 
@@ -89,17 +89,17 @@ Rectangle {
                         Keys.focusedItem = null
                 return
 
-        Device.onKeyPress (event) ->
-            focusedKeys?.onPress.emit keysEvent
+        Device.onKeyPress.connect (event) ->
+            focusedKeys?.emit 'onPress', keysEvent
 
-        Device.onKeyHold (event) ->
-            focusedKeys?.onHold.emit keysEvent
+        Device.onKeyHold.connect (event) ->
+            focusedKeys?.emit 'onHold', keysEvent
 
-        Device.onKeyRelease (event) ->
-            focusedKeys?.onRelease.emit keysEvent
+        Device.onKeyRelease.connect (event) ->
+            focusedKeys?.emit 'onRelease', keysEvent
 
-        Device.onKeyInput (event) ->
-            focusedKeys?.onInput.emit keysEvent
+        Device.onKeyInput.connect (event) ->
+            focusedKeys?.emit 'onInput', keysEvent
 
 ## *Item.Keys.Event* Keys.event
 

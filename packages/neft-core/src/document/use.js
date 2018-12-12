@@ -1,4 +1,3 @@
-const signal = require('../signal')
 const log = require('../log')
 const assert = require('../assert')
 const eventLoop = require('../event-loop')
@@ -14,7 +13,7 @@ class Use {
 
     this.hiddenDepth = 0
     this.immediateRenderPending = false
-    this.onElementPropsChange = signal.createReference(this.element.onPropsChange)
+    this.onElementPropsChange = this.element.onPropsChange.asSignalDispatcher()
 
     this.element.onPropsChange.connect(this.whenElementPropsChange, this)
 

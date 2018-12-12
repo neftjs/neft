@@ -24,8 +24,8 @@
             super()
             @_children = []
             @_runningChildIndex = -1
-            @onStart onStart
-            @onStop onStop
+            @onStart.connect onStart
+            @onStop.connect onStop
 
         itemUtils.defineProperty
             constructor: @
@@ -51,7 +51,7 @@
                 @running = false
             else
                 child = @_children[@_runningChildIndex]
-                child.onStop runNext, @
+                child.onStop.connect runNext, @
                 child.running = true
                 child.paused = @_paused
             return

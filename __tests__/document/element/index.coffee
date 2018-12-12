@@ -327,7 +327,7 @@ describe 'Document Element', ->
                 doc2b.parent = null
                 watcher = doc2.watch 'b'
                 tags.push watcher.nodes...
-                watcher.onAdd (tag) ->
+                watcher.onAdd.connect (tag) ->
                     tags.push tag
                 doc2b.parent = doc2div1
                 assert.isEqual tags, [doc2b], maxDeep: 1
@@ -336,7 +336,7 @@ describe 'Document Element', ->
                 doc2u.parent = null
                 watcher = doc2.watch 'b u'
                 tags.push watcher.nodes...
-                watcher.onAdd (tag) ->
+                watcher.onAdd.connect (tag) ->
                     tags.push tag
                 doc2u.parent = doc2b
                 assert.isEqual tags, [doc2u, doc2u2], maxDeep: 1
@@ -345,7 +345,7 @@ describe 'Document Element', ->
                 doc2u.parent = null
                 watcher = doc2div1.watch '> u'
                 tags.push watcher.nodes...
-                watcher.onAdd (tag) ->
+                watcher.onAdd.connect (tag) ->
                     tags.push tag
                 doc2u.parent = doc2div1
                 assert.isEqual tags, [doc2u], maxDeep: 1
@@ -353,9 +353,9 @@ describe 'Document Element', ->
             it '[foo]', ->
                 watcher = doc2div1.watch '[attr2]'
                 tags.push watcher.nodes...
-                watcher.onAdd (tag) ->
+                watcher.onAdd.connect (tag) ->
                     tags.push tag
-                watcher.onRemove (tag) ->
+                watcher.onRemove.connect (tag) ->
                     util.remove tags, tag
                 doc2u.props.set 'attr2', '2'
                 assert.isEqual tags, [doc2u], maxDeep: 1
@@ -365,9 +365,9 @@ describe 'Document Element', ->
             it '[foo=bar]', ->
                 watcher = doc2div1.watch '[attr=2]'
                 tags.push watcher.nodes...
-                watcher.onAdd (tag) ->
+                watcher.onAdd.connect (tag) ->
                     tags.push tag
-                watcher.onRemove (tag) ->
+                watcher.onRemove.connect (tag) ->
                     util.remove tags, tag
                 doc2u.props.set 'attr', '2'
                 assert.isEqual tags, [doc2u], maxDeep: 1
@@ -377,9 +377,9 @@ describe 'Document Element', ->
             it '[foo^=bar]', ->
                 watcher = doc2div1.watch '[color^=re]'
                 tags.push watcher.nodes...
-                watcher.onAdd (tag) ->
+                watcher.onAdd.connect (tag) ->
                     tags.push tag
-                watcher.onRemove (tag) ->
+                watcher.onRemove.connect (tag) ->
                     util.remove tags, tag
                 doc2u.props.set 'color', 'red'
                 assert.isEqual tags, [doc2u], maxDeep: 1
@@ -389,9 +389,9 @@ describe 'Document Element', ->
             it '[foo$=bar]', ->
                 watcher = doc2div1.watch '[color$=ed]'
                 tags.push watcher.nodes...
-                watcher.onAdd (tag) ->
+                watcher.onAdd.connect (tag) ->
                     tags.push tag
-                watcher.onRemove (tag) ->
+                watcher.onRemove.connect (tag) ->
                     util.remove tags, tag
                 doc2u.props.set 'color', 'red'
                 assert.isEqual tags, [doc2u], maxDeep: 1
@@ -401,9 +401,9 @@ describe 'Document Element', ->
             it '[foo*=bar]', ->
                 watcher = doc2div1.watch '[color*=rang]'
                 tags.push watcher.nodes...
-                watcher.onAdd (tag) ->
+                watcher.onAdd.connect (tag) ->
                     tags.push tag
-                watcher.onRemove (tag) ->
+                watcher.onRemove.connect (tag) ->
                     util.remove tags, tag
                 doc2u.props.set 'color', 'orange'
                 assert.isEqual tags, [doc2u], maxDeep: 1
@@ -414,9 +414,9 @@ describe 'Document Element', ->
                 doc2u.parent = null
                 watcher = doc2div1.watch '*'
                 tags.push watcher.nodes...
-                watcher.onAdd (tag) ->
+                watcher.onAdd.connect (tag) ->
                     tags.push tag
-                watcher.onRemove (tag) ->
+                watcher.onRemove.connect (tag) ->
                     util.remove tags, tag
                 doc2u.parent = doc2div1
                 assert.isEqual tags, [doc2b, doc2u, doc2u2], maxDeep: 1
@@ -426,9 +426,9 @@ describe 'Document Element', ->
             it '*[foo]', ->
                 watcher = doc2div1.watch '*[attr2]'
                 tags.push watcher.nodes...
-                watcher.onAdd (tag) ->
+                watcher.onAdd.connect (tag) ->
                     tags.push tag
-                watcher.onRemove (tag) ->
+                watcher.onRemove.connect (tag) ->
                     util.remove tags, tag
                 doc2u.props.set 'attr2', '2'
                 assert.isEqual tags, [doc2u], maxDeep: 1
@@ -439,9 +439,9 @@ describe 'Document Element', ->
                 doc2u.parent = null
                 watcher = doc2.watch 'div > * > u[color]'
                 tags.push watcher.nodes...
-                watcher.onAdd (tag) ->
+                watcher.onAdd.connect (tag) ->
                     tags.push tag
-                watcher.onRemove (tag) ->
+                watcher.onRemove.connect (tag) ->
                     util.remove tags, tag
                 doc2u.parent = doc2b
                 assert.isEqual tags, [doc2u], maxDeep: 1
@@ -453,9 +453,9 @@ describe 'Document Element', ->
                 doc2div2.parent = null
                 watcher = doc2.watch 'div > * > u[color], div[attr]'
                 tags.push watcher.nodes...
-                watcher.onAdd (tag) ->
+                watcher.onAdd.connect (tag) ->
                     tags.push tag
-                watcher.onRemove (tag) ->
+                watcher.onRemove.connect (tag) ->
                     util.remove tags, tag
                 doc2div1.parent = doc2
                 doc2div2.parent = doc2
@@ -467,9 +467,9 @@ describe 'Document Element', ->
             it '&[foo]', ->
                 watcher = doc2u.watch '&[color]'
                 tags.push watcher.nodes...
-                watcher.onAdd (tag) ->
+                watcher.onAdd.connect (tag) ->
                     tags.push tag
-                watcher.onRemove (tag) ->
+                watcher.onRemove.connect (tag) ->
                     util.remove tags, tag
                 assert.isEqual tags, [doc2u], maxDeep: 1
                 doc2u.props.set 'color', undefined
@@ -478,9 +478,9 @@ describe 'Document Element', ->
             it '#text', ->
                 watcher = doc2.watch '#text'
                 tags.push watcher.nodes...
-                watcher.onAdd (tag) ->
+                watcher.onAdd.connect (tag) ->
                     tags.push tag
-                watcher.onRemove (tag) ->
+                watcher.onRemove.connect (tag) ->
                     util.remove tags, tag
                     assert.isEqual tags, [doc2em1.children[0]], maxDeep: 1
                     newText = new Element.Text
@@ -498,14 +498,14 @@ describe 'Document Element', ->
             watcher1 = div.watch 'b'
             watcher2 = div.watch 'b'
             disconnected = false
-            watcher2.onAdd (tag) ->
+            watcher2.onAdd.connect (tag) ->
                 tags.push tag
-            watcher1.onRemove (tag) ->
+            watcher1.onRemove.connect (tag) ->
                 unless disconnected
                     disconnected = true
                     watcher1.disconnect()
                     watcher2.disconnect()
-            watcher2.onRemove (tag) ->
+            watcher2.onRemove.connect (tag) ->
                 removedTags.push tag
             b1.parent = null
             assert.isEqual removedTags, [b1, b2], maxDeep: 1
@@ -521,7 +521,7 @@ describe 'Document Element', ->
             elem = fromHTML('<b a="1"></b>').cloneDeep()
             tag = elem.children[0]
 
-            tag.onPropsChange (name, oldVal) ->
+            tag.onPropsChange.connect (name, oldVal) ->
                 value = @props[name]
                 args = [@, arguments...]
 
@@ -535,7 +535,7 @@ describe 'Document Element', ->
             elem = fromHTML('<b></b>').cloneDeep()
             tag = elem.children[0]
 
-            tag.onVisibleChange ->
+            tag.onVisibleChange.connect ->
                 value = @visible
                 args = [@, arguments...]
 
@@ -549,7 +549,7 @@ describe 'Document Element', ->
             elem = fromHTML('<b>a</b>').cloneDeep()
             tag = elem.children[0].children[0]
 
-            tag.onTextChange ->
+            tag.onTextChange.connect ->
                 text = @text
                 args = [@, arguments...]
 
@@ -564,7 +564,7 @@ describe 'Document Element', ->
             tag1 = elem.children[0]
             tag2 = elem.children[1]
 
-            tag2.onParentChange ->
+            tag2.onParentChange.connect ->
                 value = @parent
                 args = [@, arguments...]
 
@@ -579,7 +579,7 @@ describe 'Document Element', ->
             tag = elem.children[0]
 
             listener = -> ok = false
-            tag.onVisibleChange listener
+            tag.onVisibleChange.connect listener
             tag.onVisibleChange.disconnect listener
 
             tag.visible = false

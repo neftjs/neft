@@ -1,6 +1,6 @@
 'use strict'
 
-utils = require '../util'
+util = require '../util'
 log = require '../log'
 assert = require '../assert'
 ObservableArray = require '../observable-array'
@@ -14,7 +14,7 @@ MAX_LOOPS = 50
 getPropHandlerName = do ->
     cache = Object.create null
     (prop) ->
-        cache[prop] ||= "on#{utils.capitalize(prop)}Change"
+        cache[prop] ||= "on#{util.capitalize(prop)}Change"
 
 class Connection
     pool = []
@@ -68,11 +68,11 @@ class Connection
             if item instanceof ObservableArray
                 @isConnected = true
                 handler = @getSignalChangeListener()
-                item.onPush handler, @
-                item.onPop handler, @
+                item.onPush.connect handler, @
+                item.onPop.connect handler, @
             else if handler = item[@handlerName]
                 @isConnected = true
-                handler @getSignalChangeListener(), @
+                handler.connect @getSignalChangeListener(), @
         return
 
     disconnect: ->
@@ -186,7 +186,7 @@ class Binding
             @updateLoop = 0
         `//</development>`
 
-        result = utils.tryFunction @func, @ctx, @args
+        result = util.tryFunction @func, @ctx, @args
         if result instanceof Error
             @onError result
             result = @getDefaultValue()

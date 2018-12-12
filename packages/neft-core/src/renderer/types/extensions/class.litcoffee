@@ -4,13 +4,11 @@
 
     assert = require '../../../assert'
     utils = require '../../../util'
-    signal = require '../../../signal'
+    {SignalsEmitter} = require '../../../signal'
     log = require '../../../log'
     TagQuery = require '../../../document/element/element/tag/query'
 
     log = log.scope 'Rendering', 'Class'
-
-    {emitSignal} = signal.Emitter
 
     module.exports = (Renderer, Impl, itemUtils) ->
         class ChangesObject
@@ -598,7 +596,7 @@ Grid {
                 if oldVal
                     oldVal.onElementChange.disconnect @reloadQuery, @
                 if val = @_ref._target
-                    val.onElementChange @reloadQuery, @
+                    val.onElementChange.connect @reloadQuery, @
                 if oldVal isnt val
                     @reloadQuery()
                 return
@@ -611,16 +609,16 @@ Grid {
                 @_priority = 0
                 super ref
 
-                ref.onTargetChange onTargetChange, @
+                ref.onTargetChange.connect onTargetChange, @
                 onTargetChange.call @, ref._target
 
 ## *Signal* Class::document.onNodeAdd(*Element* node)
 
-            signal.Emitter.createSignal @, 'onNodeAdd'
+            SignalsEmitter.createSignal @, 'onNodeAdd'
 
 ## *Signal* Class::document.onNodeRemove(*Element* node)
 
-            signal.Emitter.createSignal @, 'onNodeRemove'
+            SignalsEmitter.createSignal @, 'onNodeRemove'
 
 ## *String* Class::document.query
 
@@ -712,17 +710,17 @@ Grid {
                 return
 
             onNodeAdd = (node) ->
-                node.onStyleChange onNodeStyleChange, @
+                node.onStyleChange.connect onNodeStyleChange, @
                 if style = node._style
                     connectNodeStyle.call @, style
-                emitSignal @, 'onNodeAdd', node
+                @emit 'onNodeAdd', node
                 return
 
             onNodeRemove = (node) ->
                 node.onStyleChange.disconnect onNodeStyleChange, @
                 if style = node._style
                     disconnectNodeStyle.call @, style
-                emitSignal @, 'onNodeRemove', node
+                @emit 'onNodeRemove', node
                 return
 
             reloadQuery: ->
@@ -736,8 +734,8 @@ Grid {
                 # add new ones
                 if (query = @_query) and (target = @_ref.target) and (node = target.element) and node.watch
                     watcher = @_nodeWatcher = node.watch query
-                    watcher.onAdd onNodeAdd, @
-                    watcher.onRemove onNodeRemove, @
+                    watcher.onAdd.connect onNodeAdd, @
+                    watcher.onRemove.connect onNodeRemove, @
                 return
 
         Class

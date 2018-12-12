@@ -124,8 +124,8 @@ module.exports = (impl) ->
             impl.utils.onFontLoaded onFontLoaded, @
 
         # update autoWidth/autoHeight
-        @onWidthChange onWidthChange
-        @onHeightChange onHeightChange
+        @onWidthChange.connect onWidthChange
+        @onHeightChange.connect onHeightChange
         return
 
     setText: (val) ->

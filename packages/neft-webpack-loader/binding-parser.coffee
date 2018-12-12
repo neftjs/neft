@@ -128,5 +128,6 @@ exports.parse = (val, isPublicId, opts = 0, objOpts = {}, isVariableId) ->
     hash = hash.trim()
     text = text.trim()
 
+
     hash: hash
     connections: text

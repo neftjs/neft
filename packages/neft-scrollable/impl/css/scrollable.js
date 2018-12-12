@@ -1,6 +1,6 @@
 // when=NEFT_HTML
 
-const { util, signal } = require('@neft/core')
+const { util, SignalDispatcher } = require('@neft/core')
 const { Impl } = require('@neft/core/src/renderer')
 const { Item } = Impl.Types
 
@@ -13,7 +13,7 @@ exports.create = function (data) {
   scrollElem.style.height = '100%'
   data.elem.appendChild(scrollElem)
 
-  this.onParentChange(() => {
+  this.onParentChange.connect(() => {
     scrollElem.scrollLeft = this._contentX
     scrollElem.scrollTop = this._contentY
   })
@@ -71,8 +71,8 @@ exports.createData = function () {
     contentItem: null,
     scrollElem: null,
     yScrollbar: false,
-    onContentXChange: signal.create(),
-    onContentYChange: signal.create(),
+    onContentXChange: new SignalDispatcher(),
+    onContentYChange: new SignalDispatcher(),
   }, Item.DATA)
 }
 
@@ -101,7 +101,7 @@ exports.setScrollableContentItem = (function () {
     }
 
     if (val != null) {
-      val.onHeightChange(onHeightChange, this)
+      val.onHeightChange.connect(onHeightChange, this)
       this._impl.contentItem = val
       this._impl.scrollElem.appendChild(val._impl.elem)
     }

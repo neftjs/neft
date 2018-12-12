@@ -1,6 +1,6 @@
 'use strict'
 
-{util, signal} = require('@neft/core')
+{util, SignalDispatcher} = require('@neft/core')
 {Impl} = require('@neft/core/src/renderer')
 {Item} = Impl.Types
 
@@ -130,14 +130,7 @@ onImplReady = (windowItem) ->
     windowItem.pointer.onMove (e) ->
         stop = false
         for listener in pointerWindowMoveListeners
-            r = listener(e)
-            if r is signal.STOP_PROPAGATION
-                stop = true
-                break
-            if r is DELTA_VALIDATION_PENDING
-                stop = true
-        if stop
-            signal.STOP_PROPAGATION
+            listener(e)
 
 Impl.onWindowItemReady onImplReady
 
@@ -176,13 +169,13 @@ usePointer = (item) ->
 
                 dx = dy = 0
 
-            if moveMovement(e) is signal.STOP_PROPAGATION
-                focus = true
-                pointerUsed = true
+            # if moveMovement(e) is signal.STOP_PROPAGATION
+            #     focus = true
+            #     pointerUsed = true
 
-                horizontalContinuous.update dx + e.movementX
-                verticalContinuous.update dy + e.movementY
-            signal.STOP_PROPAGATION
+            #     horizontalContinuous.update dx + e.movementX
+            #     verticalContinuous.update dy + e.movementY
+            # signal.STOP_PROPAGATION
 
         windowItem.pointer.onRelease (e) ->
             listen = false

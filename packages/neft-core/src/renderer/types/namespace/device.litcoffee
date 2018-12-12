@@ -3,10 +3,10 @@
     'use strict'
 
     utils = require '../../../util'
-    signal = require '../../../signal'
+    {SignalsEmitter} = require '../../../signal'
 
     module.exports = (Renderer, Impl, itemUtils) ->
-        class Device extends signal.Emitter
+        class Device extends SignalsEmitter
             constructor: ->
                 super()
                 @_platform = 'Unix'
@@ -102,19 +102,19 @@ Text {
 
 ## *Signal* Device.onPointerPress(*Device.PointerEvent* event)
 
-            signal.Emitter.createSignal @, 'onPointerPress'
+            SignalsEmitter.createSignal @, 'onPointerPress'
 
 ## *Signal* Device.onPointerRelease(*Device.PointerEvent* event)
 
-            signal.Emitter.createSignal @, 'onPointerRelease'
+            SignalsEmitter.createSignal @, 'onPointerRelease'
 
 ## *Signal* Device.onPointerMove(*Device.PointerEvent* event)
 
-            signal.Emitter.createSignal @, 'onPointerMove'
+            SignalsEmitter.createSignal @, 'onPointerMove'
 
 ## *Signal* Device.onPointerWheel(*Device.PointerEvent* event)
 
-            signal.Emitter.createSignal @, 'onPointerWheel'
+            SignalsEmitter.createSignal @, 'onPointerWheel'
 
 ## ReadOnly *Device.KeyboardEvent* Device.keyboard
 
@@ -124,23 +124,23 @@ Text {
 
 ## *Signal* Device.onKeyPress(*Device.KeyboardEvent* event)
 
-            signal.Emitter.createSignal @, 'onKeyPress'
+            SignalsEmitter.createSignal @, 'onKeyPress'
 
 ## *Signal* Device.onKeyHold(*Device.KeyboardEvent* event)
 
-            signal.Emitter.createSignal @, 'onKeyHold'
+            SignalsEmitter.createSignal @, 'onKeyHold'
 
 ## *Signal* Device.onKeyRelease(*Device.KeyboardEvent* event)
 
-            signal.Emitter.createSignal @, 'onKeyRelease'
+            SignalsEmitter.createSignal @, 'onKeyRelease'
 
 ## *Signal* Device.onKeyInput(*Device.KeyboardEvent* event)
 
-            signal.Emitter.createSignal @, 'onKeyInput'
+            SignalsEmitter.createSignal @, 'onKeyInput'
 
 # **Class** Device.PointerEvent
 
-        class DevicePointerEvent extends signal.Emitter
+        class DevicePointerEvent extends SignalsEmitter
             constructor: ->
                 super()
 
@@ -209,7 +209,7 @@ Text {
 
 # **Class** Device.KeyboardEvent()
 
-        class DeviceKeyboardEvent extends signal.Emitter
+        class DeviceKeyboardEvent extends SignalsEmitter
             constructor: ->
                 super()
 
@@ -279,9 +279,9 @@ Text {
                 y = event.y
                 return
 
-            device.onPointerPress updateMovement
-            device.onPointerRelease updateMovement
-            device.onPointerMove updateMovement
+            device.onPointerPress.connect updateMovement
+            device.onPointerRelease.connect updateMovement
+            device.onPointerMove.connect updateMovement
 
         # initialize by the implementation
         Impl.initDeviceNamespace.call device

@@ -4,17 +4,11 @@
 
     utils = require '../../../util'
     assert = require '../../../assert'
-    signal = require '../../../signal'
+    {SignalsEmitter} = require '../../../signal'
     TypedArray = require '../../../typed-array'
     stringify = require './tag/stringify'
 
-    {emitSignal} = signal.Emitter
-
     assert = assert.scope 'View.Element.Tag'
-
-    isDefined = (elem) -> elem?
-
-    CSS_ID_RE = ///\#([^\s]+)///
 
     module.exports = (Element) -> class Tag extends Element
         @Props = Props = require('./tag/props') @
@@ -72,13 +66,13 @@
 
 ## *Signal* Tag::onChildrenChange(*Element* added, *Element* removed)
 
-        signal.Emitter.createSignal @, 'onChildrenChange'
+        SignalsEmitter.createSignal @, 'onChildrenChange'
 
 ## *Element.Tag.Props* Tag::props
 
 ## *Signal* Tag::onPropsChange(*String* attribute, *Any* oldValue)
 
-        signal.Emitter.createSignal @, 'onPropsChange'
+        SignalsEmitter.createSignal @, 'onPropsChange'
 
         clone: (clone = new @constructor) ->
             super clone

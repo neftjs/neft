@@ -86,7 +86,7 @@ module.exports = (impl) ->
                         touchEvents--
                         return
                 updatePointerEvent e
-                device.onPointerPress.emit pointer
+                device.emit 'onPointerPress', pointer
                 return
 
             window.addEventListener 'mousedown', onPointerPress
@@ -102,7 +102,7 @@ module.exports = (impl) ->
                         touchEvents--
                         return
                 updatePointerEvent e
-                device.onPointerRelease.emit pointer
+                device.emit 'onPointerRelease', pointer
                 return
 
             window.addEventListener 'mouseup', onPointerRelease
@@ -118,7 +118,7 @@ module.exports = (impl) ->
                         touchEvents--
                         return
                 updatePointerEvent e
-                device.onPointerMove.emit pointer
+                device.emit 'onPointerMove', pointer
                 return
 
             window.addEventListener 'mousemove', onPointerMove
@@ -128,6 +128,6 @@ module.exports = (impl) ->
             event = getNormalizedEvent e
             pointer.deltaX = event.deltaX
             pointer.deltaY = event.deltaY
-            device.onPointerWheel.emit pointer
+            device.emit 'onPointerWheel', pointer
 
         window.addEventListener impl.utils.pointerWheelEventName, onPointerWheel

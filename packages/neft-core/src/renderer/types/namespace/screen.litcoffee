@@ -3,14 +3,14 @@
     'use strict'
 
     utils = require '../../../util'
-    signal = require '../../../signal'
+    {SignalsEmitter} = require '../../../signal'
     assert = require '../../../assert'
 
     module.exports = (Renderer, Impl, itemUtils) ->
         StatusBar = require('./screen/statusBar') Renderer, Impl, itemUtils
         NavigationBar = require('./screen/navigationBar') Renderer, Impl, itemUtils
 
-        class Screen extends signal.Emitter
+        class Screen extends SignalsEmitter
             constructor: ->
                 super()
                 @_impl = bindings: null

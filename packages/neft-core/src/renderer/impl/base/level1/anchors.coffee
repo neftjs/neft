@@ -202,7 +202,7 @@ module.exports = (impl) ->
 
         if val = @targetItem = @item._parent
             for handler in getTargetWatchProps[@line].parent
-                val[handler] update, @
+                val[handler].connect update, @
 
         update.call @
         return
@@ -214,7 +214,7 @@ module.exports = (impl) ->
 
         if val = @targetItem = @item._nextSibling
             for handler in getTargetWatchProps[@line].sibling
-                val[handler] update, @
+                val[handler].connect update, @
 
         update.call @
         return
@@ -226,19 +226,19 @@ module.exports = (impl) ->
 
         if val = @targetItem = @item._previousSibling
             for handler in getTargetWatchProps[@line].sibling
-                val[handler] update, @
+                val[handler].connect update, @
 
         update.call @
         return
 
     onChildInsert = (child) ->
-        child.onVisibleChange update, @
+        child.onVisibleChange.connect update, @
         if @source is 'fillWidthSize'
-            child.onXChange update, @
-            child.onWidthChange update, @
+            child.onXChange.connect update, @
+            child.onWidthChange.connect update, @
         if @source is 'fillHeightSize'
-            child.onYChange update, @
-            child.onHeightChange update, @
+            child.onYChange.connect update, @
+            child.onHeightChange.connect update, @
 
         update.call @
         return
@@ -289,7 +289,7 @@ module.exports = (impl) ->
                 @type = 'sibling'
 
             for handler in getSourceWatchProps[source]
-                item[handler] update, @
+                item[handler].connect update, @
 
             @prop = getItemProp[source]
             @getSourceValue = getSourceValue[source]
@@ -305,22 +305,22 @@ module.exports = (impl) ->
             switch target
                 when 'parent'
                     @targetItem = item._parent
-                    item.onParentChange onParentChange, @
+                    item.onParentChange.connect onParentChange, @
                     onParentChange.call @, null
                 when 'children'
                     @targetItem = item.children
-                    item.onChildrenChange onChildrenChange, @
+                    item.onChildrenChange.connect onChildrenChange, @
                     child = @targetItem.firstChild
                     while child
                         onChildInsert.call @, child
                         child = child.nextSibling
                 when 'nextSibling'
                     @targetItem = item._nextSibling
-                    item.onNextSiblingChange onNextSiblingChange, @
+                    item.onNextSiblingChange.connect onNextSiblingChange, @
                     onNextSiblingChange.call @, null
                 when 'previousSibling'
                     @targetItem = item._previousSibling
-                    item.onPreviousSiblingChange onPreviousSiblingChange, @
+                    item.onPreviousSiblingChange.connect onPreviousSiblingChange, @
                     onPreviousSiblingChange.call @, null
                 else
                     if not utils.isObject(target) or handler not of target
@@ -328,7 +328,7 @@ module.exports = (impl) ->
                         return
                     if @targetItem = target
                         for handler in getTargetWatchProps[line][@type]
-                            @targetItem[handler] update, @
+                            @targetItem[handler].connect update, @
                     update.call @
 
         update: ->

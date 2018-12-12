@@ -4,10 +4,7 @@
 
     utils = require '../../../../util'
     assert = require '../../../../assert'
-    signal = require '../../../../signal'
     styles = require '../../styles'
-
-    {emitSignal} = signal.Emitter
 
     module.exports = (Tag) -> class Props
         constructor: (ref) ->
@@ -55,7 +52,7 @@
             @[name] = value
 
             # trigger event
-            emitSignal @_ref, 'onPropsChange', name, old
+            @_ref.emit 'onPropsChange', name, old
             Tag.query.checkWatchersDeeply @_ref
 
             styles.onSetProp @_ref, name, value, old

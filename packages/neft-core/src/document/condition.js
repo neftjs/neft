@@ -4,7 +4,7 @@ class Condition {
     this.element = document.element.getChildByAccessPath(element)
     this.elseElement = elseElement && document.element.getChildByAccessPath(elseElement)
 
-    this.element.onPropsChange(this.onPropsChange, this)
+    this.element.onPropsChange.connect(this.onPropsChange, this)
   }
 
   onPropsChange(name) {

@@ -1,6 +1,6 @@
 'use strict'
 
-signal = require '../../../../signal'
+{SignalDispatcher} = require '../../../../signal'
 
 module.exports = (impl) ->
     {Item} = impl.Types
@@ -52,7 +52,7 @@ module.exports = (impl) ->
             width: 0
             height: 0
             elem: img
-        signal.create obj, 'onLoaded'
+            onLoaded: new SignalDispatcher()
         obj
 
     getImage = (src) ->
@@ -83,7 +83,7 @@ module.exports = (impl) ->
         else if img.status is 'error'
             callback?.call @, true
         else
-            img.onLoaded onImageLoaded, @
+            img.onLoaded.connect onImageLoaded, @
         return
 
     DATA =

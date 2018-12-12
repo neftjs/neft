@@ -104,7 +104,7 @@ Rectangle {
 
                     if val
                         if handlerName of val
-                            val[handlerName] listener, @
+                            val[handlerName].connect listener, @
                         else
                             log.error "'#{property}' property signal not found"
                 return
@@ -177,5 +177,5 @@ Rectangle {
 
                     if val
                         handlerName = itemUtils.getPropHandlerName val
-                        target[handlerName] listener, @
+                        target[handlerName].connect listener, @
                 return

@@ -176,7 +176,7 @@ describe "attributes", ->
         item = node.style
         oldVals = []
 
-        item.onXChange (oldVal) -> oldVals.push oldVal
+        item.onXChange.connect (oldVal) -> oldVals.push oldVal
 
         assert.is item.x, 2
         assert.isEqual oldVals, []

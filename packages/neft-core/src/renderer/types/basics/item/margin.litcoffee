@@ -3,7 +3,7 @@
     'use strict'
 
     utils = require '../../../../util'
-    signal = require '../../../../signal'
+    {SignalsEmitter} = require '../../../../signal'
     assert = require '../../../../assert'
 
     module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor, opts) -> class Margin extends itemUtils.DeepObject
@@ -102,7 +102,7 @@ Column {
                 setter: (_super) -> (val) ->
                     extraOldVal = @[extraProp]
                     _super.call @, val
-                    @[extraPropSignal].emit extraOldVal
+                    @emit extraPropSignal, extraOldVal
                 namespace: propertyName
                 parentConstructor: ctor
                 developmentSetter: developmentSetter
@@ -137,7 +137,7 @@ Sum of the left and right margin.
 
 ## *Signal* Margin::onHorizontalChange(*Float* oldValue)
 
-        signal.Emitter.createSignal @, 'onHorizontalChange'
+        SignalsEmitter.createSignal @, 'onHorizontalChange'
 
         utils.defineProperty @::, 'horizontal', null, ->
             @_left + @_right
@@ -150,7 +150,7 @@ Sum of the top and bottom margin.
 
 ## *Signal* Margin::onVerticalChange(*Float* oldValue)
 
-        signal.Emitter.createSignal @, 'onVerticalChange'
+        SignalsEmitter.createSignal @, 'onVerticalChange'
 
         utils.defineProperty @::, 'vertical', null, ->
             @_top + @_bottom

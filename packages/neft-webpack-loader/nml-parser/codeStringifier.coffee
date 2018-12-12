@@ -258,7 +258,7 @@ class Stringifier
         # call onReady
         for child in @objects
             if not Renderer[child.name] or 'onReady' of Renderer[child.name]::
-                result += "#{child.id}.onReady.emit()\n"
+                result += "#{child.id}.emit('onReady')\n"
 
         # return
         result += "return { objects: #{@getIdsObject @ast}, item: #{@ast.id} }"

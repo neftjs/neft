@@ -367,12 +367,12 @@ module.exports = (impl) ->
         updateSize.call @
 
     enableChild = (child) ->
-        child.onVisibleChange update, @
-        child.onWidthChange updateSize, @
-        child.onHeightChange updateSize, @
-        child.onMarginChange update, @
-        child.onAnchorsChange update, @
-        child.onLayoutChange update, @
+        child.onVisibleChange.connect update, @
+        child.onWidthChange.connect updateSize, @
+        child.onHeightChange.connect updateSize, @
+        child.onMarginChange.connect update, @
+        child.onAnchorsChange.connect update, @
+        child.onLayoutChange.connect update, @
 
     disableChild = (child) ->
         child.onVisibleChange.disconnect update, @
@@ -403,8 +403,8 @@ module.exports = (impl) ->
 
     create: (item, type) ->
         item._impl.gridType = type
-        item.onAlignmentChange updateSize
-        item.onPaddingChange updateSize
+        item.onAlignmentChange.connect updateSize
+        item.onPaddingChange.connect updateSize
 
     update: update
 
@@ -422,11 +422,11 @@ module.exports = (impl) ->
                 child = child.nextSibling
 
         if item
-            item.onVisibleChange update, @
-            item.onChildrenChange onChildrenChange, @
-            item.onLayoutChange update, @
-            item.onWidthChange onWidthChange, @
-            item.onHeightChange onHeightChange, @
+            item.onVisibleChange.connect update, @
+            item.onChildrenChange.connect onChildrenChange, @
+            item.onLayoutChange.connect update, @
+            item.onWidthChange.connect onWidthChange, @
+            item.onHeightChange.connect onHeightChange, @
 
             child = item.children.firstChild
             while child

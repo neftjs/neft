@@ -1,9 +1,9 @@
-const signal = require('../signal')
+const { SignalDispatcher } = require('../signal')
 const assert = require('../assert')
 
-signal.create(exports, 'onReady')
-signal.create(exports, 'onWindowItemChange')
-signal.create(exports, 'onLinkUri')
+exports.onReady = new SignalDispatcher()
+exports.onWindowItemChange = new SignalDispatcher()
+exports.onLinkUri = new SignalDispatcher()
 
 const Impl = require('./impl')(exports)
 

@@ -1,7 +1,7 @@
-// when=NEFT_HTML
+const { util } = require('@neft/core')
+const Renderer = require('@neft/core/src/renderer')
 
-const { utils } = Neft
-const { Item } = Neft.Renderer.Impl.Types
+const { Item } = Renderer.Impl.Types
 
 exports.create = function (data) {
   data.elem = document.createElement('div')
@@ -10,7 +10,7 @@ exports.create = function (data) {
 }
 
 exports.createData = function () {
-  return utils.merge({
+  return util.merge({
     source: '',
     resolution: 1,
   }, Item.DATA)

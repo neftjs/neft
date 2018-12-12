@@ -16,7 +16,7 @@ Image {
     'use strict'
 
     assert = require '../../../assert'
-    signal = require '../../../signal'
+    {SignalDispatcher, SignalsEmitter} = require '../../../signal'
     log = require '../../../log'
     utils = require '../../../util'
     Resources = require '../../../resources'
@@ -52,7 +52,7 @@ Image {
 
 ## *Signal* Image.onPixelRatioChange(*Float* oldValue)
 
-        signal.create @, 'onPixelRatioChange'
+        @onPixelRatioChange = new SignalDispatcher()
 
         pixelRatio = 1
         utils.defineProperty @, 'pixelRatio', utils.CONFIGURABLE, ->
@@ -143,18 +143,18 @@ The image source URL or data URI.
                             itemUtils.setPropertyValue @, 'resolution', opts.width / @sourceWidth
 
                     @_loaded = true
-                    @onLoadedChange.emit false
+                    @emit 'onLoadedChange', false
                     if err
-                        @onError.emit err
+                        @emit 'onError', err
                     else
-                        @onLoad.emit()
+                        @emit 'onLoad'
                     return
 
                 (_super) -> (val) ->
                     _super.call @, val
                     if @_loaded
                         @_loaded = false
-                        @onLoadedChange.emit true
+                        @emit 'onLoadedChange', true
                     itemUtils.setPropertyValue @, 'sourceWidth', 0
                     itemUtils.setPropertyValue @, 'sourceHeight', 0
                     itemUtils.setPropertyValue @, 'resolution', 1
@@ -212,12 +212,12 @@ The image source URL or data URI.
 
 ## *Signal* Image::onLoadedChange(*Boolean* oldValue)
 
-        signal.Emitter.createSignal @, 'onLoadedChange'
+        SignalsEmitter.createSignal @, 'onLoadedChange'
 
 ## *Signal* Image::onLoad()
 
-        signal.Emitter.createSignal @, 'onLoad'
+        SignalsEmitter.createSignal @, 'onLoad'
 
 ## *Signal* Image::onError(*Error* error)
 
-        signal.Emitter.createSignal @, 'onError'
+        SignalsEmitter.createSignal @, 'onError'

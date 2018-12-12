@@ -4,7 +4,7 @@
 
     utils = require '../../../util'
     assert = require '../../../assert'
-    signal = require '../../../signal'
+    {SignalsEmitter} = require '../../../signal'
 
     module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Renderer.Extension
         @__name__ = 'Animation'
@@ -19,11 +19,11 @@
 
 ## *Signal* Animation::onStart()
 
-        signal.Emitter.createSignal @, 'onStart'
+        SignalsEmitter.createSignal @, 'onStart'
 
 ## *Signal* Animation::onStop()
 
-        signal.Emitter.createSignal @, 'onStop'
+        SignalsEmitter.createSignal @, 'onStop'
 
 ## *Boolean* Animation::paused
 
@@ -96,7 +96,7 @@
 
         _enable: ->
             Impl.startAnimation.call @
-            @onStart.emit()
+            @emit 'onStart'
             if @_paused
                 Impl.pauseAnimation.call @
 
@@ -104,4 +104,4 @@
             if @_paused
                 @paused = false
             Impl.stopAnimation.call @
-            @onStop.emit()
+            @emit 'onStop'

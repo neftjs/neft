@@ -1,6 +1,6 @@
 'use strict'
 
-signal = require '../../../signal'
+{SignalDispatcher} = require '../../../signal'
 
 isFirefox = exports.isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 
@@ -117,7 +117,7 @@ exports.keysEvents = do ->
         if device = keysEvents.device
             {keyboard} = device
             keyboard.key = key
-            device.onKeyPress.emit keyboard
+            device.emit 'onKeyPress', keyboard
 
     # hold
     window.addEventListener 'keydown', (e) ->
@@ -127,7 +127,7 @@ exports.keysEvents = do ->
         if device = keysEvents.device
             {keyboard} = device
             keyboard.key = key
-            device.onKeyHold.emit keyboard
+            device.emit 'onKeyHold', keyboard
 
     # released
     window.addEventListener 'keyup', (e) ->
@@ -139,7 +139,7 @@ exports.keysEvents = do ->
         if device = keysEvents.device
             {keyboard} = device
             keyboard.key = key
-            device.onKeyRelease.emit keyboard
+            device.emit 'onKeyRelease', keyboard
 
     # input
     window.addEventListener 'keypress', (e) ->
@@ -149,12 +149,12 @@ exports.keysEvents = do ->
         if device = keysEvents.device
             {keyboard} = device
             keyboard.text = text
-            device.onKeyInput.emit keyboard
+            device.emit 'onKeyInput', keyboard
 
     keysEvents =
         device: null
 
-signal.create exports, 'onFontLoaded'
+exports.onFontLoaded = new SignalDispatcher()
 exports.loadingFonts = Object.create null
 exports.loadedFonts = Object.create null
 

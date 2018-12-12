@@ -1,6 +1,7 @@
 'use strict'
 
 Struct = require '@neft/core/src/struct'
+eventLoop = require '@neft/core/src/event-loop'
 {createView, renderParse} = require './utils'
 
 describe 'Document n-use', ->
@@ -98,7 +99,8 @@ describe 'Document n-use', ->
         context = new Struct status: null
         renderParse view,
             context: context
-        context.status = 'ok'
+        eventLoop.callInLock ->
+            context.status = 'ok'
         assert.isEqual view.exported.logs, ['ok']
 
     it 'does not render component inside hidden element', ->

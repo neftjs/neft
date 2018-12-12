@@ -78,8 +78,8 @@ module.exports = (impl) ->
 
         data.contentElem = new PIXI.Sprite emptyTexture
         data.elem.addChild data.contentElem
-        @onWidthChange updateSize
-        @onHeightChange updateSize
+        @onWidthChange.connect updateSize
+        @onHeightChange.connect updateSize
         return
 
     setImageSource: (val, callback) ->
@@ -105,8 +105,8 @@ module.exports = (impl) ->
                     data.image.svgItems.push self
                     onSvgImageResize.call self
                     unless data.isSvg
-                        self.onWidthChange onSvgImageResize
-                        self.onHeightChange onSvgImageResize
+                        self.onWidthChange.connect onSvgImageResize
+                        self.onHeightChange.connect onSvgImageResize
                         data.isSvg = true
                 unless data.image.texture
                     img = data.image.elem

@@ -2,6 +2,7 @@ const { render } = require('./src/initializer')
 const {
   callNativeFunction, onNativeEvent, registerNativeFunction, publishNativeEvent,
 } = require('./src/native')
+const { SignalDispatcher, SignalsEmitter } = require('./src/signal')
 const Resources = require('./src/resources')
 const Renderer = require('./src/renderer')
 
@@ -11,10 +12,11 @@ exports.registerNativeFunction = registerNativeFunction
 exports.publishNativeEvent = publishNativeEvent
 
 exports.util = require('./src/util')
-exports.signal = require('./src/signal')
 exports.Struct = require('./src/struct')
 exports.ObservableArray = require('./src/observable-array')
 
+exports.SignalDispatcher = SignalDispatcher
+exports.SignalsEmitter = SignalsEmitter
 exports.render = render
 exports.loadFont = Renderer.loadFont
 exports.resources = new Resources()

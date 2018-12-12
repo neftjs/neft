@@ -4,7 +4,7 @@ const { Text } = require('./element')
 
 const listenOnTextChange = function (element, log) {
   if (element instanceof Text) {
-    element.onTextChange(log.renderOnChange, log)
+    element.onTextChange.connect(log.renderOnChange, log)
   } else {
     element.children.forEach(child => listenOnTextChange(child, log))
   }
@@ -17,7 +17,7 @@ class Log {
 
     this.isRenderPending = false
     this.log = utils.bindFunctionContext(this.log, this)
-    this.element.onPropsChange(this.renderOnChange, this)
+    this.element.onPropsChange.connect(this.renderOnChange, this)
     listenOnTextChange(this.element, this)
   }
 

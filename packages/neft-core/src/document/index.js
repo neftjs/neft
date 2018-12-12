@@ -148,14 +148,14 @@ class Document {
     if (oldValue) this[callRenderListener]('refDelete', ref, oldValue)
     this.refs[ref] = value
     this[callRenderListener]('refSet', ref, value)
-    this.exported.onRefsChange.emit()
+    this.exported.emit('onRefsChange')
   }
 
   deleteRef(ref) {
     const oldValue = this.refs[ref]
     delete this.refs[ref]
     this[callRenderListener]('refDelete', ref, oldValue)
-    this.exported.onRefsChange.emit()
+    this.exported.emit('onRefsChange')
   }
 
   render({
@@ -166,7 +166,7 @@ class Document {
 
     if (this.context !== context) {
       this.context = context
-      this.exported.onContextChange.emit()
+      this.exported.emit('onContextChange')
     }
 
     if (typeof props === 'object' && props !== null) {

@@ -4,10 +4,8 @@
 
     utils = require '../../../util'
     assert = require '../../../assert'
-    signal = require '../../../signal'
+    {SignalsEmitter} = require '../../../signal'
     styles = require '../styles'
-
-    {emitSignal} = signal.Emitter
 
     assert = assert.scope 'View.Element.Text'
 
@@ -59,7 +57,7 @@
             @_text = value
 
             # trigger event
-            emitSignal @, 'onTextChange', old
+            @emit 'onTextChange', old
             Element.Tag.query.checkWatchersDeeply @
 
             styles.onSetText @
@@ -68,7 +66,7 @@
 
 ## *Signal* Text::onTextChange(*String* oldValue)
 
-        signal.Emitter.createSignal @, 'onTextChange'
+        SignalsEmitter.createSignal @, 'onTextChange'
 
         toJSON: (arr) ->
             unless arr

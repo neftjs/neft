@@ -3,11 +3,11 @@
     'use strict'
 
     utils = require '../../../util'
-    signal = require '../../../signal'
+    {SignalsEmitter} = require '../../../signal'
     assert = require '../../../assert'
 
     module.exports = (Renderer, Impl, itemUtils) ->
-        class Navigator extends signal.Emitter
+        class Navigator extends SignalsEmitter
             constructor: ->
                 super()
                 @_impl = bindings: null

@@ -4,11 +4,11 @@
 
     log = require '../../../../log'
     utils = require '../../../../util'
-    signal = require '../../../../signal'
+    {SignalsEmitter} = require '../../../../signal'
     assert = require '../../../../assert'
 
     module.exports = (Renderer, Impl, itemUtils) ->
-        class StatusBar extends signal.Emitter
+        class StatusBar extends SignalsEmitter
             constructor: ->
                 super()
                 @_height = 0

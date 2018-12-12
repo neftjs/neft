@@ -1,6 +1,6 @@
-const { signal, callNativeFunction, onNativeEvent } = require('@neft/core')
+const { SignalDispatcher, callNativeFunction, onNativeEvent } = require('@neft/core')
 
-exports.onBackPress = signal.create()
+exports.onBackPress = new SignalDispatcher()
 
 exports.killApp = () => callNativeFunction('extensionBackKillApp')
 

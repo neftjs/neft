@@ -43,7 +43,7 @@ module.exports = (impl) ->
             )
 
     loadingTextsByFonts = Object.create null
-    implUtils.onFontLoaded (name) ->
+    implUtils.onFontLoaded.connect (name) ->
         # clear widths
         for font, sizes of fontSizes
             for char of sizes
@@ -253,7 +253,7 @@ module.exports = (impl) ->
         impl.utils.prependElement data.elem, data.innerElem
 
         if impl.utils.loadingFonts['sans-serif'] > 0
-            impl.utils.onFontLoaded reloadFontFamily, @
+            impl.utils.onFontLoaded.connect reloadFontFamily, @
 
     setText: (val) ->
         val = val.replace /<[bB][rR]\s?\/?>/g, "\n"
@@ -299,7 +299,7 @@ module.exports = (impl) ->
         @_impl.fontFamily = val
 
         if impl.utils.loadingFonts[val] > 0
-            impl.utils.onFontLoaded reloadFontFamily, @
+            impl.utils.onFontLoaded.connect reloadFontFamily, @
 
         if impl.utils.DEFAULT_FONTS[val]
             val = "#{impl.utils.DEFAULT_FONTS[val]}, #{val}"

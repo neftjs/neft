@@ -1,11 +1,10 @@
 'use strict'
 
 utils = require '../../../../util'
-signal = require '../../../../signal'
+{SignalsEmitter} = require '../../../../signal'
 eventLoop = require '../../../../event-loop'
 assert = require '../../../../assert'
 
-{emitSignal} = signal.Emitter
 Tag = Text = null
 
 DEFAULT_PRIORITY = 0
@@ -284,7 +283,7 @@ getQueries = (selector, opts=0) ->
 
     queries
 
-class Watcher extends signal.Emitter
+class Watcher extends SignalsEmitter
     NOP = ->
 
     lastUid = 0
@@ -316,8 +315,8 @@ class Watcher extends signal.Emitter
         @nodesWillChange = false
         Object.seal @
 
-    signal.Emitter.createSignal @, 'onAdd'
-    signal.Emitter.createSignal @, 'onRemove'
+    SignalsEmitter.createSignal @, 'onAdd'
+    SignalsEmitter.createSignal @, 'onRemove'
 
     test: (tag) ->
         for funcs in @queries
@@ -336,11 +335,11 @@ class Watcher extends signal.Emitter
             delete node._inWatchers[uid]
 
         while node = nodesToRemove.pop()
-            emitSignal @, 'onRemove', node
+            @emit 'onRemove', node
 
         while node = nodes.pop()
             delete node._inWatchers[uid]
-            emitSignal @, 'onRemove', node
+            @emit 'onRemove', node
 
         @onAdd.disconnectAll()
         @onRemove.disconnectAll()
@@ -520,10 +519,10 @@ module.exports = (Element, _Tag) ->
             while watcher = watchersToUpdate.pop()
                 {nodesToAdd, nodesToRemove} = watcher
                 while node = nodesToRemove.pop()
-                    emitSignal watcher, 'onRemove', node
+                    watcher.emit 'onRemove', node
                 while node = nodesToAdd.pop()
                     watcher.nodes.push node
-                    emitSignal watcher, 'onAdd', node
+                    watcher.emit 'onAdd', node
                 watcher.nodesWillChange = false
             return
 

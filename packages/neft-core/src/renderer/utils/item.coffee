@@ -2,13 +2,10 @@
 
 assert = require '../../assert'
 utils = require '../../util'
-signal = require '../../signal'
+{SignalsEmitter} = require '../../signal'
 log = require '../../log'
 
 log = log.scope 'Renderer'
-
-{Emitter} = signal
-{emitSignal} = Emitter
 
 {isArray} = Array
 
@@ -35,7 +32,7 @@ module.exports = (Renderer, Impl) ->
 
         path or ''
 
-    class UtilsObject extends Emitter
+    class UtilsObject extends SignalsEmitter
         initObject = (opts) ->
             for prop, val of opts
                 path = exports.splitAttribute prop
@@ -108,7 +105,7 @@ module.exports = (Renderer, Impl) ->
             assert.notLengthOf name, 0
             assert.notOk name of object, "#{object} already has a signal '#{name}'"
 
-            signal.Emitter.createSignalOnObject object, name
+            SignalsEmitter.createSignal object, name
 
             return
 
@@ -129,7 +126,7 @@ module.exports = (Renderer, Impl) ->
             return
 
         constructor: ->
-            Emitter.call @
+            SignalsEmitter.call @
 
             @id = ''
             `//<development>`
@@ -173,7 +170,7 @@ module.exports = (Renderer, Impl) ->
         constructor: (opts) ->
             super opts
 
-    class MutableDeepObject extends signal.Emitter
+    class MutableDeepObject extends SignalsEmitter
         constructor: (ref) ->
             assert.instanceOf ref, UtilsObject
             super()
@@ -255,9 +252,9 @@ module.exports = (Renderer, Impl) ->
         signalName = getPropHandlerName name
 
         if opts.hasOwnProperty('constructor')
-            signal.Emitter.createSignal opts.constructor, signalName, opts.signalInitializer
+            SignalsEmitter.createSignal opts.constructor, signalName, opts.signalInitializer
         else
-            signal.Emitter.createSignalOnObject prototype, signalName, opts.signalInitializer
+            SignalsEmitter.createSignal prototype, signalName, opts.signalInitializer
 
         # getter
         internalName = getPropInternalName name
@@ -294,12 +291,12 @@ module.exports = (Renderer, Impl) ->
                     else
                         funcStr += "impl.call(this._ref, val);\n"
                 funcStr += "this.#{internalName} = val;\n"
-                funcStr += "emitSignal(this, '#{signalName}', oldVal);\n"
-                funcStr += "emitSignal(this._ref, '#{namespaceSignalName}', '#{name}', oldVal);\n"
+                funcStr += "this.emit('#{signalName}', oldVal);\n"
+                funcStr += "this._ref.emit('#{namespaceSignalName}', '#{name}', oldVal);\n"
                 funcStr += "};"
 
-                func = new Function 'impl', 'implValue', 'emitSignal', 'debug', funcStr
-            propSetter = basicSetter = func implementation, implementationValue, emitSignal, developmentSetter
+                func = new Function 'impl', 'implValue', 'debug', funcStr
+            propSetter = basicSetter = func implementation, implementationValue, developmentSetter
         else
             func = do ->
                 funcStr = "return function(val){\n"
@@ -315,11 +312,11 @@ module.exports = (Renderer, Impl) ->
                     else
                         funcStr += "impl.call(this, val);\n"
                 funcStr += "this.#{internalName} = val;\n"
-                funcStr += "emitSignal(this, '#{signalName}', oldVal);\n"
+                funcStr += "this.emit('#{signalName}', oldVal);\n"
                 funcStr += "};"
 
-                func = new Function 'impl', 'implValue', 'emitSignal', 'debug', funcStr
-            propSetter = basicSetter = func implementation, implementationValue, emitSignal, developmentSetter
+                func = new Function 'impl', 'implValue', 'debug', funcStr
+            propSetter = basicSetter = func implementation, implementationValue, developmentSetter
 
         # custom desc
         getter = if customGetter? then customGetter(propGetter) else propGetter
@@ -341,5 +338,5 @@ module.exports = (Renderer, Impl) ->
         oldVal = item[internalName]
         if val isnt oldVal
             item[internalName] = val
-            emitSignal item, signalName, oldVal
+            item.emit signalName, oldVal
         return

@@ -24,8 +24,8 @@
             super()
             @_children = []
             @_runningChildren = 0
-            @onStart onStart
-            @onStop onStop
+            @onStart.connect onStart
+            @onStop.connect onStop
 
         itemUtils.defineProperty
             constructor: @

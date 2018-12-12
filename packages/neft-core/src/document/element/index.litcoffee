@@ -4,16 +4,14 @@
 
     utils = require '../../util'
     assert = require '../../assert'
-    signal = require '../../signal'
+    {SignalsEmitter} = require '../../signal'
     styles = require './styles'
 
     {isArray} = Array
-    {Emitter} = signal
-    {emitSignal} = Emitter
 
     assert = assert.scope 'View.Element'
 
-    class Element extends Emitter
+    class Element extends SignalsEmitter
         @__name__ = 'Element'
         @__path__ = 'File.Element'
 
@@ -146,7 +144,7 @@
                 else
                     index = oldChildren.indexOf @
                     oldChildren.splice index, 1
-                emitSignal @_parent, 'onChildrenChange', null, @
+                @_parent.emit 'onChildrenChange', null, @
 
                 @_previousSibling?._nextSibling = @_nextSibling
                 @_nextSibling?._previousSibling = @_previousSibling
@@ -160,7 +158,7 @@
                 assert.notOk utils.has(@_parent.children, @)
                 newChildren = @_parent.children
                 index = newChildren.push(@) - 1
-                emitSignal parent, 'onChildrenChange', @
+                parent.emit 'onChildrenChange', @
                 if index is 0
                     @_previousSibling = null
                 else
@@ -174,7 +172,7 @@
                 assert.is @_previousSibling._nextSibling, @
 
             # trigger signal
-            emitSignal @, 'onParentChange', old
+            @emit 'onParentChange', old
 
             Tag.query.checkWatchersDeeply @, old
             Tag.query.checkWatchersDeeply @
@@ -185,7 +183,7 @@
 
 ## *Signal* Element::onParentChange(*Element* oldValue)
 
-        signal.Emitter.createSignal @, 'onParentChange'
+        SignalsEmitter.createSignal @, 'onParentChange'
 
 ## *Renderer.Item* Element::style
 
@@ -200,12 +198,12 @@
             @_style = val
 
             # trigger signal
-            emitSignal @, 'onStyleChange', old, val
+            @emit 'onStyleChange', old, val
             true
 
 ## *Signal* Element::onStyleChange(*Renderer.Item* oldValue)
 
-        signal.Emitter.createSignal @, 'onStyleChange'
+        SignalsEmitter.createSignal @, 'onStyleChange'
 
 ## *Boolean* Element::visible
 
@@ -222,14 +220,14 @@
             @_visible = val
 
             # trigger signal
-            emitSignal @, 'onVisibleChange', old
+            @emit 'onVisibleChange', old
 
             styles.onSetVisible @, val
             true
 
 ## *Signal* Element::onVisibleChange(*Boolean* oldValue)
 
-        signal.Emitter.createSignal @, 'onVisibleChange'
+        SignalsEmitter.createSignal @, 'onVisibleChange'
 
 ## *Array* Element::queryAllParents(*String* query)
 

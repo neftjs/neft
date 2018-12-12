@@ -4,11 +4,10 @@
 
     assert = require '../../../assert'
     utils = require '../../../util'
-    signal = require '../../../signal'
+    {SignalsEmitter} = require '../../../signal'
     Matrix = require '../../utils/Matrix'
 
     {isArray} = Array
-    {emitSignal} = signal.Emitter
 
     assert = assert.scope 'Renderer.Item'
 
@@ -139,11 +138,11 @@ Rectangle {
 }
 ```
 
-        signal.Emitter.createSignal @, 'onReady'
+        SignalsEmitter.createSignal @, 'onReady'
 
 ## *Signal* Item::onAnimationFrame(*Integer* miliseconds)
 
-        signal.Emitter.createSignal @, 'onAnimationFrame', do ->
+        SignalsEmitter.createSignal @, 'onAnimationFrame', do ->
             now = Date.now()
             items = []
 
@@ -153,7 +152,7 @@ Rectangle {
                 ms = now - oldNow
 
                 for item in items
-                    emitSignal item, 'onAnimationFrame', ms
+                    item.emit 'onAnimationFrame', ms
                 requestAnimationFrame frame
 
             requestAnimationFrame? frame
@@ -176,7 +175,7 @@ Rectangle {
 
 ## *Signal* Item::onChildrenChange(*Item* added, *Item* removed)
 
-        signal.Emitter.createSignal @, 'onChildrenChange'
+        SignalsEmitter.createSignal @, 'onChildrenChange'
 
         class ChildrenObject extends itemUtils.MutableDeepObject
             constructor: (ref) ->
@@ -335,7 +334,7 @@ Removes all children from the item.
                 Impl.setItemParent.call child, parent
 
             child._parent = parent
-            emitSignal child, 'onParentChange', null
+            child.emit 'onParentChange', null
             return
 
         updateZSiblingsForAppendedItem = (item, z, newChildren) ->
@@ -473,23 +472,23 @@ Removes all children from the item.
 
                 # signals
                 if old isnt null
-                    emitSignal old, 'onChildrenChange', null, @
+                    old.emit 'onChildrenChange', null, @
                 if val isnt null
-                    emitSignal val, 'onChildrenChange', @, null
+                    val.emit 'onChildrenChange', @, null
 
-                emitSignal @, 'onParentChange', old
+                @emit 'onParentChange', old
 
                 if oldPreviousSibling isnt null
-                    emitSignal oldPreviousSibling, 'onNextSiblingChange', @
+                    oldPreviousSibling.emit 'onNextSiblingChange', @
                 if oldNextSibling isnt null
-                    emitSignal oldNextSibling, 'onPreviousSiblingChange', @
+                    oldNextSibling.emit 'onPreviousSiblingChange', @
 
                 if val isnt null or oldPreviousSibling isnt null
                     if previousSibling
-                        emitSignal previousSibling, 'onNextSiblingChange', null
-                    emitSignal @, 'onPreviousSiblingChange', oldPreviousSibling
+                        previousSibling.emit 'onNextSiblingChange', null
+                    @emit 'onPreviousSiblingChange', oldPreviousSibling
                 if oldNextSibling isnt null
-                    emitSignal @, 'onNextSiblingChange', oldNextSibling
+                    @emit 'onNextSiblingChange', oldNextSibling
 
                 return
 
@@ -525,7 +524,7 @@ Removes all children from the item.
 
 ## *Signal* Item::onPreviousSiblingChange(*Item* oldValue)
 
-        signal.Emitter.createSignal @, 'onPreviousSiblingChange'
+        SignalsEmitter.createSignal @, 'onPreviousSiblingChange'
 
 ## *Item* Item::nextSibling
 
@@ -687,31 +686,31 @@ Removes all children from the item.
             # children signal
             if oldParent isnt newParent
                 if oldParent
-                    emitSignal oldParent, 'onChildrenChange', null, @
-                emitSignal newParent, 'onChildrenChange', @, null
-                emitSignal @, 'onParentChange', oldParent
+                    oldParent.emit 'onChildrenChange', null, @
+                newParent.emit 'onChildrenChange', @, null
+                @emit 'onParentChange', oldParent
             else
-                emitSignal newParent, 'onChildrenChange', null, null
+                newParent.emit 'onChildrenChange', null, null
 
             # current siblings signals
             if oldPreviousSibling
-                emitSignal oldPreviousSibling, 'onNextSiblingChange', @
+                oldPreviousSibling.emit 'onNextSiblingChange', @
             if oldNextSibling
-                emitSignal oldNextSibling, 'onPreviousSiblingChange', @
+                oldNextSibling.emit 'onPreviousSiblingChange', @
 
             # new siblings signals
-            emitSignal @, 'onPreviousSiblingChange', oldPreviousSibling
+            @emit 'onPreviousSiblingChange', oldPreviousSibling
             if previousSibling
-                emitSignal previousSibling, 'onNextSiblingChange', previousSiblingOldNextSibling
-            emitSignal @, 'onNextSiblingChange', oldNextSibling
+                previousSibling.emit 'onNextSiblingChange', previousSiblingOldNextSibling
+            @emit 'onNextSiblingChange', oldNextSibling
             if nextSibling
-                emitSignal nextSibling, 'onPreviousSiblingChange', nextSiblingOldPreviousSibling
+                nextSibling.emit 'onPreviousSiblingChange', nextSiblingOldPreviousSibling
 
             return
 
 ## *Signal* Item::onNextSiblingChange(*Item* oldValue)
 
-        signal.Emitter.createSignal @, 'onNextSiblingChange'
+        SignalsEmitter.createSignal @, 'onNextSiblingChange'
 
 ## ReadOnly *Item* Item::belowSibling
 

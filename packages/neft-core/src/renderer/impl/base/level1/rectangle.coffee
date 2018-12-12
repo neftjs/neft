@@ -60,8 +60,8 @@ module.exports = (impl) ->
     create: (data) ->
         impl.Types.Image.create.call @, data
 
-        @onWidthChange updateImageIfNeeded
-        @onHeightChange updateImageIfNeeded
+        @onWidthChange.connect updateImageIfNeeded
+        @onHeightChange.connect updateImageIfNeeded
 
     setRectangleColor: (val) ->
         @_impl.color = val

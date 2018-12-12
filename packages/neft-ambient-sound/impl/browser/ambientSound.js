@@ -1,6 +1,6 @@
-// when=NEFT_BROWSER
+const { SignalDispatcher } = require('@neft/core')
+const Renderer = require('@neft/core/src/renderer')
 
-const { Renderer, signal } = Neft
 const { Item } = Renderer.Impl.Types
 
 exports.create = function (data) {
@@ -15,7 +15,7 @@ exports.create = function (data) {
 
 exports.createData = function () {
   const data = Item.createData()
-  data.onStop = signal.create()
+  data.onStop = new SignalDispatcher()
   return data
 }
 

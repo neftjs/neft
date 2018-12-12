@@ -84,9 +84,9 @@
                             "integer, float or a string, but '#{arg}' given"
                     bridge.pushInteger EVENT_NULL_TYPE
 
-        # unless pushPending
-        #     pushPending = true
-        #     setImmediate sendData
+        if not pushPending and process.env.NEFT_BROWSER
+            pushPending = true
+            setImmediate sendData
         return
 
     exports.callFunction = utils.deprecate exports.callNativeFunction, '''

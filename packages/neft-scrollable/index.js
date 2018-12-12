@@ -38,13 +38,13 @@ Scrollable.Initialize = (item) => {
   let pressX = 0; let pressY = 0; let
     prevented = false
 
-  item.pointer.onPress((event) => {
+  item.pointer.onPress.connect((event) => {
     pressX = event.x
     pressY = event.y
     prevented = false
   })
 
-  item.pointer.onMove((event) => {
+  item.pointer.onMove.connect((event) => {
     if (prevented) {
       return
     }

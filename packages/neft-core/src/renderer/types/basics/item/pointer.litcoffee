@@ -14,7 +14,7 @@ Rectangle {
     'use strict'
 
     utils = require '../../../../util'
-    signal = require '../../../../signal'
+    {SignalsEmitter} = require '../../../../signal'
     assert = require '../../../../assert'
 
     NOP = ->
@@ -124,7 +124,7 @@ Enables mouse and touch handling.
         ]
 
         for signalName in @SIGNALS
-            signal.Emitter.createSignal @, signalName, onLazySignalInitialized
+            SignalsEmitter.createSignal @, signalName, onLazySignalInitialized
 
 ## *Boolean* Pointer::pressed = `false`
 
@@ -142,8 +142,8 @@ Whether the pointer is currently pressed.
             (pointer) ->
                 unless pointer._pressedInitialized
                     pointer._pressedInitialized = true
-                    pointer.onPress onPress
-                    pointer.onRelease onRelease
+                    pointer.onPress.connect onPress
+                    pointer.onRelease.connect onRelease
                 return
 
         itemUtils.defineProperty
@@ -172,8 +172,8 @@ Whether the pointer is currently under the item.
             (pointer) ->
                 unless pointer._hoverInitialized
                     pointer._hoverInitialized = true
-                    pointer.onEnter onEnter
-                    pointer.onExit onExit
+                    pointer.onEnter.connect onEnter
+                    pointer.onExit.connect onExit
                 return
 
         itemUtils.defineProperty

@@ -1,11 +1,9 @@
 'use strict'
 
 utils = require '../../../../../util'
-signal = require '../../../../../signal'
 eventLoop = require '../../../../../event-loop'
 
 {sin, cos} = Math
-{emitSignal} = signal.Emitter
 
 isPointInBox = (ex, ey, x, y, w, h) ->
     ex >= x and ey >= y and ex < x + w and ey < y + h
@@ -94,7 +92,7 @@ module.exports = (impl) ->
     pressedItems = []
     hoverItems = []
 
-    impl.Renderer.onReady ->
+    impl.Renderer.onReady.connect ->
         {Device} = impl.Renderer
         {event} = impl.Renderer.Item.Pointer
 
@@ -105,7 +103,7 @@ module.exports = (impl) ->
                 PROPAGATE_UP | STOP_ASIDE_PROPAGATION
 
         # support press event
-        Device.onPointerPress do ->
+        Device.onPointerPress.connect do ->
             onItem = (item, itemX, itemY) ->
                 {capturePointer} = item._impl
                 if capturePointer & CLICK
@@ -115,7 +113,7 @@ module.exports = (impl) ->
                     event._ensureMove = true
                     event._itemX = itemX
                     event._itemY = itemY
-                    emitSignal item.pointer, 'onPress', event
+                    item.pointer.emit 'onPress', event
                     if event._ensureRelease
                         itemsToRelease.push item
                     if event._ensureMove
@@ -132,7 +130,7 @@ module.exports = (impl) ->
                 return
 
         # support release and click events
-        Device.onPointerRelease do ->
+        Device.onPointerRelease.connect do ->
             onItem = (item, itemX, itemY) ->
                 data = item._impl
                 {capturePointer} = data
@@ -140,14 +138,14 @@ module.exports = (impl) ->
                     event._itemX = itemX
                     event._itemY = itemY
                 if capturePointer & RELEASE
-                    emitSignal item._pointer, 'onRelease', event
+                    item._pointer.emit 'onRelease', event
                 if capturePointer & PRESS
                     index = itemsToRelease.indexOf item
                     if index >= 0
                         itemsToRelease[index] = null
                 if capturePointer & CLICK and not event._preventClick
                     if utils.has(pressedItems, item)
-                        emitSignal item.pointer, 'onClick', event
+                        item.pointer.emit 'onClick', event
                 if capturePointer & (RELEASE | CLICK)
                     if event._stopPropagation
                         return STOP_PROPAGATION
@@ -168,12 +166,12 @@ module.exports = (impl) ->
                         data = item._impl
                         data.pointerHover = false
                         data.pointerMoveFlag = 0
-                        emitSignal item.pointer, 'onExit', event
+                        item.pointer.emit 'onExit', event
 
                 unless event._stopPropagation
                     for item in itemsToRelease by -1
                         if item
-                            emitSignal item.pointer, 'onRelease', event
+                            item.pointer.emit 'onRelease', event
                             if event._stopPropagation
                                 break
 
@@ -183,7 +181,7 @@ module.exports = (impl) ->
                 return
 
         # support move, enter and exit events
-        Device.onPointerMove do ->
+        Device.onPointerMove.connect do ->
             flag = 0
 
             onItem = (item, itemX, itemY) ->
@@ -196,9 +194,9 @@ module.exports = (impl) ->
                 if capturePointer & (ENTER | EXIT) and not data.pointerHover
                     data.pointerHover = true
                     hoverItems.push item
-                    emitSignal item.pointer, 'onEnter', event
+                    item.pointer.emit 'onEnter', event
                 if capturePointer & MOVE
-                    emitSignal item._pointer, 'onMove', event
+                    item._pointer.emit 'onMove', event
                 if capturePointer & (ENTER | EXIT | MOVE)
                     if event._stopPropagation
                         return STOP_PROPAGATION
@@ -219,7 +217,7 @@ module.exports = (impl) ->
                         break
                     data = item._impl
                     if data.pointerMoveFlag isnt flag
-                        emitSignal item.pointer, 'onMove', event
+                        item.pointer.emit 'onMove', event
 
                 for item, i in hoverItems by -1
                     data = item._impl
@@ -227,7 +225,7 @@ module.exports = (impl) ->
                         data.pointerHover = false
                         data.pointerMoveFlag = 0
                         hoverItems.splice i, 1
-                        emitSignal item.pointer, 'onExit', event
+                        item.pointer.emit 'onExit', event
 
                 for item in itemsToMove
                     data = item._impl
@@ -236,14 +234,14 @@ module.exports = (impl) ->
                 return
 
         # support wheel event
-        Device.onPointerWheel do ->
+        Device.onPointerWheel.connect do ->
             onItem = (item, itemX, itemY) ->
                 event._stopPropagation = true
                 if item._impl.capturePointer & WHEEL
-                    if (pointer = item._pointer) and not signal.isEmpty(pointer.onWheel)
+                    if (pointer = item._pointer) and not pointer.onWheel.isEmpty()
                         event._itemX = itemX
                         event._itemY = itemY
-                        emitSignal pointer, 'onWheel', event
+                        pointer.emit 'onWheel', event
                         if event._stopPropagation
                             return STOP_PROPAGATION
                 getEventStatus()

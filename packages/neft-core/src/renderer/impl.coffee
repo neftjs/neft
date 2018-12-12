@@ -3,7 +3,7 @@
 {assert} = console
 
 utils = require '../util'
-signal = require '../signal'
+{SignalDispatcher} = require '../signal'
 eventLoop = require '../event-loop'
 
 module.exports = (Renderer) ->
@@ -12,7 +12,7 @@ module.exports = (Renderer) ->
     impl.windowItem = null
     impl.serverUrl = ''
     impl.resources = null
-    signal.create impl, 'onWindowItemReady'
+    impl.onWindowItemReady = new SignalDispatcher
 
     TYPES = ['Item', 'Image', 'Text', 'Native', 'FontLoader',
              'Device', 'Screen', 'Navigator',

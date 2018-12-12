@@ -2,10 +2,10 @@
 
     'use strict'
 
-    signal = require '../../../../signal'
+    {SignalsEmitter} = require '../../../../signal'
 
     module.exports = (Renderer, Impl, itemUtils) ->
-        class NavigationBar extends signal.Emitter
+        class NavigationBar extends SignalsEmitter
             constructor: ->
                 super()
                 @_height = 0

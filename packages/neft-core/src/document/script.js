@@ -1,7 +1,7 @@
 const log = require('../log')
 const utils = require('../util')
 const Struct = require('../struct')
-const { Emitter } = require('../signal')
+const { SignalsEmitter } = require('../signal')
 
 const PROP_OPTS = 0
 
@@ -22,8 +22,8 @@ class ScriptExported extends Struct {
 
 utils.defineProperty(ScriptExported.prototype, 'constructor', PROP_OPTS, ScriptExported)
 
-Emitter.createSignal(ScriptExported, 'onRefsChange')
-Emitter.createSignal(ScriptExported, 'onContextChange')
+SignalsEmitter.createSignal(ScriptExported, 'onRefsChange')
+SignalsEmitter.createSignal(ScriptExported, 'onContextChange')
 
 class Script {
   constructor(document, script) {

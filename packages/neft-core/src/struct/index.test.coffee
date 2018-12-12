@@ -34,13 +34,13 @@ it 'old key cannot be deleted', ->
 
 it 'onChange signal is emitted with old value', ->
     oldValues = []
-    struct.onNameChange (oldValue) -> oldValues.push(oldValue)
+    struct.onNameChange.connect (oldValue) -> oldValues.push(oldValue)
     struct.name = 'Max'
     assert.isEqual oldValues, ['Bob']
 
 it 'new value is available in onChange signal', ->
     newValue = null
-    struct.onNameChange -> newValue = @name
+    struct.onNameChange.connect -> newValue = @name
     struct.name = 'Max'
     assert.is newValue, 'Max'
 

@@ -3,7 +3,7 @@
 utils = require '../util'
 assert = require '../assert'
 log = require '../log'
-signal = require '../signal'
+{SignalsEmitter} = require '../signal'
 eventLoop = require '../event-loop'
 Binding = require '../binding'
 
@@ -43,7 +43,7 @@ class DocumentBinding extends Binding
     setValue: (val) ->
         @input.setValue val
 
-module.exports = class Input extends signal.Emitter
+module.exports = class Input extends SignalsEmitter
     initBindingConfig = (cfg) ->
         cfg.func ?= new Function cfg.body
         cfg.tree ?= [cfg.func, cfg.connections]
