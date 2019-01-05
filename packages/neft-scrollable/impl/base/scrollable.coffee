@@ -127,7 +127,7 @@ DELTA_VALIDATION_PENDING = 1
 
 pointerWindowMoveListeners = []
 onImplReady = (windowItem) ->
-    windowItem.pointer.onMove (e) ->
+    windowItem.pointer.onMove.connect (e) ->
         stop = false
         for listener in pointerWindowMoveListeners
             listener(e)
@@ -177,7 +177,7 @@ usePointer = (item) ->
             #     verticalContinuous.update dy + e.movementY
             # signal.STOP_PROPAGATION
 
-        windowItem.pointer.onRelease (e) ->
+        windowItem.pointer.onRelease.connect (e) ->
             listen = false
             dx = dy = 0
 
@@ -194,7 +194,7 @@ usePointer = (item) ->
 
     Impl.onWindowItemReady onImplReady
 
-    item.pointer.onPress (e) ->
+    item.pointer.onPress.connect (e) ->
         listen = true
 
         item._impl.globalScale = getItemGlobalScale item
@@ -229,7 +229,7 @@ useWheel = (item) ->
             requestAnimationFrame timer
         return
 
-    item.pointer.onWheel (e) ->
+    item.pointer.onWheel.connect (e) ->
         x = e.deltaX / WHEEL_DIVISOR
         y = e.deltaY / WHEEL_DIVISOR
         item._impl.globalScale = getItemGlobalScale item

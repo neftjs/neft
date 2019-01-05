@@ -1,0 +1,17 @@
+<meta
+  name="Storage"
+  category="Modules"
+/>
+
+<method name=get returns="Promise&lt;String&gt;">
+  <argument name=key type=string />
+</method>
+
+<method name=set returns="Promise">
+  <argument name=key type=string />
+  <argument name=value type=string />
+</method>
+
+<method name=remove returns="Promise">
+  <argument name=key type=string />
+</method>

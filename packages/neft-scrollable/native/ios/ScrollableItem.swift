@@ -38,6 +38,9 @@ extension Extension.Scrollable {
             override func didMoveToWindow() {
                 super.didMoveToWindow()
                 delegate = self
+                if #available(iOS 11.0, *) {
+                    contentInsetAdjustmentBehavior = .never
+                }
             }
 
             override func layoutSubviews() {

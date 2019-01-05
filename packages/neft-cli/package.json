@@ -2,7 +2,7 @@
   "name": "@neft/cli",
   "version": "0.0.1",
   "bin": {
-    "neft": "bin/neft.js"
+    "neftio": "bin/neftio.js"
   },
   "dependencies": {
     "@babel/core": "^7.1.2",
@@ -13,6 +13,9 @@
     "@neft/runtime-ios": "0.0.1",
     "@neft/runtime-macos": "0.0.1",
     "@neft/webpack-loader": "0.0.1",
+    "@neft/request": "0.0.1",
+    "@neft/event-source": "0.0.1",
+    "@neft/webpack-coffee-loader": "0.0.1",
     "babel-loader": "^8.0.4",
     "coffee-script": "^1.12.7",
     "express": "^4.16.3",

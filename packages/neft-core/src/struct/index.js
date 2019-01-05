@@ -1,5 +1,6 @@
 const util = require('../util')
 const assert = require('../assert')
+const eventLoop = require('../event-loop')
 const { SignalsEmitter } = require('../signal')
 
 const privatePropOpts = util.CONFIGURABLE | util.WRITABLE
@@ -19,7 +20,7 @@ const createProperty = (struct, key, value) => {
     this[privateKey] = newValue
     this.emit(signalName, oldVal)
   }
-  util.defineProperty(struct, key, propOpts, getter, setter)
+  util.defineProperty(struct, key, propOpts, getter, eventLoop.bindInLock(setter))
 }
 
 class Struct extends SignalsEmitter {

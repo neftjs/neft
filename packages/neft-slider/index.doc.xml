@@ -1,0 +1,21 @@
+<meta
+  name="Slider"
+  category="Modules"
+  extends="Style.Native"
+/>
+
+<property name=value type=number default=0 />
+
+<property name=minValue type=number default=0 />
+
+<property name=maxValue type=number default=1 />
+
+<property name=thumbColor type=color />
+
+<property name=minTrackColor type=color />
+
+<property name=maxTrackColor type=color />
+
+<method name=setValueAnimated>
+  <argument name=value type=number />
+</method>

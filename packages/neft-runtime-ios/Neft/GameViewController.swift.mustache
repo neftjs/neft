@@ -51,6 +51,8 @@ class GameViewController: UIViewController {
     }
 
     override func viewDidLoad() {
+        self.automaticallyAdjustsScrollViewInsets = false
+
         App.app = self
 
         initClient()

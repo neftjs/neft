@@ -10,17 +10,32 @@ const listToLog = list => list.reduce((result, element, index) => {
   let suffix = ', '
   if (index === list.length - 1) suffix = ''
   if (index === list.length - 2) suffix = ' or '
-  return `${result}\`${element}\`${suffix}`
+  return `${result}${element}${suffix}`
 }, '')
+
+const printHelp = () => {
+  log.log('**Neftio CLI**\n')
+  log.log('npx neftio <u>operation</u> <u>target</u>')
+  log.log(`           <u>operation</u> = ${listToLog(possibleOperations)}`)
+  log.log(`           <u>target</u> = ${listToLog(possibleTargets)}\n`)
+  log.log('<u>operation:</u>')
+  log.log('init       creates basic files inside your project')
+  log.log('build      builds given target without running it')
+  log.log('run        builds given target and runs it')
+  log.log('clean      removes temporary files and built targets\n')
+  log.log('<u>arguments:</u>')
+  log.log('--production       creates production build')
+  log.log('')
+}
 
 exports.parseArgv = ([operation, target, ...rest]) => {
   if (!operations[operation]) {
     if (operation) {
       log.error(`Unknown operation ${operation} given; expected ${listToLog(possibleOperations)}`)
     } else {
-      log.error(`No operation specified; try ${listToLog(possibleOperations)}`)
+      printHelp()
     }
-    log.log('Example: `neft run html`')
+    log.log('Example: `npx neftio run html`')
     process.exit(1)
   }
 

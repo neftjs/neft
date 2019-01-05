@@ -1,0 +1,174 @@
+<meta
+  name="Item"
+  category="Style"
+/>
+
+<property name="id" type="string" readonly>
+
+</property>
+
+<property name="query" type="string" readonly>
+
+</property>
+
+<property name="element" type="Document.Element" readonly withSignal>
+
+</property>
+
+<signal name=onAnimationFrame>
+  <argument name=milliseconds type=number />
+</signal>
+
+<property name="children" type="Object" readonly>
+  <property name="firstChild" type="Item" readonly />
+  <property name="lastChild" type="Item" readonly />
+  <property name="bottomChild" type="Item" readonly />
+  <property name="topChild" type="Item" readonly />
+  <property name="length" type="number" readonly />
+  <method name="get" returns="Item">
+    <argument name="index" type="number" />
+    Returns an item with the given index.
+  </method>
+
+  <method name="index" returns="Item">
+    <argument name="item" type="Item" />
+    Returns index at which a given element can be found in the children array,
+    or `-1`if it is not present.
+  </method>
+
+  <method name="has" returns="boolean">
+    <argument name="item" type="Item" />
+    Determines whether the given element is a child of an item.
+  </method>
+
+  <method name="clear">
+    Removes all children from an item.
+  </method>
+</property>
+
+<signal name="onChildrenChange">
+  <argument name="added" type="Item" />
+  <argument name="removed" type="Item" />
+</signal>
+
+<property name="parent" type="Item" withSignal />
+
+<property name="previousSibling" type="Item" withSignal />
+
+<property name="nextSibling" type="Item" withSignal />
+
+<property name="belowSibling" type="Item" readonly />
+
+<property name="aboveSibling" type="Item" readonly />
+
+<property name="index" type="number" />
+
+<property name="visible" type=boolean default=true withSignal>
+  Determines whether an item is visible or not.
+
+  <script lang="nml">
+    Item {
+      width: 100
+      height: 100
+      pointer.onClick: function(){
+        rect.visible = !rect.visible;
+        text.text = rect.visible ? "Click to hide" : "Click to show";
+      }
+      Rectangle {
+        id: rect
+        anchors.fill: parent
+        color: 'blue'
+      }
+      Text {
+        id: text
+        text: "Click to hide"
+        anchors.centerIn: parent
+      }
+    }
+  </script>
+</property>
+
+<property name=clip type=boolean default=false withSignal />
+
+<property name=width type=number default=0 withSignal />
+
+<property name=height type=number default=0 withSignal />
+
+<property name=x type=number default=0 withSignal />
+
+<property name=y type=number default=0 withSignal />
+
+<property name=z type=number default=0 withSignal />
+
+<property name=scale type=number default=1 withSignal />
+
+<property name=rotation type=number default=0 withSignal>
+  <script lang="nml">
+    Rectangle {
+      width: 100
+      height: 100
+      color: 'red'
+      rotation: Math.PI / 4
+    }
+  </script>
+</property>
+
+<property name=opacity type=number default=1 withSignal />
+
+<method name=scaleInPoint>
+  <argument name=scale type=number />
+  <argument name=pointX type=number />
+  <argument name=pointY type=number />
+</method>
+
+<method name=getGlobalComputes returns=Object>
+  Returns globally computed x, y, scale, rotation, visible and opacity.
+</method>
+
+<property name=anchors type=Anchors readonly />
+
+<signal name=onAnchorsChange>
+  <argument name=property type=string />
+  <argument name=oldValue type=Array />
+</signal>
+
+<property name=layout type=Layout readonly />
+
+<signal name=onLayoutChange>
+  <argument name=property type=string />
+  <argument name=oldValue type=Any />
+</signal>
+
+<property name=pointer type=Pointer readonly />
+
+<property name=margin type=Margin readonly />
+
+<signal name=onMarginChange>
+  <argument name=property type=string />
+  <argument name=oldValue type=Any />
+</signal>
+
+<property name=keys type=Keys readonly />
+
+<article title="Custom properties">
+  <script lang="nml">
+    Item {
+      id: main
+      property currentLife: 0.8
+      Text {
+        text: "Life: " + main.currentLife
+      }
+    }
+  </script>
+</article>
+
+<article title="Custom signals">
+  <script lang="nml">
+    Item {
+      signal onPlayerCollision
+      onPlayerCollision(){
+        // boom!
+      }
+    }
+  </script>
+</article>

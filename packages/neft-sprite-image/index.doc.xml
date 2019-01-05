@@ -1,0 +1,9 @@
+<meta
+  name="SpriteImage"
+  category="Modules"
+  extends="Style.Native"
+/>
+
+<property name=source type=string />
+<property name=frameCount type=number />
+<property name=animation type="Style.NumberAnimation" readonly />

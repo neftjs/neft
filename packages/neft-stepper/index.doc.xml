@@ -1,0 +1,11 @@
+<meta
+  name="Stepper"
+  category="Modules"
+  extends="Style.Native"
+/>
+
+<property name=value type=number />
+<property name=color type=color />
+<property name=minValue type=number />
+<property name=maxValue type=number default=100 />
+<property name=stepValue type=number default=1 />

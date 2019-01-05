@@ -22,19 +22,19 @@ module.exports = (impl) ->
     bridge.listen bridge.inActions.POINTER_PRESS, (reader) ->
         pointer.x = reader.getFloat()
         pointer.y = reader.getFloat()
-        device.onPointerPress.emit pointer
+        device.emit 'onPointerPress', pointer
         return
 
     bridge.listen bridge.inActions.POINTER_RELEASE, (reader) ->
         pointer.x = reader.getFloat()
         pointer.y = reader.getFloat()
-        device.onPointerRelease.emit pointer
+        device.emit 'onPointerRelease', pointer
         return
 
     bridge.listen bridge.inActions.POINTER_MOVE, (reader) ->
         pointer.x = reader.getFloat()
         pointer.y = reader.getFloat()
-        device.onPointerMove.emit pointer
+        device.emit 'onPointerMove', pointer
         return
 
     ###
@@ -55,26 +55,25 @@ module.exports = (impl) ->
     bridge.listen bridge.inActions.KEY_PRESS, (reader) ->
         keyboard.key = reader.getString()
         keyboard.text = ''
-        device.onKeyPress.emit keyboard
+        device.emit 'onKeyPress', keyboard
         return
 
     bridge.listen bridge.inActions.KEY_HOLD, (reader) ->
         keyboard.key = reader.getString()
         keyboard.text = ''
-        device.onKeyHold.emit keyboard
+        device.emit 'onKeyHold', keyboard
         return
 
     bridge.listen bridge.inActions.KEY_INPUT, (reader) ->
         keyboard.key = ''
         keyboard.text = reader.getString()
-        device.onKeyInput.emit keyboard
+        device.emit 'onKeyInput', keyboard
         return
 
     bridge.listen bridge.inActions.KEY_RELEASE, (reader) ->
         keyboard.key = reader.getString()
         keyboard.text = ''
-        console.log('KEY RELEASE', keyboard.key)
-        device.onKeyRelease.emit keyboard
+        device.emit 'onKeyRelease', keyboard
         return
 
     initDeviceNamespace: ->

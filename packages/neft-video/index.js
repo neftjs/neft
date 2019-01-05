@@ -1,6 +1,6 @@
-const { Renderer, assert, utils } = Neft
+const { NativeStyleItem } = require('@neft/core')
 
-class Video extends Renderer.Native {
+class Video extends NativeStyleItem {
   start() {
     this.call('start')
   }

@@ -30,12 +30,11 @@
 
 ## *Resources* Resources.fromJSON(*String*|*Object* json)
 
-        @fromJSON = (json) ->
+        @fromJSON = (json, resources = new Resources) ->
             if typeof json is 'string'
                 json = JSON.parse json
             assert.isObject json
 
-            resources = new Resources
             for prop, val of json
                 if prop is '__name__'
                     continue

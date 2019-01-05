@@ -1,0 +1,21 @@
+<meta
+  name="Scrollable"
+  category="Modules"
+  extends="Style.Native"
+/>
+
+<property name=contentItem type="Style.Item" />
+<property name=contentX type=number />
+<property name=contentY type=number />
+<property name=horizontalScrollBar type=boolean default=true />
+<property name=verticalScrollBar type=boolean default=true />
+<property name=horizontalScrollEffect type=boolean default=true />
+<property name=verticalScrollEffect type=boolean default=true />
+
+<method name=scrollTo>
+  <argument name=x type=number />
+  <argument name=y type=number />
+  <argument name=options>
+    <argument name=animate type=boolean default=false />
+  </argument>
+</method>

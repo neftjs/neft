@@ -1,0 +1,42 @@
+<meta
+  name="Text"
+  category="Style"
+  extends="Style.Item"
+/>
+
+<script lang="nml">
+  Text {
+    font.pixelSize: 30
+    font.family: 'monospace'
+    text: 'Neft Renderer'
+    color: 'blue'
+  }
+</script>
+
+<property name=width type=number default=-1 withSignal />
+
+<property name=height type=number default=-1 withSignal />
+
+<property name=text type=string withSignal />
+
+<property name=color type=string default=black withSignal />
+
+<property name=lineHeight type=number default=1 withSignal hidden />
+
+<property name=contentWidth type=number default=0 readonly withSignal />
+
+<property name=contentHeight type=number default=0 readonly withSignal />
+
+<property name=alignment type=Alignment readonly />
+
+<signal name=onAlignmentChange>
+  <argument name=property type=string />
+  <argument name=oldValue type=Any />
+</signal>
+
+<property name=font type=Font readonly />
+
+<signal name=onFontChange>
+  <argument name=property type=string />
+  <argument name=oldValue type=Any />
+</signal>

@@ -45,9 +45,9 @@ module.exports = (impl) ->
             pushString @constructor.name
             data.id = bridge.getId @
 
-        @pointer.onPress onPointerPress, @
-        @pointer.onRelease onPointerRelease, @
-        @pointer.onMove onPointerMove, @
+        @pointer.onPress.connect onPointerPress, @
+        @pointer.onRelease.connect onPointerRelease, @
+        @pointer.onMove.connect onPointerMove, @
         return
 
     updateNativeSize: updateNativeSize = ->

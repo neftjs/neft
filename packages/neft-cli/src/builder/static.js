@@ -113,6 +113,7 @@ exports.loadStaticFiles = async () => {
   const target = new Resources()
   const files = await glob(path.join(inDir, '**/*.*'))
   await Promise.all(files.map(file => mapFile(file, target)))
-  return `const { setResources } = require('@neft/core')
-setResources(${JSON.stringify(target)})`
+  return `const { resources } = require('@neft/core')
+const { Resources } = require('@neft/core/src/resources')
+Resources.fromJSON(${JSON.stringify(target)}, resources)`
 }

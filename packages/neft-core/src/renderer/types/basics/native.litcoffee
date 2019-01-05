@@ -6,6 +6,7 @@
     log = require '../../../log'
     assert = require '../../../assert'
     colorUtils = require '../../utils/color'
+    Resources = require '../../../resources'
 
     IS_NATIVE = process.env.NEFT_NATIVE
     if process.env.NEFT_NATIVE
@@ -66,6 +67,38 @@ where `XYZ` is the given name.
                 defaultValue: false
                 developmentSetter: (val) ->
                     assert.isBoolean val
+
+#### resource
+
+            PROPERTY_TYPES.resource = (config) ->
+                defaultValue: ''
+                developmentSetter: (val) ->
+                    assert.isString val
+                implementationValue: do ->
+                    RESOURCE_REQUEST =
+                        resolution: 1
+                    requestAnimationFrame ->
+                        RESOURCE_REQUEST.resolution = Renderer.Device.pixelRatio
+                    getResourceResolutionByPath = (rsc, path) ->
+                        for format in rsc.formats
+                            paths = rsc.paths[format]
+                            if not paths
+                                continue
+                            for resolution of paths
+                                if paths[resolution] is path
+                                    return parseFloat(resolution)
+                        return 1
+                    (val) ->
+                        unless Resources.testUri(val)
+                            return val
+                        resource = Impl.resources?.getResource(val)
+                        if resource
+                            path = resource.resolve RESOURCE_REQUEST
+                            config.onResolutionChange?.call @, getResourceResolutionByPath(resource, path)
+                            return path
+                        else
+                            log.warn("Unknown resource given `#{val}`")
+                            return ''
 
 #### color
 
@@ -154,6 +187,10 @@ where `XYZ` is the given name.
 
                 # create
                 itemUtils.defineProperty config
+
+            @setPropertyValue = itemUtils.setPropertyValue
+            @addTypeImplementation = (impl) ->
+                Impl.addTypeImplementation @constructor.name, impl
 
 ## *Native* Native::constructor() : *Item*
 

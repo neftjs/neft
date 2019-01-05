@@ -67,7 +67,6 @@ const compile = compiler => new Promise((resolve, reject) => {
     } else if (stats.hasErrors() || stats.hasWarnings()) {
       reject(new Error(stats.toString(webpackStatsToString)))
     } else {
-      log.log(stats.toString(webpackStatsToString))
       resolve()
     }
   })
@@ -79,6 +78,8 @@ const watchAndCompile = (compiler, webpackConfig) => new Promise((resolve, rejec
   app.use('/static', Express.static('dist/static'))
   app.use(webpackDevMiddleware(compiler, {
     noInfo: true,
+    logLevel: 'warn',
+    logTime: true,
     writeToDisk: true,
     publicPath: webpackConfig.output.publicPath,
     headers: {
@@ -86,7 +87,10 @@ const watchAndCompile = (compiler, webpackConfig) => new Promise((resolve, rejec
       'Access-Control-Allow-Origin': webpackConfig.output.publicPath,
     },
   }))
-  app.use(webpackHotMiddleware(compiler))
+  app.use(webpackHotMiddleware(compiler, {
+    noInfo: true,
+    reload: true,
+  }))
 
   let firstCall = true
   compiler.hooks.done.tap('NeftWatchAndCompile', () => {
@@ -94,7 +98,7 @@ const watchAndCompile = (compiler, webpackConfig) => new Promise((resolve, rejec
     firstCall = false
     app.listen(devServerPort, (error) => {
       if (error) return reject(error)
-      log.info(`Start development server on port \`${devServerPort}\``)
+      log.log(`Start development server on port \`${devServerPort}\``)
       return resolve()
     })
   })
@@ -106,13 +110,13 @@ const findExtensions = () => Object.keys(packageFile.dependencies || {})
 
 const staticFileLoader = function () {
   this.async(true)
-  this.cacheable(false)
+  this.cacheable(true)
   loadStaticFiles()
     .then((result) => { this.callback(null, result) }, (error) => { this.callback(error) })
 }
 
 exports.build = async (target, args) => {
-  log.info(`Starting \`${target}\` build`)
+  const logline = log.line().timer().loading(`Build **${target}**`)
   const targetBuilder = targetBuilders[target]
   const output = path.join(outputDir, target)
   const filepath = path.join(output, 'bundle.js')
@@ -163,13 +167,14 @@ exports.build = async (target, args) => {
         },
         {
           test: /\.(coffee|coffee\.md|litcoffee)$/,
-          use: [require.resolve('./webpack-coffee-loader')],
+          use: [require.resolve('@neft/webpack-coffee-loader')],
         },
       ],
     },
   }
   const webpackConfig = util.mergeDeepAll(defaultWebpackConfig, targetBuilder.webpackConfig)
 
+  logline.loading(`Build **${target}** - bundle`)
   if (production || !args.run) {
     await compile(webpack(webpackConfig))
   } else {
@@ -182,9 +187,17 @@ exports.build = async (target, args) => {
     await watchAndCompile(webpack(webpackConfig), webpackConfig)
   }
 
+  logline.loading(`Build **${target}** - produce manifest`)
   const manifest = await produceManifest({ ...targetBuilder, target, output })
+
+  logline.loading(`Build **${target}** - generate icons`)
   await generateIcons({ ...targetBuilder, target, manifest })
+
+  logline.loading(`Build **${target}** - build native project`)
   await targetBuilder.build({
     manifest, output, filepath, production, extensions,
   })
+
+  logline.log(`✔ Built **${target}**`).stop()
+  if (!args.run) log.log(`Bundle is located in \`${path.relative(realpath, output)}\``)
 }

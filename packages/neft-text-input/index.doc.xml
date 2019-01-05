@@ -1,0 +1,14 @@
+<meta
+  name="TextInput"
+  category="Modules"
+  extends="Style.Native"
+/>
+
+<property name=text type=string />
+<property name=textColor type=color />
+<property name=placeholder type=string />
+<property name=placeholderColor type=color />
+<property name=keyboardType type=string />
+<property name=multiline type=boolean />
+<property name=returnKeyType type=string />
+<property name=secureTextEntry type=boolean />

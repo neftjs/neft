@@ -1,9 +1,8 @@
-const { assert } = require('@neft/core')
-const Renderer = require('@neft/core/src/renderer')
+const { assert, NativeStyleItem } = require('@neft/core')
 
-const { setPropertyValue } = Renderer.itemUtils
+const { setPropertyValue } = NativeStyleItem
 
-class Switch extends Renderer.Native {
+class Switch extends NativeStyleItem {
   setSelectedAnimated(val) {
     assert.isBoolean(val)
     setPropertyValue(this, 'selected', val)

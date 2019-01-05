@@ -25,6 +25,7 @@ extension Extension.Request {
         }
     }
 
+    // @export Request.request(string, string, string, string, number) => Promise as request
     static func request(_ uri: String, _ method: String, _ headers: [String: String], _ body: String, _ timeout: Int, _ completion: @escaping (_ error: String, _ code: Int, _ data: String, _ headers: [String: String]) -> Void) {
         var req = URLRequest(url: URL(string: uri)!)
         let session = URLSession.shared

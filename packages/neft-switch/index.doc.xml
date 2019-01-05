@@ -1,0 +1,13 @@
+<meta
+  name="Switch"
+  category="Modules"
+  extends="Style.Native"
+/>
+
+<property name=selected type=boolean />
+<property name=borderColor type=color />
+<property name=selectedColor type=color />
+<property name=thumbColor type=color />
+<method name=setSelectedAnimated>
+  <argument name=value type=boolean />
+</method>
