@@ -1,0 +1,16 @@
+<meta
+  name="Device.KeyboardEvent"
+  category="Style"
+/>
+
+<property name=visible type=boolean default=false readonly />
+
+<property name=height type=number readonly />
+
+<property name=key type=string readonly />
+
+<property name=text type=string readonly />
+
+<method name=show />
+
+<method name=hide />

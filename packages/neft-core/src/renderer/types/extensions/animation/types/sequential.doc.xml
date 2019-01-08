@@ -1,0 +1,7 @@
+<meta
+  name="SequentialAnimation"
+  category="Style"
+  extends="Style.Animation"
+/>
+
+<property name=children type="Style.Animation[]" />

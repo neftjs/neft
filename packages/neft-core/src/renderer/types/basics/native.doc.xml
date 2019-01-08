@@ -1,0 +1,20 @@
+<meta
+  name="Item"
+  category="Style"
+  extends="Style.Item"
+/>
+
+<method name=set>
+  <argument name=propName type=string />
+  <argument name=value type=any />
+</method>
+
+<method name=call>
+  <argument name=funcName type=string />
+  <argument name="args..." type=any />
+</method>
+
+<method name=on>
+  <argument name=eventName type=string />
+  <argument name=listener type=function />
+</method>

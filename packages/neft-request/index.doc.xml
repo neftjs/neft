@@ -1,0 +1,13 @@
+<meta
+  name="Request"
+  category="Modules"
+/>
+
+<method name=request returns=Promise>
+  <argument name=options.uri type=string />
+  <argument name=options.method type=string default=GET />
+  <argument name=options.headers type=object />
+  <argument name=options.body type=any />
+  <argument name=options.json type=boolean />
+  <argument name=options.timeout type=number default=30000 />
+</method>

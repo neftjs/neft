@@ -1,0 +1,62 @@
+<meta
+  name="Item.Pointer.Event"
+  category="Style"
+  extends="Device.PointerEvent"
+/>
+
+Events order:
+ 1. Press
+ 2. Enter
+ 3. Move
+ 4. Move (not captured ensured items)
+ 5. Exit
+ 6. Release
+ 7. Click
+ 8. Exit (entered items on touch devices)
+ 9. Release (not captured ensured items)
+
+Stopped 'Enter' event will emit 'Move' event on this item.
+
+Stopped 'Exit' event will emit 'Release' event on this item.
+
+<property name=itemX type=number readonly>
+  Represents pointer horizontal position in a local item coordinate system.
+  Is not available inside `onExit` event and for move or release ensured items.
+</property>
+
+<property name=itemY type=number readonly>
+  Represents pointer vertical position in a local item coordinate system.
+  Is not available inside `onExit` event and for move or release ensured items.
+</property>
+
+<property name=stopPropagation type=boolean default=false>
+  Enable this property to stop further event propagation.
+</property>
+
+<property name=checkSiblings type=boolean default=false>
+  By default first deepest captured item will propagate this event only by his parents.
+  Change this value to test previous siblings as well.
+</property>
+
+<property name=ensureRelease type=boolean default=true>
+  Define whether pressed item should get 'onRelease' signal even
+  if the pointer has been released outside of this item.
+
+  Can be changed only in the 'onPress' signal.
+</property>
+
+<property name=ensureMove type=boolean default=true>
+  Define whether the pressed item should get 'onMove' signals even
+  if the pointer is outside of this item.
+
+  Can be changed only in the 'onPress' signal.
+</property>
+
+<property name=preventClick type=boolean default=false>
+  Set it to `true` to block emitting `click` signals.
+
+  This property is reset on each pointer press.
+
+  It's internally used by Scrollable element to block `clicks` after view has been scrolled.
+</property>
+

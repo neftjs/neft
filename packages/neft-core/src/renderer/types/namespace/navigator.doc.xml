@@ -1,0 +1,12 @@
+<meta
+  name="Navigator"
+  category="Style"
+/>
+
+<property name=language type=string default=en readonly />
+
+<property name=browser type=boolean readonly />
+
+<property name=native type=boolean readonly />
+
+<property name=online type=boolean readonly />

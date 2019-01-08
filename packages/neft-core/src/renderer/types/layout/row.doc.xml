@@ -1,0 +1,20 @@
+<meta
+  name=Row
+  category=Style
+  extends="Style.Item"
+/>
+
+```javascript
+Row {
+    spacing: 5
+    Rectangle { color: 'blue'; width: 50; height: 50; }
+    Rectangle { color: 'green'; width: 20; height: 50; }
+    Rectangle { color: 'red'; width: 50; height: 20; }
+}
+```
+
+<property name=padding type="Item.Margin" />
+<property name=spacing type=number default=0 />
+<property name=alignment type="Item.Alignment" />
+<property name=includeBorderMargins type=boolean default=false />
+

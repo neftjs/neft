@@ -1,0 +1,10 @@
+<meta
+  name="Item.Layout"
+  category="Style"
+/>
+
+<property name=enabled type=boolean default=true />
+
+<property name=fillWidth type=boolean default=false />
+
+<property name=fillHeight type=boolean default=false />

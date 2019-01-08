@@ -1,0 +1,18 @@
+<meta
+  name=Screen
+  category=Style
+/>
+
+<property name=touch type=boolean readonly />
+
+<property name=width type=number readonly />
+
+<property name=height type=number readonly />
+
+<property name=orientation type=string default="Portrait" readonly>
+  May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape.
+</property>
+
+<property name=statusBar type="Screen.StatusBar" readonly />
+
+<property name=navigationBar type="Screen.NavigationBar" readonly />

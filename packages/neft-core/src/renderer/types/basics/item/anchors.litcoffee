@@ -1,5 +1,3 @@
-# Anchors
-
     'use strict'
 
     utils = require '../../../../util'
@@ -18,33 +16,6 @@
     V_LINE_REQ = 1<<3
     FREE_H_LINE_REQ = 1<<4
     FREE_V_LINE_REQ = 1<<5
-
-Anchors describe position relations between two items.
-
-Each item has few lines: top, bottom, verticalCenter, left, right, horizontalCenter.
-
-Anchors give a posibility to say, that a line of the first item must be
-always in the same position as a line of the second item.
-
-Anchors work only between siblings and in relation to the direct parent.
-
-```javascript
-Item {
-    height: 100
-    Rectangle {
-        id: rect1
-        width: 100
-        height: 100
-        color: 'green'
-    }
-    Rectangle {
-        width: 40
-        height: 40
-        color: 'red'
-        anchors.left: rect1.right
-    }
-}
-```
 
     H_LINES =
         top: true
@@ -115,20 +86,6 @@ Item {
 
                     [target, line] = val
 
-```javascript
-Rectangle {
-    width: 100
-    height: 100
-    color: 'green'
-    Rectangle {
-        width: 40
-        height: 40
-        color: 'red'
-        anchors.left: parent.right
-    }
-}
-```
-
                     if opts & ONLY_TARGET_ALLOW
                         unless line is undefined
                             log.error "`anchors.#{type}` expects only a target to be defined; " +
@@ -139,9 +96,6 @@ Rectangle {
                         unless H_LINES[line] or V_LINES[line]
                             log.error "`anchors.#{type}` expects an anchor line to be defined; " +
                               "`'#{val}'` given;\nuse one of the `#{Object.keys allowedLines}`"
-
-Horizontal anchors can't point to the vertical lines (and vice versa),
-so `anchors.top = parent.left` is not allowed.
 
                     if opts & H_LINE_REQ
                         unless H_LINES[line]
@@ -175,177 +129,41 @@ so `anchors.top = parent.left` is not allowed.
                 setter: setter
                 getter: -> getter
 
-## *Array* Anchors::left
-
         createAnchorProp 'left', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ, ->
             if @_ref
                 @_ref.x - (@_ref._margin?._left or 0)
-
-## *Signal* Anchors::onLeftChange(*Array* oldValue)
-
-## *Array* Anchors::right
 
         createAnchorProp 'right', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ, ->
             if @_ref
                 @_ref._x + @_ref._width + (@_ref._margin?._right or 0)
 
-## *Signal* Anchors::onRightChange(*Array* oldValue)
-
-## *Array* Anchors::horizontalCenter
-
-```svg
-<svg viewBox="0 0 1 1">
-    <rect x="0.2" y="0.2" width="0.6" height="0.6" fill="lightgray" />
-    <line x1="0.5" y1="0" x2="0.5" y2="1" stroke="black" stroke-width="0.01" />
-</svg>
-```
-
-```javascript
-Item {
-    height: 100
-    Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-    Rectangle {
-        color: 'red'; width: 40; height: 40
-        anchors.horizontalCenter: rect1.horizontalCenter
-    }
-}
-```
-
         createAnchorProp 'horizontalCenter', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ, ->
             if @_ref
                 @_ref._x + @_ref._width / 2
-
-## *Signal* Anchors::onHorizontalCenterChange(*Array* oldValue)
-
-## *Array* Anchors::top
-
-```svg
-<svg viewBox="0 0 1 1">
-    <rect x="0.2" y="0.2" width="0.6" height="0.6" fill="lightgray" />
-    <line x1="0" y1="0.2" x2="1" y2="0.2" stroke="black" stroke-width="0.01" />
-</svg>
-```
-
-```javascript
-Item {
-    height: 100
-    Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-    Rectangle {
-        color: 'red'; width: 40; height: 40
-        anchors.top: rect1.verticalCenter
-    }
-}
-```
 
         createAnchorProp 'top', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ, ->
             if @_ref
                 @_ref._y - (@_ref._margin?._top or 0)
 
-## *Signal* Anchors::onTopChange(*Array* oldValue)
-
-## *Array* Anchors::bottom
-
-```svg
-<svg viewBox="0 0 1 1">
-    <rect x="0.2" y="0.2" width="0.6" height="0.6" fill="lightgray" />
-    <line x1="0" y1="0.8" x2="1" y2="0.8" stroke="black" stroke-width="0.01" />
-</svg>
-```
-
         createAnchorProp 'bottom', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ, ->
             if @_ref
                 @_ref._y + @_ref._height + (@_ref._margin?._bottom or 0)
-
-## *Signal* Anchors::onBottomChange(*Array* oldValue)
-
-## *Array* Anchors::verticalCenter
-
-```svg
-<svg viewBox="0 0 1 1">
-    <rect x="0.2" y="0.2" width="0.6" height="0.6" fill="lightgray" />
-    <line x1="0" y1="0.5" x2="1" y2="0.5" stroke="black" stroke-width="0.01" />
-</svg>
-```
-
-```javascript
-Item {
-    height: 100
-    Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-    Rectangle {
-        color: 'red'; width: 40; height: 40
-        anchors.verticalCenter: rect1.verticalCenter
-    }
-}
-```
 
         createAnchorProp 'verticalCenter', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ, ->
             if @_ref
                 @_ref._y + @_ref._height / 2
 
-## *Signal* Anchors::onVerticalCenterChange(*Array* oldValue)
-
-## *Array* Anchors::centerIn
-
-It's a shortcut for the horizontalCenter and verticalCenter anchors.
-
-No target line is required.
-
-```javascript
-Rectangle {
-    id: rect1
-    width: 100
-    height: 100
-    color: 'green'
-    Rectangle {
-        width: 40
-        height: 40
-        color: 'red'
-        anchors.centerIn: parent
-    }
-}
-```
-
-## *Signal* Anchors::onCenterInChange(*Array* oldValue)
-
         createAnchorProp 'centerIn', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ, ->
             if @_ref
                 [@horizontalCenter, @verticalCenter]
-
-## *Array* Anchors::fill
-
-Changes item position and its size to be always equal the anchored target.
-
-No target line is required.
-
-```javascript
-Item {
-    height: 100
-    Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-    Rectangle {
-        color: 'red'
-        opacity: 0.5
-        anchors.fill: rect1
-    }
-}
-```
-
-## *Signal* Anchors::onFillChange(*Array* oldValue)
 
         createAnchorProp 'fill', ONLY_TARGET_ALLOW, ->
             if @_ref
                 [@_ref._x, @_ref._y, @_ref._width, @_ref._height]
 
-## *Array* Anchors::fillWidth
-
-## *Signal* Anchors::onFillWidthChange(*Array* oldValue)
-
         createAnchorProp 'fillWidth', ONLY_TARGET_ALLOW, ->
             if @_ref
                 [@_ref._x, @_ref._width]
-
-## *Array* Anchors::fillHeight
-
-## *Signal* Anchors::onFillHeightChange(*Array* oldValue)
 
         createAnchorProp 'fillHeight', ONLY_TARGET_ALLOW, ->
             if @_ref

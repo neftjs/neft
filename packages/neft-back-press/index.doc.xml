@@ -1,0 +1,8 @@
+<meta
+  name="BackPress"
+  category="Modules"
+/>
+
+<signal name=onBackPress />
+
+<method name=killApp />

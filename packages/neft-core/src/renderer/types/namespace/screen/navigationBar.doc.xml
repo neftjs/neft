@@ -1,0 +1,6 @@
+<meta
+  name="Screen.NavigationBar"
+  category="Style"
+/>
+
+<property name=height type=number readonly />

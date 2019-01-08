@@ -1,0 +1,23 @@
+<meta
+  name="ActiveLink"
+  category="Modules"
+/>
+
+<method name=web>
+  <argument name=url type=string />
+</method>
+
+<method name=mailto>
+  <argument name=options.address type=string />
+  <argument name=options.subject type=string />
+</method>
+
+<method name=tel>
+  <argument name=number type=string />
+</method>
+
+<method name=geo>
+  <argument name=options.latitude type=number />
+  <argument name=options.longitude type=number />
+  <argument name=options.address type=string />
+</method>

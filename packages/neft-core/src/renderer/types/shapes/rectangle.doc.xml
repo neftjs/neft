@@ -1,0 +1,13 @@
+<meta
+  name=Rectangle
+  category=Style
+  extends="Style.Item"
+/>
+
+<property name=color type=string default="transparent" />
+
+<property name=radius type=number default="0" />
+
+<property name="border.width" type=number default="0" />
+
+<property name="border.color" type=string default="transparent" />
