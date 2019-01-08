@@ -17,6 +17,7 @@ const PARSERS = [
   require('./parse/conditions'),
   require('./parse/refs'),
   require('./parse/logs'),
+  require('./parse/unknowns'),
 ]
 /* eslint-enable global-require */
 

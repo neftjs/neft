@@ -17,6 +17,7 @@ module.exports = (element, parser) => {
     // long formula
     if (child.name === 'n-use') {
       nUses.push(child)
+      child.name = 'blank'
     }
   }
 

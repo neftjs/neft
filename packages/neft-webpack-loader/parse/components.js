@@ -2,6 +2,7 @@ const findImports = (element, parser) => {
   const imports = []
   element.queryAll('n-import').forEach((child) => {
     const { src, as } = child.props
+    child.parent = null
     if (!src || !as) {
       parser.warning(new Error('<n-import> must provide src="" and as="" properties'))
       return
