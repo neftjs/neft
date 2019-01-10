@@ -1,6 +1,7 @@
 <meta
-  name=Rectangle
-  category=Style
+  name="Style.Rectangle"
+  title="Rectangle NML Type"
+  category="API Reference/Shape"
   extends="Style.Item"
 />
 

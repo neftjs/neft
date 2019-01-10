@@ -1,6 +1,7 @@
 <meta
-  name="Device"
-  category="Style"
+  name="Style.Device"
+  title="Device NML Namespace"
+  category="API Reference/Namespace"
 />
 
 <property name=platform type=string default=Unix>
@@ -31,8 +32,6 @@
 <property name=phone type=boolean default=false />
 
 <property name=mobile type=boolean default=false />
-
-<property name=pixelRatio type=number default=1 />
 
 <property name=pixelRatio type=number default=1 />
 

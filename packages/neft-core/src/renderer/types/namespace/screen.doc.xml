@@ -1,6 +1,7 @@
 <meta
-  name=Screen
-  category=Style
+  name="Style.Screen"
+  title="Screen NML Namespace"
+  category="API Reference/Namespace"
 />
 
 <property name=touch type=boolean readonly />
@@ -13,6 +14,10 @@
   May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape.
 </property>
 
-<property name=statusBar type="Screen.StatusBar" readonly />
+<property name=statusBar.height type=number readonly />
 
-<property name=navigationBar type="Screen.NavigationBar" readonly />
+<property name=statusBar.color type=string>
+  May contains: Light or Dark.
+</property>
+
+<property name=navigationBar.height type=number readonly />

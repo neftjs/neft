@@ -1,6 +1,7 @@
 <meta
-  name="Image"
-  category="Style"
+  name="Style.Image"
+  title="Image NML Type"
+  category="API Reference"
   extends="Style.Item"
 />
 

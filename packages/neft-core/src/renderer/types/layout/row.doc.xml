@@ -1,6 +1,7 @@
 <meta
-  name=Row
-  category=Style
+  name="Style.Row"
+  title="Row NML Type"
+  category="API Reference/Layout"
   extends="Style.Item"
 />
 
@@ -13,8 +14,12 @@ Row {
 }
 ```
 
-<property name=padding type="Item.Margin" />
+<property name=padding.left type=number default=0 />
+<property name=padding.top type=number default=0 />
+<property name=padding.right type=number default=0 />
+<property name=padding.bottom type=number default=0 />
 <property name=spacing type=number default=0 />
-<property name=alignment type="Item.Alignment" />
+<property name=alignment.horizontal type=string default="left" />
+<property name=alignment.vertical type=string default="top" />
 <property name=includeBorderMargins type=boolean default=false />
 

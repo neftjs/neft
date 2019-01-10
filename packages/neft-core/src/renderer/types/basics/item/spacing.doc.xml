@@ -1,8 +1,0 @@
-<meta
-  name="Item.Spacing"
-  category="Style"
-/>
-
-<property name=column type=number default=0 />
-
-<property name=row type=number default=0 />

@@ -1,6 +1,7 @@
 <meta
-  name="Device.KeyboardEvent"
-  category="Style"
+  name="Style.KeyboardEvent"
+  title="KeyboardEvent"
+  category="API Reference/Event"
 />
 
 <property name=visible type=boolean default=false readonly />

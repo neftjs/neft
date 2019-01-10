@@ -1,8 +1,21 @@
 <meta
-  name="Item.Pointer.Event"
-  category="Style"
-  extends="Device.PointerEvent"
+  name="Style.PointerEvent"
+  title="PointerEvent"
+  category="API Reference/Event"
+  extends="Style.PointerEvent"
 />
+
+<property name=x type=number readonly />
+
+<property name=y type=number readonly />
+
+<property name=movementX type=number readonly />
+
+<property name=movementY type=number readonly />
+
+<property name=deltaX type=number readonly />
+
+<property name=deltaY type=number readonly />
 
 Events order:
  1. Press

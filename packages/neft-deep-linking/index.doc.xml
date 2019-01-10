@@ -3,6 +3,6 @@
   category="Modules"
 />
 
-<parameter name=openUrl type=string />
+<property name=openUrl type=string />
 
 <signal name=onOpenUrlChange />

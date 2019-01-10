@@ -1,6 +1,7 @@
 <meta
-  name="Transition"
-  category="Style"
+  name="Style.Transition"
+  title="Transition NML Type"
+  category="API Reference/Animation"
 />
 
 ```javascript

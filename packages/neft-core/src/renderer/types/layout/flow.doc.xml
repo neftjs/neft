@@ -1,6 +1,7 @@
 <meta
-  name=Flow
-  category=Style
+  name="Style.Flow"
+  title="Flow NML Type"
+  category="API Reference/Layout"
   extends="Style.Item"
 />
 
@@ -16,9 +17,14 @@ Flow {
 }
 ```
 
-<property name=padding type="Item.Margin" />
-<property name=spacing type=number default=0 />
-<property name=alignment type="Item.Alignment" />
+<property name=padding.left type=number default=0 />
+<property name=padding.top type=number default=0 />
+<property name=padding.right type=number default=0 />
+<property name=padding.bottom type=number default=0 />
+<property name=spacing.column type=number default=0 />
+<property name=spacing.row type=number default=0 />
+<property name=alignment.horizontal type=string default="left" />
+<property name=alignment.vertical type=string default="top" />
 <property name=includeBorderMargins type=boolean default=false />
 <property name=collapseMargins type=boolean default=false />
 

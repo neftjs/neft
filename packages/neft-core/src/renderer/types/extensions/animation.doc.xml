@@ -1,6 +1,7 @@
 <meta
-  name=Animation
-  category=Style
+  name="Style.Animation"
+  title="Animation NML Abstract Type"
+  category="API Reference/Animation"
 />
 
 <signal name=onStart />

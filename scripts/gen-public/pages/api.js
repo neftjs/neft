@@ -27,22 +27,29 @@ function getFullBlockName({ props }, parents) {
 }
 
 function getTypeLink(aside, type) {
-  const uri = aside.types[type]
-  if (uri) return `<a href="${uri}">${type}</a>`
-  if (type[0].toUpperCase() === type[0]) console.warn(`Cannot find type ${type}`)
-  return type
+  return type.replace(/[A-Za-z.0-9]+/, (justType) => {
+    const uri = aside.types[justType]
+    if (uri) return `<a href="${uri}">${justType}</a>`
+    if (justType[0].toUpperCase() === justType[0]) console.warn(`Cannot find type ${justType}`)
+    return justType
+  })
 }
 
-function getTypeHeader({ type, props, content }, { aside, linkTypes = false, parents = [] } = {}) {
+function getTypeHeader({ type, props, content }, {
+  aside,
+  linkTypes = false,
+  parents = [],
+  mapName = name => `<b>${name}</b>`,
+} = {}) {
   let html = ''
   const name = getFullBlockName({ props }, parents)
   switch (type) {
     case 'property':
-      html += `<b>${name}</b> : `
+      html += `${mapName(name)} : `
       html += linkTypes ? getTypeLink(aside, props.type) : props.type
       break
     case 'signal':
-      html += `<b>${name}</b>`
+      html += mapName(name)
       break
     case 'method': {
       const argPropsToText = argProps => `<i>${argProps.name}</i> : ${argProps.type}`
@@ -55,7 +62,7 @@ function getTypeHeader({ type, props, content }, { aside, linkTypes = false, par
           }
           return argPropsToText(childProps)
         })
-      html += `<b>${name}</b>(${args.join(', ')})`
+      html += `${mapName(name)}(${args.join(', ')})`
       if (props.returns != null) {
         html += ` : ${linkTypes ? getTypeLink(aside, props.returns) : props.returns}`
       }
@@ -68,7 +75,12 @@ function getTypeHeader({ type, props, content }, { aside, linkTypes = false, par
 }
 
 function stringToUri(string) {
-  return querystring.escape(string.replace(/ /g, '-'))
+  return string
+    .replace(/ /g, '-')
+    .replace(/\./g, '/')
+    .split('/')
+    .map(querystring.escape)
+    .join('/')
 }
 
 function getTypeAnchor(type, parents) {
@@ -96,6 +108,7 @@ function stringifyBlock({ type, props }, innerHTML, parents) {
 
 function generateHtmlToc(content, { headers = true, parents = [] } = {}) {
   const contentByType = {}
+  const names = {}
   let html = ''
 
   content.forEach((block) => {
@@ -108,12 +121,16 @@ function generateHtmlToc(content, { headers = true, parents = [] } = {}) {
     const blocks = contentByType[type]
     if (!blocks) return
     if (headers) html += `<h2>${title}</h2>`
-    html += '<ul>'
+    html += '<ul class="toc">'
     blocks.forEach((block) => {
+      const header = getTypeHeader(block, {
+        parents,
+        mapName: name => `<a href="#${getTypeAnchor(block, parents)}"><b>${name}</b></a>`,
+      })
+      if (names[header]) throw new Error(`Duplicated name for ${header}`)
+      names[header] = true
       html += '<li>'
-      html += `<a href="#${getTypeAnchor(block, parents)}">`
-      html += `<span class="name">${getTypeHeader(block, { parents })}</span>`
-      html += '</a>'
+      html += `<span class="name">${header}</span>`
       html += generateHtmlToc(block.content, {
         headers: false,
         parents: [...parents, block],
@@ -164,9 +181,15 @@ function generateHtmlBody(content, { aside, headers = true, parents = [] } = {})
   return html
 }
 
+function getFileTitleSteps({ meta }) {
+  const categories = meta.category.split('/')
+  const names = meta.name.split('.')
+  return [categories[0], ...names.slice(0, -1), ...categories.slice(1), ...names.slice(-1)]
+}
+
 function getFileUri({ meta }) {
-  const parts = ['/api', meta.category, meta.name].filter(part => !!part)
-  return parts.join('/').toLowerCase()
+  const parts = getFileTitleSteps({ meta }).map(stringToUri)
+  return `/${parts.join('/').toLowerCase()}`
 }
 
 function generateHtmlHead({ meta }, { aside }) {
@@ -177,10 +200,74 @@ function generateHtmlHead({ meta }, { aside }) {
   return html
 }
 
-function generateHtmlFile(elements, { aside }) {
+function generateAside(inputFiles, { activeUri }) {
+  const types = {}
+  const uris = {}
+  const files = inputFiles.slice()
+
+  // sort files
+  const filePriority = ({ elements }) => {
+    let priority = getFileTitleSteps(elements).length * 100
+    if (!elements.meta.extends) priority -= 1
+    return priority
+  }
+  files.sort((a, b) => filePriority(a) - filePriority(b))
+
+  // build types and uris
+  files.forEach(({ filename, elements: { meta } }) => {
+    const uri = getFileUri({ meta })
+    if (uris[uri]) throw new Error(`Duplicated uri for ${uri} comes from ${filename} and ${uris[uri]}`)
+    if (types[meta.name]) throw new Error(`Duplicated name for ${meta.name} comes from ${filename}`)
+    uris[uri] = filename
+    types[meta.name] = uri
+  })
+
+  // build tree
+  const tree = {}
+  files.forEach(({ elements: { meta } }) => {
+    const steps = getFileTitleSteps({ meta })
+    const lastStep = steps.reduce((target, step) => {
+      target[step] = target[step] || {}
+      return target[step]
+    }, tree)
+    lastStep.uri = types[meta.name]
+  })
+
+  // generate html
+  const uriToHtml = (uri, title) => {
+    const linkClass = uri === activeUri ? ' class="active"' : ''
+    return `<a href="${uri}"${linkClass}>${title}</a>`
+  }
+  const leafToHtml = (leaf) => {
+    let html = '<ul>'
+    let active = false
+    Object.entries(leaf).forEach(([category, subleaf]) => {
+      html += '<li>'
+      if (subleaf.uri) {
+        active = active || subleaf.uri === activeUri
+        html += uriToHtml(subleaf.uri, category)
+      } else {
+        const { html: subleafHtml, active: subleafActive } = leafToHtml(subleaf)
+        active = active || subleafActive
+        const categoryClass = ['category']
+        if (active) categoryClass.push('active')
+        html += `<span class="${categoryClass.join(' ')}">${category}</span>`
+        html += subleafHtml
+      }
+      html += '</li>'
+    })
+    html += '</ul>'
+    return { html, active }
+  }
+
+  return { types, html: leafToHtml(tree).html }
+}
+
+function generateHtmlFile(elements, { files }) {
   const { content } = elements
   let html = ''
 
+  const aside = generateAside(files, { activeUri: getFileUri(elements) })
   html += generateHtmlHead(elements, { aside })
   html += generateHtmlToc(content)
   html += generateHtmlBody(content, { aside })
@@ -204,42 +291,23 @@ function generateHtmlFile(elements, { aside }) {
   }
 }
 
-function generateAside(files) {
-  const categories = {}
-  const types = {}
-
-  files.forEach(({ meta }) => {
-    const uri = getFileUri({ meta })
-    categories[meta.category] = categories[meta.category] || []
-    categories[meta.category].push({ title: meta.title || meta.name, uri })
-    types[[meta.category, meta.name].join('.')] = uri
-  })
-
-  let html = '<ul>'
-  Object.keys(categories).sort().forEach((category) => {
-    html += `<li><span class="category">${category}</span><ul>`
-    html += categories[category].map(({ title, uri }) => `<li><a href="${uri}">${title}</a></li>`).join('')
-    html += '</ul></li>'
-  })
-  html += '</ul>'
-
-  return { html, types }
-}
-
 exports.getPages = async () => {
   const pages = []
-  const filenames = await promisify(glob)(API_FILES)
+  const filenames = await promisify(glob)(API_FILES, { ignore: '**/node_modules/**' })
   const files = await Promise.all(filenames.map(async (filename) => {
     const file = await fs.readFile(filename, 'utf-8')
     try {
-      return parseDocFile(file)
+      return { filename, elements: parseDocFile(file) }
     } catch (error) {
       throw new Error(`Cannot parse ${filename}: ${error}`)
     }
   }))
-  const aside = generateAside(files)
-  await Promise.all(files.map(async (elements) => {
-    pages.push(generateHtmlFile(elements, { aside }))
+  await Promise.all(files.map(async ({ filename, elements }) => {
+    try {
+      pages.push(generateHtmlFile(elements, { files }))
+    } catch (error) {
+      throw new Error(`Cannot generate HTML file for ${filename}: ${error}`)
+    }
   }))
   return pages
 }

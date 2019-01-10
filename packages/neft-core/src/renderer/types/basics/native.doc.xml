@@ -1,6 +1,7 @@
 <meta
-  name="Item"
-  category="Style"
+  name="Style.Native"
+  title="Native NML Type"
+  category="API Reference"
   extends="Style.Item"
 />
 

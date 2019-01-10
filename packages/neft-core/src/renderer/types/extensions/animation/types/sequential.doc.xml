@@ -1,6 +1,7 @@
 <meta
-  name="SequentialAnimation"
-  category="Style"
+  name="Style.SequentialAnimation"
+  title="SequentialAnimation NML Type"
+  category="API Reference/Animation"
   extends="Style.Animation"
 />
 

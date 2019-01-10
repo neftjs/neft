@@ -1,6 +1,7 @@
 <meta
-  name=Grid
-  category=Style
+  name="Style.Grid"
+  title="Grid NML Type"
+  category="API Reference/Layout"
   extends="Style.Item"
 />
 
@@ -16,10 +17,15 @@ Grid {
 }
 ```
 
-<property name=padding type="Item.Margin" />
+<property name=padding.left type=number default=0 />
+<property name=padding.top type=number default=0 />
+<property name=padding.right type=number default=0 />
+<property name=padding.bottom type=number default=0 />
 <property name=columns type=number default=2 />
 <property name=rows type=number default=Infinity />
-<property name=spacing type=number default=0 />
-<property name=alignment type="Item.Alignment" />
+<property name=spacing.column type=number default=0 />
+<property name=spacing.row type=number default=0 />
+<property name=alignment.horizontal type=string default="left" />
+<property name=alignment.vertical type=string default="top" />
 <property name=includeBorderMargins type=boolean default=false />
 

@@ -1,8 +1,0 @@
-<meta
-  name="Item.Alignment"
-  category="Style"
-/>
-
-<property name=horizontal type=string default="left" />
-
-<property name=vertical type=string default="top" />

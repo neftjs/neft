@@ -1,6 +1,7 @@
 <meta
-  name="Text"
-  category="Style"
+  name="Style.Text"
+  title="Text NML Type"
+  category="API Reference"
   extends="Style.Item"
 />
 
@@ -27,14 +28,20 @@
 
 <property name=contentHeight type=number default=0 readonly withSignal />
 
-<property name=alignment type=Alignment readonly />
+<property name=alignment.horizontal type=string default="left" />
+<property name=alignment.vertical type=string default="top" />
 
 <signal name=onAlignmentChange>
   <argument name=property type=string />
   <argument name=oldValue type=Any />
 </signal>
 
-<property name=font type=Font readonly />
+<property name=font.family type=string default="sans-serif" />
+<property name=font.pixelSize type=number default=14 />
+<property name=font.weight type=number default=0.4>
+  In range from 0 to 1.
+</property>
+<property name=font.italic type=boolean default=false />
 
 <signal name=onFontChange>
   <argument name=property type=string />

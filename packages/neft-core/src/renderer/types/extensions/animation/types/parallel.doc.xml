@@ -1,6 +1,7 @@
 <meta
-  name="ParallelAnimation"
-  category="Style"
+  name="Style.ParallelAnimation"
+  title="ParallelAnimation NML Type"
+  category="API Reference/Animation"
   extends="Style.Animation"
 />
 
