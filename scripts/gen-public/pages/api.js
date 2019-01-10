@@ -52,7 +52,11 @@ function getTypeHeader({ type, props, content }, {
       html += mapName(name)
       break
     case 'method': {
-      const argPropsToText = argProps => `<i>${argProps.name}</i> : ${argProps.type}`
+      const argPropsToText = (argProps) => {
+        const argName = argProps.name
+        const argType = linkTypes ? getTypeLink(aside, argProps.type) : argProps.type
+        return `<i>${argName}</i> : ${argType}`
+      }
       const args = content
         .filter(({ type: childType }) => childType === 'argument')
         .map(({ props: childProps, content: childContent }) => {
@@ -250,7 +254,7 @@ function generateAside(inputFiles, { activeUri }) {
         const { html: subleafHtml, active: subleafActive } = leafToHtml(subleaf)
         active = active || subleafActive
         const categoryClass = ['category']
-        if (active) categoryClass.push('active')
+        if (subleafActive) categoryClass.push('active')
         html += `<span class="${categoryClass.join(' ')}">${category}</span>`
         html += subleafHtml
       }

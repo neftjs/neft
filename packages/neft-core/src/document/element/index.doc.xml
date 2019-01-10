@@ -1,0 +1,20 @@
+<meta
+  name="DOM.Element"
+  title="DOM Base Element"
+  category="API Reference"
+/>
+
+<property name=index type=number />
+<property name=nextSibling type="DOM.Element" readonly />
+<property name=previousSibling type="DOM.Element" readonly />
+<property name=parent type="DOM.Element" />
+<property name=style type="Style.Item" readonly />
+<property name=visible type=boolean />
+
+<method name=queryAllParents returns="DOM.Element[]">
+  <argument name=query type=string />
+</method>
+
+<method name=queryParents returns="DOM.Element">
+  <argument name=query type=string />
+</method>

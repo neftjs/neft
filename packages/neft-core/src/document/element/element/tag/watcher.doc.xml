@@ -1,0 +1,15 @@
+<meta
+  name="DOM.Watcher"
+  title="DOM Elements Watcher"
+  category="API Reference"
+/>
+
+<signal name="onAdd">
+  <argument name=element type="DOM.Element" />
+</signal>
+
+<signal name="onRemove">
+  <argument name=element type="DOM.Element" />
+</signal>
+
+<method name="disconnect" />

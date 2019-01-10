@@ -3,16 +3,16 @@
 // Remembers aside#aside scroll position
 (function () {
   const STORAGE_KEY = 'asideScrollY'
-  const { location, localStorage } = window
+  const { localStorage } = window
 
   if (!localStorage) return
 
   const element = document.getElementById('aside')
   if (!element) return
 
-  function getPage() {
-    return location.pathname.slice(0, location.pathname.indexOf('/', 1) + 1)
-  }
+  // function getPage() {
+  //   return location.pathname.slice(0, location.pathname.indexOf('/', 1) + 1)
+  // }
 
   function syncScrollY() {
     element.scrollTop = localStorage.getItem(STORAGE_KEY) || 0
@@ -30,15 +30,15 @@
     })
   }
 
-  function isSamePageAsBefore() {
-    return document.referrer.indexOf(location.origin + getPage()) === 0
-  }
+  // function isSamePageAsBefore() {
+  //   return document.referrer.indexOf(location.origin + getPage()) === 0
+  // }
 
-  if (isSamePageAsBefore()) {
-    syncScrollY()
-  } else {
-    updateItem()
-  }
+  // if (isSamePageAsBefore()) {
+  syncScrollY()
+  // } else {
+  //   updateItem()
+  // }
 
   listenOnChanges()
 }())

@@ -1,0 +1,49 @@
+<meta
+  name="DOM.Tag"
+  title="DOM Tag Element"
+  category="API Reference"
+  extends="DOM.Element"
+/>
+
+<property name=name type=string />
+<property name=children type="DOM.Element[]" />
+<property name=props type=Object>
+  <method name="has" returns=boolean>
+    <argument name=prop type=string />
+  </method>
+
+  <method name="set" returns=boolean>
+    <argument name=name type=string />
+    <argument name=value type=any />
+  </method>
+</property>
+
+<method name=queryAll returns="DOM.Element[]">
+  <argument name=query type=string />
+</method>
+
+<method name=query returns="DOM.Element">
+  <argument name=query type=string />
+</method>
+
+<method name=watch returns="DOM.Watcher">
+  <argument name=query type=string />
+
+  ```javascript
+var watcher = doc.watch('div > * > b[attr]');
+watcher.onAdd(function(tag){});
+watcher.onRemove(function(tag){});
+watcher.disconnect();
+```
+</method>
+
+<method name=stringify returns=string>
+</method>
+
+<method name=stringifyChildren returns=string>
+</method>
+
+<method name=replace>
+  <argument name=oldElement type="DOM.Element" />
+  <argument name=newElement type="DOM.Element" />
+</method>
