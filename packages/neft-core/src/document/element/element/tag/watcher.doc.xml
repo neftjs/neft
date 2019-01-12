@@ -2,6 +2,7 @@
   name="DOM.Watcher"
   title="DOM Elements Watcher"
   category="API Reference"
+  priority="-1"
 />
 
 <signal name="onAdd">

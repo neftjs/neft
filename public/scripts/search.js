@@ -5,9 +5,8 @@
   const SEARCH_OPTIONS = {
     expand: true,
     fields: {
-      h1: { boost: 4 },
-      h2: { boost: 3 },
-      h3: { boost: 2 },
+      page: { boost: 3 },
+      text: { boost: 2 },
     },
   }
 
@@ -29,43 +28,61 @@
       .trim()
   }
 
+  const ids = []
+
   const lunrIndex = (function buildSearch() {
     const index = elasticlunr(function () {
-      this.addField('h1')
-      this.addField('h2')
-      this.addField('h3')
+      this.addField('page')
+      this.addField('text')
       this.setRef('id')
       this.saveDocument(false)
     })
 
-    function addDoc(id, level, text) {
-      const doc = { id }
-      doc[`h${level}`] = text
-      index.addDoc(doc)
+    const addDoc = (type, text, id) => {
+      ids.push(id)
+      index.addDoc({
+        [type]: trimOnlyNonWords(text),
+        id: ids.length - 1,
+      })
+      index.addDoc({
+        [type]: trim(text),
+        id: ids.length - 1,
+      })
     }
 
-    const { texts } = searchTexts
-    for (let i = 0, n = texts.length; i < n; i += 1) {
-      const level = texts[i][1]
-      const text = texts[i][2]
-      addDoc(i, level, trimOnlyNonWords(text))
-      addDoc(i, level, trim(text))
-    }
+    searchTexts.forEach(([category, pages]) => {
+      pages.forEach(([uri, page, types]) => {
+        addDoc('page', page, { category, uri, page })
+        types.forEach(([type, texts]) => {
+          texts.forEach(([hash, text]) => {
+            addDoc('text', text, {
+              category, uri, type, hash, text,
+            })
+          })
+        })
+      })
+    })
+
     return index
   }())
 
   function search(text) {
     const result = []
     const lunrResult = lunrIndex.search(trim(text), SEARCH_OPTIONS)
-    const { pages } = searchTexts
-    const { texts } = searchTexts
-    for (let i = 0; i < lunrResult.length; i += 1) {
-      const found = texts[lunrResult[i].ref]
-      result.push({
-        page: pages[found[0]],
-        text: found[2],
-      })
-    }
+
+    lunrResult.forEach(({ ref }) => {
+      console.log(ids[ref])
+    })
+
+    // const { pages } = searchTexts
+    // const { texts } = searchTexts
+    // for (let i = 0; i < lunrResult.length; i += 1) {
+    //   const found = texts[lunrResult[i].ref]
+    //   result.push({
+    //     page: pages[found[0]],
+    //     text: found[2],
+    //   })
+    // }
     return result
   }
 
@@ -80,7 +97,7 @@
     let html = '<ul>'
 
     for (let i = 0; i < result.length; i += 1) {
-      const uri = `/${result[i].page}.html`
+      const uri = `/${result[i].page}`
       const text = result[i].text.replace(markRe, '<mark>$1</mark>')
       html += `<li><a href="${uri}">${text}</a></li>`
     }

@@ -12,7 +12,7 @@
 
 </property>
 
-<property name="element" type="Document.Element" readonly withSignal>
+<property name="element" type="DOM.Element" readonly withSignal>
 
 </property>
 
@@ -20,25 +20,25 @@
   <argument name=milliseconds type=number />
 </signal>
 
-<property name="children" type="Object" readonly>
-  <property name="firstChild" type="Item" readonly />
-  <property name="lastChild" type="Item" readonly />
-  <property name="bottomChild" type="Item" readonly />
-  <property name="topChild" type="Item" readonly />
+<property name="children" type="object" readonly>
+  <property name="firstChild" type="Style.Item" readonly />
+  <property name="lastChild" type="Style.Item" readonly />
+  <property name="bottomChild" type="Style.Item" readonly />
+  <property name="topChild" type="Style.Item" readonly />
   <property name="length" type="number" readonly />
-  <method name="get" returns="Item">
+  <method name="get" returns="Style.Item">
     <argument name="index" type="number" />
     Returns an item with the given index.
   </method>
 
-  <method name="index" returns="Item">
-    <argument name="item" type="Item" />
+  <method name="index" returns="Style.Item">
+    <argument name="item" type="Style.Item" />
     Returns index at which a given element can be found in the children array,
     or `-1`if it is not present.
   </method>
 
   <method name="has" returns="boolean">
-    <argument name="item" type="Item" />
+    <argument name="item" type="Style.Item" />
     Determines whether the given element is a child of an item.
   </method>
 
@@ -48,19 +48,19 @@
 </property>
 
 <signal name="onChildrenChange">
-  <argument name="added" type="Item" />
-  <argument name="removed" type="Item" />
+  <argument name="added" type="Style.Item" />
+  <argument name="removed" type="Style.Item" />
 </signal>
 
-<property name="parent" type="Item" withSignal />
+<property name="parent" type="Style.Item" withSignal />
 
-<property name="previousSibling" type="Item" withSignal />
+<property name="previousSibling" type="Style.Item" withSignal />
 
-<property name="nextSibling" type="Item" withSignal />
+<property name="nextSibling" type="Style.Item" withSignal />
 
-<property name="belowSibling" type="Item" readonly />
+<property name="belowSibling" type="Style.Item" readonly />
 
-<property name="aboveSibling" type="Item" readonly />
+<property name="aboveSibling" type="Style.Item" readonly />
 
 <property name="index" type="number" />
 
@@ -122,11 +122,11 @@
   <argument name=pointY type=number />
 </method>
 
-<method name=getGlobalComputes returns=Object>
+<method name=getGlobalComputes returns=object>
   Returns globally computed x, y, scale, rotation, visible and opacity.
 </method>
 
-<property name="anchors" type="Object" readonly>
+<property name="anchors" type="object" readonly>
   Anchors describe position relations between two items.
 
   Each item has few lines: top, bottom, verticalCenter, left, right, horizontalCenter.
@@ -289,7 +289,7 @@
   <argument name=oldValue type=Array />
 </signal>
 
-<property name="layout" type="Object" readonly>
+<property name="layout" type="object" readonly>
   <property name=enabled type=boolean default=true />
 
   <property name=fillWidth type=boolean default=false />
@@ -302,7 +302,7 @@
   <argument name=oldValue type=Any />
 </signal>
 
-<property name="pointer" type="Object" readonly>
+<property name="pointer" type="object" readonly>
   ```javascript
   Rectangle {
       width: 100
@@ -349,7 +349,7 @@
   <property name=hover type=boolean default=false />
 </property>
 
-<property name="margin" type="Object" readonly>
+<property name="margin" type="object" readonly>
   <property name=left type=number default=0>
     Margins are used in anchors and within layout items.
 
@@ -389,7 +389,7 @@
   <argument name=oldValue type=Any />
 </signal>
 
-<property name="keys" type="Object" readonly>
+<property name="keys" type="object" readonly>
   ```javascript
   Rectangle {
       width: 100

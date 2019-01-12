@@ -19,12 +19,25 @@ async function preparePartials() {
 }
 
 function getViewObject(uri, view) {
+  const getClassName = ({ uri: linkUri }) => {
+    if (uri.startsWith(linkUri)) return 'active'
+    return ''
+  }
   return {
     ...view,
     nav: [
       { title: 'Playground', uri: '', className: '' },
       { title: 'Docs', uri: '', className: '' },
-      { title: 'API', uri: '', className: '' },
+      {
+        title: 'Modules',
+        uri: '/modules/activelink',
+        className: getClassName({ uri: '/modules/' }),
+      },
+      {
+        title: 'API Reference',
+        uri: '/api-reference/neft',
+        className: getClassName({ uri: '/api-reference/' }),
+      },
     ],
   }
 }

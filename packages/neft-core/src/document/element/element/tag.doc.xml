@@ -7,7 +7,7 @@
 
 <property name=name type=string />
 <property name=children type="DOM.Element[]" />
-<property name=props type=Object>
+<property name=props type=object>
   <method name="has" returns=boolean>
     <argument name=prop type=string />
   </method>

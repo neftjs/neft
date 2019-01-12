@@ -14,6 +14,7 @@ exports.HTML_FILES = {
   out: 'gh-pages',
 }
 exports.API_FILES = 'packages/**/*.doc.xml'
+exports.SEARCH_FILE = 'gh-pages/scripts/search-texts.js'
 
 // exports.OUTPUT_DIR = 'gh-pages'
 // exports.PUBLIC_DIR = 'public'
@@ -28,4 +29,3 @@ exports.API_FILES = 'packages/**/*.doc.xml'
 // exports.API_SUMMARY_PATH = 'public/api/SUMMARY.json'
 // exports.LANG_ALIASES = { nml: 'qml' }
 // exports.IGNORED_LANGS = { svg: true }
-// exports.SEARCH_FILE = 'scripts/search-texts.js'

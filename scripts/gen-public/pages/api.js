@@ -204,15 +204,20 @@ function generateHtmlHead({ meta }, { aside }) {
   return html
 }
 
-function generateAside(inputFiles, { activeUri }) {
+function getMainCategory(meta) {
+  return meta.category.split('/')[0]
+}
+
+function generateAside(inputFiles, { activeUri, activeMeta }) {
   const types = {}
   const uris = {}
-  const files = inputFiles.slice()
+  let files = inputFiles.slice()
 
   // sort files
   const filePriority = ({ elements }) => {
     let priority = getFileTitleSteps(elements).length * 100
     if (!elements.meta.extends) priority -= 1
+    if (elements.meta.priority) priority -= parseFloat(elements.meta.priority)
     return priority
   }
   files.sort((a, b) => filePriority(a) - filePriority(b))
@@ -225,6 +230,10 @@ function generateAside(inputFiles, { activeUri }) {
     uris[uri] = filename
     types[meta.name] = uri
   })
+
+  // filter to only active category left
+  const activeCategory = getMainCategory(activeMeta)
+  files = files.filter(file => getMainCategory(file.elements.meta) === activeCategory)
 
   // build tree
   const tree = {}
@@ -242,7 +251,7 @@ function generateAside(inputFiles, { activeUri }) {
     const linkClass = uri === activeUri ? ' class="active"' : ''
     return `<a href="${uri}"${linkClass}>${title}</a>`
   }
-  const leafToHtml = (leaf) => {
+  const leafToHtml = (leaf, { root = true } = {}) => {
     let html = '<ul>'
     let active = false
     Object.entries(leaf).forEach(([category, subleaf]) => {
@@ -251,11 +260,11 @@ function generateAside(inputFiles, { activeUri }) {
         active = active || subleaf.uri === activeUri
         html += uriToHtml(subleaf.uri, category)
       } else {
-        const { html: subleafHtml, active: subleafActive } = leafToHtml(subleaf)
+        const { html: subleafHtml, active: subleafActive } = leafToHtml(subleaf, { root: false })
         active = active || subleafActive
         const categoryClass = ['category']
         if (subleafActive) categoryClass.push('active')
-        html += `<span class="${categoryClass.join(' ')}">${category}</span>`
+        if (!root) html += `<span class="${categoryClass.join(' ')}">${category}</span>`
         html += subleafHtml
       }
       html += '</li>'
@@ -271,7 +280,10 @@ function generateHtmlFile(elements, { files }) {
   const { content } = elements
   let html = ''
 
-  const aside = generateAside(files, { activeUri: getFileUri(elements) })
+  const aside = generateAside(files, {
+    activeUri: getFileUri(elements),
+    activeMeta: elements.meta,
+  })
   html += generateHtmlHead(elements, { aside })
   html += generateHtmlToc(content)
   html += generateHtmlBody(content, { aside })
