@@ -5,35 +5,43 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
 
-import io.neft.renderer.Image;
+import io.neft.nimage.NImage;
+import io.neft.nimage.NImageHolder;
 import io.neft.renderer.NativeItem;
 import io.neft.renderer.annotation.OnCreate;
 import io.neft.renderer.annotation.OnSet;
-import io.neft.utils.Consumer;
-import io.neft.utils.StringUtils;
 
 import static java.lang.Math.round;
 
 public class TileImageItem extends NativeItem {
-    private String source;
+    private final NImageHolder<Bitmap> imageHolder;
     private float resolution;
 
     @OnCreate("TileImage")
     public TileImageItem() {
         super(new View(APP.getActivity().getApplicationContext()));
+
+        imageHolder = new NImageHolder<Bitmap>() {
+            @Override
+            public void draw(Bitmap resource) {
+                setBitmap(resource);
+            }
+
+            @Override
+            public void onLoad(Bitmap resource) {
+                // NOP
+            }
+
+            @Override
+            public void onError() {
+                // NOP
+            }
+        };
     }
 
     @OnSet("source")
     public void setSource(final String val) {
-        source = val;
-        Image.getImageFromSource(val, new Consumer<Bitmap>() {
-            @Override
-            public void accept(Bitmap bitmap) {
-                if (StringUtils.equals(source, val)) {
-                    setBitmap(bitmap);
-                }
-            }
-        });
+        NImage.loadBitmap(imageHolder, val);
     }
 
     private void setBitmap(Bitmap bitmap) {

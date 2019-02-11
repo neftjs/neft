@@ -3,6 +3,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    private var openUrl: String = ""
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         {{&manifest.applicationDidFinishLaunching}}
@@ -10,7 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        App.getApp().openUrl = url.absoluteString
+        openUrl = url.absoluteString
         return true
     }
 
@@ -27,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-
+        App.getApp().openUrl = openUrl
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
