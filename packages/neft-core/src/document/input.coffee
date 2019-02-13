@@ -54,21 +54,21 @@ module.exports = class Input extends SignalsEmitter
 
         @element = @document.element.getChildByAccessPath(element)
         @isRendered = false
-        @target = @document.exported
+        @target = null
         @binding = null
 
         initBindingConfig @interpolation
 
-    registerBinding: ->
-        assert.isNotDefined @binding
-        @binding = DocumentBinding.New @interpolation.tree, @
-        return
-
     render: ->
+        assert.isNotDefined @binding
+        @target = @document.exported
+        @binding = DocumentBinding.New @interpolation.tree, @
         @isRendered = true
-        @binding?.update()
+        @binding.update()
         return
 
     revert: ->
+        @binding.destroy()
+        @binding = null
         @isRendered = false
         return

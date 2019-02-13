@@ -130,7 +130,7 @@ describe 'Document n-for', ->
             <script>
             module.exports = {
                 a: 0,
-                onBeforeRender() {
+                onRender() {
                     this.a = 1
                 },
             }
@@ -184,7 +184,7 @@ describe 'Document n-for', ->
             <n-component name="Abc">
                 <script>
                 module.exports = {
-                    onBeforeRevert() {
+                    onRevert() {
                         this.onRevertCalled();
                     },
                 }
@@ -198,7 +198,7 @@ describe 'Document n-for', ->
                 onChildRevert() {
                     this.reverted = this.reverted + 1;
                 },
-                onBeforeRender() {
+                onRender() {
                     this.visible = true
                 },
             }

@@ -27,7 +27,7 @@ describe 'Document script', ->
             <script>
             module.exports = {
                 b: null,
-                onBeforeRender() {
+                onRender() {
                     this.b = this.a
                 },
             }
@@ -44,7 +44,7 @@ describe 'Document script', ->
             <script>
             module.exports = {
                 a: null,
-                onCreate() {
+                onRender() {
                     this.a = this.refs.x.props.a
                 }
             }
@@ -60,7 +60,7 @@ describe 'Document script', ->
             <script>
             module.exports = {
                 aNode: null,
-                onCreate() {
+                onRender() {
                     this.aNode = this.node
                 }
             }
@@ -75,7 +75,7 @@ describe 'Document script', ->
             <script>
             module.exports = {
                 keys: null,
-                onCreate() {
+                onRender() {
                     var keys = [];
                     this.keys = keys;
                     for (var key in this) {
@@ -87,7 +87,7 @@ describe 'Document script', ->
         '''
 
         renderParse view
-        assert.isEqual view.exported.keys, ['keys', 'onCreate']
+        assert.isEqual view.exported.keys, ['keys', 'onRender']
 
     it 'further tags are ignored', ->
         view = createView '''
@@ -112,7 +112,7 @@ describe 'Document script', ->
             <script>
             module.exports = {
                 a: null,
-                onCreate() {
+                onRender() {
                     this.a = '<&&</b>'
                 },
             }
@@ -126,41 +126,31 @@ describe 'Document script', ->
     it 'properly calls events', ->
         view = createView """
             <script>
-            module.exports = {
+            module.exports = () => ({
                 events: [],
-                onBeforeRender() {
-                    this.events.push('onBeforeRender');
-                },
                 onRender() {
                     this.events.push('onRender');
-                },
-                onBeforeRevert() {
-                    this.events.push('onBeforeRevert');
                 },
                 onRevert() {
                     this.events.push('onRevert');
                 },
-            }
+            })
             </script>
         """
 
-        {events} = view.exported
-        assert.isEqual events, []
-
         view.render()
-        assert.isEqual events, ['onBeforeRender', 'onRender']
+        {events} = view.exported
+        assert.isEqual events, ['onRender']
 
         view.revert()
-        assert.isEqual events, [
-            'onBeforeRender', 'onRender', 'onBeforeRevert', 'onRevert'
-        ]
+        assert.isEqual events, ['onRender', 'onRevert']
 
-    it 'onBeforeRender is called with context in exported', ->
+    it 'onRender is called with context in exported', ->
         view = createView '''
             <script>
             module.exports = {
                 a: null,
-                onBeforeRender() {
+                onRender() {
                     this.a = this.context.a
                 },
             }
@@ -173,32 +163,22 @@ describe 'Document script', ->
     it 'does not call events for foreign exported', ->
         view = createView """
             <script>
-            module.exports = {
+            module.exports = () => ({
                 events: [],
-                onBeforeRender() {
-                    this.events.push('onBeforeRender');
-                },
                 onRender() {
                     this.events.push('onRender');
-                },
-                onBeforeRevert() {
-                    this.events.push('onBeforeRevert');
                 },
                 onRevert() {
                     this.events.push('onRevert');
                 },
-            }
+            })
             </script>
-            <ul n-each="[1,2]">${item}</ul>
+            <ul n-each="${[1,2]}">${item}</ul>
         """
 
-        {events} = view.exported
-        assert.isEqual events, []
-
         view.render()
-        assert.isEqual events, ['onBeforeRender', 'onRender']
+        {events} = view.exported
+        assert.isEqual events, ['onRender']
 
         view.revert()
-        assert.isEqual events, [
-            'onBeforeRender', 'onRender', 'onBeforeRevert', 'onRevert'
-        ]
+        assert.isEqual events, ['onRender', 'onRevert']

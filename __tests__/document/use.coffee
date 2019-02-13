@@ -50,13 +50,10 @@ describe 'Document n-use', ->
     it 'does not render hidden component', ->
         view = createView '''
             <script>
-            module.exports = {
+            module.exports = () => ({
                 data: null,
-                logs: null,
-                onBeforeRender() {
-                    this.logs = []
-                },
-            }
+                logs: [],
+            })
             </script>
             <n-component name="Abc">
                 <n-props logs name />
@@ -77,12 +74,9 @@ describe 'Document n-use', ->
     it 'renders unhidden component with ready props', ->
         view = createView '''
             <script>
-            module.exports = {
-                logs: null,
-                onBeforeRender() {
-                    this.logs = []
-                },
-            }
+            module.exports = () => ({
+                logs: [],
+            })
             </script>
             <n-component name="Abc">
                 <n-props logs status />
@@ -106,12 +100,9 @@ describe 'Document n-use', ->
     it 'does not render component inside hidden element', ->
         view = createView '''
             <script>
-            module.exports = {
-                logs: null,
-                onBeforeRender() {
-                    this.logs = []
-                },
-            }
+            module.exports = () => ({
+                logs: [],
+            })
             </script>
             <n-component name="Abc">
                 <script>
@@ -146,7 +137,7 @@ describe 'Document n-use', ->
             <script>
             module.exports = {
                 visible: false,
-                onBeforeRender() {
+                onRender() {
                     this.visible = true
                 },
             }

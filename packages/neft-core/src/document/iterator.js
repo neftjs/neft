@@ -126,7 +126,6 @@ class Iterator {
     if (this.pool.length) return this.pool.pop()
     const component = this.component({
       parent: this.document,
-      exported: Object.create(this.document.exported),
     })
     return component
   }
@@ -137,7 +136,7 @@ class Iterator {
 
     const { data, naming } = this
     const usedComponent = this.getComponent()
-    const { exported } = usedComponent
+    const exported = Object.create(this.document.exported)
 
     this.usedComponents.splice(index, 0, usedComponent)
 
@@ -149,7 +148,11 @@ class Iterator {
     newChild.parent = this.element
     newChild.index = index
     this.forEachComponentBaseRef(usedComponent, 'setRef')
-    usedComponent.render({ context: this.document.context, listeners: this.componentListeners })
+    usedComponent.render({
+      exported,
+      context: this.document.context,
+      listeners: this.componentListeners,
+    })
   }
 
   popItem(elem, index = elem) {

@@ -6,8 +6,6 @@ module.exports = class InputText extends Input
     constructor: (document, { element, interpolation, text }) ->
         super document, element, interpolation, text
 
-        @registerBinding()
-
     getValue: ->
         @element.text
 

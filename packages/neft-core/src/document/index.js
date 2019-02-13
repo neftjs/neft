@@ -65,13 +65,8 @@ class Document {
 
     this.refs = options.refs ? parseRefs(options.refs, this.element) : {}
     this.props = options.props || {}
-    if (options.exported) {
-      this.script = null
-      this.exported = options.exported
-    } else {
-      this.script = new Script(this, options.script)
-      this.exported = this.script.exported
-    }
+    this.script = new Script(this, options.script)
+    this.exported = null
 
     this.inputs = mapToTypes(TextInput, options.textInputs, this)
       .concat(mapToTypes(PropInput, options.propInputs, this))
@@ -94,8 +89,6 @@ class Document {
 
     this.uid = utils.uid()
     Object.seal(this)
-
-    if (this.script) this.script.afterCreate()
 
     if (process.env.NODE_ENV === 'development') {
       saveInstance(this)
@@ -160,14 +153,12 @@ class Document {
 
   render({
     context = null, props = null, onPropsChange, sourceElement = null,
-    listeners = null,
+    listeners = null, exported = null,
   } = {}) {
     assert.notOk(this.rendered, 'Document is already rendered')
 
-    if (this.context !== context) {
-      this.context = context
-      this.exported.emit('onContextChange')
-    }
+    this.exported = exported === null ? this.script.produceExported() : exported
+    this.context = context
 
     if (typeof props === 'object' && props !== null) {
       this[renderProps] = props
@@ -181,7 +172,6 @@ class Document {
 
     this[renderSourceElement] = sourceElement
     this[renderListeners] = listeners
-    if (this.script) this.script.beforeRender()
     this.inputs.forEach(input => input.render())
     this.conditions.forEach(condition => condition.render())
     this.uses.forEach(use => use.render())
@@ -191,12 +181,12 @@ class Document {
     this.logs.forEach(docLog => docLog.render())
 
     this.rendered = true
-    if (this.script) this.script.afterRender()
+    this.script.afterRender()
   }
 
   revert() {
     assert.ok(this.rendered, 'Document is not rendered')
-    if (this.script) this.script.beforeRevert()
+    this.script.beforeRevert()
     this[renderProps] = null
     if (this[renderOnPropsChange]) {
       this[renderOnPropsChange].disconnect(this.reloadProp, this)
@@ -210,8 +200,8 @@ class Document {
     if (this.target) this.target.revert()
     this.styleItems.forEach(styleItem => styleItem.revert())
     this.rendered = false
-    if (this.script) this.script.afterRevert()
     this[renderListeners] = null
+    this.exported = null
   }
 }
 
