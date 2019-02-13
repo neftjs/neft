@@ -8,7 +8,7 @@ const Condition = require('./condition')
 const TextInput = require('./input/text')
 const PropInput = require('./input/prop')
 const Script = require('./script')
-const Target = require('./target')
+const Slot = require('./slot')
 const Iterator = require('./iterator')
 const StyleItem = require('./style-item')
 
@@ -75,7 +75,7 @@ class Document {
     this.logs = mapToTypes(Log, options.logs, this)
     this.style = options.style || {}
     this.styleItems = mapToTypes(StyleItem, options.styleItems, this)
-    this.target = options.target ? new Target(this, options.target) : null
+    this.slot = options.slot ? new Slot(this, options.slot) : null
     this.uses = mapToTypes(Use, options.uses, this)
 
     this.context = null
@@ -176,7 +176,7 @@ class Document {
     this.conditions.forEach(condition => condition.render())
     this.uses.forEach(use => use.render())
     this.iterators.forEach(iterator => iterator.render())
-    if (this.target) this.target.render(sourceElement)
+    if (this.slot) this.slot.render(sourceElement)
     this.styleItems.forEach(styleItem => styleItem.render())
     this.logs.forEach(docLog => docLog.render())
 
@@ -197,7 +197,7 @@ class Document {
     this.conditions.forEach(condition => condition.revert())
     this.uses.forEach(use => use.revert())
     this.iterators.forEach(iterator => iterator.revert())
-    if (this.target) this.target.revert()
+    if (this.slot) this.slot.revert()
     this.styleItems.forEach(styleItem => styleItem.revert())
     this.rendered = false
     this[renderListeners] = null

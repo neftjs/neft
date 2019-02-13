@@ -1,4 +1,4 @@
-class Target {
+class Slot {
   constructor(document, element) {
     this.document = document
     this.element = document.element.getChildByAccessPath(element)
@@ -22,4 +22,4 @@ class Target {
   }
 }
 
-module.exports = Target
+module.exports = Slot
