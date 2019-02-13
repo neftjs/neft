@@ -33,7 +33,7 @@ describe 'Document n-use', ->
                 />
                 <n-props loops />
             </n-component>
-            <n-use n-component="a" loops="3" />
+            <n-use n-component="a" loops=${3} />
         '''
         renderParse view
         assert.is view.element.stringify(), '1111'

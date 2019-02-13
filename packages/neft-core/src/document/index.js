@@ -181,7 +181,6 @@ class Document {
 
     this[renderSourceElement] = sourceElement
     this[renderListeners] = listeners
-
     if (this.script) this.script.beforeRender()
     this.inputs.forEach(input => input.render())
     this.conditions.forEach(condition => condition.render())

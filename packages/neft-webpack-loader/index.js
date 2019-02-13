@@ -11,12 +11,12 @@ const PARSERS = [
   require('./parse/iterators'),
   require('./parse/scripts'),
   require('./parse/props'),
-  require('./parse/target'),
+  require('./parse/conditions'),
   require('./parse/uses'),
   require('./parse/storage'),
-  require('./parse/conditions'),
   require('./parse/refs'),
   require('./parse/logs'),
+  require('./parse/target'),
   require('./parse/unknowns'),
 ]
 /* eslint-enable global-require */
