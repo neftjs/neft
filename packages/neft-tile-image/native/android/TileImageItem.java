@@ -15,6 +15,7 @@ import static java.lang.Math.round;
 
 public class TileImageItem extends NativeItem {
     private final NImageHolder<Bitmap> imageHolder;
+    private String source;
     private float resolution;
 
     @OnCreate("TileImage")
@@ -41,6 +42,7 @@ public class TileImageItem extends NativeItem {
 
     @OnSet("source")
     public void setSource(final String val) {
+        source = val;
         NImage.loadBitmap(imageHolder, val);
     }
 
@@ -64,5 +66,17 @@ public class TileImageItem extends NativeItem {
     @OnSet("resolution")
     public void setResolution(float val) {
         this.resolution = val;
+    }
+
+    @Override
+    protected void onAttached() {
+        super.onAttached();
+        setSource(source);
+    }
+
+    @Override
+    protected void onDetached() {
+        super.onDetached();
+        NImage.clear(imageHolder);
     }
 }

@@ -11,6 +11,7 @@ import io.neft.client.handlers.StringActionHandler;
 
 final public class Screen {
     private static final App APP = App.getInstance();
+    private String statusBarColor;
     private float width;
     private float height;
     private RectF rect;
@@ -27,6 +28,7 @@ final public class Screen {
     }
 
     static void setStatusBarColor(String value) {
+        APP.getRenderer().getScreen().statusBarColor = value;
         View decorView = APP.getActivity().getWindow().getDecorView();
         int flags = decorView.getSystemUiVisibility();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -57,5 +59,9 @@ final public class Screen {
             statusBarHeight = APP.getRenderer().pxToDp(resources.getDimensionPixelSize(resourceId));
         }
         APP.getClient().pushAction(OutAction.SCREEN_STATUSBAR_HEIGHT, statusBarHeight);
+    }
+
+    static void restore(Screen screen) {
+        setStatusBarColor(screen.statusBarColor);
     }
 }

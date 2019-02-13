@@ -16,6 +16,11 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // transparent status bar
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        );
+
         APP.attach(this);
 
         view = APP.getWindowView();
@@ -26,11 +31,6 @@ public class MainActivity extends Activity {
         }
 
         setContentView(view);
-
-        // transparent status bar
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        );
 
         Intent intent = getIntent();
         APP.intentData = intent.getDataString();

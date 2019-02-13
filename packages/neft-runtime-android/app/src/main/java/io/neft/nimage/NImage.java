@@ -1,5 +1,6 @@
 package io.neft.nimage;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -62,6 +63,8 @@ public class NImage {
     }
 
     public static void clear(NImageHolder holder) {
-        Glide.with(APP.getActivity()).clear(holder);
+        Activity activity = APP.getActivity();
+        if (activity.isDestroyed()) return;
+        Glide.with(activity).clear(holder);
     }
 }

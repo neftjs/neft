@@ -128,6 +128,8 @@ public class App {
         if (isFirstAttach) {
             windowView = new WindowView(activity.getApplicationContext());
             startWhenReady();
+        } else {
+            renderer.restore();
         }
     }
 

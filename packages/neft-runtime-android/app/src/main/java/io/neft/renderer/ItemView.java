@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import lombok.Getter;
 
 public class ItemView extends ViewGroup {
-    @Getter int itemId = 0;
+    @Getter Item item;
 
     public ItemView(Context context) {
         super(context);
@@ -16,6 +16,7 @@ public class ItemView extends ViewGroup {
 
     @Override
     protected LayoutParams generateDefaultLayoutParams() {
+        super.onStartTemporaryDetach();
         return new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     }
 
@@ -105,5 +106,29 @@ public class ItemView extends ViewGroup {
         public LayoutParams(ViewGroup.LayoutParams source) {
             super(source);
         }
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (item != null) item.onDetached();
+    }
+
+    @Override
+    public void onStartTemporaryDetach() {
+        super.onStartTemporaryDetach();
+        if (item != null) item.onDetached();
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (item != null) item.onAttached();
+    }
+
+    @Override
+    public void onFinishTemporaryDetach() {
+        super.onFinishTemporaryDetach();
+        if (item != null) item.onAttached();
     }
 }

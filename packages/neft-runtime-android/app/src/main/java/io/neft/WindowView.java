@@ -63,7 +63,7 @@ public class WindowView extends ItemView {
         while (parent != null) {
             if (parent instanceof ItemView) {
                 ItemView itemView = ((ItemView) parent);
-                int itemId = itemView.getItemId();
+                int itemId = itemView.getItem().getId();
                 if (itemId > 0) {
                     APP.getClient().pushAction(OutAction.ITEM_KEYS_FOCUS, itemId);
                     break;

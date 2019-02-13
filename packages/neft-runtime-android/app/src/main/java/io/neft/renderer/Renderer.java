@@ -9,8 +9,8 @@ import lombok.Getter;
 public class Renderer {
     final private List<Item> items = new ArrayList<>();
     @Getter final private Device device = new Device();
-    final private Screen screen = new Screen();
-    final private Navigator navigator = new Navigator();
+    @Getter final private Screen screen = new Screen();
+    @Getter final private Navigator navigator = new Navigator();
 
     public Renderer() {
         items.add(null);
@@ -41,5 +41,9 @@ public class Renderer {
         Device.init(device);
         Screen.init(screen);
         Navigator.init(navigator);
+    }
+
+    public void restore() {
+        Screen.restore(screen);
     }
 }

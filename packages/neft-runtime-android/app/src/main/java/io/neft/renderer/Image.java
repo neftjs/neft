@@ -57,4 +57,16 @@ public class Image extends Item {
         source = val;
         NImage.loadDrawable(holder, val);
     }
+
+    @Override
+    protected void onAttached() {
+        super.onAttached();
+        setSource(source);
+    }
+
+    @Override
+    protected void onDetached() {
+        super.onDetached();
+        NImage.clear(holder);
+    }
 }

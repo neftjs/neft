@@ -91,6 +91,22 @@ const assignManifest = (target, source) => {
     target.project.dependencies.push(...source.project.dependencies)
   }
 
+  // project.dependencies
+  if (source.project && source.project.buildscript && Array.isArray(source.project.buildscript.repositories)) {
+    target.project = target.project || {}
+    target.project.buildscript = target.project.buildscript || {}
+    target.project.buildscript.repositories = target.project.buildscript.repositories || []
+    target.project.buildscript.repositories.push(...source.project.buildscript.repositories)
+  }
+
+  // project.dependencies
+  if (source.project && source.project.allprojects && Array.isArray(source.project.allprojects.repositories)) {
+    target.project = target.project || {}
+    target.project.allprojects = target.project.allprojects || {}
+    target.project.allprojects.repositories = target.project.allprojects.repositories || []
+    target.project.allprojects.repositories.push(...source.project.allprojects.repositories)
+  }
+
   // app.dependencies
   if (source.app && Array.isArray(source.app.dependencies)) {
     target.app = target.app || {}

@@ -13,6 +13,7 @@ import io.neft.client.handlers.ActionHandler;
 import io.neft.client.handlers.NoArgsActionHandler;
 import io.neft.client.handlers.ReaderActionHandler;
 import io.neft.renderer.handlers.*;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,7 +136,7 @@ public class Item {
     }
 
     // basic properties
-    final int id;
+    @Getter final int id;
     private int x = 0;
     private int y = 0;
     private int width = 0;
@@ -194,7 +195,7 @@ public class Item {
         this.view = view;
         view.setLayoutParams(new ItemView.LayoutParams(0, 0));
         this.id = APP.getRenderer().registerItem(this);
-        view.itemId = this.id;
+        view.item = this;
         view.setClipChildren(optimized);
     }
 
@@ -469,5 +470,13 @@ public class Item {
                 dropGpu();
             }
         }
+    }
+
+    protected void onAttached() {
+        // NOP
+    }
+
+    protected void onDetached() {
+        // NOP
     }
 }
