@@ -4,7 +4,7 @@ const parse = require('./input-parser')
 
 const { Tag, Text } = Element
 
-const InputRE = /([^$]*)\${([^}]*)}([^$]*)/gm
+const InputRE = /{([^}]*)}/g
 
 const testInput = (text) => {
   InputRE.lastIndex = 0

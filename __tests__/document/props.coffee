@@ -2,17 +2,17 @@
 
 describe 'Document properties', ->
     # it 'are parsed to objects', ->
-    #     view = createView "<a data=${{a:1}}></a>"
+    #     view = createView "<a data={{a:1}}></a>"
     #     view.render()
     #     assert.isEqual view.element.children[0].props.data, a: 1
 
     it 'are parsed to arrays', ->
-        view = createView "<a data=${[1,2]}></a>"
+        view = createView "<a data={[1,2]}></a>"
         view.render()
         assert.isEqual view.element.children[0].props.data, [1, 2]
 
     it 'are parsed to numbers', ->
-        view = createView "<a data=${-123.1} />"
+        view = createView "<a data={-123.1} />"
         view.render()
 
         attrValue = view.element.children[0].props.data

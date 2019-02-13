@@ -6,7 +6,7 @@
 describe 'Document string interpolation', ->
     it 'works in a text', ->
         view = createView '''
-            Hello ${context.name}!
+            Hello {context.name}!
         '''
 
         renderParse view,
@@ -15,7 +15,7 @@ describe 'Document string interpolation', ->
 
     it 'may contain expression code', ->
         view = createView '''
-            <b visible="${context.page !== 'Loading'}" />
+            <b visible="{context.page !== 'Loading'}" />
         '''
         context = new Struct page: 'Loading'
         renderParse view,
@@ -30,7 +30,7 @@ describe 'Document string interpolation', ->
         it 'lookup use', ->
             view = createView '''
                 <n-component name="a">
-                    ${x}
+                    {x}
                     <n-props x />
                 </n-component>
                 <n-use n-component="a" x="2" />
@@ -43,7 +43,7 @@ describe 'Document string interpolation', ->
             view = createView '''
                 <n-component name="a">
                     <n-component name="b">
-                        ${x}
+                        {x}
                         <n-props x />
                     </n-component>
                     <n-use n-component="b" x="4" />
@@ -73,10 +73,10 @@ describe 'Document string interpolation', ->
         it 'does not contain internal properties', ->
             view = createView '''
                 <n-component name="a">
-                    ${Object.keys(this)}
+                    {Object.keys(this)}
                     <n-props x />
                 </n-component>
-                <n-use n-component="a" x="1" n-if=${true} />
+                <n-use n-component="a" x="1" n-if={true} />
             '''
 
             renderParse view
@@ -86,7 +86,7 @@ describe 'Document string interpolation', ->
         it 'refers to nodes', ->
             view = createView '''
                 <a n-ref="first" label="12" />
-                ${refs.first.props.label}
+                {refs.first.props.label}
             '''
 
             renderParse view
@@ -98,7 +98,7 @@ describe 'Document string interpolation', ->
         it 'are accessible by exported', ->
             view = createView '''
                 <a n-ref="first" label="12" />
-                ${this.refs.first.props.label}
+                {this.refs.first.props.label}
             '''
 
             renderParse view
@@ -123,7 +123,7 @@ describe 'Document string interpolation', ->
                     </script>
                 </n-component>
                 <Test n-ref="first" />
-                ${refs.first && refs.first.name}
+                {refs.first && refs.first.name}
             '''
 
             renderParse view
@@ -136,7 +136,7 @@ describe 'Document string interpolation', ->
         view = createView '''
             <div n-ref="first" label="12" />
             <n-component name="Test">
-                ${typeof refs.first}
+                {typeof refs.first}
             </n-component>
             <n-use n-component="Test" />
         '''
@@ -147,7 +147,7 @@ describe 'Document string interpolation', ->
     describe '`context`', ->
         it 'is accessed in rendered file', ->
             view = createView '''
-                ${context.a}
+                {context.a}
             '''
 
             renderParse view,
@@ -161,7 +161,7 @@ describe 'Document string interpolation', ->
 
         it 'is accesible by exported', ->
             view = createView '''
-                ${this.context.a}
+                {this.context.a}
             '''
 
             renderParse view,
@@ -175,7 +175,7 @@ describe 'Document string interpolation', ->
 
         it 'lookup use', ->
             view = createView '''
-                <n-component name="a">${context.a}</n-component>
+                <n-component name="a">{context.a}</n-component>
                 <n-use n-component="a" />
             '''
 
@@ -191,7 +191,7 @@ describe 'Document string interpolation', ->
         it 'lookup n-each', ->
             view = createView '''
                 <blank n-each="[1]">
-                    ${context.a}
+                    {context.a}
                 </blank>
             '''
 
@@ -215,7 +215,7 @@ describe 'Document string interpolation', ->
                     },
                 }
                 </script>
-                ${a}
+                {a}
             '''
 
             renderParse view
@@ -231,7 +231,7 @@ describe 'Document string interpolation', ->
                     },
                 }
                 </script>
-                ${this.a}
+                {this.a}
             '''
 
             renderParse view
@@ -247,7 +247,7 @@ describe 'Document string interpolation', ->
                     },
                 }
                 </script>
-                ${a}
+                {a}
             '''
 
             renderParse view
@@ -267,7 +267,7 @@ describe 'Document string interpolation', ->
                     },
                 }
                 </script>
-                ${obj.a || '0'}
+                {obj.a || '0'}
             '''
 
             renderParse view
@@ -279,7 +279,7 @@ describe 'Document string interpolation', ->
 
     it 'handler is called on signal', ->
         view = createView '''
-            <span x="1" onClick="${context.onClick(2)}" />
+            <span x="1" onClick="{context.onClick(2)}" />
         '''
 
         calls = 0
@@ -294,7 +294,7 @@ describe 'Document string interpolation', ->
 
     it 'returned handler is called on signal with exported and parameters', ->
         view = createView '''
-            <span x="1" onClick="${context.onClick}" />
+            <span x="1" onClick="{context.onClick}" />
         '''
 
         calls = 0
@@ -310,7 +310,7 @@ describe 'Document string interpolation', ->
         it 'on `props`', ->
             view = createView '''
                 <n-component name="a">
-                    ${x}
+                    {x}
                     <n-props x />
                 </n-component>
                 <n-use n-component="a" x="2" y="1" />
@@ -324,10 +324,10 @@ describe 'Document string interpolation', ->
         it 'on `props` list element', ->
             view = createView '''
                 <n-component name="a">
-                    ${list[0]}
+                    {list[0]}
                     <n-props list />
                 </n-component>
-                <n-use n-component="a" list="${context.list}" />
+                <n-use n-component="a" list="{context.list}" />
             '''
             elem = view.element.children[0]
             list = new ObservableArray()
@@ -339,7 +339,7 @@ describe 'Document string interpolation', ->
             assert.is view.element.stringify(), 'a'
 
         it 'on `context`', ->
-            view = createView '${context.x}'
+            view = createView '{context.x}'
 
             context = new Struct x: 1
 
@@ -351,7 +351,7 @@ describe 'Document string interpolation', ->
             assert.is view.element.stringify(), '2'
 
         it 'on `context` property', ->
-            view = createView '${context.dict.x}'
+            view = createView '{context.dict.x}'
 
             context = dict: new Struct x: 1
 
@@ -364,7 +364,7 @@ describe 'Document string interpolation', ->
 
         it 'on `context` use', ->
             view = createView '''
-                <n-component name="a">${context.a}</n-component>
+                <n-component name="a">{context.a}</n-component>
                 <n-use n-component="a" />
             '''
 
@@ -377,7 +377,7 @@ describe 'Document string interpolation', ->
         it 'on `context` n-each', ->
             view = createView '''
                 <blank n-each="[1]">
-                    ${context.a}
+                    {context.a}
                 </blank>
             '''
 

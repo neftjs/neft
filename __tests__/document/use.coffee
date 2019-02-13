@@ -28,12 +28,12 @@ describe 'Document n-use', ->
                 1
                 <n-use
                   n-component="a"
-                  n-if="${loops > 0}"
-                  loops="${loops - 1}"
+                  n-if="{loops > 0}"
+                  loops="{loops - 1}"
                 />
                 <n-props loops />
             </n-component>
-            <n-use n-component="a" loops=${3} />
+            <n-use n-component="a" loops={3} />
         '''
         renderParse view
         assert.is view.element.stringify(), '1111'
@@ -65,8 +65,8 @@ describe 'Document n-use', ->
                 }
                 </script>
             </n-component>
-            <Abc logs="${logs}" name="fail" n-if=${data} />
-            <Abc logs="${logs}" name="ok" />
+            <Abc logs="{logs}" name="fail" n-if={data} />
+            <Abc logs="{logs}" name="ok" />
         '''
         renderParse view
         assert.isEqual view.exported.logs, ['ok']
@@ -88,7 +88,7 @@ describe 'Document n-use', ->
                 }
                 </script>
             </n-component>
-            <Abc logs="${logs}" status=${context.status} n-if=${context.status} />
+            <Abc logs="{logs}" status={context.status} n-if={context.status} />
         '''
         context = new Struct status: null
         renderParse view,
@@ -114,10 +114,10 @@ describe 'Document n-use', ->
                 </script>
                 <n-props logs name />
             </n-component>
-            <div n-if="${false}">
-                <Abc logs="${this.logs}" name="fail" />
+            <div n-if="{false}">
+                <Abc logs="{this.logs}" name="fail" />
             </div>
-            <Abc logs="${this.logs}" name="ok" />
+            <Abc logs="{this.logs}" name="ok" />
         '''
         renderParse view
         assert.isEqual view.exported.logs, ['ok']
@@ -142,7 +142,7 @@ describe 'Document n-use', ->
                 },
             }
             </script>
-            <div n-ref="container" n-if="${visible}">
+            <div n-ref="container" n-if="{visible}">
                 <Abc n-ref="abc" />
             </div>
         '''

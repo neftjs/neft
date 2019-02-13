@@ -1,4 +1,4 @@
-const xhtmlParser = require('not-so-smart-xhtml-parser')
+const xhtmlParser = require('lite-html-parser')
 const util = require('@neft/core/src/util/index.litcoffee')
 const Element = require('@neft/core/src/document/element')
 
@@ -49,6 +49,8 @@ module.exports = (xhtml) => {
     },
     comment() {},
     instruction() {},
+  }, {
+    noAttributeValue: '{true}',
   })
 
   if (stack.length > 0) {

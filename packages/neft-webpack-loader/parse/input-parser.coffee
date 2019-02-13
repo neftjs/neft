@@ -32,13 +32,12 @@ module.exports = (text, scopeProps) ->
     n = text.length
     while i < n
         charStr = text[i]
-        if charStr is '$' and text[i+1] is '{'
+        if charStr is '{'
             isBlock = true
             blocks += 1
             if str isnt '' or blocks > 1
                 hash += '"'+str+'" + '
             str = ''
-            i++
         else if charStr is '{'
             innerBlocks += 1
             str += charStr
@@ -69,6 +68,7 @@ module.exports = (text, scopeProps) ->
         new Function funcBody
     catch err
         log.error "Can't parse string literal:\n#{text}\n#{err.message}"
+        return null
 
     body: funcBody
     connections: connections

@@ -5,32 +5,32 @@
 
 describe 'Document n-for', ->
     it 'loops expected times', ->
-        view = createView '<ul n-for="i in ${[0,0]}">1</ul>'
+        view = createView '<ul n-for="i in {[0,0]}">1</ul>'
 
         renderParse view
         assert.is view.element.stringify(), '<ul>11</ul>'
 
     it 'provides `item` property', ->
-        view = createView '<ul n-for="item in ${[1,2]}">${item}</ul>'
+        view = createView '<ul n-for="item in {[1,2]}">{item}</ul>'
 
         renderParse view
         assert.is view.element.stringify(), '<ul>12</ul>'
 
     it 'provides `index` property', ->
-        view = createView '<ul n-for="(item, index) in ${[1,2]}">${index}</ul>'
+        view = createView '<ul n-for="(item, index) in {[1,2]}">{index}</ul>'
 
         renderParse view
         assert.is view.element.stringify(), '<ul>01</ul>'
 
     it 'provides `array` property', ->
-        view = createView '<ul n-for="(item, index, array) in ${[1,2]}">${array}</ul>'
+        view = createView '<ul n-for="(item, index, array) in {[1,2]}">{array}</ul>'
 
         renderParse view
         assert.is view.element.stringify(), '<ul>1,21,2</ul>'
 
     it 'supports runtime updates on given observable array', ->
         view = createView '''
-            <ul n-for="(item, i, each) in ${arr}">${each[i]}</ul>
+            <ul n-for="(item, i, each) in {arr}">{each[i]}</ul>
             <n-props arr />
         '''
 
@@ -52,7 +52,7 @@ describe 'Document n-for', ->
 
     it 'supports runtime updates on the n-for prop', ->
         view = createView '''
-            <ul n-for="(item, i, each) in ${[1, 2]}">${each[i]}</ul>
+            <ul n-for="(item, i, each) in {[1, 2]}">{each[i]}</ul>
             <n-props arr />
         '''
 
@@ -64,7 +64,7 @@ describe 'Document n-for', ->
 
     it 'access global `props`', ->
         view = createView '''
-        <ul n-for="i in ${[1,2]}">${a}</ul>
+        <ul n-for="i in {[1,2]}">{a}</ul>
         <n-props a />
         '''
 
@@ -74,7 +74,7 @@ describe 'Document n-for', ->
 
     it 'access global `props` by scope', ->
         view = createView '''
-        <ul n-for="i in ${[1,2]}">${this.a}</ul>
+        <ul n-for="i in {[1,2]}">{this.a}</ul>
         <n-props a />
         '''
 
@@ -84,8 +84,8 @@ describe 'Document n-for', ->
 
     it 'access `refs`', ->
         view = createView """
-            <div n-ref="a" prop="a" n-if=${false} />
-            <ul n-for="i in ${[1,2]}">${refs.a.props.prop}</ul>
+            <div n-ref="a" prop="a" n-if={false} />
+            <ul n-for="i in {[1,2]}">{refs.a.props.prop}</ul>
         """
 
         renderParse view
@@ -94,7 +94,7 @@ describe 'Document n-for', ->
     it 'access component `props`', ->
         view = createView """
             <n-component name="a">
-                <ul n-for="i in ${[1,2]}">${a}</ul>
+                <ul n-for="i in {[1,2]}">{a}</ul>
                 <n-props a />
             </n-component>
             <n-use n-component="a" a="a" />
@@ -117,7 +117,7 @@ describe 'Document n-for', ->
                     },
                 }
                 </script>
-                <ul n-for="i in ${[1,2]}">${isSelf(this)}</ul>
+                <ul n-for="i in {[1,2]}">{isSelf(this)}</ul>
             </n-component>
             <n-use n-component="a" />
         """
@@ -135,8 +135,8 @@ describe 'Document n-for', ->
                 },
             }
             </script>
-            <ul n-for="i in ${[1,2]}">${a}</ul>
-            <ul n-for="i in ${[1,2]}">${this.a}</ul>
+            <ul n-for="i in {[1,2]}">{a}</ul>
+            <ul n-for="i in {[1,2]}">{this.a}</ul>
         '''
 
         renderParse view
@@ -149,8 +149,8 @@ describe 'Document n-for', ->
                 a: 0,
             }
             </script>
-            <ul n-for="i in ${[1,2]}">${a}</ul>
-            <ul n-for="i in ${[1,2]}">${this.a}</ul>
+            <ul n-for="i in {[1,2]}">{a}</ul>
+            <ul n-for="i in {[1,2]}">{this.a}</ul>
         '''
 
         renderParse view
@@ -159,8 +159,8 @@ describe 'Document n-for', ->
 
     it 'internal props are not accessible by scope', ->
         view = createView '''
-            <ul n-for="i in ${[0]}">
-                ${this.item}${this.index}${this.each}
+            <ul n-for="i in {[0]}">
+                {this.item}{this.index}{this.each}
             </ul>
         '''
 
@@ -169,9 +169,9 @@ describe 'Document n-for', ->
 
     it 'can be nested', ->
         view = createView '''
-            <ul n-for="(item1, index1) in ${[1]}">
-                <ul n-for="(item2, index2) in ${[2]}">
-                    ${item1}|${index1}|${item2}|${index2}
+            <ul n-for="(item1, index1) in {[1]}">
+                <ul n-for="(item2, index2) in {[2]}">
+                    {item1}|{index1}|{item2}|{index2}
                 </ul>
             </ul>
         '''
@@ -203,9 +203,9 @@ describe 'Document n-for', ->
                 },
             }
             </script>
-            <div n-ref="container" n-if="${visible}">
-                <ul n-for="i in ${[2]}">
-                    <Abc onRevertCalled="${onChildRevert}" />
+            <div n-ref="container" n-if="{visible}">
+                <ul n-for="i in {[2]}">
+                    <Abc onRevertCalled="{onChildRevert}" />
                 </ul>
             </div>
         '''
@@ -218,7 +218,7 @@ describe 'Document n-for', ->
 
     it 'populates `n-ref`', ->
         view = createView """
-            <ul n-for="i in ${[1,2]}"><div elem=${i} n-ref="deepElem" /></ul>
+            <ul n-for="i in {[1,2]}"><div elem={i} n-ref="deepElem" /></ul>
         """
 
         renderParse view
@@ -228,7 +228,7 @@ describe 'Document n-for', ->
     it 'populates `n-ref` comes from `n-use`', ->
         view = createView """
             <n-component name="Abc"><n-props elem /></n-component>
-            <ul n-for="i in ${[1, 2]}"><Abc elem=${i} n-ref="deepElem" /></ul>
+            <ul n-for="i in {[1, 2]}"><Abc elem={i} n-ref="deepElem" /></ul>
         """
 
         renderParse view

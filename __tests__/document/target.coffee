@@ -17,10 +17,10 @@ describe 'Document n-target', ->
     it 'can be hidden', ->
         view = createView '''
             <n-component name="a">
-                <n-target n-if="${x === 1}" />
+                <n-target n-if="{x === 1}" />
                 <n-props x />
             </n-component>
-            <n-use n-component="a" x=${0}><b></b></n-use>
+            <n-use n-component="a" x={0}><b></b></n-use>
         '''
         elem = view.element.children[0]
 

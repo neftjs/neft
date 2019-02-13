@@ -117,7 +117,7 @@ describe 'Document script', ->
                 },
             }
             </script>
-            ${this.a}
+            {this.a}
         """
 
         renderParse view
@@ -173,7 +173,7 @@ describe 'Document script', ->
                 },
             })
             </script>
-            <ul n-each="${[1,2]}">${item}</ul>
+            <ul n-each="{[1,2]}">{item}</ul>
         """
 
         view.render()

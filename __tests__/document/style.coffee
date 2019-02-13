@@ -123,7 +123,7 @@ describe 'Element.Text', ->
 describe "attributes", ->
     it 'are set on a style item', ->
         view = createViewAndRender '''
-        <b x=${50} />
+        <b x={50} />
         <style bare>@Item b {}</style>
         '''
 
@@ -135,7 +135,7 @@ describe "attributes", ->
 
     it 'on change are set on a style item', ->
         view = createViewAndRender '''
-        <b x=${50} />
+        <b x={50} />
         <style bare>@Item b {}</style>
         '''
 
@@ -147,7 +147,7 @@ describe "attributes", ->
 
     it 'set event handlers', ->
         view = createViewAndRender '''
-        <b onXChange="${calls += 1}" />
+        <b onXChange="{calls += 1}" />
         <script>module.exports = { calls: 0 }</script>
         <style bare>@Item b {}</style>
         '''
@@ -167,7 +167,7 @@ describe "attributes", ->
 
     it "is not updated when file is reverting", ->
         view = createViewAndRender '''
-        <b x="${x}" />
+        <b x="{x}" />
         <script>module.exports = { x: 2 }</script>
         <style bare>@Item b {}</style>
         '''
@@ -203,7 +203,7 @@ describe 'item visible', ->
 
     it "is 'false' if the style node is invisible", ->
         view = createViewAndRender '''
-        <b n-if=${false} />
+        <b n-if={false} />
         <style bare>@Item b {}</style>
         '''
 
@@ -222,7 +222,7 @@ describe 'item visible', ->
 
     it "is 'true' if the style node comes visible", ->
         view = createViewAndRender '''
-        <b n-if=${false} />
+        <b n-if={false} />
         <style bare>@Item b {}</style>
         '''
 
@@ -233,7 +233,7 @@ describe 'item visible', ->
 
     it "is 'false' if the not-styled node parent is invisible", ->
         view = createViewAndRender '''
-        <div n-if=${false}>
+        <div n-if={false}>
             <div><b /></div>
         </div>
         <style bare>@Item b {}</style>
@@ -258,8 +258,8 @@ describe 'item visible', ->
 
     it "is 'false' when not-styled node parent comes visible on invisible item", ->
         view = createViewAndRender '''
-        <div n-if=${false}>
-            <b n-if=${false} />
+        <div n-if={false}>
+            <b n-if={false} />
         </div>
         <style bare>@Item b {}</style>
         '''
@@ -271,7 +271,7 @@ describe 'item visible', ->
 
     it "is 'true' if the styled node parent is invisible", ->
         view = createViewAndRender '''
-        <main n-if=${false}>
+        <main n-if={false}>
             <div><b /></div>
         </main>
         <style bare>@Rectangle main {} @Item b {}</style>
@@ -404,8 +404,8 @@ describe "Style item index", ->
             return
 
         view = createViewAndRender '''
-        <div n-for="item in ${[1,2,3]}">
-            <b>${item}</b>
+        <div n-for="item in {[1,2,3]}">
+            <b>{item}</b>
         </div>
         <style bare>@Item div {}</style>
         '''
