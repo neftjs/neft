@@ -88,7 +88,7 @@ describe 'Document n-use', ->
                 }
                 </script>
             </n-component>
-            <Abc logs="{logs}" status={context.status} n-if={context.status} />
+            <Abc logs="{logs}" status={$context.status} n-if={$context.status} />
         '''
         context = new Struct status: null
         renderParse view,
@@ -148,9 +148,9 @@ describe 'Document n-use', ->
         '''
         view.render()
         {exported} = view
-        {abc} = exported.refs
+        {abc} = exported.$refs
 
         assert.is abc.reverted, 0
         exported.visible = false
         assert.is abc.reverted, 1
-        assert.is exported.refs.abc, view.element.children[0].children[0]
+        assert.is exported.$refs.abc, view.element.children[0].children[0]

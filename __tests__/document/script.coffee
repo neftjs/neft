@@ -21,7 +21,7 @@ describe 'Document script', ->
         renderParse view
         assert.is view.exported.a, undefined
 
-    it 'is called with props in beforeRender', ->
+    it 'is called with props in onRender', ->
         view = createView '''
             <n-props a />
             <script>
@@ -39,13 +39,13 @@ describe 'Document script', ->
                 a: 1
         assert.is view.exported.b, 1
 
-    it 'is called with refs in exported', ->
+    it 'is called with $refs in exported', ->
         view = createView '''
             <script>
             module.exports = {
                 a: null,
                 onRender() {
-                    this.a = this.refs.x.props.a
+                    this.a = this.$refs.x.props.a
                 }
             }
             </script>
@@ -55,20 +55,20 @@ describe 'Document script', ->
         renderParse view
         assert.is view.exported.a, '1'
 
-    it 'is called with file node in exported', ->
+    it 'is called with file $element in exported', ->
         view = createView '''
             <script>
             module.exports = {
-                aNode: null,
+                savedElement: null,
                 onRender() {
-                    this.aNode = this.node
+                    this.savedElement = this.$element
                 }
             }
             </script>
         '''
 
         renderParse view
-        assert.is view.exported.aNode, view.node
+        assert.is view.exported.savedElement, view.element
 
     it 'predefined exported properties are not enumerable', ->
         view = createView '''
@@ -145,13 +145,13 @@ describe 'Document script', ->
         view.revert()
         assert.isEqual events, ['onRender', 'onRevert']
 
-    it 'onRender is called with context in exported', ->
+    it 'onRender is called with $context in exported', ->
         view = createView '''
             <script>
             module.exports = {
                 a: null,
                 onRender() {
-                    this.a = this.context.a
+                    this.a = this.$context.a
                 },
             }
             </script>

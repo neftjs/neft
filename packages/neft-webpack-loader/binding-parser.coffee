@@ -66,7 +66,7 @@ exports.parse = (val, isPublicId, opts = 0, objOpts = {}, isVariableId) ->
     for elem, i in binding when typeof elem isnt 'string'
         elem = objOpts.modifyBindingPart?(elem) or elem
         if opts & BINDING_THIS_TO_SELF_OPTS and elem[0] is 'this'
-            elem.splice 1, 0, 'self'
+            elem.splice 1, 0, '$self'
         useThis = elem[0] in ['parent', 'nextSibling', 'previousSibling', 'target']
         useThis or= objOpts.globalIdToThis?[elem[0]]
         useThis or= objOpts.shouldPrefixByThis?(elem[0])

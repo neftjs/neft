@@ -141,14 +141,14 @@ class Document {
     if (oldValue) this[callRenderListener]('refDelete', ref, oldValue)
     this.refs[ref] = value
     this[callRenderListener]('refSet', ref, value)
-    this.exported.emit('onRefsChange')
+    this.exported.emit('on$RefsChange')
   }
 
   deleteRef(ref) {
     const oldValue = this.refs[ref]
     delete this.refs[ref]
     this[callRenderListener]('refDelete', ref, oldValue)
-    this.exported.emit('onRefsChange')
+    this.exported.emit('on$RefsChange')
   }
 
   render({

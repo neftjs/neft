@@ -85,7 +85,7 @@ describe 'Document n-for', ->
     it 'access `refs`', ->
         view = createView """
             <div n-ref="a" prop="a" n-if={false} />
-            <ul n-for="i in {[1,2]}">{refs.a.props.prop}</ul>
+            <ul n-for="i in {[1,2]}">{$refs.a.props.prop}</ul>
         """
 
         renderParse view

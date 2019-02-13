@@ -7,10 +7,10 @@ const PROP_OPTS = 0
 class ScriptExported extends Struct {
   constructor(document, obj) {
     super(obj)
-    util.defineProperty(this, 'element', PROP_OPTS, document.element)
-    util.defineProperty(this, 'refs', PROP_OPTS, document.refs)
-    util.defineProperty(this, 'context', PROP_OPTS, () => document.context, null)
-    util.defineProperty(this, 'self', PROP_OPTS, this)
+    util.defineProperty(this, '$element', PROP_OPTS, document.element)
+    util.defineProperty(this, '$refs', PROP_OPTS, document.refs)
+    util.defineProperty(this, '$context', PROP_OPTS, () => document.context, null)
+    util.defineProperty(this, '$self', PROP_OPTS, this)
     Object.keys(this).forEach((key) => {
       if (typeof this[key] === 'function') {
         this[key] = this[key].bind(this)
@@ -21,7 +21,7 @@ class ScriptExported extends Struct {
 
 util.defineProperty(ScriptExported.prototype, 'constructor', PROP_OPTS, ScriptExported)
 
-SignalsEmitter.createSignal(ScriptExported, 'onRefsChange')
+SignalsEmitter.createSignal(ScriptExported, 'on$RefsChange')
 
 class Script {
   constructor(document, script) {
