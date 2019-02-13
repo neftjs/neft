@@ -1,10 +1,10 @@
 module.exports = (element, parser) => {
   const refs = {}
 
-  element.queryAll('[n-ref]').forEach((nRef) => {
-    const ref = nRef.props['n-ref']
+  element.queryAll('[n-ref]').concat(element.queryAll('[ref]')).forEach((nRef) => {
+    const ref = nRef.props['n-ref'] || nRef.props.ref
     if (refs[ref]) {
-      parser.warning(new Error(`n-ref must be unique; ${ref} is duplicated`))
+      parser.warning(new Error(`n-ref ${ref} is already defined`))
       return
     }
     refs[ref] = nRef

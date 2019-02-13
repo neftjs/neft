@@ -95,6 +95,15 @@ describe 'Document string interpolation', ->
             view.element.children[0].props.set 'label', 23
             assert.is view.element.children[1].text, '23'
 
+        it 'can be defined without n- prefix', ->
+            view = createView '''
+                <a ref="first" label="12" />
+                {$refs.first.props.label}
+            '''
+
+            renderParse view
+            assert.is view.element.children[1].text, '12'
+
         it 'are accessible by exported', ->
             view = createView '''
                 <a n-ref="first" label="12" />
