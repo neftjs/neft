@@ -376,8 +376,8 @@ Grid {
         ATTRS_ALIAS_DEF = [
             ['x', 'anchors.left', 'anchors.right', 'anchors.horizontalCenter', 'anchors.centerIn', 'anchors.fill', 'anchors.fillWidth'],
             ['y', 'anchors.top', 'anchors.bottom', 'anchors.verticalCenter', 'anchors.centerIn', 'anchors.fill', 'anchors.fillHeight'],
-            ['width', 'anchors.fill', 'anchors.fillWidth', 'layout.fillWidth'],
-            ['height', 'anchors.fill', 'anchors.fillHeight', 'layout.fillHeight'],
+            ['width', 'anchors.fill', 'anchors.fillWidth', 'fillWidth'],
+            ['height', 'anchors.fill', 'anchors.fillHeight', 'fillHeight'],
             ['margin.horizontal', 'margin.left'],
             ['margin.horizontal', 'margin.right'],
             ['margin.vertical', 'margin.top'],
@@ -572,6 +572,19 @@ Grid {
             if classQueue.length is 3
                 runQueue target
             return
+
+        class ElementTarget extends itemUtils.Object
+            constructor: (element) ->
+                super()
+                @_element = element
+                Object.seal @
+
+            itemUtils.defineProperty
+                constructor: @
+                name: 'element'
+                defaultValue: null
+
+        Class.ElementTarget = ElementTarget
 
 ## *Object* Class::document
 

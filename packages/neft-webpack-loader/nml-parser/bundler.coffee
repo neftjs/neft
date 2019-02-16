@@ -26,11 +26,14 @@ getConstants = (constants) ->
         result += "const #{constant.name} = #{constant.value}\n"
     result
 
-getObjectsCode = (objects) ->
+getObjectsCode = (objects, objectCodes) ->
     result = ""
-    for object in objects
-        code = PADDING + object.code.replace /\n/g, '\n' + PADDING
-        result += "exports.#{object.id} = () => {\n#{code}\n}\n"
+    for objectCode, i in objectCodes
+        code = PADDING + objectCode.code.replace /\n/g, '\n' + PADDING
+        if objects[i].type is 'select'
+            result += "exports.selects.push(() => {\n#{code}\n})\n"
+        else
+            result += "exports.#{objectCode.id} = () => {\n#{code}\n}\n"
     result
 
 getFileMeta = (path) ->
@@ -40,6 +43,8 @@ getFileMeta = (path) ->
     "exports._path = \"#{relPath}\"\n"
 
 exports.bundle = ({path, imports, constants, objects, objectCodes, queries}) ->
+    hasSelect = objects.find (obj) -> obj.type is 'select'
+
     result = '''
     const exports = {}\n
     const Renderer = require('@neft/core/src/renderer')
@@ -47,7 +52,9 @@ exports.bundle = ({path, imports, constants, objects, objectCodes, queries}) ->
     '''
     result += getImports imports
     result += getConstants constants
-    result += getObjectsCode objectCodes
+    if hasSelect
+        result += 'exports.selects = []\n'
+    result += getObjectsCode objects, objectCodes
     if path
         result += getFileMeta path
     result += 'return exports'

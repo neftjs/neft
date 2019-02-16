@@ -2,8 +2,8 @@
 
 assert = require '../../assert'
 
-WIDTH_PROPS = ['width', 'anchors.fill', 'anchors.fillWidth', 'layout.fillWidth']
-HEIGHT_PROPS = ['height', 'anchors.fill', 'anchors.fillHeight', 'layout.fillHeight']
+WIDTH_PROPS = ['width', 'anchors.fill', 'anchors.fillWidth', 'fillWidth']
+HEIGHT_PROPS = ['height', 'anchors.fill', 'anchors.fillHeight', 'fillHeight']
 
 module.exports = (Renderer) ->
     hasOneOfProps = (item, props) ->

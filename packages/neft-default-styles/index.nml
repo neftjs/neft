@@ -1,143 +1,23 @@
-// https://www.w3.org/TR/CSS2/sample.html
-
-@Item div, dl, dt, li, pre {
+@Item body, div, li, pre, layer, article, aside, footer, header, hgroup, main, nav, section, ul, menu, dir, ol, li, dl, dt, dd, form, fieldset, pre {
     layout: 'flow'
     fillWidth: true
 }
 
-@Item address {
+@Item p, address, blockquote, h1, h2, h3, h4, h5, h6, h7, legend {
     layout: 'flow'
     fillWidth: true
 
     #text {
-		fillWidth: true
-        font.italic: true
+        fillWidth: true
     }
 }
 
-@Item h1 {
-    layout: 'flow'
-    padding.vertical: 18.76
-    fillWidth: true
-
-    #text {
-		fillWidth: true
-        font.pixelSize: 28
-        font.weight: 0.7
-    }
-}
-
-@Item h2 {
-    layout: 'flow'
-    padding.vertical: 21
-    fillWidth: true
-
-    #text {
-		fillWidth: true
-        font.pixelSize: 21
-        font.weight: 0.7
-    }
-}
-
-@Item h3 {
-    layout: 'flow'
-    padding.vertical: 23.24
-    fillWidth: true
-
-    #text {
-		fillWidth: true
-        font.pixelSize: 16.38
-        font.weight: 0.7
-    }
-}
-
-@Item h4, p, fieldset, form, dl {
-    layout: 'flow'
-    padding.vertical: 31.36
-    fillWidth: true
-
-    #text {
-		fillWidth: true
-        font.weight: 0.7
-    }
-}
-
-@Item h5 {
-    layout: 'flow'
-    padding.vertical: 42
-    fillWidth: true
-
-    #text {
-		fillWidth: true
-        font.pixelSize: 11.62
-        font.weight: 0.7
-    }
-}
-
-@Item h6 {
-    layout: 'flow'
-    padding.vertical: 46.76
-    fillWidth: true
-
-    #text {
-		fillWidth: true
-        font.pixelSize: 10.5
-        font.weight: 0.7
-    }
-}
-
-@Item b, strong {
+@Item u, strong, b, i, em, code, mark {
     layout: 'flow'
 
     #text {
-		fillWidth: true
-        font.weight: 0.7
+        fillWidth: true
     }
-}
-
-@Item blockquote {
-    layout: 'flow'
-    padding: '31.36 40 31.36 40'
-    fillWidth: true
-
-    #text {
-		fillWidth: true
-	}
-}
-
-@Item i, cite, em, var {
-    layout: 'flow'
-
-    #text {
-		fillWidth: true
-        font.italic: true
-    }
-}
-
-@Item pre, tt, code, kbd, samp {
-    layout: 'flow'
-
-    #text {
-		fillWidth: true
-        font.family: 'monospace'
-    }
-}
-
-@Item ol, ul, menu {
-    layout: 'flow'
-    padding.vertical: 31.36
-    padding.left: 40
-    fillWidth: true
-
-    ul, ol {
-        margin.vertical: 0
-    }
-}
-
-@Item dd {
-    layout: 'flow'
-    padding.left: 40
-    fillWidth: true
 }
 
 @Image img {}

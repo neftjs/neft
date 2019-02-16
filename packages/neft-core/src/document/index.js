@@ -1,6 +1,7 @@
 const utils = require('../util')
 const assert = require('../assert')
 const eventLoop = require('../event-loop')
+const Renderer = require('../renderer')
 const log = require('../log')
 const Use = require('./use')
 const Log = require('./log')
@@ -33,6 +34,18 @@ const mapToTypes = (Type, list, document) => {
 }
 
 const isInternalProp = prop => prop[0] === 'n' && prop[1] === '-'
+
+const attachStyles = (styles, element) => {
+  Object.values(styles).forEach((style) => {
+    const { selects } = style
+    if (!selects) return
+    selects.forEach((selectGen) => {
+      const { select } = selectGen()
+      select.target = new Renderer.Class.ElementTarget(element)
+      select.running = true
+    })
+  })
+}
 
 const getComponentGenerator = Symbol('getComponentGenerator')
 const componentsPool = Symbol('componentsPool')
@@ -93,6 +106,8 @@ class Document {
     if (process.env.NODE_ENV === 'development') {
       saveInstance(this)
     }
+
+    attachStyles(this.style, this.element)
   }
 
   [getComponentGenerator](name) {

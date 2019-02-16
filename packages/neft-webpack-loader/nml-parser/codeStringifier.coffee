@@ -256,7 +256,12 @@ class Stringifier
             result += "#{itemCode}\n"
 
         # return
-        result += "return { objects: #{@getIdsObject @ast}, item: #{@ast.id} }"
+        result += "return { objects: #{@getIdsObject @ast}"
+        if @ast.id
+            result += ", item: #{@ast.id}"
+        else
+            result += ", select: #{@ids[0]}"
+        result += ' }'
         result
 
 exports.stringify = (ast, path) ->

@@ -271,6 +271,6 @@ it 'parses top level selects', ->
         "document.query": 'a > b', \
         "changes": {"color": 'red'}\
         })
-        return { objects: {"_r0": _r0}, item: undefined }
+        return { objects: {"_r0": _r0}, select: _r0 }
     '''
     assert.is getObjectCode(code), expected

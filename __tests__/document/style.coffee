@@ -56,6 +56,20 @@ describe '<style />', ->
             view = createViewAndRender '<div />'
             assert.instanceOf view.element.query('div').style, Renderer.Item
 
+    it 'applies top level selects', ->
+        view = createView '''
+            <div class="first" />
+            <style>
+                .first {
+                    spacing: 4
+                }
+            </style>
+        '''
+
+        renderParse view
+        testNode = view.element.query 'div'
+        assert.ok testNode.style._classList[0].running
+
 describe 'n-style', ->
     it "accepts 'style' syntax", ->
         view = createViewAndRender '''
@@ -71,7 +85,7 @@ describe 'n-style', ->
         view = createViewAndRender '''
         <div><i /></div>
         <style bare>
-        @Flow div {
+        @Item div {
             @Rectangle i {}
         }
         </style>
@@ -80,7 +94,7 @@ describe 'n-style', ->
         bNode = view.element.query 'div'
         iNode = view.element.query 'i'
 
-        assert.instanceOf bNode.style, Renderer.Flow
+        assert.instanceOf bNode.style, Renderer.Item
         assert.instanceOf iNode.style, Renderer.Rectangle
 
     it 'element is accessible in the created style document', ->

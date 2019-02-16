@@ -36,6 +36,37 @@ it 'bundles items', ->
     """
     assert.is result, expected
 
+it 'bundles top level selects', ->
+    result = bundle '''
+        a > b {
+            color: 'red'
+        }
+
+        div {
+            strong {
+                font.weight: 1
+            }
+        }
+    ''', {}
+    expected = """
+        #{PREFIX}
+        #{DEFAULT_IMPORTS}
+        exports.selects = []
+        exports.selects.push(() => {
+          const _r0 = Class.New()
+          _RendererObject.setOpts(_r0, {"document.query": 'a > b', "changes": {"color": 'red'}})
+          return { objects: {"_r0": _r0}, select: _r0 }
+        })
+        exports.selects.push(() => {
+          const _r0 = Class.New()
+          const _r1 = Class.New()
+          _RendererObject.setOpts(_r0, {"document.query": 'div', "changes": [], "children": [_RendererObject.setOpts(_r1, {"document.query": 'strong', "changes": {"font.weight": 1}})]})
+          return { objects: {"_r0": _r0, "_r1": _r1}, select: _r0 }
+        })
+        return exports
+    """
+    assert.is result, expected
+
 it 'appends constants', ->
     result = bundle '''
         const abc = 1

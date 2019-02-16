@@ -30,7 +30,7 @@ exports.createView = (html) => {
   const module = {}
   const viewFuncBody = loader.call({
     fs,
-    resourcePath: 'text.xhtml',
+    resourcePath: 'test.xhtml',
     emitError: () => {},
     emitWarning: () => {},
     query: {
