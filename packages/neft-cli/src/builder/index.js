@@ -126,7 +126,7 @@ exports.build = async (target, args) => {
   if (targetEnvs[target].browser) webpackTarget = 'web' // for HMR
   if (production) webpackTarget = 'node' // webpack doesn't put polyfills for node target
   const defaultWebpackConfig = {
-    entry: [require.resolve('@babel/polyfill'), './src/index.js'],
+    entry: [require.resolve('@babel/polyfill'), './'],
     output: {
       path: output,
       filename: 'bundle.js',

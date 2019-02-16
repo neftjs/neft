@@ -40,12 +40,18 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends itemUtils.Obj
         @_scale = 1
         @_rotation = 0
         @_opacity = 1
-        @_linkUri = ''
         @_anchors = null
         @_layout = null
+        @_fillWidth = false
+        @_fillHeight = false
         @_keys = null
         @_pointer = null
         @_margin = null
+        @_padding = null
+        @_columns = 2
+        @_rows = Infinity
+        @_spacing = null
+        @_alignment = null
         @_classes = null
         @_query = ''
         @_element = null
@@ -64,9 +70,6 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends itemUtils.Obj
         developmentSetter: (val) ->
             if val?
                 assert.instanceOf val, DocElement
-
-    # DEPRECATED
-    SignalsEmitter.createSignal @, 'onReady'
 
     SignalsEmitter.createSignal @, 'onAnimationFrame', do ->
         now = Date.now()
@@ -99,8 +102,6 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends itemUtils.Obj
 
     class ChildrenObject extends itemUtils.MutableDeepObject
         constructor: (ref) ->
-            @_layout = null
-            @_target = null
             @_firstChild = null
             @_lastChild = null
             @_bottomChild = null
@@ -127,45 +128,6 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends itemUtils.Obj
         utils.defineProperty @::, 'length', null, ->
             @_length
         , null
-
-        # DEPRECATED
-        itemUtils.defineProperty
-            constructor: @
-            name: 'layout'
-            defaultValue: null
-            developmentSetter: (val) ->
-                if val?
-                    assert.instanceOf val, Item, """
-                        Item.children.layout needs to be an Item, but #{val} given
-                    """
-            setter: (_super) -> (val) ->
-                if @_layout?.effectItem
-                    @_layout.parent = null
-                    @_layout.effectItem = @_layout
-
-                _super.call @, val
-
-                if '_effectItem' of @_ref
-                    @_ref.effectItem = if val then null else @_ref
-
-                if val?
-                    ref = @_ref
-                    setFakeParent val, ref, 0
-                    if val.effectItem
-                        val.effectItem = ref
-
-                return
-
-        # DEPRECATED
-        itemUtils.defineProperty
-            constructor: @
-            name: 'target'
-            defaultValue: null
-            developmentSetter: (val) ->
-                if val?
-                    assert.instanceOf val, Item, """
-                        Item.children.target needs to be an Item, but #{val} given
-                    """
 
         get: (val) ->
             assert.operator val, '>=', 0, """
@@ -247,20 +209,6 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends itemUtils.Obj
             old = @_parent
             oldChildren = old?.children
             valChildren = val?.children
-
-            if valChildren?._target
-                # detect whether target is a child of this item
-                containsItem = false
-                tmpItem = valChildren._target
-                while tmpItem
-                    if tmpItem is @
-                        containsItem = true
-                        break
-                    tmpItem = tmpItem._parent
-
-                unless containsItem
-                    val = valChildren._target
-                    valChildren = val.children
 
             if old is val
                 return
@@ -775,14 +723,52 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends itemUtils.Obj
         developmentSetter: (val) ->
             assert.isFloat val, "Item.opacity needs to be a float, but #{val} given"
 
-    # DEPRECATED
     itemUtils.defineProperty
         constructor: @
-        name: 'linkUri'
-        defaultValue: ''
-        implementation: Impl.setItemLinkUri
+        name: 'layout'
+        defaultValue: null
+        implementation: Impl.setItemLayout
         developmentSetter: (val) ->
-            assert.isString val, "Item.linkUri needs to be a string, but #{val} given"
+            if val isnt null
+                assert.isString val
+
+    itemUtils.defineProperty
+        constructor: @
+        name: 'fillWidth'
+        defaultValue: false
+        developmentSetter: (val) ->
+            assert.isBoolean val
+
+    itemUtils.defineProperty
+        constructor: @
+        name: 'fillHeight'
+        defaultValue: false
+        developmentSetter: (val) ->
+            assert.isBoolean val
+
+    itemUtils.defineProperty
+        constructor: @
+        name: 'columns'
+        defaultValue: 2
+        implementation: Impl.setItemColumns
+        developmentSetter: (val) ->
+            assert.operator val, '>=', 0
+        setter: (_super) -> (val) ->
+            if val <= 0
+                val = 1
+            _super.call @, val
+
+    itemUtils.defineProperty
+        constructor: @
+        name: 'rows'
+        defaultValue: Infinity
+        implementation: Impl.setItemRows
+        developmentSetter: (val) ->
+            assert.operator val, '>=', 0
+        setter: (_super) -> (val) ->
+            if val <= 0
+                val = 1
+            _super.call @, val
 
     scaleInPoint: (scale, pointX, pointY) ->
         oldScale = @scale
@@ -845,15 +831,16 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends itemUtils.Obj
     @createSpacing = require('./item/spacing') Renderer, Impl, itemUtils, Item
     @createAlignment = require('./item/alignment') Renderer, Impl, itemUtils, Item
     @createAnchors = require('./item/anchors') Renderer, Impl, itemUtils, Item
-    @createLayout = require('./item/layout') Renderer, Impl, itemUtils, Item
     @createMargin = require('./item/margin') Renderer, Impl, itemUtils, Item
     @createPointer = require('./item/pointer') Renderer, Impl, itemUtils, Item
     @createKeys = require('./item/keys') Renderer, Impl, itemUtils, Item
 
     @createAnchors @
-    @createLayout @
     @Pointer = @createPointer @
     @createMargin @
+    @createMargin @, propertyName: 'padding'
+    @createAlignment @
+    @createSpacing @
     @Keys = @createKeys @
 
     Item

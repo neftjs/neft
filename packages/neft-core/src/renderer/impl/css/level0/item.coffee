@@ -102,7 +102,7 @@ module.exports = (impl) ->
         isLayer: false
         isInLayers: false
         operations: 0
-    , impl.pointer.DATA
+    , impl.ITEM_DATA
 
     DATA: DATA
 
@@ -170,17 +170,6 @@ module.exports = (impl) ->
 
     setItemOpacity: (val) ->
         @_impl.elemStyle.opacity = val
-        return
-
-    setItemLinkUri: (val) ->
-        unless @_impl.linkElem
-            elem = @_impl.linkElem = document.createElement 'a'
-            elem.setAttribute 'class', 'link'
-            @_impl.elem.appendChild elem
-
-        if @_impl.linkElem.getAttribute('href') isnt val
-            @_impl.linkElem.setAttribute 'href', val
-            @_impl.linkElem.style.display = if val isnt '' then 'block' else 'none'
         return
 
     attachItemSignal: (ns, signalName) ->

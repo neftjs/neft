@@ -30,7 +30,6 @@ it 'bundles items', ->
         exports._i0 = () => {
           const _i0 = Item.New()
           _RendererObject.setOpts(_i0, {"query": 'any-item'})
-          _i0.emit('onReady')
           return { objects: {"_i0": _i0}, item: _i0 }
         }
         return exports
@@ -52,7 +51,6 @@ it 'appends constants', ->
 
         exports._i0 = () => {
           const _i0 = Item.New()
-          _i0.emit('onReady')
           return { objects: {"_i0": _i0}, item: _i0 }
         }
         return exports

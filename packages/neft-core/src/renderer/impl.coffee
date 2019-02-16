@@ -17,7 +17,7 @@ module.exports = (Renderer) ->
     TYPES = ['Item', 'Image', 'Text', 'Native', 'FontLoader',
              'Device', 'Screen', 'Navigator',
 
-             'Rectangle', 'Grid', 'Column', 'Row', 'Flow',
+             'Rectangle',
              'Animation', 'PropertyAnimation', 'NumberAnimation']
 
     ABSTRACT_TYPES =

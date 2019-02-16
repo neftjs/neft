@@ -29,14 +29,12 @@ module.exports = (impl) ->
         bindings: null
         anchors: null
         elem: null
-        linkUri: ''
-        linkUriListens: false
         x: 0
         y: 0
         width: 0
         height: 0
         scale: 1
-    , impl.pointer.DATA
+    , impl.ITEM_DATA
 
     DATA: DATA
 
@@ -118,41 +116,6 @@ module.exports = (impl) ->
     setItemOpacity: (val) ->
         @_impl.elem.alpha = val
         impl._dirty = true
-
-    setItemLinkUri: do ->
-        hoverElements = 0
-
-        onClick = (event) ->
-            {linkUri} = @_impl
-            if linkUri
-                if ///^([a-z]+:)///.test linkUri
-                    window.location.href = linkUri
-                else
-                    impl.Renderer.onLinkUri.emit linkUri
-            else
-                event.stopPropagation = false
-            return
-
-        onEnter = ->
-            if @_impl.linkUri
-                if hoverElements++ is 0
-                    document.body.style.cursor = 'pointer'
-            return
-
-        onExit = ->
-            if --hoverElements is 0
-                document.body.style.cursor = 'default'
-            return
-
-        (val) ->
-            @_impl.linkUri = val
-
-            unless @_impl.linkUriListens
-                @_impl.linkUriListens = true
-                @pointer.onClick onClick, @
-                @pointer.onEnter onEnter, @
-                @pointer.onExit onExit, @
-            return
 
     attachItemSignal: (ns, signalName) ->
         if ns is 'pointer'

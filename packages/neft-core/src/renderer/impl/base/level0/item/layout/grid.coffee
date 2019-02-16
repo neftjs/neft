@@ -2,10 +2,10 @@
 
 MAX_LOOPS = 100
 
-utils = require '../../../../util'
-log = require '../../../../log'
-eventLoop = require '../../../../event-loop'
-TypedArray = require '../../../../typed-array'
+utils = require '../../../../../../util'
+log = require '../../../../../../log'
+eventLoop = require '../../../../../../event-loop'
+TypedArray = require '../../../../../../typed-array'
 
 log = log.scope 'Renderer'
 
@@ -48,11 +48,7 @@ ALIGNMENT_TO_POINT =
     bottom: 1
 
 updateItem = (item) ->
-    unless effectItem = item._effectItem
-        return
-
-    {includeBorderMargins} = item
-    {children} = effectItem
+    {children} = item
     firstChild = children.firstChild
     data = item._impl
     {gridType} = data
@@ -61,21 +57,18 @@ updateItem = (item) ->
     {autoWidth, autoHeight} = data
     columnSpacing = rowSpacing = 0
 
-    if layout = effectItem._layout
-        autoWidth and= not layout._fillWidth
-        autoHeight and= not layout._fillHeight
+    autoWidth and= not item._fillWidth
+    autoHeight and= not item._fillHeight
 
+    columnSpacing = item.spacing.column
+    rowSpacing = item.spacing.row
     if gridType is ALL
         columnsLen = item.columns
         rowsLen = item.rows
-        columnSpacing = item.spacing.column
-        rowSpacing = item.spacing.row
     else if gridType is COLUMN
-        rowSpacing = item.spacing
         columnsLen = 1
         rowsLen = Infinity
     else if gridType is ROW
-        columnSpacing = item.spacing
         columnsLen = Infinity
         rowsLen = 1
 
@@ -114,7 +107,7 @@ updateItem = (item) ->
         childIndex += 1
         nextChild = child.nextSibling
         # check visibility
-        if not child._visible or (child._layout and not child._layout._enabled)
+        if not child._visible or (child._anchors and child._anchors._runningCount)
             visibleChildren[childIndex] = 0
             continue
         visibleChildren[childIndex] = 1
@@ -142,31 +135,25 @@ updateItem = (item) ->
         width = child._width
         height = child._height
         margin = child._margin
-        layout = child._layout
 
         column = i % columnsLen
         row = Math.floor(i / columnsLen) % rowsLen
 
-        if layout
-            if layout._fillWidth
-                width = 0
-                columnsFillsSum++
-                columnsFills[column] = 1
-            if layout._fillHeight
-                height = 0
-                rowsFillsSum++
-                rowsFills[row] = 1
+        if child._fillWidth
+            width = 0
+            columnsFillsSum++
+            columnsFills[column] = 1
+        if child._fillHeight
+            height = 0
+            rowsFillsSum++
+            rowsFills[row] = 1
 
         # margins
         if margin
-            if includeBorderMargins or column isnt 0
-                width += margin._left
-            if includeBorderMargins or column isnt lastColumn
-                width += margin._right
-            if includeBorderMargins or row isnt 0
-                height += margin._top
-            if includeBorderMargins or row isnt lastRow
-                height += margin._bottom
+            width += margin._left
+            width += margin._right
+            height += margin._top
+            height += margin._bottom
 
         # save
         if width > columnsSizes[column]
@@ -189,7 +176,7 @@ updateItem = (item) ->
 
     # expand filled cells
     if not autoWidth
-        freeWidthSpace = effectItem._width - columnSpacing * lastColumn - leftPadding - rightPadding - gridWidth
+        freeWidthSpace = item._width - columnSpacing * lastColumn - leftPadding - rightPadding - gridWidth
         if freeWidthSpace > 0 and columnsFillsSum > 0
             unusedFills = getCleanArray unusedFills, lastColumn + 1
             length = lastColumn + 1
@@ -211,7 +198,7 @@ updateItem = (item) ->
             freeWidthSpace = 0
 
     if not autoHeight
-        freeHeightSpace = effectItem._height - rowSpacing * lastRow - topPadding - bottomPadding - gridHeight
+        freeHeightSpace = item._height - rowSpacing * lastRow - topPadding - bottomPadding - gridHeight
         if freeHeightSpace > 0 and rowsFillsSum > 0
             unusedFills = getCleanArray unusedFills, lastRow+1
             length = lastRow+1
@@ -254,8 +241,6 @@ updateItem = (item) ->
             continue
 
         margin = child._margin
-        layout = child._layout
-        anchors = child._anchors
 
         column = i % columnsLen
         row = Math.floor(i / columnsLen) % rowsLen
@@ -273,46 +258,38 @@ updateItem = (item) ->
         # get child margins
         leftMargin = rightMargin = 0
         if margin
-            if includeBorderMargins or column isnt 0
-                leftMargin = margin._left
-            if includeBorderMargins or column isnt lastColumn
-                rightMargin = margin._right
+            leftMargin = margin._left
+            rightMargin = margin._right
 
         topMargin = bottomMargin = 0
         if margin
-            if includeBorderMargins or row isnt 0
-                topMargin = margin._top
-            if includeBorderMargins or row isnt lastRow
-                bottomMargin = margin._bottom
+            topMargin = margin._top
+            bottomMargin = margin._bottom
 
-        # set sizes
-        if layout
-            # set width
-            if layout._fillWidth
-                width = columnsSizes[column] - leftMargin - rightMargin
-                child.width = width
+        # set width
+        if child._fillWidth
+            width = columnsSizes[column] - leftMargin - rightMargin
+            child.width = width
 
-            # set height
-            if layout._fillHeight
-                height = rowsSizes[row] - topMargin - bottomMargin
-                child.height = height
+        # set height
+        if child._fillHeight
+            height = rowsSizes[row] - topMargin - bottomMargin
+            child.height = height
 
         # set x
-        unless anchors?._autoX
-            child.x = cellX + plusX + leftMargin + leftPadding + columnsSizes[column] * alignH - (child._width + leftMargin + rightMargin) * alignH
+        child.x = cellX + plusX + leftMargin + leftPadding + columnsSizes[column] * alignH - (child._width + leftMargin + rightMargin) * alignH
 
         # set y
-        unless anchors?._autoY
-            child.y = cellY + plusY + topMargin + topPadding + rowsSizes[row] * alignV - (child._height + topMargin + bottomMargin) * alignV
+        child.y = cellY + plusY + topMargin + topPadding + rowsSizes[row] * alignV - (child._height + topMargin + bottomMargin) * alignV
 
         i++
 
     # set effect item size
     if autoWidth
-        effectItem.width = gridWidth + columnSpacing * lastColumn + leftPadding + rightPadding
+        item.width = gridWidth + columnSpacing * lastColumn + leftPadding + rightPadding
 
     if autoHeight
-        effectItem.height = gridHeight + rowSpacing * lastRow + topPadding + bottomPadding
+        item.height = gridHeight + rowSpacing * lastRow + topPadding + bottomPadding
     return
 
 updateItems = ->
@@ -330,7 +307,7 @@ updateItems = ->
 
 update = ->
     data = @_impl
-    if data.pending or not @_effectItem?._visible
+    if data.pending or not @_visible
         return
 
     data.pending = true
@@ -370,17 +347,19 @@ module.exports = (impl) ->
         child.onVisibleChange.connect update, @
         child.onWidthChange.connect updateSize, @
         child.onHeightChange.connect updateSize, @
+        child.onFillWidthChange.connect update, @
+        child.onFillHeightChange.connect update, @
         child.onMarginChange.connect update, @
         child.onAnchorsChange.connect update, @
-        child.onLayoutChange.connect update, @
 
     disableChild = (child) ->
         child.onVisibleChange.disconnect update, @
         child.onWidthChange.disconnect updateSize, @
         child.onHeightChange.disconnect updateSize, @
+        child.onFillWidthChange.disconnect update, @
+        child.onFillHeightChange.disconnect update, @
         child.onMarginChange.disconnect update, @
         child.onAnchorsChange.disconnect update, @
-        child.onLayoutChange.disconnect update, @
 
     onChildrenChange = (added, removed) ->
         if added
@@ -393,46 +372,37 @@ module.exports = (impl) ->
     ROW: ROW
     ALL: ALL
 
-    DATA:
-        pending: false
-        updatePending: false
-        gridType: 0
-        gridUpdateLoops: 0
-        autoWidth: true
-        autoHeight: true
-
-    create: (item, type) ->
-        item._impl.gridType = type
-        item.onAlignmentChange.connect updateSize
-        item.onPaddingChange.connect updateSize
-
     update: update
 
-    setEffectItem: (item, oldItem) ->
-        if oldItem
-            oldItem.onVisibleChange.disconnect update, @
-            oldItem.onChildrenChange.disconnect onChildrenChange, @
-            oldItem.onLayoutChange.disconnect update, @
-            oldItem.onWidthChange.disconnect onWidthChange, @
-            oldItem.onHeightChange.disconnect onHeightChange, @
+    turnOff: ->
+        @onAlignmentChange.disconnect updateSize
+        @onPaddingChange.disconnect updateSize
+        @onVisibleChange.disconnect update
+        @onChildrenChange.disconnect onChildrenChange
+        @onWidthChange.disconnect onWidthChange
+        @onHeightChange.disconnect onHeightChange
 
-            child = oldItem.children.firstChild
-            while child
-                disableChild.call @, child
-                child = child.nextSibling
+        child = @children.firstChild
+        while child
+            disableChild.call @, child
+            child = child.nextSibling
 
-        if item
-            item.onVisibleChange.connect update, @
-            item.onChildrenChange.connect onChildrenChange, @
-            item.onLayoutChange.connect update, @
-            item.onWidthChange.connect onWidthChange, @
-            item.onHeightChange.connect onHeightChange, @
+        return
 
-            child = item.children.firstChild
-            while child
-                enableChild.call @, child
-                child = child.nextSibling
+    turnOn: (gridType) ->
+        @_impl.gridType = gridType
+        @onAlignmentChange.connect updateSize
+        @onPaddingChange.connect updateSize
+        @onVisibleChange.connect update
+        @onChildrenChange.connect onChildrenChange
+        @onWidthChange.connect onWidthChange
+        @onHeightChange.connect onHeightChange
 
-            update.call @
+        child = @children.firstChild
+        while child
+            enableChild.call @, child
+            child = child.nextSibling
+
+        update.call @
 
         return

@@ -1,126 +1,143 @@
 // https://www.w3.org/TR/CSS2/sample.html
 
-@Flow div, dl, dt, li, pre {
-    layout.fillWidth: true
+@Item div, dl, dt, li, pre {
+    layout: 'flow'
+    fillWidth: true
 }
 
-@Flow address {
-    layout.fillWidth: true
+@Item address {
+    layout: 'flow'
+    fillWidth: true
 
     #text {
-		layout.fillWidth: true
+		fillWidth: true
         font.italic: true
     }
 }
 
-@Flow h1 {
+@Item h1 {
+    layout: 'flow'
     padding.vertical: 18.76
-    layout.fillWidth: true
+    fillWidth: true
 
     #text {
-		layout.fillWidth: true
+		fillWidth: true
         font.pixelSize: 28
         font.weight: 0.7
     }
 }
 
-@Flow h2 {
+@Item h2 {
+    layout: 'flow'
     padding.vertical: 21
-    layout.fillWidth: true
+    fillWidth: true
 
     #text {
-		layout.fillWidth: true
+		fillWidth: true
         font.pixelSize: 21
         font.weight: 0.7
     }
 }
 
-@Flow h3 {
+@Item h3 {
+    layout: 'flow'
     padding.vertical: 23.24
-    layout.fillWidth: true
+    fillWidth: true
 
     #text {
-		layout.fillWidth: true
+		fillWidth: true
         font.pixelSize: 16.38
         font.weight: 0.7
     }
 }
 
-@Flow h4, p, fieldset, form, dl {
+@Item h4, p, fieldset, form, dl {
+    layout: 'flow'
     padding.vertical: 31.36
-    layout.fillWidth: true
+    fillWidth: true
 
     #text {
-		layout.fillWidth: true
+		fillWidth: true
         font.weight: 0.7
     }
 }
 
-@Flow h5 {
+@Item h5 {
+    layout: 'flow'
     padding.vertical: 42
-    layout.fillWidth: true
+    fillWidth: true
 
     #text {
-		layout.fillWidth: true
+		fillWidth: true
         font.pixelSize: 11.62
         font.weight: 0.7
     }
 }
 
-@Flow h6 {
+@Item h6 {
+    layout: 'flow'
     padding.vertical: 46.76
-    layout.fillWidth: true
+    fillWidth: true
 
     #text {
-		layout.fillWidth: true
+		fillWidth: true
         font.pixelSize: 10.5
         font.weight: 0.7
     }
 }
 
-@Flow b, strong {
+@Item b, strong {
+    layout: 'flow'
+
     #text {
-		layout.fillWidth: true
+		fillWidth: true
         font.weight: 0.7
     }
 }
 
-@Flow blockquote {
+@Item blockquote {
+    layout: 'flow'
     padding: '31.36 40 31.36 40'
-    layout.fillWidth: true
+    fillWidth: true
 
     #text {
-		layout.fillWidth: true
+		fillWidth: true
 	}
 }
 
-@Flow i, cite, em, var {
+@Item i, cite, em, var {
+    layout: 'flow'
+
     #text {
-		layout.fillWidth: true
+		fillWidth: true
         font.italic: true
     }
 }
 
-@Flow pre, tt, code, kbd, samp {
+@Item pre, tt, code, kbd, samp {
+    layout: 'flow'
+
     #text {
-		layout.fillWidth: true
+		fillWidth: true
         font.family: 'monospace'
     }
 }
 
-@Flow ol, ul, menu {
+@Item ol, ul, menu {
+    layout: 'flow'
     padding.vertical: 31.36
     padding.left: 40
-    layout.fillWidth: true
+    fillWidth: true
 
     ul, ol {
         margin.vertical: 0
     }
 }
 
-@Flow dd {
+@Item dd {
+    layout: 'flow'
     padding.left: 40
-    layout.fillWidth: true
+    fillWidth: true
 }
 
 @Image img {}

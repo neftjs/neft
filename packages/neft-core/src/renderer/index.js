@@ -3,7 +3,6 @@ const assert = require('../assert')
 
 exports.onReady = new SignalDispatcher()
 exports.onWindowItemChange = new SignalDispatcher()
-exports.onLinkUri = new SignalDispatcher()
 
 const Impl = require('./impl')(exports)
 
@@ -53,14 +52,6 @@ exports.Text = require('./types/basics/text')(exports, Impl, itemUtils)
 exports.Native = require('./types/basics/native')(exports, Impl, itemUtils)
 
 exports.Rectangle = require('./types/shapes/rectangle')(exports, Impl, itemUtils)
-
-exports.Grid = require('./types/layout/grid')(exports, Impl, itemUtils)
-
-exports.Column = require('./types/layout/column')(exports, Impl, itemUtils)
-
-exports.Row = require('./types/layout/row')(exports, Impl, itemUtils)
-
-exports.Flow = require('./types/layout/flow')(exports, Impl, itemUtils)
 
 exports.FontLoader = require('./types/loader/font')(exports, Impl, itemUtils)
 

@@ -12,7 +12,6 @@ it 'parses Item', ->
     '''
     expected = '''
         const _i0 = Item.New()
-        _i0.emit('onReady')
         return { objects: {"_i0": _i0}, item: _i0 }
     '''
     assert.is getObjectCode(code), expected
@@ -24,7 +23,6 @@ it 'adds given file path', ->
     expected = '''
         const _i0 = Item.New()
         _i0._path = "abc123"
-        _i0.emit('onReady')
         return { objects: {"_i0": _i0}, item: _i0 }
     '''
     assert.is getObjectCode(code, 'abc123'), expected
@@ -38,7 +36,6 @@ it 'sets item id', ->
     expected = '''
         const abc123 = Item.New()
         _RendererObject.setOpts(abc123, {"id": "abc123"})
-        abc123.emit('onReady')
         return { objects: {"abc123": abc123}, item: abc123 }
     '''
     assert.is getObjectCode(code), expected
@@ -54,7 +51,6 @@ it 'sets item properties', ->
         const _i0 = Item.New()
         _RendererObject.createProperty(_i0, "prop1")
         _RendererObject.createProperty(_i0, "customProp")
-        _i0.emit('onReady')
         return { objects: {"_i0": _i0}, item: _i0 }
     '''
     assert.is getObjectCode(code), expected
@@ -70,7 +66,6 @@ it 'sets item signals', ->
         const _i0 = Item.New()
         _RendererObject.createSignal(_i0, "signal1")
         _RendererObject.createSignal(_i0, "customSignal")
-        _i0.emit('onReady')
         return { objects: {"_i0": _i0}, item: _i0 }
     '''
     assert.is getObjectCode(code), expected
@@ -84,7 +79,6 @@ it 'sets item attributes', ->
     expected = '''
         const _i0 = Item.New()
         _RendererObject.setOpts(_i0, {"prop1": 123})
-        _i0.emit('onReady')
         return { objects: {"_i0": _i0}, item: _i0 }
     '''
     assert.is getObjectCode(code), expected
@@ -101,8 +95,6 @@ it 'sets item object attributes', ->
         const _i1 = Item.New()
         const _i0 = Rectangle.New()
         _RendererObject.setOpts(_i1, {"prop1": _RendererObject.setOpts(_i0, {"color": 'red'})})
-        _i1.emit('onReady')
-        _i0.emit('onReady')
         return { objects: {"_i1": _i1, "_i0": _i0}, item: _i1 }
     '''
     assert.is getObjectCode(code), expected
@@ -119,8 +111,6 @@ it 'parses Item with children', ->
         const _i1 = Item.New()
         const _i0 = Rectangle.New()
         _RendererObject.setOpts(_i1, {"children": [_RendererObject.setOpts(_i0, {"color": 'red'})]})
-        _i1.emit('onReady')
-        _i0.emit('onReady')
         return { objects: {"_i1": _i1, "_i0": _i0}, item: _i1 }
     '''
     assert.is getObjectCode(code), expected
@@ -138,7 +128,6 @@ it 'sets item functions', ->
         _RendererObject.setOpts(_i0, {"onEvent": function(param1,param2){
                 return param1 + param2;
             }})
-        _i0.emit('onReady')
         return { objects: {"_i0": _i0}, item: _i0 }
     '''
     assert.is getObjectCode(code), expected
@@ -158,8 +147,6 @@ it 'sets item bindings', ->
         const child = Rectangle.New()
         _RendererObject.setOpts(_i0, {"width": [function(){return child.width}, [[child, 'width']]], \
         "children": [_RendererObject.setOpts(child, {"id": "child"})]})
-        _i0.emit('onReady')
-        child.emit('onReady')
         return { objects: {"_i0": _i0, "child": child}, item: _i0 }
     '''
     assert.is getObjectCode(code), expected
@@ -203,7 +190,6 @@ it 'sets item anchors', ->
     expected = '''
         const _i0 = Item.New()
         _RendererObject.setOpts(_i0, {"anchors.left": ["previousSibling","horizontalCenter"]})
-        _i0.emit('onReady')
         return { objects: {"_i0": _i0}, item: _i0 }
     '''
     assert.is getObjectCode(code), expected
@@ -226,7 +212,6 @@ it 'parses conditions', ->
         "changes": {"height": [function(){return Renderer.width}, [[Renderer, 'width']]]}\
         })\
         ]})
-        _i0.emit('onReady')
         return { objects: {"_i0": _i0, "_r0": _r0}, item: _i0 }
     '''
     assert.is getObjectCode(code), expected
@@ -249,7 +234,6 @@ it 'parses conditions returning value', ->
         "changes": {"height": 100}\
         })\
         ]})
-        _i0.emit('onReady')
         return { objects: {"_i0": _i0, "_r0": _r0}, item: _i0 }
     '''
     assert.is getObjectCode(code), expected
@@ -271,7 +255,6 @@ it 'parses selects', ->
         "changes": {"color": 'red'}\
         })\
         ]})
-        _i0.emit('onReady')
         return { objects: {"_i0": _i0, "_r0": _r0}, item: _i0 }
     '''
     assert.is getObjectCode(code), expected

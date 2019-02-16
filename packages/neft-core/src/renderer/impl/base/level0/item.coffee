@@ -4,15 +4,26 @@ utils = require '../../../../util'
 
 module.exports = (impl) ->
     pointer = impl.pointer = require('./item/pointer') impl
+    flowLayout = require('./item/layout/flow') impl
+    gridLayout = require('./item/layout/grid') impl
 
     NOP = ->
 
     DATA =
-        elem: null
         bindings: null
         anchors: null
         capturePointer: 0
         childrenCapturesPointer: 0
+        layout: null
+        loops: 0
+        pending: false
+        updatePending: false
+        gridType: 0
+        gridUpdateLoops: 0
+        autoWidth: true
+        autoHeight: true
+
+    impl.ITEM_DATA = DATA
 
     DATA: DATA
 
@@ -65,7 +76,41 @@ module.exports = (impl) ->
 
     setItemOpacity: (val) ->
 
-    setItemLinkUri: (val) ->
+    setItemLayout: (val) ->
+        @_impl.layout?.turnOff.call @
+
+        if val is 'flow'
+            @_impl.layout = flowLayout
+            flowLayout.turnOn.call @
+        else if val is 'column'
+            @_impl.layout = gridLayout
+            gridLayout.turnOn.call @, gridLayout.COLUMN
+        else if val is 'row'
+            @_impl.layout = gridLayout
+            gridLayout.turnOn.call @, gridLayout.ROW
+        else if val is 'grid'
+            @_impl.layout = gridLayout
+            gridLayout.turnOn.call @, gridLayout.COLUMN | gridLayout.ROW
+
+        return
+
+    setItemColumnSpacing: (val) ->
+        @_impl.layout?.update.call @
+
+    setItemRowSpacing: (val) ->
+        @_impl.layout?.update.call @
+
+    setItemColumns: (val) ->
+        @_impl.layout?.update.call @
+
+    setItemRows: (val) ->
+        @_impl.layout?.update.call @
+
+    setItemAlignmentHorizontal: (val) ->
+        @_impl.layout?.update.call @
+
+    setItemAlignmentVertical: (val) ->
+        @_impl.layout?.update.call @
 
     attachItemSignal: (name, signal) ->
         if name is 'pointer'

@@ -10,7 +10,7 @@ const windowDocument = new Document('__window__', {
   style: {
     __default__: {
       item: () => {
-        const item = Renderer.Flow.New()
+        const item = Renderer.Item.New({ layout: 'flow' })
         return { objects: { item }, item }
       },
     },

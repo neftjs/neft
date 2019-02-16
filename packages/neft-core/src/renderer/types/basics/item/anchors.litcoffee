@@ -3,7 +3,6 @@
     utils = require '../../../../util'
     log = require '../../../../log'
     assert = require '../../../../assert'
-    signal = require '../../../../signal'
 
     log = log.scope 'Renderer'
 
@@ -53,6 +52,8 @@
 
         constructor: (ref) ->
             super ref
+
+            @_runningCount = 0
             @_top = null
             @_bottom = null
             @_verticalCenter = null
@@ -63,15 +64,17 @@
             @_fill = null
             @_fillWidth = null
             @_fillHeight = null
-            @_autoX = false
-            @_autoY = false
 
             Object.preventExtensions @
 
         implMethod = Impl["set#{ctor.name}Anchor"]
         stringValuesCache = Object.create null
         createAnchorProp = (type, opts=0, getter) ->
+            internalProp = "_#{type}"
+
             setter = (_super) -> (val=null) ->
+                oldVal = @[internalProp]
+
                 if typeof val is 'string'
                     unless arr = stringValuesCache[val]
                         arr = stringValuesCache[val] = val.split '.'
@@ -111,10 +114,8 @@
                     if val[0] is 'this'
                         val[0] = @
 
-                if opts & FREE_V_LINE_REQ
-                    @_autoX = !!val
-                if opts & FREE_H_LINE_REQ
-                    @_autoY = !!val
+                if !!oldVal isnt !!val
+                    @_runningCount += if val then 1 else -1
 
                 _super.call @, val
 

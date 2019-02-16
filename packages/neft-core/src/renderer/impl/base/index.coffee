@@ -13,10 +13,6 @@ exports.Types =
     Navigator: require './level0/navigator'
 
     Rectangle: require './level1/rectangle'
-    Grid: require './level1/grid'
-    Column: require './level1/column'
-    Row: require './level1/row'
-    Flow: require './level1/flow'
 
     Animation: require './level1/animation'
     PropertyAnimation: require './level1/animation/property'
