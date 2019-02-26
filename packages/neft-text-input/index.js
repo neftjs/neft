@@ -1,6 +1,6 @@
 const Renderer = require('@neft/core/src/renderer')
+require('./tag')
 
-const { setPropertyValue } = Renderer.itemUtils
 const { Impl } = Renderer
 
 class TextInput extends Renderer.Native {
@@ -10,15 +10,13 @@ class TextInput extends Renderer.Native {
 }
 
 TextInput.Initialize = (item) => {
-  item.on('textChange', function (val) {
-    setPropertyValue(this, 'text', val)
+  item.on('valueChange', function (value) {
+    this.element.value = value
   })
 }
 
-TextInput.defineProperty({
-  type: 'text',
-  name: 'text',
-  defaultValue: '',
+TextInput.defineElementProperty({
+  name: 'value',
 })
 
 TextInput.defineProperty({
@@ -26,10 +24,8 @@ TextInput.defineProperty({
   name: 'textColor',
 })
 
-TextInput.defineProperty({
-  type: 'text',
+TextInput.defineElementProperty({
   name: 'placeholder',
-  defaultValue: '',
 })
 
 TextInput.defineProperty({
@@ -38,26 +34,22 @@ TextInput.defineProperty({
 })
 
 // text, numeric, email, tel
-TextInput.defineProperty({
-  type: 'text',
+TextInput.defineElementProperty({
   name: 'keyboardType',
   implementationValue: val => val && val.toLowerCase(),
 })
 
-TextInput.defineProperty({
-  type: 'boolean',
+TextInput.defineElementProperty({
   name: 'multiline',
 })
 
 // done, go, next, search, send, null
-TextInput.defineProperty({
-  type: 'text',
+TextInput.defineElementProperty({
   name: 'returnKeyType',
   implementationValue: val => val && val.toLowerCase(),
 })
 
-TextInput.defineProperty({
-  type: 'boolean',
+TextInput.defineElementProperty({
   name: 'secureTextEntry',
 })
 

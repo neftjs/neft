@@ -55,7 +55,7 @@ public class TextInputItem extends NativeItem {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                pushEvent("textChange", getItemView().getText().toString());
+                pushEvent("valueChange", getItemView().getText().toString());
             }
 
             @Override
@@ -84,8 +84,8 @@ public class TextInputItem extends NativeItem {
         getItemView().setInputType(keyboardTypeMod | multilineMod | secureTextEntryMod);
     }
 
-    @OnSet("text")
-    public void setText(String val) {
+    @OnSet("value")
+    public void setValue(String val) {
         getItemView().setText(val);
         updateSize();
     }

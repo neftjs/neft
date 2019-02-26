@@ -36,6 +36,13 @@ const webpackStatsToString = {
   hash: false,
 }
 
+// load neft modules
+Object.keys(packageFile.dependencies || {})
+  .filter(name => name.startsWith('@neft/') && name !== '@neft/cli' && name !== '@neft/core')
+  .forEach((name) => {
+    require(require.resolve(name, { paths: [realpath] }))
+  })
+
 const getDefaultStyles = () => Object.keys(packageFile.dependencies || {})
   .filter(name => name.startsWith('@neft/'))
   .filter(name => fs.existsSync(path.join('node_modules/', name, '/index.nml')))

@@ -134,10 +134,10 @@ describe 'Element.Text', ->
 
         assert.is item.text, node.text
 
-describe "attributes", ->
+describe "style: attributes", ->
     it 'are set on a style item', ->
         view = createViewAndRender '''
-        <b x={50} />
+        <b style:x={50} />
         <style bare>@Item b {}</style>
         '''
 
@@ -145,11 +145,11 @@ describe "attributes", ->
         item = node.style
 
         assert.instanceOf item, Renderer.Item
-        assert.is item.x, node.props['x']
+        assert.is item.x, node.props['style:x']
 
     it 'on change are set on a style item', ->
         view = createViewAndRender '''
-        <b x={50} />
+        <b style:x={50} />
         <style bare>@Item b {}</style>
         '''
 
@@ -157,11 +157,11 @@ describe "attributes", ->
         item = node.style
 
         node.props.set 'x', 70
-        assert.is item.x, node.props['x']
+        assert.is item.x, node.props['style:x']
 
     it 'set event handlers', ->
         view = createViewAndRender '''
-        <b onXChange="{calls += 1}" />
+        <b style:onXChange="{calls += 1}" />
         <script>module.exports = { calls: 0 }</script>
         <style bare>@Item b {}</style>
         '''
@@ -181,7 +181,7 @@ describe "attributes", ->
 
     it "is not updated when file is reverting", ->
         view = createViewAndRender '''
-        <b x="{x}" />
+        <b style:x="{x}" />
         <script>module.exports = { x: 2 }</script>
         <style bare>@Item b {}</style>
         '''

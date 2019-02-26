@@ -1,20 +1,19 @@
-
-const { util } = require('@neft/core')
+const { util, SignalDispatcher } = require('@neft/core')
 const Renderer = require('@neft/core/src/renderer')
 
-const { setPropertyValue } = Renderer.itemUtils
 const { Item } = Renderer.Impl.Types
 
 exports.create = function (data) {
   Item.create.call(this, data)
 
-  const innerElem = data.innerElem = document.createElement('input')
+  const innerElem = document.createElement('input')
+  data.innerElem = innerElem
   innerElem.setAttribute('type', 'text')
   data.innerElemStyle = innerElem.style
   data.elem.appendChild(innerElem)
 
   innerElem.addEventListener('input', () => {
-    setPropertyValue(this, 'text', innerElem.value)
+    data.onValueChange.emit(innerElem.value)
   })
 }
 
@@ -22,11 +21,16 @@ exports.createData = function () {
   return util.merge({
     innerElem: null,
     innerElemStyle: null,
+    onValueChange: new SignalDispatcher(),
   }, Item.DATA)
 }
 
-exports.setTextInputText = function (val) {
+exports.setTextInputValue = function (val) {
   this._impl.innerElem.value = val
+}
+
+exports.setTextInputPlaceholder = function (val) {
+  this._impl.innerElem.placeholder = val
 }
 
 exports.setTextInputTextColor = function (val) {

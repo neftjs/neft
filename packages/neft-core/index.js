@@ -6,6 +6,7 @@ const { SignalDispatcher, SignalsEmitter } = require('./src/signal')
 const Resources = require('./src/resources')
 const Renderer = require('./src/renderer')
 const log = require('./src/log')
+const Element = require('./src/document/element')
 
 // native
 exports.callNativeFunction = callNativeFunction
@@ -22,6 +23,9 @@ exports.ObservableArray = require('./src/observable-array')
 // signal
 exports.SignalDispatcher = SignalDispatcher
 exports.SignalsEmitter = SignalsEmitter
+
+// document
+exports.CustomTag = Element.Tag.CustomTag
 
 // renderer
 exports.render = render

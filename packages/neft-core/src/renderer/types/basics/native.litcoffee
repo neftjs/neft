@@ -2,7 +2,7 @@
 
     'use strict'
 
-    utils = require '../../../util'
+    util = require '../../../util'
     log = require '../../../log'
     assert = require '../../../assert'
     colorUtils = require '../../utils/color'
@@ -137,8 +137,8 @@ where `XYZ` is the given name.
 
             @defineProperty = (config) ->
                 itemName = @name
-                properties = @_properties ||= []
-                config = utils.clone config
+                properties = @_properties ?= []
+                config = util.clone config
 
                 assert.isObject config, '''
                     NativeItem.defineProperty config parameter must be an object
@@ -169,10 +169,10 @@ where `XYZ` is the given name.
                 # implementation
                 config.implementation = do ->
                     if config.enabled is false
-                        return utils.NOP
+                        return util.NOP
 
-                    ctorName = utils.capitalize itemName
-                    name = utils.capitalize config.name
+                    ctorName = util.capitalize itemName
+                    name = util.capitalize config.name
                     if IS_NATIVE
                         funcName = "rendererSet#{ctorName}#{name}"
                         (val) ->
@@ -192,6 +192,15 @@ where `XYZ` is the given name.
             @addTypeImplementation = (impl) ->
                 Impl.addTypeImplementation @constructor.name, impl
 
+            @defineElementProperty = ({ name }) ->
+                elementProperties = @_elementProperties ?= []
+                signalName = "on#{util.capitalize(name)}Change"
+                elementProperties.push
+                    name: name
+                    signalName: signalName
+                return
+
+
 ## *Native* Native::constructor() : *Item*
 
             constructor: ->
@@ -207,10 +216,21 @@ where `XYZ` is the given name.
                     for property in properties
                         @[property.internalName] = property.defaultValue
 
+                # synchronize with element properties
+                @onElementChange.connect @handleElementChange, @
+                @handleElement = {}
+                elementProperties = @constructor._elementProperties
+                elementProperties.forEach (prop) =>
+                    {name} = prop
+                    @handleElement[name] = () ->
+                        @set name, @element[name]
+
+                return
+
             _width: -1
-            getter = utils.lookupGetter @::, 'width'
-            itemWidthSetter = utils.lookupSetter @::, 'width'
-            utils.defineProperty @::, 'width', null, getter,
+            getter = util.lookupGetter @::, 'width'
+            itemWidthSetter = util.lookupSetter @::, 'width'
+            util.defineProperty @::, 'width', null, getter,
                 do (_super = itemWidthSetter) -> (val) ->
                     if @_autoWidth = val is -1
                         Impl.updateNativeSize.call @
@@ -219,9 +239,9 @@ where `XYZ` is the given name.
                     return
 
             _height: -1
-            getter = utils.lookupGetter @::, 'height'
-            itemHeightSetter = utils.lookupSetter @::, 'height'
-            utils.defineProperty @::, 'height', null, getter,
+            getter = util.lookupGetter @::, 'height'
+            itemHeightSetter = util.lookupSetter @::, 'height'
+            util.defineProperty @::, 'height', null, getter,
                 do (_super = itemHeightSetter) -> (val) ->
                     if @_autoHeight = val is -1
                         Impl.updateNativeSize.call @
@@ -229,14 +249,28 @@ where `XYZ` is the given name.
                         _super.call @, val
                     return
 
+            handleElementChange: (oldVal) ->
+                elementProperties = @constructor._elementProperties
+                if oldVal
+                    for prop in elementProperties
+                        oldVal[prop.signalName]?.disconnect @handleElement[prop.name], @
+                val = @element
+                if val
+                    for prop in elementProperties
+                        val[prop.signalName]?.connect @handleElement[prop.name], @
+                        @set prop.name, val[prop.name]
+
+                return
+
+
 ## Native::set(*String* propName, *Any* val)
 
             set: (name, val) ->
                 assert.isString name, "NativeItem.set name must be a string, but #{name} given"
 
-                ctorName = utils.capitalize @constructor.name
+                ctorName = util.capitalize @constructor.name
                 id = @_impl.id
-                name = utils.capitalize name
+                name = util.capitalize name
 
                 if IS_NATIVE
                     funcName = "rendererSet#{ctorName}#{name}"
@@ -251,9 +285,9 @@ where `XYZ` is the given name.
             call: (name, args...) ->
                 assert.isString name, "NativeItem.call name must be a string, but #{name} given"
 
-                ctorName = utils.capitalize @constructor.name
+                ctorName = util.capitalize @constructor.name
                 id = @_impl.id
-                name = utils.capitalize name
+                name = util.capitalize name
 
                 if IS_NATIVE
                     funcName = "rendererCall#{ctorName}#{name}"
@@ -293,10 +327,10 @@ where `XYZ` is the given name.
                     NativeItem.on listener must be a function, but #{func} given
                 """
 
-                name = utils.capitalize name
+                name = util.capitalize name
 
                 if IS_NATIVE
-                    ctorName = utils.capitalize @constructor.name
+                    ctorName = util.capitalize @constructor.name
                     eventName = "rendererOn#{ctorName}#{name}"
 
                     unless listeners = eventListeners[eventName]

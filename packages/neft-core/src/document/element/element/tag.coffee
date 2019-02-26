@@ -11,27 +11,26 @@ assert = assert.scope 'View.Element.Tag'
 module.exports = (Element) -> class Tag extends Element
     @Props = Props = require('./tag/props') @
 
-    extensions = @extensions = Object.create null
-
     @__name__ = 'Tag'
     @__path__ = 'File.Element.Tag'
 
     JSON_CTOR_ID = @JSON_CTOR_ID = Element.JSON_CTORS.push(Tag) - 1
 
     i = Element.JSON_ARGS_LENGTH
-    JSON_NAME = i++
+    JSON_NAME = @JSON_NAME = i++
     JSON_CHILDREN = i++
-    JSON_ATTRS = i++
+    JSON_PROPS = i++
     JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
+
+    @CustomTag = require('./tag/custom') Element, @
 
     @_fromJSON = (arr, obj) ->
         name = arr[JSON_NAME]
         unless obj
-            ctor = extensions[name] or Tag
-            obj = new ctor
+            obj = new Tag
         Element._fromJSON arr, obj
         obj.name = name
-        utils.merge obj.props, arr[JSON_ATTRS]
+        utils.merge obj.props, arr[JSON_PROPS]
 
         prevChild = null
         for child in arr[JSON_CHILDREN]
@@ -156,7 +155,7 @@ module.exports = (Element) -> class Tag extends Element
         super arr
         arr[JSON_NAME] = @name
         children = arr[JSON_CHILDREN] = []
-        arr[JSON_ATTRS] = @props
+        arr[JSON_PROPS] = @props
 
         for child in @children
             children.push child.toJSON()

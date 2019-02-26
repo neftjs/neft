@@ -2,6 +2,9 @@ const xhtmlParser = require('lite-html-parser')
 const util = require('@neft/core/src/util/index.litcoffee')
 const Element = require('@neft/core/src/document/element')
 
+const { Tag } = Element
+const { customTags } = Tag.CustomTag
+
 class ParserError extends Error {
   constructor(message, xhtml, line, row) {
     super(message)
@@ -23,7 +26,8 @@ module.exports = (xhtml) => {
   }
   xhtmlParser.parse(xhtml, {
     opentag(name) {
-      const tag = new Element.Tag()
+      const Ctor = customTags[name] || Tag
+      const tag = new Ctor()
       tag.name = name
       addElement(tag)
       return stack.push(tag)
@@ -37,7 +41,7 @@ module.exports = (xhtml) => {
     },
     attribute(name, value) {
       const element = getLastElement()
-      element.props[name] = value
+      element.props.set(name, value)
     },
     text(text) {
       if (!text.replace(/[\t\n]/gm, '')) {

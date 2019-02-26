@@ -69,17 +69,20 @@ module.exports = class StyleItem
         return
 
     setProp: do ->
-        isInternalProp = (prop) -> prop[0] is 'n' && prop[1] is '-'
+        isStyleProp = (prop) -> prop.startsWith PROP_PREFIX
+
+        getPropWithoutPrefix = (prop) ->
+            prop.slice PROP_PREFIX.length
 
         getSplitProp = do ->
             cache = Object.create null
             (prop) ->
-                cache[prop] ||= prop.split ':'
+                cache[prop] ||= getPropWithoutPrefix(prop).split ':'
 
         getPropertyPath = do ->
             cache = Object.create null
             (prop) ->
-                cache[prop] ||= prop.replace /:/g, '.'
+                cache[prop] ||= getPropWithoutPrefix(prop).replace /:/g, '.'
 
         getInternalProperty = do ->
             cache = Object.create null
@@ -89,7 +92,7 @@ module.exports = class StyleItem
         (prop, val, oldVal) ->
             assert.instanceOf @, StyleItem
 
-            if isInternalProp(prop)
+            unless isStyleProp(prop)
                 return false
 
             parts = getSplitProp prop
