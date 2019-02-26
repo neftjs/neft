@@ -126,6 +126,7 @@ class Iterator {
     if (this.pool.length) return this.pool.pop()
     const component = this.component({
       parent: this.document,
+      root: false,
     })
     return component
   }

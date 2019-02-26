@@ -197,9 +197,9 @@ describe 'Document string interpolation', ->
                 context: a: '2'
             assert.is view.element.stringify(), '2'
 
-        it 'lookup n-each', ->
+        it 'lookup n-for', ->
             view = createView '''
-                <blank n-each="[1]">
+                <blank n-for="item in {[1]}">
                     {$context.a}
                 </blank>
             '''
@@ -383,9 +383,9 @@ describe 'Document string interpolation', ->
             context.a = 2
             assert.is view.element.stringify(), '2'
 
-        it 'on `context` n-each', ->
+        it 'on `context` n-for', ->
             view = createView '''
-                <blank n-each="[1]">
+                <blank n-for="item in {[1]}">
                     {$context.a}
                 </blank>
             '''

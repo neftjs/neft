@@ -48,7 +48,6 @@ const attachStyles = (styles, element) => {
 }
 
 const getComponentGenerator = Symbol('getComponentGenerator')
-const componentsPool = Symbol('componentsPool')
 const renderProps = Symbol('renderProps')
 const renderOnPropsChange = Symbol('renderOnPropsChange')
 const renderSourceElement = Symbol('renderSourceElement')
@@ -80,6 +79,7 @@ class Document {
     this.props = options.props || {}
     this.script = new Script(this, options.script)
     this.exported = null
+    this.root = options.root != null ? options.root : true
 
     this.inputs = mapToTypes(TextInput, options.textInputs, this)
       .concat(mapToTypes(PropInput, options.propInputs, this))
@@ -94,7 +94,6 @@ class Document {
     this.context = null
     this.rendered = false
 
-    this[componentsPool] = {}
     this[renderProps] = null
     this[renderOnPropsChange] = null
     this[renderSourceElement] = null
@@ -126,19 +125,24 @@ class Document {
   getComponent(name) {
     const generator = this[getComponentGenerator](name)
     if (!generator) return this.parent ? this.parent.getComponent(name) : null
-    const pool = this[componentsPool][name]
+    const { pool } = generator
     if (pool && pool.length > 0) return pool.pop()
     return generator({ parent: this })
   }
 
   returnComponent(name, component) {
-    if (!this[getComponentGenerator](name)) {
-      if (this.parent) this.parent.returnComponent(name, component)
-      else throw new Error('Unknown component given to return')
+    const generator = this[getComponentGenerator](name)
+    if (!generator) {
+      if (this.parent) {
+        this.parent.returnComponent(name, component)
+      } else {
+        throw new Error('Unknown component given to return')
+      }
+      return
     }
-    if (!this[componentsPool][name]) this[componentsPool][name] = []
     assert.notOk(component.rendered, 'Cannot return rendered component')
-    this[componentsPool][name].push(component)
+    if (!generator.pool) generator.pool = []
+    generator.pool.push(component)
   }
 
   reloadProp(name) {
@@ -196,12 +200,12 @@ class Document {
     this.logs.forEach(docLog => docLog.render())
 
     this.rendered = true
-    this.script.afterRender()
+    if (this.root) this.script.afterRender()
   }
 
   revert() {
     assert.ok(this.rendered, 'Document is not rendered')
-    this.script.beforeRevert()
+    if (this.root) this.script.beforeRevert()
     this[renderProps] = null
     if (this[renderOnPropsChange]) {
       this[renderOnPropsChange].disconnect(this.reloadProp, this)
@@ -243,7 +247,6 @@ if (process.env.NODE_ENV === 'development') {
 
     const newComponents = options.components ? parseComponents(options.components) : {}
     this.components = Object.assign(this.components, newComponents)
-    this[componentsPool] = {}
 
     if (rendered) {
       this.render({

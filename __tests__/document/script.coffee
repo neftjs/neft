@@ -173,7 +173,7 @@ describe 'Document script', ->
                 },
             })
             </script>
-            <ul n-each="{[1,2]}">{item}</ul>
+            <ul n-for="item in {[1,2]}">{item}</ul>
         """
 
         view.render()
