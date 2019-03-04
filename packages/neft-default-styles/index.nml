@@ -21,3 +21,5 @@
 }
 
 @Image img {}
+
+@Image image {}
