@@ -120,7 +120,7 @@ describe 'Document string interpolation', ->
             view = createView '''
                 <n-component name="Test">
                     <script>
-                    module.exports = {
+                    exports.default = {
                         name: '',
                         onRender() {
                             this.name = 'a'
@@ -217,7 +217,7 @@ describe 'Document string interpolation', ->
         it 'is accessed in rendered file', ->
             view = createView '''
                 <script>
-                module.exports = {
+                exports.default = {
                     a: 0,
                     onRender() {
                         this.a = 1
@@ -233,7 +233,7 @@ describe 'Document string interpolation', ->
         it 'is accessible by exported', ->
             view = createView '''
                 <script>
-                module.exports = {
+                exports.default = {
                     a: 0,
                     onRender() {
                         this.a = 1
@@ -249,7 +249,7 @@ describe 'Document string interpolation', ->
         it 'is cleared on revert', ->
             view = createView '''
                 <script>
-                module.exports = {
+                exports.default = {
                     a: 0,
                     onRender() {
                         this.a = this.a + 1
@@ -269,7 +269,7 @@ describe 'Document string interpolation', ->
         it 'binding is not updated on reverted component', ->
             view = createView '''
                 <script>
-                module.exports = {
+                exports.default = {
                     obj: null,
                     onRender() {
                         this.obj = { a: 1 }

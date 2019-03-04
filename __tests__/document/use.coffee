@@ -50,7 +50,7 @@ describe 'Document n-use', ->
     it 'does not render hidden component', ->
         view = createView '''
             <script>
-            module.exports = () => ({
+            exports.default = () => ({
                 data: null,
                 logs: [],
             })
@@ -58,7 +58,7 @@ describe 'Document n-use', ->
             <n-component name="Abc">
                 <n-props logs name />
                 <script>
-                module.exports = {
+                exports.default = {
                     onRender() {
                         this.logs.push(this.name);
                     },
@@ -74,14 +74,14 @@ describe 'Document n-use', ->
     it 'renders unhidden component with ready props', ->
         view = createView '''
             <script>
-            module.exports = () => ({
+            exports.default = () => ({
                 logs: [],
             })
             </script>
             <n-component name="Abc">
                 <n-props logs status />
                 <script>
-                module.exports = {
+                exports.default = {
                     onRender() {
                         this.logs.push(this.status);
                     },
@@ -100,13 +100,13 @@ describe 'Document n-use', ->
     it 'does not render component inside hidden element', ->
         view = createView '''
             <script>
-            module.exports = () => ({
+            exports.default = () => ({
                 logs: [],
             })
             </script>
             <n-component name="Abc">
                 <script>
-                module.exports = {
+                exports.default = {
                     onRender() {
                         this.logs.push(this.name);
                     },
@@ -126,7 +126,7 @@ describe 'Document n-use', ->
         view = createView '''
             <n-component name="Abc">
                 <script>
-                module.exports = {
+                exports.default = {
                     reverted: 0,
                     onRevert() {
                         this.reverted = (this.reverted + 1) || 1
@@ -135,7 +135,7 @@ describe 'Document n-use', ->
                 </script>
             </n-component>
             <script>
-            module.exports = {
+            exports.default = {
                 visible: false,
                 onRender() {
                     this.visible = true

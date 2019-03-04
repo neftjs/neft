@@ -11,11 +11,6 @@ class ScriptExported extends Struct {
     util.defineProperty(this, '$refs', PROP_OPTS, document.refs)
     util.defineProperty(this, '$context', PROP_OPTS, () => document.context, null)
     util.defineProperty(this, '$self', PROP_OPTS, this)
-    Object.keys(this).forEach((key) => {
-      if (typeof this[key] === 'function') {
-        this[key] = this[key].bind(this)
-      }
-    })
   }
 }
 
@@ -25,27 +20,50 @@ SignalsEmitter.createSignal(ScriptExported, 'on$RefsChange')
 
 class Script {
   constructor(document, script) {
+    class ComponentScript extends ScriptExported {}
+
     this.document = document
-    this.script = script
+    this.produceInstanceFields = null
+    this.ExportedConstructor = ComponentScript
+
+    if (typeof script === 'function') {
+      this.produceInstanceFields = script
+    } else if (util.isObject(script)) {
+      Object.keys(script).forEach((key) => {
+        if (key !== 'default') ComponentScript.prototype[key] = script[key]
+      })
+      if (typeof script.default === 'function') {
+        this.produceInstanceFields = script.default
+      } else {
+        this.produceInstanceFields = () => script.default
+      }
+    } else {
+      this.produceInstanceFields = () => null
+    }
   }
 
-  combineObject() {
-    let object
-    if (typeof this.script === 'function') object = this.script()
-    if (util.isObject(this.script)) object = util.clone(this.script)
-    if (!object) object = {}
+  produceExported() {
+    // produce object with combined static methods and instance fields
+    const object = this.produceInstanceFields() || {}
 
+    // add props
     Object.keys(this.document.props).forEach((prop) => {
       if (!(prop in object)) {
         object[prop] = null
       }
     })
 
-    return object
-  }
+    // create struct
+    const exported = new this.ExportedConstructor(this.document, object)
 
-  produceExported() {
-    return new ScriptExported(this.document, this.combineObject())
+    // bind instance methods
+    Object.keys(object).forEach((field) => {
+      if (typeof object[field] === 'function') {
+        exported[field] = exported[field].bind(exported)
+      }
+    })
+
+    return exported
   }
 
   afterRender() {

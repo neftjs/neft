@@ -162,7 +162,7 @@ describe "style: attributes", ->
     it 'set event handlers', ->
         view = createViewAndRender '''
         <b style:onXChange="{calls += 1}" />
-        <script>module.exports = { calls: 0 }</script>
+        <script>exports.default = { calls: 0 }</script>
         <style bare>@Item b {}</style>
         '''
 
@@ -182,7 +182,7 @@ describe "style: attributes", ->
     it "is not updated when file is reverting", ->
         view = createViewAndRender '''
         <b style:x="{x}" />
-        <script>module.exports = { x: 2 }</script>
+        <script>exports.default = { x: 2 }</script>
         <style bare>@Item b {}</style>
         '''
 

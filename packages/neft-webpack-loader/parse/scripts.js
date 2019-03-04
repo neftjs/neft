@@ -6,7 +6,11 @@ module.exports = function (element, parser) {
 
   parser.addProp('script', () => {
     const code = script.stringifyChildren()
-    return `((module) => {\n(() => {${code}})()\n return module.exports})({})`
+    return `((module) => {\
+      const { exports } = module;\n
+      (() => {${code}})();\n
+      return module.exports;
+    })({ exports: {} })`
   })
 
   const nextScript = element.query('script')

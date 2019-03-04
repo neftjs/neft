@@ -25,7 +25,7 @@ describe 'Document script', ->
         view = createView '''
             <n-props a />
             <script>
-            module.exports = {
+            exports.default = {
                 b: null,
                 onRender() {
                     this.b = this.a
@@ -42,7 +42,7 @@ describe 'Document script', ->
     it 'is called with $refs in exported', ->
         view = createView '''
             <script>
-            module.exports = {
+            exports.default = {
                 a: null,
                 onRender() {
                     this.a = this.$refs.x.props.a
@@ -58,7 +58,7 @@ describe 'Document script', ->
     it 'is called with file $element in exported', ->
         view = createView '''
             <script>
-            module.exports = {
+            exports.default = {
                 savedElement: null,
                 onRender() {
                     this.savedElement = this.$element
@@ -73,7 +73,7 @@ describe 'Document script', ->
     it 'predefined exported properties are not enumerable', ->
         view = createView '''
             <script>
-            module.exports = {
+            exports.default = {
                 keys: null,
                 onRender() {
                     var keys = [];
@@ -92,12 +92,12 @@ describe 'Document script', ->
     it 'further tags are ignored', ->
         view = createView '''
             <script>
-            module.exports = {
+            exports.default = {
                 aa: 1,
             }
             </script>
             <script>
-            module.exports = {
+            exports.default = {
                 bb: 1,
             }
             </script>
@@ -110,7 +110,7 @@ describe 'Document script', ->
     it 'can contains XML text', ->
         view = createView """
             <script>
-            module.exports = {
+            exports.default = {
                 a: null,
                 onRender() {
                     this.a = '<&&</b>'
@@ -126,7 +126,7 @@ describe 'Document script', ->
     it 'properly calls events', ->
         view = createView """
             <script>
-            module.exports = () => ({
+            exports.default = () => ({
                 events: [],
                 onRender() {
                     this.events.push('onRender');
@@ -148,7 +148,7 @@ describe 'Document script', ->
     it 'onRender is called with $context in exported', ->
         view = createView '''
             <script>
-            module.exports = {
+            exports.default = {
                 a: null,
                 onRender() {
                     this.a = this.$context.a
@@ -163,7 +163,7 @@ describe 'Document script', ->
     it 'does not call events for foreign exported', ->
         view = createView """
             <script>
-            module.exports = () => ({
+            exports.default = () => ({
                 events: [],
                 onRender() {
                     this.events.push('onRender');
@@ -182,3 +182,18 @@ describe 'Document script', ->
 
         view.revert()
         assert.isEqual events, ['onRender', 'onRevert']
+
+    it 'is combined with static methods', ->
+        view = createView '''
+            <script>
+            exports.plusOne = num => num + 1
+            exports.default = () => ({
+                numbers: [1, 2]
+            })
+            </script>
+            <p n-for="number in {numbers}">{plusOne(number)},</p>
+        '''
+
+        view.render()
+
+        assert.is view.element.stringify(), '<p>2,3,</p>'
