@@ -1,0 +1,7 @@
+{
+  "name": "@neft/background",
+  "version": "0.0.1",
+  "dependencies": {
+    "@neft/core": "0.0.1"
+  }
+}
