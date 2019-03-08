@@ -378,19 +378,11 @@ Grid {
             ['y', 'anchors.top', 'anchors.bottom', 'anchors.verticalCenter', 'anchors.centerIn', 'anchors.fill', 'anchors.fillHeight'],
             ['width', 'anchors.fill', 'anchors.fillWidth', 'fillWidth'],
             ['height', 'anchors.fill', 'anchors.fillHeight', 'fillHeight'],
-            ['margin.horizontal', 'margin.left'],
-            ['margin.horizontal', 'margin.right'],
-            ['margin.vertical', 'margin.top'],
-            ['margin.vertical', 'margin.bottom'],
-            ['padding.horizontal', 'padding.left'],
-            ['padding.horizontal', 'padding.right'],
-            ['padding.vertical', 'padding.top']
-            ['padding.vertical', 'padding.bottom']
         ]
 
         ATTRS_ALIAS = Object.create null
-        ATTRS_ALIAS['margin'] = ['margin.left', 'margin.right', 'margin.horizontal', 'margin.top', 'margin.bottom', 'margin.vertical']
-        ATTRS_ALIAS['padding'] = ['padding.left', 'padding.right', 'padding.horizontal', 'padding.top', 'padding.bottom', 'padding.vertical']
+        ATTRS_ALIAS['margin'] = ['margin.left', 'margin.right', 'margin.top', 'margin.bottom']
+        ATTRS_ALIAS['padding'] = ['padding.left', 'padding.right', 'padding.top', 'padding.bottom']
         ATTRS_ALIAS['alignment'] = ['alignment.horizontal', 'alignment.vertical']
 
         do ->

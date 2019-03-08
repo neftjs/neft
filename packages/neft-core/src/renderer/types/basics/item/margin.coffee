@@ -62,45 +62,23 @@ module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor, opts) -> class Marg
 
         Object.preventExtensions @
 
-    createMarginProp = (type, extraProp) ->
+    createMarginProp = (type) ->
         developmentSetter = (val) ->
             assert typeof val is 'number' and isFinite(val)
             , "margin.#{type} expects a finite number; `#{val}` given"
 
-        extraPropSignal = "on#{utils.capitalize(extraProp)}Change"
         itemUtils.defineProperty
             constructor: Margin
             name: type
             defaultValue: 0
-            setter: (_super) -> (val) ->
-                extraOldVal = @[extraProp]
-                _super.call @, val
-                @emit extraPropSignal, extraOldVal
             namespace: propertyName
             parentConstructor: ctor
             developmentSetter: developmentSetter
 
-    createMarginProp 'left', 'horizontal'
-
-    createMarginProp 'top', 'vertical'
-
-    createMarginProp 'right', 'horizontal'
-
-    createMarginProp 'bottom', 'vertical'
-
-    SignalsEmitter.createSignal @, 'onHorizontalChange'
-
-    utils.defineProperty @::, 'horizontal', null, ->
-        @_left + @_right
-    , (val) ->
-        @left = @right = val / 2
-
-    SignalsEmitter.createSignal @, 'onVerticalChange'
-
-    utils.defineProperty @::, 'vertical', null, ->
-        @_top + @_bottom
-    , (val) ->
-        @top = @bottom = val / 2
+    createMarginProp 'left'
+    createMarginProp 'top'
+    createMarginProp 'right'
+    createMarginProp 'bottom'
 
     valueOf: ->
         if @left is @top and @top is @right and @right is @bottom
