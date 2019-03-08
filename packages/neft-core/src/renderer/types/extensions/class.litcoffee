@@ -394,6 +394,13 @@ Grid {
                             arr.push alias
             return
 
+        getContainedAttribute = (classElem, attr) ->
+            if changes = classElem._changes
+                attrs = changes._attributes
+                if attrs[attr] isnt undefined
+                    return attr
+            return ''
+
         getContainedAttributeOrAlias = (classElem, attr) ->
             if changes = classElem._changes
                 attrs = changes._attributes
@@ -500,50 +507,63 @@ Grid {
 
             # attributes
             for attr, val of attributes
-                path = null
                 restoreDefault = true
-                alias = ''
+
+                # don't restore if this attribute is already set by more important class
                 for i in [classListIndex - 1..0] by -1
                     if getContainedAttributeOrAlias(classList[i], attr)
                         restoreDefault = false
                         break
 
                 if restoreDefault
-                    # get default value
-                    defaultValue = undefined
-                    defaultIsBinding = false
-                    for i in [classListIndex + 1...classListLength] by 1
-                        if alias = getContainedAttributeOrAlias(classList[i], attr)
-                            defaultValue = classList[i].changes._attributes[alias]
-                            defaultIsBinding = !!classList[i].changes._bindings[alias]
-                            break
-                    alias ||= attr
+                    # we firstly restore the attribute itself or its alias
+                    getAttributeMethod = getContainedAttributeOrAlias
+                    while getAttributeMethod
+                        path = null
+                        alias = ''
 
-                    # restore binding
-                    if !!bindings[attr]
-                        path = splitAttribute attr
-                        object = getObjectByPath item, path
-                        lastPath = path[path.length - 1]
-                        unless object
-                            continue
-                        object.createBinding lastPath, null, item
+                        # get default value
+                        defaultValue = undefined
+                        defaultIsBinding = false
+                        for i in [classListIndex + 1...classListLength] by 1
+                            if alias = getAttributeMethod(classList[i], attr)
+                                defaultValue = classList[i].changes._attributes[alias]
+                                defaultIsBinding = !!classList[i].changes._bindings[alias]
+                                break
+                        alias ||= attr
 
-                    # set default value
-                    if attr isnt alias or not path
-                        path = splitAttribute alias
-                        object = getObjectByPath item, path
-                        lastPath = path[path.length - 1]
-                        unless object
-                            continue
+                        if alias is attr
+                            # no more aliases to restore
+                            getAttributeMethod = null
+                        else
+                            # we need to restore the original attribute in the next iteration
+                            getAttributeMethod = getContainedAttribute
 
-                    if defaultIsBinding
-                        object.createBinding lastPath, defaultValue, item
-                    else if typeof val is 'function' and object[lastPath]?.connect
-                        object[lastPath].disconnect val, item
-                    else
-                        if defaultValue is undefined
-                            defaultValue = getPropertyDefaultValue object, lastPath
-                        object[lastPath] = defaultValue
+                        # restore binding
+                        if !!bindings[attr]
+                            path = splitAttribute attr
+                            object = getObjectByPath item, path
+                            lastPath = path[path.length - 1]
+                            unless object
+                                continue
+                            object.createBinding lastPath, null, item
+
+                        # set default value
+                        if attr isnt alias or not path
+                            path = splitAttribute alias
+                            object = getObjectByPath item, path
+                            lastPath = path[path.length - 1]
+                            unless object
+                                continue
+
+                        if defaultIsBinding
+                            object.createBinding lastPath, defaultValue, item
+                        else if typeof val is 'function' and object[lastPath]?.connect
+                            object[lastPath].disconnect val, item
+                        else
+                            if defaultValue is undefined
+                                defaultValue = getPropertyDefaultValue object, lastPath
+                            object[lastPath] = defaultValue
 
             return
 
