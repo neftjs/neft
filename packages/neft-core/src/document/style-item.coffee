@@ -77,12 +77,12 @@ module.exports = class StyleItem
         getSplitProp = do ->
             cache = Object.create null
             (prop) ->
-                cache[prop] ||= getPropWithoutPrefix(prop).split ':'
+                cache[prop] ||= prop.split ':'
 
         getPropertyPath = do ->
             cache = Object.create null
             (prop) ->
-                cache[prop] ||= getPropWithoutPrefix(prop).replace /:/g, '.'
+                cache[prop] ||= prop.replace /:/g, '.'
 
         getInternalProperty = do ->
             cache = Object.create null
@@ -92,7 +92,19 @@ module.exports = class StyleItem
         (prop, val, oldVal) ->
             assert.instanceOf @, StyleItem
 
-            unless isStyleProp(prop)
+            if prop.startsWith('n-')
+                return false
+
+            if isStyleProp(prop)
+                prop = getPropWithoutPrefix(prop)
+            else if @element.constructor._styleAliasesByName
+                parts = getSplitProp prop
+                alias = @element.constructor._styleAliasesByName[parts[0]]
+                if alias
+                    prop = alias.styleName
+                else
+                    return false
+            else
                 return false
 
             parts = getSplitProp prop

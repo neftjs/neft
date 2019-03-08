@@ -64,20 +64,53 @@ module.exports = (Element, Tag) -> class CustomTag extends Tag
 
         return
 
+    @defineStyleProperty = ({ name, styleName = name }) ->
+        if @ is CustomTag
+            throw new Error 'Cannot define a property on CustomTag; create new class'
+
+        internalStyleName = "_#{styleName}"
+        signalName = "on#{util.capitalize(name)}Change"
+        signalStyleName = "on#{util.capitalize(styleName)}Change"
+
+        @_styleAliases ?= []
+        @_styleAliasesByName ?= []
+
+        alias =
+            name: name
+            signalName: signalName
+            styleName: styleName
+
+        @_styleAliases.push alias
+        @_styleAliasesByName[name] = alias
+
+        # SignalsEmitter.createSignal @, signalName
+
+        signalGetter = -> @_style?[signalStyleName]
+        getter = -> @_style?[internalStyleName]
+
+        util.defineProperty @::, signalName, util.CONFIGURABLE, signalGetter, null
+        util.defineProperty @::, name, util.CONFIGURABLE, getter, null
+
+        return
+
     constructor: ->
         super()
 
         fields = @constructor._fields
         fieldsByName = @constructor._fieldsByName
+        styleAliases = @constructor._styleAliases
+
         if fields
             for field in fields
                 @[field.internalName] = field.defaultValue
 
         Object.seal @
 
-        @onPropsChange.connect (name) ->
-            if fieldsByName[name]
-                @[name] = @props[name]
+        if fieldsByName
+            @onPropsChange.connect (name) ->
+                if fieldsByName[name]
+                    @[name] = @props[name]
+
 
     clone: (clone = new @constructor) ->
         super clone

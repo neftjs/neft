@@ -192,15 +192,6 @@ where `XYZ` is the given name.
             @addTypeImplementation = (impl) ->
                 Impl.addTypeImplementation @constructor.name, impl
 
-            @defineElementProperty = ({ name }) ->
-                elementProperties = @_elementProperties ?= []
-                signalName = "on#{util.capitalize(name)}Change"
-                elementProperties.push
-                    name: name
-                    signalName: signalName
-                return
-
-
 ## *Native* Native::constructor() : *Item*
 
             constructor: ->
@@ -215,15 +206,6 @@ where `XYZ` is the given name.
                 if properties = @constructor._properties
                     for property in properties
                         @[property.internalName] = property.defaultValue
-
-                # synchronize with element properties
-                @onElementChange.connect @handleElementChange, @
-                @handleElement = {}
-                elementProperties = @constructor._elementProperties
-                elementProperties.forEach (prop) =>
-                    {name} = prop
-                    @handleElement[name] = () ->
-                        @set name, @element[name]
 
                 return
 
@@ -248,20 +230,6 @@ where `XYZ` is the given name.
                     else
                         _super.call @, val
                     return
-
-            handleElementChange: (oldVal) ->
-                elementProperties = @constructor._elementProperties
-                if oldVal
-                    for prop in elementProperties
-                        oldVal[prop.signalName]?.disconnect @handleElement[prop.name], @
-                val = @element
-                if val
-                    for prop in elementProperties
-                        val[prop.signalName]?.connect @handleElement[prop.name], @
-                        @set prop.name, val[prop.name]
-
-                return
-
 
 ## Native::set(*String* propName, *Any* val)
 

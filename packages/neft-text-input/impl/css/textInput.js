@@ -13,7 +13,7 @@ exports.create = function (data) {
   data.elem.appendChild(innerElem)
 
   innerElem.addEventListener('input', () => {
-    data.onValueChange.emit(innerElem.value)
+    data.onTextChange.emit(innerElem.value)
   })
 }
 
@@ -21,11 +21,11 @@ exports.createData = function () {
   return util.merge({
     innerElem: null,
     innerElemStyle: null,
-    onValueChange: new SignalDispatcher(),
+    onTextChange: new SignalDispatcher(),
   }, Item.DATA)
 }
 
-exports.setTextInputValue = function (val) {
+exports.setTextInputText = function (val) {
   this._impl.innerElem.value = val
 }
 

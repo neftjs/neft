@@ -9,7 +9,7 @@ extension Extension.TextInput {
                 return TextInputItem()
             }
 
-            onSet("value") {
+            onSet("text") {
                 (item: TextInputItem, val: String) in
                 item.fieldView.text = val
             }
@@ -112,7 +112,7 @@ extension Extension.TextInput {
 
         @objc
         private func onTextChange(textField: UITextField) {
-            pushEvent(event: "valueChange", args: [textField.text ?? ""])
+            pushEvent(event: "textChange", args: [textField.text ?? ""])
         }
 
         @objc

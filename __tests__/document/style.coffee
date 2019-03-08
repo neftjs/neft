@@ -134,7 +134,7 @@ describe 'Element.Text', ->
 
         assert.is item.text, node.text
 
-describe "style: attributes", ->
+describe "style: properties", ->
     it 'are set on a style item', ->
         view = createViewAndRender '''
         <b style:x={50} />
@@ -205,6 +205,39 @@ describe "style: attributes", ->
         view.render()
         assert.is item.x, 2
         assert.isEqual oldVals, [2, 0, 4, 0]
+
+describe 'CustomTag style properties', ->
+    class CustomStyle1Tag extends Element.Tag.CustomTag
+        @registerAs 'custom-style-tag1'
+
+        @defineStyleProperty
+            name: 'left'
+            styleName: 'x'
+
+    it 'are set on a style item', ->
+        view = createViewAndRender '''
+        <custom-style-tag1 left={50} />
+        <style bare>@Item custom-style-tag1 {}</style>
+        '''
+
+        node = view.element.query 'custom-style-tag1'
+        item = node.style
+
+        assert.instanceOf item, Renderer.Item
+        assert.is item.x, node.props.left
+
+    it 'on change are set on a style item', ->
+        view = createViewAndRender '''
+        <custom-style-tag1 left={50} />
+        <style bare>@Item custom-style-tag1 {}</style>
+        '''
+
+        node = view.element.query 'custom-style-tag1'
+        item = node.style
+
+        node.props.set 'left', 70
+        assert.is item.x, node.props.left
+
 
 describe 'item visible', ->
     it "is 'true' by default", ->

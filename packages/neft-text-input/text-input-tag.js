@@ -4,34 +4,29 @@ class TextInputTag extends CustomTag {}
 
 TextInputTag.registerAs('input')
 
-TextInputTag.defineProperty({
+TextInputTag.defineStyleProperty({
   name: 'value',
-  defaultValue: '',
+  styleName: 'text',
 })
 
-TextInputTag.defineProperty({
+TextInputTag.defineStyleProperty({
   name: 'placeholder',
-  defaultValue: '',
 })
 
-TextInputTag.defineProperty({
+TextInputTag.defineStyleProperty({
   name: 'keyboardType',
-  defaultValue: '',
 })
 
-TextInputTag.defineProperty({
+TextInputTag.defineStyleProperty({
   name: 'multiline',
-  defaultValue: false,
 })
 
-TextInputTag.defineProperty({
+TextInputTag.defineStyleProperty({
   name: 'returnKeyType',
-  defaultValue: '',
 })
 
-TextInputTag.defineProperty({
+TextInputTag.defineStyleProperty({
   name: 'secureTextEntry',
-  defaultValue: false,
 })
 
 module.exports = TextInputTag

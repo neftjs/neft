@@ -1,4 +1,5 @@
 Element = require '@neft/core/src/document/element'
+{Item} = require '@neft/core/src/renderer'
 
 {util} = require('@neft/core')
 
@@ -10,6 +11,10 @@ class CustomInput extends Element.Tag.CustomTag
     @defineProperty
         name: 'value'
         defaultValue: ''
+
+    @defineStyleProperty
+        name: 'left'
+        styleName: 'x'
 
 it 'creates instances of registered custom tags', ->
     html = fromHTML '<custom-input />'
@@ -52,3 +57,27 @@ it 'values stays after json parsing', ->
     input = html.children[0]
     input.value = 'a'
     assert.is Element.fromJSON(input.toJSON()).value, 'a'
+
+it 'style property getter returns value from style', ->
+    html = fromHTML '<custom-input />'
+    input = html.children[0]
+    input.style = Item.New()
+    input.style.x = 50
+    assert.is input.left, 50
+
+it 'style property setter does not exist', ->
+    html = fromHTML '<custom-input />'
+    input = html.children[0]
+    input.style = Item.New()
+    input.left = 50
+    assert.is input.left, 0
+
+it 'style property signal proxies original source', ->
+    html = fromHTML '<custom-input />'
+    input = html.children[0]
+    args = []
+    input.style = Item.New()
+    input.onLeftChange.connect (localArgs...) ->
+        args.push localArgs
+    input.style.x = 50
+    assert.isEqual args, [[0, undefined]]
