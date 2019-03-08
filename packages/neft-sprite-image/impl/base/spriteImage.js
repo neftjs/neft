@@ -1,8 +1,7 @@
-const { utils } = Neft
-const {
-  Image, NumberAnimation, Class, Impl,
-} = Neft.Renderer
-const { Item, Native } = Impl.Types
+const { util } = require('@neft/core')
+const { Image, Class, Impl } = require('@neft/core/src/renderer')
+
+const { Item } = Impl.Types
 
 exports.create = function (data) {
   Item.create.call(this, data)
@@ -30,7 +29,7 @@ exports.create = function (data) {
 }
 
 exports.createData = function () {
-  return utils.merge({
+  return util.merge({
     autoSizeClass: null,
     frameCount: 1,
     image: null,

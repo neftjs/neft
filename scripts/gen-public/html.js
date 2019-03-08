@@ -26,7 +26,7 @@ function getViewObject(uri, view) {
   return {
     ...view,
     nav: [
-      { title: 'Playground', uri: '', className: '' },
+      // { title: 'Playground', uri: '', className: '' },
       { title: 'Docs', uri: '', className: '' },
       {
         title: 'Modules',

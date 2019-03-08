@@ -31,7 +31,8 @@ function parseXmlToElements(xml) {
       const lines = text.split('\n')
       while (lines.length && !lines[0].trim()) lines.shift()
       if (!lines.length) return
-      const indentation = lines[0].length - lines[0].trimLeft().length
+      let indentation = lines[0].length - lines[0].trimLeft().length
+      if (indentation === 1) indentation = 0
       const textTrim = lines
         .map(line => line.slice(indentation))
         .join('\n')
@@ -67,8 +68,11 @@ const handlers = {
     target.meta = props
   },
   text(props, target) {
-    if (target.type === 'script') {
-      target.props.body = props.body
+    if (target.type === 'script' || target.type === 'code') {
+      let { body } = props
+      body = body.replace('<script->', '<script>')
+      body = body.replace('</script->', '</script>')
+      target.props.body = body
       return target
     }
     return anyHandler('text', props, target)

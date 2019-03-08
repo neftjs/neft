@@ -1,15 +1,38 @@
 <meta
   name="ActiveLink"
   category="Modules"
+  description="Opens other apps like browser, maps etc."
 />
+
+<article title="Introduction">
+  <p>ActiveLink can be used to open a URL in a default web browser, show address in a maps app and more.</p>
+
+  <p>Install it by typing <code>npm i @neft/active-link</code> and later use it by <code>const activeLink = require('@neft/active-link')</code>.</p>
+</article>
 
 <method name=web>
   <argument name=url type=string />
+
+  <p>Opens a web browser with the given website URL.</p>
+
+  <script lang="html">
+    <button onClick={openWebsite()}>Open Website</button>
+
+    <script->
+    const activeLink = require('@neft/active-link')
+
+    exports.openWebsite = () => {
+      activeLink.web('https://neft.io')
+    }
+    </script->
+  </script>
 </method>
 
 <method name=mailto>
   <argument name=options.address type=string />
   <argument name=options.subject type=string />
+
+  <p>Opens user's default e-mail app with predefined receiver address and subject.</p>
 </method>
 
 <method name=tel>
@@ -20,4 +43,6 @@
   <argument name=options.latitude type=number />
   <argument name=options.longitude type=number />
   <argument name=options.address type=string />
+
+  <p>Opens user's default map app with the given latitude and longitute or an address.</p>
 </method>

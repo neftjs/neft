@@ -19,7 +19,9 @@ if (process.env.NEFT_NATIVE) {
   })
 }
 
-const createCallback = ({ json, resolve, reject }) => (error, { statusCode, body, headers }) => {
+const createCallback = ({
+  json, resolveWithFullResponse, resolve, reject,
+}) => (error, { statusCode, body, headers }) => {
   if (error) {
     reject(new Error(error))
     return
@@ -32,11 +34,17 @@ const createCallback = ({ json, resolve, reject }) => (error, { statusCode, body
       // NOP
     }
   }
-  resolve({
-    statusCode,
-    body: finalBody,
-    headers,
-  })
+  if (resolveWithFullResponse) {
+    resolve({
+      statusCode,
+      body: finalBody,
+      headers,
+    })
+  } else if (statusCode >= 200 && statusCode < 300) {
+    resolve(finalBody)
+  } else {
+    reject(finalBody)
+  }
 }
 
 const request = (optionsOrUri, optionsOrNull, defaultMethod) => new Promise((resolve, reject) => {
@@ -52,6 +60,7 @@ const request = (optionsOrUri, optionsOrNull, defaultMethod) => new Promise((res
   let body = options.body == null ? '' : options.body
   const json = Boolean(options.json || false)
   const timeout = Math.max(0, parseInt(options.timeout || DEFAULT_TIMEOUT, 10))
+  const resolveWithFullResponse = options.resolveWithFullResponse || false
 
   if (json) {
     body = JSON.stringify(body)
@@ -59,7 +68,7 @@ const request = (optionsOrUri, optionsOrNull, defaultMethod) => new Promise((res
   }
   body = String(body)
 
-  const callback = createCallback({ json, resolve, reject })
+  const callback = createCallback({ json, resolveWithFullResponse, resolve, reject })
 
   if (process.env.NEFT_NATIVE) {
     callbacks[uid] = callback

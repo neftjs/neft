@@ -46,9 +46,15 @@
         font-size: 18px;
     }
 
-    code {
+    code, pre {
         font-family: "Source Code Pro", monospace;
-        background: lighten(black, 96%);
+    }
+
+    code {
+        display: inline;
+        padding: 0.06em;
+        white-space: nowrap;
+        cursor: copy;
 
         &.svg {
             height: 200px;
@@ -61,6 +67,11 @@
         }
     }
 
+    pre {
+        font-size: 14px;
+        margin-top: 15px;
+    }
+
     ul, ol {
         margin-left: 30px;
     }
@@ -68,4 +79,8 @@
     ul.toc {
         margin-bottom: 15px;
     }
+}
+
+#disqus_thread {
+    margin-top: 50px;
 }

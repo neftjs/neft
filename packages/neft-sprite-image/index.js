@@ -1,7 +1,10 @@
-const { Renderer, utils, assert } = Neft
-const { Impl, NumberAnimation, itemUtils } = Renderer
+const { util, assert } = require('@neft/core')
+const {
+  Item, Impl, NumberAnimation, itemUtils,
+} = require('@neft/core/src/renderer')
+require('./sprite-image-tag')
 
-class SpriteImage extends Renderer.Item {
+class SpriteImage extends Item {
   constructor() {
     super()
     this._source = ''
@@ -37,7 +40,7 @@ itemUtils.defineProperty({
   },
 })
 
-utils.defineProperty(SpriteImage.prototype, 'animation', 0, function () {
+util.defineProperty(SpriteImage.prototype, 'animation', 0, function () {
   return this._animation
 }, null)
 

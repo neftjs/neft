@@ -94,17 +94,19 @@ function getTypeAnchor(type, parents) {
 function stringifyBlock({ type, props }, innerHTML, parents) {
   switch (type) {
     case 'text':
-      return `<p>${props.body}</p>`
+      return props.body
     case 'script':
       return stringify.script(props) + innerHTML
     case 'argument':
       return ''
     case 'article': {
-      const level = parents
-        .filter(block => block.type === 'article')
-        .length + 2
+      const level = parents.length + 2 + Math.min(1, parents.length)
       return `<h${level}>${props.title}</h${level}>${innerHTML}`
     }
+    case 'code':
+      return stringify.script(props, { tag: 'code' }) + innerHTML
+    case 'p':
+      return `<${type}>${innerHTML}</${type}>`
     default:
       throw new Error(`Unknown block with type ${type} and props ${Object.keys(props)}`)
   }
@@ -198,6 +200,9 @@ function getFileUri({ meta }) {
 
 function generateHtmlHead({ meta }, { aside }) {
   let html = `<h1>${meta.title || meta.name}</h1>`
+  if (meta.description) {
+    html += `<p class="caption">${meta.description}</p>`
+  }
   if (meta.extends) {
     html += `<p>Extends: ${getTypeLink(aside, meta.extends)}</p>`
   }
@@ -296,6 +301,7 @@ function generateHtmlFile(elements, { files }) {
 <div class="main">
   <main class="content api">
     ${html}
+    <div id="disqus_thread"></div>
   </main>
   <aside id="aside">
     ${aside.html}
