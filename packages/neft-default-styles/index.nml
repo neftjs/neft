@@ -1,3 +1,5 @@
+const { ImgTag } = require('./index')
+
 @Item body, div, li, pre, layer, article, aside, footer, header, hgroup, main, nav, section, ul, menu, dir, ol, li, dl, dt, dd, form, fieldset, pre {
   layout: 'flow'
   fillWidth: true
@@ -21,5 +23,3 @@
 }
 
 @Image img {}
-
-@Image image {}
