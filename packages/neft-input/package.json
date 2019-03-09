@@ -1,5 +1,5 @@
 {
-  "name": "@neft/text-input",
+  "name": "@neft/input",
   "version": "0.0.1",
   "dependencies": {
     "@neft/core": "0.0.1"
