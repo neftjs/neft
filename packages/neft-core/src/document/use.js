@@ -74,7 +74,7 @@ class Use {
     component.element.parent = this.element
 
     this.name = name
-    this.refName = this.element.props['n-ref']
+    this.refName = this.element.props['n-ref'] || this.element.props.ref
     this.component = component
 
     if (this.refName) {
