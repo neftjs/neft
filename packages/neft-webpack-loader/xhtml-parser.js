@@ -1,5 +1,5 @@
 const xhtmlParser = require('lite-html-parser')
-const util = require('@neft/core/src/util/index.litcoffee')
+const util = require('@neft/core/src/util')
 const Element = require('@neft/core/src/document/element')
 
 const { Tag } = Element
