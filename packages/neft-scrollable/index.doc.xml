@@ -2,15 +2,22 @@
   name="Scrollable"
   category="Modules"
   extends="Style.Native"
+  description="Scrolls content"
 />
 
+<article title="Introduction">
+  <p>This module performs HTTP requests. Inspired by https://github.com/request/request-promise.</p>
+
+  <p>Install it by typing <code>npm i @neft/scrollable</code> and later use it by adding <code>&lt;scrollable /&gt;</code> HTML element.</p>
+</article>
+
 <property name=contentItem type="Style.Item" />
-<property name=contentX type=number />
-<property name=contentY type=number />
-<property name=horizontalScrollBar type=boolean default=true />
-<property name=verticalScrollBar type=boolean default=true />
-<property name=horizontalScrollEffect type=boolean default=true />
-<property name=verticalScrollEffect type=boolean default=true />
+<property name=style:contentX type=number />
+<property name=style:contentY type=number />
+<property name=style:horizontalScrollBar type=boolean default=true />
+<property name=style:verticalScrollBar type=boolean default=true />
+<property name=style:horizontalScrollEffect type=boolean default=true />
+<property name=style:verticalScrollEffect type=boolean default=true />
 
 <method name=scrollTo>
   <argument name=x type=number />

@@ -30,7 +30,9 @@ function getTypeLink(aside, type) {
   return type.replace(/[A-Za-z.0-9]+/, (justType) => {
     const uri = aside.types[justType]
     if (uri) return `<a href="${uri}">${justType}</a>`
-    if (justType[0].toUpperCase() === justType[0]) console.warn(`Cannot find type ${justType}`)
+    if (justType[0].toUpperCase() === justType[0]) {
+      console.warn(`Cannot find type ${justType}`)
+    }
     return justType
   })
 }
@@ -104,7 +106,7 @@ function stringifyBlock({ type, props }, innerHTML, parents) {
       return `<h${level}>${props.title}</h${level}>${innerHTML}`
     }
     case 'code':
-      return stringify.script(props, { tag: 'code' }) + innerHTML
+      return `<code>${props.body}</code>${innerHTML}`
     case 'p':
       return `<${type}>${innerHTML}</${type}>`
     default:
@@ -259,7 +261,9 @@ function generateAside(inputFiles, { activeUri, activeMeta }) {
   const leafToHtml = (leaf, { root = true } = {}) => {
     let html = '<ul>'
     let active = false
-    Object.entries(leaf).forEach(([category, subleaf]) => {
+    const entries = Object.entries(leaf)
+    entries.sort((entry1, entry2) => entry1[0].localeCompare(entry2[0]))
+    entries.forEach(([category, subleaf]) => {
       html += '<li>'
       if (subleaf.uri) {
         active = active || subleaf.uri === activeUri
