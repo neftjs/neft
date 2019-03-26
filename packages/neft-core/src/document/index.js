@@ -33,7 +33,7 @@ const mapToTypes = (Type, list, document) => {
   return []
 }
 
-const isInternalProp = prop => prop[0] === 'n' && prop[1] === '-'
+const isInternalProp = prop => (prop[0] === 'n' && prop[1] === '-') || prop === 'ref'
 
 const attachStyles = (styles, element) => {
   Object.values(styles).forEach((style) => {

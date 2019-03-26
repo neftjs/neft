@@ -98,7 +98,6 @@ module.exports = (Element, Tag) -> class CustomTag extends Tag
 
         fields = @constructor._fields
         fieldsByName = @constructor._fieldsByName
-        styleAliases = @constructor._styleAliases
 
         if fields
             for field in fields

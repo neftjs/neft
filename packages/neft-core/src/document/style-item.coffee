@@ -14,6 +14,11 @@ log = log.scope 'Styles'
 PROPS_CLASS_PRIORITY = 9999
 PROP_PREFIX = 'style:'
 STYLE_ID_PROP = 'n-style'
+DEFAULT_PROP_ALIASES =
+    onClick: 'pointer:onClick'
+    onPress: 'pointer:onPress'
+    onRelease: 'pointer:onRelease'
+    onMove: 'pointer:onMove'
 
 module.exports = class StyleItem
     {isHandler} = InputProp
@@ -105,7 +110,9 @@ module.exports = class StyleItem
                 else
                     return false
             else
-                return false
+                prop = DEFAULT_PROP_ALIASES[prop]
+                unless prop
+                    return false
 
             parts = getSplitProp prop
 
