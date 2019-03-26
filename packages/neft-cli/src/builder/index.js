@@ -151,7 +151,7 @@ exports.build = async (target, args) => {
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
       new webpack.DefinePlugin(getDefines(production, target)),
-      new InjectWebpackPlugin(staticFileLoader, { order: ENTRY_ORDER.First }),
+      new InjectWebpackPlugin(staticFileLoader, { order: ENTRY_ORDER.NotLast }),
       new HardSourceWebpackPlugin({ info: { mode: 'none', level: 'error' } }),
     ],
     module: {

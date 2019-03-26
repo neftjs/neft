@@ -31,6 +31,7 @@ window.XMLHttpRequest = class XMLHttpRequest {
         uri: this.uri,
         body,
         timeout: this.timeout,
+        resolveWithFullResponse: true,
       })
       this.status = response.statusCode
       this.responseText = response.body
@@ -43,7 +44,7 @@ window.XMLHttpRequest = class XMLHttpRequest {
 
 window.importScripts = async (...scripts) => {
   await Promise.all(scripts.map(async (script) => {
-    const { body } = await request(script)
+    const body = await request(script)
     eval(body)
   }))
 }
