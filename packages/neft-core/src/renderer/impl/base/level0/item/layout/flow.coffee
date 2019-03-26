@@ -131,7 +131,7 @@ updateItem = (item) ->
 
         # fill width
         if child._fillWidth and not autoWidth
-            width = maxFlowWidth - leftMargin + rightMargin
+            width = maxFlowWidth - leftMargin - rightMargin
             child.width = width
 
         # get child right anchor position
