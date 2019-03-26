@@ -68,7 +68,9 @@ const request = (optionsOrUri, optionsOrNull, defaultMethod) => new Promise((res
   }
   body = String(body)
 
-  const callback = createCallback({ json, resolveWithFullResponse, resolve, reject })
+  const callback = createCallback({
+    json, resolveWithFullResponse, resolve, reject,
+  })
 
   if (process.env.NEFT_NATIVE) {
     callbacks[uid] = callback
