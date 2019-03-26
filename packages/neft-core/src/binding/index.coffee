@@ -13,14 +13,14 @@ MAX_LOOPS = 50
 
 getPropHandlerName = do ->
     cache = Object.create null
-    toHandlerHane = (prop) ->
+    toHandlerName = (prop) ->
         if prop[0] is '$'
             prop = "$#{util.capitalize(prop.slice(1))}"
         else
             prop = util.capitalize(prop)
         "on#{prop}Change"
     (prop) ->
-        cache[prop] ||= toHandlerHane(prop)
+        cache[prop] ||= toHandlerName(prop)
 
 class Connection
     pool = []

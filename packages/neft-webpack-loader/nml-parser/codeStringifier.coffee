@@ -191,7 +191,7 @@ class Stringifier
         binding = bindingParser.parse value, @isBindingPublicId, opts,
             BINDING_PARSER_OPTS, @isBindingPublicVariable
         func = "function(){return #{binding.hash}}"
-        "[#{func}, [#{binding.connections}]]"
+        "[#{func}, #{binding.connections}]"
 
     isAnchor: (ast) ->
         ast.name.indexOf('anchors.') is 0
