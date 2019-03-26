@@ -9,7 +9,7 @@ module.exports = (impl) ->
 
     NOP = ->
 
-    DATA =
+    DATA = utils.merge
         bindings: null
         anchors: null
         capturePointer: 0
@@ -22,6 +22,7 @@ module.exports = (impl) ->
         gridUpdateLoops: 0
         autoWidth: true
         autoHeight: true
+    , pointer.DATA
 
     impl.ITEM_DATA = DATA
 

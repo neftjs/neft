@@ -77,7 +77,7 @@ where `XYZ` is the given name.
                 implementationValue: do ->
                     RESOURCE_REQUEST =
                         resolution: 1
-                    requestAnimationFrame ->
+                    requestAnimationFrame? ->
                         RESOURCE_REQUEST.resolution = Renderer.Device.pixelRatio
                     getResourceResolutionByPath = (rsc, path) ->
                         for format in rsc.formats
