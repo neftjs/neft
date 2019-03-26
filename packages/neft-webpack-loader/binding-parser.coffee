@@ -96,13 +96,11 @@ exports.parse = (val, isPublicId, opts = 0, objOpts = {}, isVariableId) ->
     # split
     text = ''
     hash = ''
-    hasSplit = false
     for elem, i in binding
         if typeof elem is 'string'
             hash += elem
         else if elem.length > 1
             if binding[i - 1]? and text
-                hasSplit = true
                 text += ", "
 
             text += repeatString('[', elem.length - 1)
@@ -128,10 +126,7 @@ exports.parse = (val, isPublicId, opts = 0, objOpts = {}, isVariableId) ->
                 hash += "#{elem[0]}"
 
     hash = hash.trim()
-    text = text.trim()
-
-    if hasSplit
-        text = "[#{text}]"
+    text = "[#{text.trim()}]"
 
 
     hash: hash

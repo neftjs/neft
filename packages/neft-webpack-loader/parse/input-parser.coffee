@@ -48,7 +48,7 @@ module.exports = (text, scopeProps) ->
             else if isBlock
                 parsed = bindingParser.parse str, isPublicId, PARSER_FLAGS, PARSER_OPTS
                 hash += "(#{parsed.hash}) + "
-                connections.push eval(parsed.connections)
+                connections.push eval(parsed.connections)...
                 str = ''
             else
                 log.error "Interpolated string parse error: '#{text}'"

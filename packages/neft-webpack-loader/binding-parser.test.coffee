@@ -10,7 +10,7 @@ assertParser = (binding, expected) ->
 it 'properties', ->
     assertParser 'this.object.deepObject.property',
         hash: 'this.object.deepObject.property'
-        connections: [[['this', 'object'], 'deepObject'], 'property']
+        connections: [[[['this', 'object'], 'deepObject'], 'property']]
 
 it 'inner properties', ->
     assertParser 'this.object[this.subObject.subProperty].property',
@@ -20,7 +20,7 @@ it 'inner properties', ->
 it 'list element', ->
     assertParser 'this.list[0]',
         hash: 'this.list[0]'
-        connections: [['this', 'list'], '0']
+        connections: [[['this', 'list'], '0']]
 
 it 'and', ->
     assertParser 'this.a && !this.b',
