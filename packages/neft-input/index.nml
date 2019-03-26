@@ -1,3 +1,3 @@
-const { TextInputStyle: TextInput } = require('./index')
+const { TextInput } = require('./index')
 
 @TextInput input[type="text"] {}

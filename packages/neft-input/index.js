@@ -1,5 +1,5 @@
 const InputTag = require('./input-tag')
-const TextInputStyle = require('./text-input-style')
+const TextInput = require('./text-input-style')
 
 exports.InputTag = InputTag
-exports.TextInputStyle = TextInputStyle
+exports.TextInput = TextInput

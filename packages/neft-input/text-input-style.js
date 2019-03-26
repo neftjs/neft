@@ -1,6 +1,7 @@
 const Renderer = require('@neft/core/src/renderer')
 
 const { Impl } = Renderer
+const { setPropertyValue } = Renderer.itemUtils
 
 class TextInput extends Renderer.Native {
   focus() {
@@ -10,7 +11,7 @@ class TextInput extends Renderer.Native {
 
 TextInput.Initialize = (item) => {
   item.on('textChange', function (value) {
-    this.text = value
+    setPropertyValue(this, 'text', value)
   })
 }
 

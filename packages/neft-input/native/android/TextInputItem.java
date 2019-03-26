@@ -1,4 +1,4 @@
-package io.neft.extensions.textinput_extension;
+package io.neft.extensions.input_extension;
 
 import android.content.Context;
 import android.graphics.Color;
