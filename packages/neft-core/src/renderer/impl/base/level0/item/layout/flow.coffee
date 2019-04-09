@@ -134,15 +134,14 @@ updateItem = (item) ->
             width = maxFlowWidth - leftMargin - rightMargin
             child.width = width
 
-        # get child right anchor position
-        right = 0
+        # get child x and right anchor position
         x += leftMargin + lastColumnRightMargin + (if x > 0 then columnSpacing else 0)
-        right += x + width + rightMargin
+        right = x + width + rightMargin
 
-        # get x
+        # move to next row if doesn't fit
         if right > maxFlowWidth and visibleChildrenIndex > 0
-            right -= x
-            x = right - width
+            x = leftMargin
+            right = x + width + rightMargin
             currentRowY += rowsHeight[currentRow]
             currentRow++
             lastRowBottomMargin = currentRowBottomMargin
