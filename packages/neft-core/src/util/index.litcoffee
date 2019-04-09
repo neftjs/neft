@@ -255,7 +255,7 @@ console.log(config);
                 'use utils.mergeAll instead'
         `//</development>`
 
-        for key, value of obj when obj.hasOwnProperty(key)
+        for key, value of obj when hasOwnProp.call(obj, key)
             source[key] = value
 
         source

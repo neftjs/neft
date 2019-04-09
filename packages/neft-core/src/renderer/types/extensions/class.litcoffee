@@ -373,20 +373,18 @@ Grid {
             disableClass item, classElem
             utils.remove item._classList, classElem
 
-        ATTRS_ALIAS_DEF = [
-            ['x', 'anchors.left', 'anchors.right', 'anchors.horizontalCenter', 'anchors.centerIn', 'anchors.fill', 'anchors.fillWidth'],
-            ['y', 'anchors.top', 'anchors.bottom', 'anchors.verticalCenter', 'anchors.centerIn', 'anchors.fill', 'anchors.fillHeight'],
+        ATTRS_CONFLICTS = [
+            ['x', 'anchors.left', 'anchors.right', 'anchors.horizontalCenter', 'anchors.centerIn'],
+            ['y', 'anchors.top', 'anchors.bottom', 'anchors.verticalCenter', 'anchors.centerIn'],
             ['width', 'anchors.fill', 'anchors.fillWidth', 'fillWidth'],
             ['height', 'anchors.fill', 'anchors.fillHeight', 'fillHeight'],
         ]
 
         ATTRS_ALIAS = Object.create null
-        ATTRS_ALIAS['margin'] = ['margin.left', 'margin.right', 'margin.top', 'margin.bottom']
-        ATTRS_ALIAS['padding'] = ['padding.left', 'padding.right', 'padding.top', 'padding.bottom']
-        ATTRS_ALIAS['alignment'] = ['alignment.horizontal', 'alignment.vertical']
 
         do ->
-            for aliases in ATTRS_ALIAS_DEF
+            # for conflicts we alias ant attr in a row with other attrs in a row
+            for aliases in ATTRS_CONFLICTS
                 for prop in aliases
                     arr = ATTRS_ALIAS[prop] ?= []
                     for alias in aliases
@@ -399,6 +397,15 @@ Grid {
                 attrs = changes._attributes
                 if attrs[attr] isnt undefined
                     return attr
+            return ''
+
+        getContainedAlias = (classElem, attr) ->
+            if changes = classElem._changes
+                attrs = changes._attributes
+                if aliases = ATTRS_ALIAS[attr]
+                    for alias in aliases
+                        if attrs[alias] isnt undefined
+                            return alias
             return ''
 
         getContainedAttributeOrAlias = (classElem, attr) ->
@@ -449,7 +456,7 @@ Grid {
                 if writeAttr
                     # unset alias
                     for i in [classListIndex + 1...classListLength] by 1
-                        if (alias = getContainedAttributeOrAlias(classList[i], attr)) and alias isnt attr
+                        if (alias = getContainedAlias(classList[i], attr))
                             path = splitAttribute alias
                             object = getObjectByPath item, path
                             lastPath = path[path.length - 1]
@@ -468,14 +475,12 @@ Grid {
                         lastPath = path[path.length - 1]
                         object = getObjectByPath item, path
 
-                    `//<development>`
                     if not object or not (lastPath of object)
+                        `//<development>`
                         log.error """
                             Attribute '#{attr}' doesn't exist in '#{item}'
                         """
-                        continue
-                    `//</development>`
-                    unless object
+                        `//</development>`
                         continue
 
                     if bindings[attr]
@@ -516,8 +521,8 @@ Grid {
                         break
 
                 if restoreDefault
-                    # we firstly restore the attribute itself or its alias
-                    getAttributeMethod = getContainedAttributeOrAlias
+                    # we firstly restore the attribute itself then alias
+                    getAttributeMethod = getContainedAttribute
                     while getAttributeMethod
                         path = null
                         alias = ''
@@ -530,14 +535,17 @@ Grid {
                                 defaultValue = classList[i].changes._attributes[alias]
                                 defaultIsBinding = !!classList[i].changes._bindings[alias]
                                 break
-                        alias ||= attr
 
-                        if alias is attr
-                            # no more aliases to restore
-                            getAttributeMethod = null
-                        else
+                        if getAttributeMethod is getContainedAttribute
                             # we need to restore the original attribute in the next iteration
-                            getAttributeMethod = getContainedAttribute
+                            alias ||= attr
+                            getAttributeMethod = getContainedAlias
+                        else
+                            # nothing to scan
+                            getAttributeMethod = null
+
+                        unless alias
+                            continue
 
                         # restore binding
                         if !!bindings[attr]

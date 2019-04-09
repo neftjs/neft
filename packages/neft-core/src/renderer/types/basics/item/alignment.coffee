@@ -11,16 +11,7 @@ module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Alignment extend
         name: 'alignment'
         defaultValue: null
         valueConstructor: Alignment
-        setter: (_super) -> (val) ->
-            {alignment} = @
-            if utils.isObject val
-                alignment.horizontal = val.horizontal if val.horizontal?
-                alignment.vertical = val.vertical if val.vertical?
-            else
-                alignment.horizontal = alignment.vertical = val
-
-            _super.call @, val
-            return
+        setter: () -> null
 
     constructor: (ref) ->
         super ref

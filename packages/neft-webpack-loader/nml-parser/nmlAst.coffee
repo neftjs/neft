@@ -14,28 +14,29 @@ exports.forEachLeaf = ({
     onlyType,
     includeGiven = false,
     includeValues = false,
-    deeply = false
+    deeply = false,
+    parent = null,
 }, callback) ->
     unless callback
         result = []
         callback = (elem) -> result.push elem
     if includeGiven
         if not onlyType or ast.type is onlyType
-            callback ast
+            callback ast, parent
     if includeValues and ast.value?.type
         exports.forEachLeaf
             ast: ast.value, onlyType: onlyType, includeGiven: true,
             includeValues: includeValues and deeply,
-            deeply: deeply, callback
+            deeply: deeply, parent: ast, callback
     if deeply
         ast.body?.forEach (elem) ->
             exports.forEachLeaf
                 ast: elem, onlyType: onlyType, includeGiven: true,
                 includeValues: includeValues,
-                deeply: deeply,
+                deeply: deeply, parent: ast,
                 callback
     else
         ast.body?.forEach (elem) ->
             if not onlyType or elem.type is onlyType
-                callback elem
+                callback elem, ast
     result

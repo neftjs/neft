@@ -14,44 +14,7 @@ module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor, opts) -> class Marg
         name: propertyName
         defaultValue: 0
         valueConstructor: Margin
-        setter: (_super) -> (val=0) ->
-            margin = @[propertyName]
-            if typeof val is 'string'
-                arr = val.split ' '
-                for elem, i in arr
-                    arr[i] = parseFloat elem
-                switch arr.length
-                    when 3
-                        margin.top = arr[0]
-                        margin.right = arr[1]
-                        margin.bottom = arr[2]
-                        margin.left = arr[1]
-                    when 2
-                        margin.top = arr[0]
-                        margin.right = arr[1]
-                        margin.bottom = arr[0]
-                        margin.left = arr[1]
-                    when 1
-                        margin.left = margin.top = margin.right = margin.bottom = arr[0]
-                    else
-                        margin.top = arr[0]
-                        margin.right = arr[1]
-                        margin.bottom = arr[2]
-                        margin.left = arr[3]
-            else if Array.isArray(val)
-                margin.top = val[0] if val.length > 0
-                margin.right = val[1] if val.length > 1
-                margin.bottom = val[2] if val.length > 2
-                margin.left = val[3] if val.length > 3
-            else if utils.isObject(val)
-                margin.left = val.left if val.left?
-                margin.top = val.top if val.top?
-                margin.right = val.right if val.right?
-                margin.bottom = val.bottom if val.bottom?
-            else
-                margin.left = margin.top = margin.right = margin.bottom = val
-            _super.call @, val
-            return
+        setter: () -> null
 
     constructor: (ref) ->
         super ref

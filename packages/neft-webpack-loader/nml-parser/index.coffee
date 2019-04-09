@@ -3,6 +3,7 @@ codeStringifier = require './codeStringifier'
 bundler = require './bundler'
 queriesFinder = require './queriesFinder'
 importsFinder = require './importsFinder'
+transformNamespaceSetters = require './transformNamespaceSetters'
 
 exports.getAST = (nml, parser) ->
     astParser.parse nml, parser
@@ -16,10 +17,14 @@ exports.getQueries = (objects) ->
 exports.getImports = (ast) ->
     importsFinder.getImports ast
 
+exports.transformNamespaceSetters = (ast) ->
+    transformNamespaceSetters.transform ast
+
 exports.bundle = (nml, parser) ->
     ast = exports.getAST nml, parser
     objects = []
     for object in ast.objects
+        exports.transformNamespaceSetters object
         objects.push
             id: object.id
             code: exports.getObjectCode ast: object, path: parser.resourcePath
