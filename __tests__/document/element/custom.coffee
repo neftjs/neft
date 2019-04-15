@@ -65,12 +65,12 @@ it 'style property getter returns value from style', ->
     input.style.x = 50
     assert.is input.left, 50
 
-it 'style property setter does not exist', ->
+it 'style property setter modifies style property', ->
     html = fromHTML '<custom-input />'
     input = html.children[0]
     input.style = Item.New()
     input.left = 50
-    assert.is input.left, 0
+    assert.is input.left, 50
 
 it 'style property signal proxies original source', ->
     html = fromHTML '<custom-input />'

@@ -83,13 +83,12 @@ module.exports = (Element, Tag) -> class CustomTag extends Tag
         @_styleAliases.push alias
         @_styleAliasesByName[name] = alias
 
-        # SignalsEmitter.createSignal @, signalName
-
         signalGetter = -> @_style?[signalStyleName]
         getter = -> @_style?[internalStyleName]
+        setter = (val) -> @_style?[styleName] = val
 
         util.defineProperty @::, signalName, util.CONFIGURABLE, signalGetter, null
-        util.defineProperty @::, name, util.CONFIGURABLE, getter, null
+        util.defineProperty @::, name, util.CONFIGURABLE, getter, setter
 
         return
 
