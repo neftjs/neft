@@ -1,3 +1,3 @@
-const { ImgTag } = require('./img-tag')
+const ImgTag = require('./img-tag')
 
 exports.ImgTag = ImgTag
