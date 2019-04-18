@@ -8,10 +8,13 @@ exports.PROPERTY_TYPE = 'property'
 exports.SIGNAL_TYPE = 'signal'
 exports.CONDITION_TYPE = 'condition'
 exports.SELECT_TYPE = 'select'
+exports.NESTING_TYPE = 'nesting'
 
 exports.forEachLeaf = ({
     ast,
     onlyType,
+    omitTypes,
+    omitDeepTypes,
     includeGiven = false,
     includeValues = false,
     deeply = false,
@@ -20,23 +23,39 @@ exports.forEachLeaf = ({
     unless callback
         result = []
         callback = (elem) -> result.push elem
+    config =
+        ast: ast.value
+        onlyType: onlyType
+        omitTypes: omitTypes
+        omitDeepTypes: omitDeepTypes
+        deeply: deeply
+        includeValues: includeValues
+    isOk = (type) ->
+        ok = not onlyType or type is onlyType
+        ok and= not omitTypes or not omitTypes.has(type)
+        ok
     if includeGiven
-        if not onlyType or ast.type is onlyType
+        if isOk(ast.type)
             callback ast, parent
     if includeValues and ast.value?.type
-        exports.forEachLeaf
-            ast: ast.value, onlyType: onlyType, includeGiven: true,
-            includeValues: includeValues and deeply,
-            deeply: deeply, parent: ast, callback
+        exports.forEachLeaf Object.assign({}, config, {
+                ast: ast.value
+                includeGiven: true
+                includeValues: includeValues and deeply
+                parent: ast
+            }),
+            callback
     if deeply
         ast.body?.forEach (elem) ->
-            exports.forEachLeaf
-                ast: elem, onlyType: onlyType, includeGiven: true,
-                includeValues: includeValues,
-                deeply: deeply, parent: ast,
-                callback
+            if not omitDeepTypes or not omitDeepTypes.has(elem.type)
+                exports.forEachLeaf Object.assign({}, config, {
+                        ast: elem
+                        includeGiven: true
+                        parent: ast
+                    }),
+                    callback
     else
         ast.body?.forEach (elem) ->
-            if not onlyType or elem.type is onlyType
+            if isOk(elem.type)
                 callback elem, ast
     result

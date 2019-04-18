@@ -47,6 +47,7 @@
                 @_changes = null
                 @_document = null
                 @_children = null
+                @_nesting = null
 
 ## *Item* Class::target
 
@@ -212,6 +213,11 @@ Grid {
 
                 return
 
+            utils.defineProperty @::, 'nesting', null, null, (val) ->
+                assert.notOk @_running
+                @_nesting = val
+                return
+
             class ChildrenObject
 
 ## *Integer* Class::children.length = `0`
@@ -340,6 +346,7 @@ Grid {
             clone._inheritsPriority = @_inheritsPriority
             clone._nestingPriority = @_nestingPriority
             clone._changes = @_changes
+            clone._nesting = @_nesting
 
             if @_bindings
                 for prop, val of @_bindings
@@ -350,6 +357,11 @@ Grid {
                 for child, i in children
                     childClone = cloneClassChild clone, child
                     clone.children.append childClone
+
+            # create nested objects
+            if typeof @_nesting is 'function'
+                for child in @_nesting()
+                    clone.children.append child
 
             clone
 

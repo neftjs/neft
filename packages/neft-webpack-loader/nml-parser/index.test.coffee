@@ -59,9 +59,11 @@ it 'bundles top level selects', ->
         })
         exports.selects.push(() => {
           const _r0 = Class.New()
-          const _r1 = Class.New()
-          _RendererObject.setOpts(_r0, {"document.query": 'div', "changes": [], "children": [_RendererObject.setOpts(_r1, {"document.query": 'strong', "changes": {"font.weight": 1}})]})
-          return { objects: {"_r0": _r0, "_r1": _r1}, select: _r0 }
+          _RendererObject.setOpts(_r0, {"document.query": 'div', "changes": [], "nesting": function(){
+          const _r10 = Class.New()
+          return [_RendererObject.setOpts(_r10, {"document.query": 'strong', "changes": {"font.weight": 1}})]
+          }})
+          return { objects: {"_r0": _r0}, select: _r0 }
         })
         return exports
     """
@@ -82,6 +84,7 @@ it 'appends constants', ->
 
         exports._i0 = () => {
           const _i0 = Item.New()
+          _i0
           return { objects: {"_i0": _i0}, item: _i0 }
         }
         return exports

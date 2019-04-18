@@ -38,22 +38,14 @@ module.exports = (Renderer, Impl) ->
                 path = exports.splitAttribute prop
                 prop = path[path.length - 1]
                 obj = exports.getObjectByPath @, path
-                if typeof val is 'function'
-                    `//<development>`
-                    if typeof obj[prop] isnt 'function'
-                        log.error "Object '#{obj}' has no function '#{prop}'"
-                        continue
-                    `//</development>`
+                if typeof val is 'function' and typeof obj[prop] is 'function'
                     obj[prop] exports.bindSignalListener(@, val)
                 else if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
                     continue
-                else
-                    `//<development>`
-                    unless prop of obj
-                        log.error "Object '#{obj}' has no property '#{prop}'"
-                        continue
-                    `//</development>`
+                else if prop of obj
                     obj[prop] = val
+                else
+                    log.error "Object '#{obj}' has no property '#{prop}'"
 
             for prop, val of opts
                 path = exports.splitAttribute prop

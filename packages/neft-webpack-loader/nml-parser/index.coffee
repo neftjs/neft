@@ -4,6 +4,7 @@ bundler = require './bundler'
 queriesFinder = require './queriesFinder'
 importsFinder = require './importsFinder'
 transformNamespaceSetters = require './transformNamespaceSetters'
+transformClassNesting = require './transformClassNesting'
 
 exports.getAST = (nml, parser) ->
     astParser.parse nml, parser
@@ -20,11 +21,15 @@ exports.getImports = (ast) ->
 exports.transformNamespaceSetters = (ast) ->
     transformNamespaceSetters.transform ast
 
+exports.transformClassNesting = (ast) ->
+    transformClassNesting.transform ast
+
 exports.bundle = (nml, parser) ->
     ast = exports.getAST nml, parser
     objects = []
     for object in ast.objects
         exports.transformNamespaceSetters object
+        exports.transformClassNesting object
         objects.push
             id: object.id
             code: exports.getObjectCode ast: object, path: parser.resourcePath

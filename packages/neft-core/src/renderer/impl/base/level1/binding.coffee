@@ -57,7 +57,14 @@ module.exports = (impl) ->
 
         `//<development>`
         onError: (err) ->
-            log.error "Failed property `#{@prop}` binding in style `#{@ctx}`: `#{err}`"
+            if @obj.running isnt undefined
+                shouldPrint = @obj.running isnt false
+            else if @obj.parent isnt undefined
+                shouldPrint = @obj.parent isnt null
+            else
+                shouldPrint = true
+            if shouldPrint
+                log.error "Failed property `#{@prop}` binding in style `#{@ctx}`: `#{err}`"
             return
         `//</development>`
 

@@ -25,11 +25,11 @@ BINDING_PARSER_OPTS =
         elem
 
 class Stringifier
-    constructor: (@ast, @path) ->
-        @lastUID = 0
+    constructor: (@ast, @path, lastUID = 0) ->
+        @lastUID = lastUID
         @objects = nmlAst.forEachLeaf
             ast: @ast, onlyType: nmlAst.OBJECT_TYPE, includeGiven: true,
-            includeValues: true, deeply: true
+            includeValues: true, deeply: true, omitDeepTypes: new Set([nmlAst.NESTING_TYPE])
         @ids = @objects.map (elem) -> elem.id
         @publicIds = @ids.filter (elem) -> elem[0] isnt '_'
 
@@ -47,6 +47,7 @@ class Stringifier
         attributes = []
         functions = []
         children = []
+        nesting = []
 
         for child in ast.body
             switch child.type
@@ -58,6 +59,8 @@ class Stringifier
                     functions.push child
                 when nmlAst.OBJECT_TYPE, nmlAst.CONDITION_TYPE, nmlAst.SELECT_TYPE
                     children.push child
+                when nmlAst.NESTING_TYPE
+                    nesting.push child.body...
                 when nmlAst.PROPERTY_TYPE, nmlAst.SIGNAL_TYPE
                     null
                 else
@@ -79,8 +82,21 @@ class Stringifier
                 type: nmlAst.ATTRIBUTE_TYPE
                 name: 'children'
                 value: children
-
-        unless utils.isEmpty(opts)
+        unless utils.isEmpty(nesting)
+            nestingType =
+                type: nmlAst.NESTING_TYPE
+                body: nesting
+            nestingStringifier = new Stringifier nestingType, @path, @lastUID * 10
+            opts.push
+                type: nmlAst.ATTRIBUTE_TYPE
+                name: 'nesting'
+                value:
+                    type: nmlAst.FUNCTION_TYPE
+                    params: []
+                    code: "\n#{nestingStringifier.stringify()}"
+        if utils.isEmpty(opts)
+            ast.id
+        else
             "_RendererObject.setOpts(#{ast.id}, #{@stringifyOpts opts})"
 
     stringifyAttribute: (ast) ->
@@ -167,6 +183,9 @@ class Stringifier
             value: ast.query
         @stringifyObject object
 
+    stringifyNesting: (ast) ->
+        return "return #{@stringifyAttributeListValue(ast.body)}"
+
     stringifyPrimitiveType: (ast) ->
         ast.value
 
@@ -182,6 +201,8 @@ class Stringifier
                 @stringifyCondition ast
             when nmlAst.SELECT_TYPE
                 @stringifySelect ast
+            when nmlAst.NESTING_TYPE
+                @stringifyNesting ast
             when PRIMITIVE_TYPE
                 @stringifyPrimitiveType ast
             else
@@ -254,6 +275,9 @@ class Stringifier
         # put main item
         if itemCode
             result += "#{itemCode}\n"
+
+        if @ast.type is nmlAst.NESTING_TYPE
+            return result
 
         # return
         result += "return { objects: #{@getIdsObject @ast}"
