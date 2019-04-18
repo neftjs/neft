@@ -15,7 +15,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class PropertyAnimation extends 
         @ON_STOP = 1 << i++
         @ON_PENDING = 1 << i++
         @ALWAYS = (1 << i) - 1
-        @ON_END = -1 # often mistaken as ON_STOP
+        @ON_END = @ON_STOP # often mistaken as ON_STOP
 
     constructor: ->
         super()
@@ -46,12 +46,17 @@ module.exports = (Renderer, Impl, itemUtils) -> class PropertyAnimation extends 
             oldVal = @_target
 
             if oldVal
+                if @_running
+                    @_disable()
                 utils.remove oldVal._extensions, @
 
             if val
                 val._extensions.push @
 
             _super.call @, val
+
+            if val and @_running
+                @_enable()
             return
 
     itemUtils.defineProperty

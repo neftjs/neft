@@ -61,7 +61,7 @@ module.exports = (impl) ->
         target = anim._target
         property = anim._property
 
-        if progress is 1
+        unless running
             stateFlags |= Renderer.PropertyAnimation.ON_STOP
 
         if val is val and target and property # isNaN hack
