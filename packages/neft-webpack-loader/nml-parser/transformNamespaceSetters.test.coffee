@@ -71,6 +71,29 @@ it 'transforms margin with numeric value', ->
         { type: 'attribute', name: 'margin.left', value: 1.1 },
     ])
 
+it 'transforms nested margin with numeric value', ->
+    ast = transform '''
+    @Item {
+        margin: 1
+
+        @Rectangle {
+            margin: 2
+        }
+    }
+    '''
+    expect(ast.objects[0].body).toEqual([
+        { type: 'attribute', name: 'margin.top', value: 1 },
+        { type: 'attribute', name: 'margin.right', value: 1 },
+        { type: 'attribute', name: 'margin.bottom', value: 1 },
+        { type: 'attribute', name: 'margin.left', value: 1 },
+        { type: 'object', id: '_i0', name: 'Rectangle', body: [
+            { type: 'attribute', name: 'margin.top', value: 2 },
+            { type: 'attribute', name: 'margin.right', value: 2 },
+            { type: 'attribute', name: 'margin.bottom', value: 2 },
+            { type: 'attribute', name: 'margin.left', value: 2 },
+        ] }
+    ])
+
 it 'transforms margin with binding', ->
     ast = transform '''
     @Item {

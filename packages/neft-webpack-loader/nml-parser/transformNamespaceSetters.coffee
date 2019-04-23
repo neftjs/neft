@@ -68,6 +68,8 @@ TRANSFORM_FUNCTIONS =
     alignment: transformAlignment
 
 exports.transform = (ast) ->
+    modify = []
+
     forEachLeaf
         ast: ast
         onlyType: ATTRIBUTE_TYPE
@@ -75,7 +77,15 @@ exports.transform = (ast) ->
         deeply: true
     , (elem, parent) ->
         func = TRANSFORM_FUNCTIONS[elem.name]
-        return unless func
+        if func
+            modify.push
+                elem: elem
+                parent: parent
+        return
+
+    modify.forEach ({ elem, parent }) ->
+        func = TRANSFORM_FUNCTIONS[elem.name]
         elemIndex = parent.body.indexOf elem
         parent.body.splice elemIndex, 1, func(elem)...
+
     return
