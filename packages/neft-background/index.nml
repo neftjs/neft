@@ -1,5 +1,3 @@
 @Rectangle background {
-  fillWidth: true
-  fillHeight: true
   anchors.fill: parent
 }
