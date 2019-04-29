@@ -1,0 +1,7 @@
+{
+  "name": "@neftio/storage",
+  "version": "0.0.1",
+  "dependencies": {
+    "@neftio/core": "0.0.1"
+  }
+}

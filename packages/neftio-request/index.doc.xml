@@ -1,0 +1,61 @@
+<meta
+  name="Request"
+  category="Modules"
+  description="HTTP request client"
+/>
+
+<article title="Introduction">
+  <p>This module performs HTTP requests. Inspired by https://github.com/request/request-promise.</p>
+
+  <p>Install it by typing <code>npm i @neftio/request</code> and later use it by <code>const request = require('@neftio/request')</code>.</p>
+</article>
+
+<method name=request returns=Promise>
+  <argument name=options.uri type=string />
+  <argument name=options.method type=string default=GET />
+  <argument name=options.headers type=object />
+  <argument name=options.body type=any />
+  <argument name=options.json type=boolean />
+  <argument name=options.timeout type=number default=30000 />
+  <argument name=options.resolveWithFullResponse type=boolean default=false />
+
+  <article title="Get data from your API endpoint">
+    <script lang="javascript">
+      try {
+        const users = await request('/api/users', { json: true })
+      } catch (error) {
+        // non 2xx status
+      }
+    </script>
+  </article>
+
+  <article title="POST data">
+    <script lang="javascript">
+      try {
+        const response = await request.post({
+          uri: '/api/user',
+          json: true,
+          body: {
+            name: 'some',
+          }
+        })
+      } catch (error) {
+        // non 2xx status
+      }
+    </script>
+  </article>
+
+  <article title="Full response with statusCode">
+    <script lang="javascript">
+      try {
+        const { statusCode, body, headers } = await request({
+          uri: '/api/users',
+          json: true,
+          resolveWithFullResponse: true,
+        })
+      } catch (error) {
+        // request failed
+      }
+    </script>
+  </article>
+</method>

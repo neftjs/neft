@@ -1,8 +1,0 @@
-{
-  "name": "@neft/webpack-coffee-loader",
-  "version": "0.0.1",
-  "dependencies": {
-    "coffee-script": "^1.12.7",
-    "loader-utils": "^1.1.0"
-  }
-}
