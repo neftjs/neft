@@ -1,7 +1,0 @@
-global.Neft = require('./{{neftFileName}}');
-process.on('message', function(msg) {
-    if (msg === 'terminate') {
-        process.exit();
-    }
-});
-{{&appCode}}
