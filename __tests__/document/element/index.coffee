@@ -1,8 +1,8 @@
-Element = require '@neft/core/src/document/element'
+Element = require '@neftio/core/src/document/element'
 
-{util} = require('@neft/core')
+{util} = require('@neftio/core')
 
-fromHTML = require '@neft/webpack-loader/xhtml-parser'
+fromHTML = require '@neftio/webpack-loader/xhtml-parser'
 
 describe 'Document Element', ->
     HTML = '<b><em>abc</em></b>' +

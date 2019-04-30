@@ -1,6 +1,6 @@
 'use strict'
 
-{Struct, ObservableArray} = require '@neft/core'
+{Struct, ObservableArray} = require '@neftio/core'
 {createView, renderParse} = require './utils'
 
 describe 'Document string interpolation', ->
@@ -82,6 +82,8 @@ describe 'Document string interpolation', ->
             renderParse view
             assert.is view.element.stringify(), 'x'
 
+        return
+
     describe '`refs`', ->
         it 'refers to nodes', ->
             view = createView '''
@@ -140,6 +142,8 @@ describe 'Document string interpolation', ->
 
             view.exported.$refs.first.update()
             assert.is view.element.stringify(), 'b'
+
+        return
 
     it 'file `refs` are not accessed in components', ->
         view = createView '''
@@ -213,6 +217,8 @@ describe 'Document string interpolation', ->
                 context: a: '2'
             assert.is view.element.stringify(), '2'
 
+        return
+
     describe '`state`', ->
         it 'is accessed in rendered file', ->
             view = createView '''
@@ -285,6 +291,8 @@ describe 'Document string interpolation', ->
             assert.is view.element.stringify(), '1'
             view.render()
             assert.is view.element.stringify(), '1'
+
+        return
 
     it 'handler is called on signal', ->
         view = createView '''
@@ -395,3 +403,7 @@ describe 'Document string interpolation', ->
 
             context.a = 2
             assert.is view.element.stringify(), '2'
+
+        return
+
+    return

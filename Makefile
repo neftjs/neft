@@ -1,13 +1,13 @@
 SOURCES = packages __tests__
 
 test:
-	npx jest
+	npm test
 
 test-watch:
-	npx jest --watch --notify
+	npm test -- --watch --notify
 
 lint:
-	npx eslint $(SOURCES)
+	npm run lint
 
 fix:
-	npx eslint $(SOURCES) --fix
+	npm run lint -- --fix

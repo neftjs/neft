@@ -1,14 +1,14 @@
+os: Visual Studio 2015
 version: '{build}-{branch}'
 platform: x64
+build: off
 environment:
-    nodejs_version: "8.1.2"
-    TEST_NODE: 1
+    nodejs_version: "10.15.3"
 install:
-    - ps: Install-Product node $env:nodejs_version
+    - ps: Update-NodeJsInstallation (Get-NodeJsLatestBuild $env:nodejs_version) x64
     - npm install
-    - npm run bundle -- --node
+    - npx lerna bootstrap
 test_script:
     - node --version
     - npm --version
-    - npm test -- --verbose
-build: off
+    - npm test

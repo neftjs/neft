@@ -1,9 +1,9 @@
-Element = require '@neft/core/src/document/element'
-{Item} = require '@neft/core/src/renderer'
+Element = require '@neftio/core/src/document/element'
+{Item} = require '@neftio/core/src/renderer'
 
-{util} = require('@neft/core')
+{util} = require('@neftio/core')
 
-fromHTML = require '@neft/webpack-loader/xhtml-parser'
+fromHTML = require '@neftio/webpack-loader/xhtml-parser'
 
 class CustomInput extends Element.Tag.CustomTag
     @registerAs 'custom-input'

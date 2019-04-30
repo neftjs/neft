@@ -1,6 +1,6 @@
 references:
     workspace_root: &workspace_root
-        ~/neft
+        ~/neftio
     node_dependencies_cache_key: &node_dependencies_cache_key "\
         node-dependency-cache-\
         {{ checksum \"package-lock.json\" }}"
@@ -8,12 +8,12 @@ references:
         attach_workspace:
             at: *workspace_root
     run_tests: &run_tests
-        run: npm test -- --verbose
+        run: npm test
 
 defaults: &defaults
     working_directory: *workspace_root
     docker:
-        - image: circleci/node:8.8.1
+        - image: circleci/node:10.15.3
 
 version: 2
 jobs:
@@ -24,19 +24,17 @@ jobs:
             - restore_cache:
                 key: *node_dependencies_cache_key
             - run: npm install
+            - run: npx lerna bootstrap
             - save_cache:
                 key: *node_dependencies_cache_key
                 paths:
                     - node_modules
-            - run: npm run bundle -- --node --html --webgl --android --ios --macos
             - persist_to_workspace:
                 root: *workspace_root
                 paths:
                     - .
     test_linux_node:
         <<: *defaults
-        environment:
-            - TEST_NODE: 1
         steps:
             - *attach_workspace
             - *run_tests
