@@ -1,0 +1,3 @@
+app:
+  dependencies:
+  - compile 'com.tylerjroach:eventsource:1.2.11'

@@ -1,0 +1,8 @@
+platform :ios, '8.0'
+
+target 'Neft' do
+  use_frameworks!
+  {{#manifest.pods}}
+  {{&.}}
+  {{/manifest.pods}}
+end

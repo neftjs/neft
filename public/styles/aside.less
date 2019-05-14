@@ -1,0 +1,44 @@
+@import "colors";
+
+#aside {
+    position: fixed;
+    width: 250px;
+    top: 61px;
+    bottom: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 53px 0;
+
+    > ul > li {
+        padding-bottom: 15px;
+    }
+
+    span.category {
+        display: inline-block;
+        color: #6d6d6d;
+        font-size: 18px;
+        font-weight: 800;
+        padding: 5px 0;
+
+        &.active {
+            color: #444;
+        }
+    }
+
+    > ul ul ul span.category, > ul ul ul span.category + ul {
+        padding-left: 20px;
+    }
+
+    a {
+        color: @blue-color;
+        font-size: 16px;
+        line-height: 1.8;
+        display: block;
+        text-decoration: none;
+        font-weight: 500;
+
+        &.active {
+            font-weight: 900;
+        }
+    }
+}

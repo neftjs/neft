@@ -1,0 +1,17 @@
+<meta
+  name="Style.Animation"
+  title="Animation NML Abstract Type"
+  category="API Reference/Animation"
+/>
+
+<signal name=onStart />
+<signal name=onStop />
+
+<property name=paused type=boolean default=false />
+<property name=reversed type=boolean default=false />
+<property name=loop type=boolean default=false />
+
+<method name=start />
+<method name=stop />
+<method name=pause />
+<method name=resume />

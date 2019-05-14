@@ -1,0 +1,25 @@
+<meta
+  name="Style.Transition"
+  title="Transition NML Type"
+  category="API Reference/Animation"
+/>
+
+```javascript
+Rectangle {
+    width: 100; height: 100;
+    color: 'red'
+    pointer.onClick: function () {
+        this.x = Math.random() * 300;
+    }
+    Transition {
+        property: 'x'
+        animation: NumberAnimation {
+            duration: 1500
+        }
+    }
+}
+```
+
+<property name=animation type="Style.PropertyAnimation" />
+<property name=target type="Style.Item" />
+<property name=property type=string />

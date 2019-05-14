@@ -1,0 +1,17 @@
+<meta
+  name="Style.KeyboardEvent"
+  title="KeyboardEvent"
+  category="API Reference/Event"
+/>
+
+<property name=visible type=boolean default=false readonly />
+
+<property name=height type=number readonly />
+
+<property name=key type=string readonly />
+
+<property name=text type=string readonly />
+
+<method name=show />
+
+<method name=hide />

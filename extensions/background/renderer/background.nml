@@ -1,4 +1,0 @@
-Rectangle {
-    anchors.fill: parent
-    layout.enabled: false
-}

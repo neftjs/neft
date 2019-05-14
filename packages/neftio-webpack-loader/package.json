@@ -1,0 +1,9 @@
+{
+  "name": "@neftio/webpack-loader",
+  "version": "0.0.1",
+  "dependencies": {
+    "@neftio/core": "0.0.1",
+    "lite-html-parser": "^0.2.0",
+    "pegjs": "^0.10.0"
+  }
+}

@@ -1,0 +1,68 @@
+<meta
+  name="Style.Device"
+  title="Device NML Namespace"
+  category="API Reference/Namespace"
+/>
+
+<property name=platform type=string default=Unix>
+  Possible values are:
+   - Android,
+   - iOS,
+   - BlackBerry,
+   - WindowsCE,
+   - WindowsRT,
+   - WindowsPhone,
+   - Linux,
+   - Windows,
+   - Unix,
+   - OSX.
+
+  ```javascript
+  Text {
+      text: 'You are using: ' + Device.platform
+      font.pixelSize: 30
+  }
+  ```
+</property>
+
+<property name=desktop type=boolean default=true />
+
+<property name=tablet type=boolean default=false />
+
+<property name=phone type=boolean default=false />
+
+<property name=mobile type=boolean default=false />
+
+<property name=pixelRatio type=number default=1 />
+
+<signal name=onPointerPress>
+  <argument name=event type="Device.PointerEvent" />
+</signal>
+
+<signal name=onPointerRelease>
+  <argument name=event type="Device.PointerEvent" />
+</signal>
+
+<signal name=onPointerMove>
+  <argument name=event type="Device.PointerEvent" />
+</signal>
+
+<signal name=onPointerWheel>
+  <argument name=event type="Device.PointerEvent" />
+</signal>
+
+<signal name=onKeyPress>
+  <argument name=event type="Device.KeyboardEvent" />
+</signal>
+
+<signal name=onKeyRelease>
+  <argument name=event type="Device.KeyboardEvent" />
+</signal>
+
+<signal name=onKeyHold>
+  <argument name=event type="Device.KeyboardEvent" />
+</signal>
+
+<signal name=onKeyInput>
+  <argument name=event type="Device.KeyboardEvent" />
+</signal>

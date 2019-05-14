@@ -1,0 +1,30 @@
+<meta
+  name="SignalDispatcher"
+  category="API Reference"
+/>
+
+<method name=connect>
+  <argument name=listener type=function />
+  <argument name=context type=any default=null />
+</method>
+
+<method name=connectOnce>
+  <argument name=listener type=function />
+  <argument name=context type=any default=null />
+</method>
+
+<method name=disconnect>
+  <argument name=listener type=function />
+  <argument name=context type=any default=null />
+</method>
+
+<method name=disconnectAll>
+</method>
+
+<method name=emit>
+  <argument name=arg1 type=any />
+  <argument name=arg2 type=any />
+</method>
+
+<method name=isEmpty returns=boolean>
+</method>

@@ -1,0 +1,14 @@
+<meta
+  name="Style.Rectangle"
+  title="Rectangle NML Type"
+  category="API Reference/Shape"
+  extends="Style.Item"
+/>
+
+<property name=color type=string default="transparent" />
+
+<property name=radius type=number default="0" />
+
+<property name="border.width" type=number default="0" />
+
+<property name="border.color" type=string default="transparent" />

@@ -1,0 +1,49 @@
+<meta
+  name="Style.Text"
+  title="Text NML Type"
+  category="API Reference"
+  extends="Style.Item"
+/>
+
+<script lang="nml">
+  Text {
+    font.pixelSize: 30
+    font.family: 'monospace'
+    text: 'Neft Renderer'
+    color: 'blue'
+  }
+</script>
+
+<property name=width type=number default=-1 withSignal />
+
+<property name=height type=number default=-1 withSignal />
+
+<property name=text type=string withSignal />
+
+<property name=color type=string default=black withSignal />
+
+<property name=lineHeight type=number default=1 withSignal hidden />
+
+<property name=contentWidth type=number default=0 readonly withSignal />
+
+<property name=contentHeight type=number default=0 readonly withSignal />
+
+<property name=alignment.horizontal type=string default="left" />
+<property name=alignment.vertical type=string default="top" />
+
+<signal name=onAlignmentChange>
+  <argument name=property type=string />
+  <argument name=oldValue type=Any />
+</signal>
+
+<property name=font.family type=string default="sans-serif" />
+<property name=font.pixelSize type=number default=14 />
+<property name=font.weight type=number default=0.4>
+  In range from 0 to 1.
+</property>
+<property name=font.italic type=boolean default=false />
+
+<signal name=onFontChange>
+  <argument name=property type=string />
+  <argument name=oldValue type=Any />
+</signal>

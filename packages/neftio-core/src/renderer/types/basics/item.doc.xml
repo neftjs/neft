@@ -1,0 +1,448 @@
+<meta
+  name="Style.Item"
+  title="Item NML Type"
+  category="API Reference"
+/>
+
+<property name="id" type="string" readonly>
+
+</property>
+
+<property name="query" type="string" readonly>
+
+</property>
+
+<property name="element" type="DOM.Element" readonly withSignal>
+
+</property>
+
+<signal name=onAnimationFrame>
+  <argument name=milliseconds type=number />
+</signal>
+
+<property name="children" type="object" readonly>
+  <property name="firstChild" type="Style.Item" readonly />
+  <property name="lastChild" type="Style.Item" readonly />
+  <property name="bottomChild" type="Style.Item" readonly />
+  <property name="topChild" type="Style.Item" readonly />
+  <property name="length" type="number" readonly />
+  <method name="get" returns="Style.Item">
+    <argument name="index" type="number" />
+    Returns an item with the given index.
+  </method>
+
+  <method name="index" returns="Style.Item">
+    <argument name="item" type="Style.Item" />
+    Returns index at which a given element can be found in the children array,
+    or `-1`if it is not present.
+  </method>
+
+  <method name="has" returns="boolean">
+    <argument name="item" type="Style.Item" />
+    Determines whether the given element is a child of an item.
+  </method>
+
+  <method name="clear">
+    Removes all children from an item.
+  </method>
+</property>
+
+<signal name="onChildrenChange">
+  <argument name="added" type="Style.Item" />
+  <argument name="removed" type="Style.Item" />
+</signal>
+
+<property name="parent" type="Style.Item" withSignal />
+
+<property name="previousSibling" type="Style.Item" withSignal />
+
+<property name="nextSibling" type="Style.Item" withSignal />
+
+<property name="belowSibling" type="Style.Item" readonly />
+
+<property name="aboveSibling" type="Style.Item" readonly />
+
+<property name="index" type="number" />
+
+<property name="visible" type=boolean default=true withSignal>
+  Determines whether an item is visible or not.
+
+  <script lang="nml">
+    Item {
+      width: 100
+      height: 100
+      pointer.onClick: function(){
+        rect.visible = !rect.visible;
+        text.text = rect.visible ? "Click to hide" : "Click to show";
+      }
+      Rectangle {
+        id: rect
+        anchors.fill: parent
+        color: 'blue'
+      }
+      Text {
+        id: text
+        text: "Click to hide"
+        anchors.centerIn: parent
+      }
+    }
+  </script>
+</property>
+
+<property name=clip type=boolean default=false withSignal />
+
+<property name=width type=number default=0 withSignal />
+
+<property name=height type=number default=0 withSignal />
+
+<property name=x type=number default=0 withSignal />
+
+<property name=y type=number default=0 withSignal />
+
+<property name=z type=number default=0 withSignal />
+
+<property name=scale type=number default=1 withSignal />
+
+<property name=rotation type=number default=0 withSignal>
+  <script lang="nml">
+    Rectangle {
+      width: 100
+      height: 100
+      color: 'red'
+      rotation: Math.PI / 4
+    }
+  </script>
+</property>
+
+<property name=opacity type=number default=1 withSignal />
+
+<method name=scaleInPoint>
+  <argument name=scale type=number />
+  <argument name=pointX type=number />
+  <argument name=pointY type=number />
+</method>
+
+<method name=getGlobalComputes returns=object>
+  Returns globally computed x, y, scale, rotation, visible and opacity.
+</method>
+
+<property name="anchors" type="object" readonly>
+  Anchors describe position relations between two items.
+
+  Each item has few lines: top, bottom, verticalCenter, left, right, horizontalCenter.
+
+  Anchors give a posibility to say, that a line of the first item must be
+  always in the same position as a line of the second item.
+
+  Anchors work only between siblings and in relation to the direct parent.
+
+  ```javascript
+  Item {
+      height: 100
+      Rectangle {
+          id: rect1
+          width: 100
+          height: 100
+          color: 'green'
+      }
+      Rectangle {
+          width: 40
+          height: 40
+          color: 'red'
+          anchors.left: rect1.right
+      }
+  }
+  ```
+
+  ```javascript
+  Rectangle {
+      width: 100
+      height: 100
+      color: 'green'
+      Rectangle {
+          width: 40
+          height: 40
+          color: 'red'
+          anchors.left: parent.right
+      }
+  }
+  ```
+
+  Horizontal anchors can't point to the vertical lines (and vice versa),
+  so `anchors.top = parent.left` is not allowed.
+
+  <property name=left type=object />
+
+  <property name=right type=object />
+
+  <property name=horizontalCenter type=object />
+
+  <script lang="svg">
+    <svg viewBox="0 0 1 1">
+        <rect x="0.2" y="0.2" width="0.6" height="0.6" fill="lightgray" />
+        <line x1="0.5" y1="0" x2="0.5" y2="1" stroke="black" stroke-width="0.01" />
+    </svg>
+  </script>
+
+  ```javascript
+  Item {
+      height: 100
+      Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+      Rectangle {
+          color: 'red'; width: 40; height: 40
+          anchors.horizontalCenter: rect1.horizontalCenter
+      }
+  }
+  ```
+
+  <property name=top type=object />
+
+  <script lang="svg">
+  <svg viewBox="0 0 1 1">
+      <rect x="0.2" y="0.2" width="0.6" height="0.6" fill="lightgray" />
+      <line x1="0" y1="0.2" x2="1" y2="0.2" stroke="black" stroke-width="0.01" />
+  </svg>
+  </script>
+
+  ```javascript
+  Item {
+      height: 100
+      Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+      Rectangle {
+          color: 'red'; width: 40; height: 40
+          anchors.top: rect1.verticalCenter
+      }
+  }
+  ```
+
+  <property name=bottom type=object />
+
+  <script lang="svg">
+  <svg viewBox="0 0 1 1">
+      <rect x="0.2" y="0.2" width="0.6" height="0.6" fill="lightgray" />
+      <line x1="0" y1="0.8" x2="1" y2="0.8" stroke="black" stroke-width="0.01" />
+  </svg>
+  </script>
+
+  <property name=verticalCenter type=object />
+
+  <script lang="svg">
+  <svg viewBox="0 0 1 1">
+      <rect x="0.2" y="0.2" width="0.6" height="0.6" fill="lightgray" />
+      <line x1="0" y1="0.5" x2="1" y2="0.5" stroke="black" stroke-width="0.01" />
+  </svg>
+  </script>
+
+  ```javascript
+  Item {
+      height: 100
+      Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+      Rectangle {
+          color: 'red'; width: 40; height: 40
+          anchors.verticalCenter: rect1.verticalCenter
+      }
+  }
+  ```
+
+  <property name=centerIn type=object />
+
+  It's a shortcut for the horizontalCenter and verticalCenter anchors.
+
+  No target line is required.
+
+  ```javascript
+  Rectangle {
+      id: rect1
+      width: 100
+      height: 100
+      color: 'green'
+      Rectangle {
+          width: 40
+          height: 40
+          color: 'red'
+          anchors.centerIn: parent
+      }
+  }
+  ```
+
+  <property name=fill type=object />
+
+  Changes item position and its size to be always equal the anchored target.
+
+  No target line is required.
+
+  ```javascript
+  Item {
+      height: 100
+      Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+      Rectangle {
+          color: 'red'
+          opacity: 0.5
+          anchors.fill: rect1
+      }
+  }
+  ```
+</property>
+
+<signal name=onAnchorsChange>
+  <argument name=property type=string />
+  <argument name=oldValue type=Array />
+</signal>
+
+<property name="layout" type="object" readonly>
+  <property name=enabled type=boolean default=true />
+
+  <property name=fillWidth type=boolean default=false />
+
+  <property name=fillHeight type=boolean default=false />
+</property>
+
+<signal name=onLayoutChange>
+  <argument name=property type=string />
+  <argument name=oldValue type=Any />
+</signal>
+
+<property name="pointer" type="object" readonly>
+  ```javascript
+  Rectangle {
+      width: 100
+      height: 100
+      color: 'green'
+      if (this.pointer.hover) {
+          color: 'red'
+      }
+  }
+  ```
+
+  <property name=enabled type=boolean default=true />
+
+  <signal name=onClick>
+    <argument name=event type="Style.PointerEvent" />
+  </signal>
+
+  <signal name=onPress>
+    <argument name=event type="Style.PointerEvent" />
+  </signal>
+
+  <signal name=onRelease>
+    <argument name=event type="Style.PointerEvent" />
+  </signal>
+
+  <signal name=onEnter>
+    <argument name=event type="Style.PointerEvent" />
+  </signal>
+
+  <signal name=onExit>
+    <argument name=event type="Style.PointerEvent" />
+  </signal>
+
+  <signal name=onWheel>
+    <argument name=event type="Style.PointerEvent" />
+  </signal>
+
+  <signal name=onMove>
+    <argument name=event type="Style.PointerEvent" />
+  </signal>
+
+  <property name=pressed type=boolean default=false />
+
+  <property name=hover type=boolean default=false />
+</property>
+
+<property name="margin" type="object" readonly>
+  <property name=left type=number default=0>
+    Margins are used in anchors and within layout items.
+
+  ```javascript
+  Rectangle {
+      width: 100
+      height: 100
+      color: 'red'
+      Rectangle {
+          width: 100
+          height: 50
+          color: 'yellow'
+          anchors.left: parent.right
+          margin.left: 20
+      }
+  }
+  ```
+
+  ```javascript
+  Column {
+      Rectangle { color: 'red'; width: 50; height: 50; }
+      Rectangle { color: 'yellow'; width: 50; height: 50; margin.top: 20; }
+      Rectangle { color: 'green'; width: 50; height: 50; }
+  }
+  ```
+  </property>
+
+  <property name=top type=number default=0 />
+
+  <property name=right type=number default=0 />
+
+  <property name=bottom type=number default=0 />
+</property>
+
+<signal name=onMarginChange>
+  <argument name=property type=string />
+  <argument name=oldValue type=Any />
+</signal>
+
+<property name="keys" type="object" readonly>
+  ```javascript
+  Rectangle {
+      width: 100
+      height: 100
+      color: 'green'
+      keys.focus: true
+      keys.onPressed: function(){
+          this.color = 'red';
+      }
+      keys.onReleased: function(){
+          this.color = 'green';
+      }
+  }
+  ```
+
+  <signal name=onPress>
+    <argument name=event type="Style.KeyboardEvent" />
+  </signal>
+
+  <signal name=onHold>
+    <argument name=event type="Style.KeyboardEvent" />
+  </signal>
+
+  <signal name=onRelease>
+    <argument name=event type="Style.KeyboardEvent" />
+  </signal>
+
+  <signal name=onInput>
+    <argument name=event type="Style.KeyboardEvent" />
+  </signal>
+
+  <property name=focus type=boolean default=false />
+</property>
+
+<article title="Custom properties">
+  <script lang="nml">
+    Item {
+      id: main
+      property currentLife: 0.8
+      Text {
+        text: "Life: " + main.currentLife
+      }
+    }
+  </script>
+</article>
+
+<article title="Custom signals">
+  <script lang="nml">
+    Item {
+      signal onPlayerCollision
+      onPlayerCollision(){
+        // boom!
+      }
+    }
+  </script>
+</article>

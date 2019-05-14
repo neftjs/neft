@@ -1,3 +1,0 @@
--keep class io.neft.** { *; }
--keep class com.caverock.** { *; }
--dontwarn com.caverock.**

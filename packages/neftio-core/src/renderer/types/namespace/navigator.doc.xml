@@ -1,0 +1,13 @@
+<meta
+  name="Style.Navigator"
+  title="Navigator NML Namespace"
+  category="API Reference/Namespace"
+/>
+
+<property name=language type=string default=en readonly />
+
+<property name=browser type=boolean readonly />
+
+<property name=native type=boolean readonly />
+
+<property name=online type=boolean readonly />

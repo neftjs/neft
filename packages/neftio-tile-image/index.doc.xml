@@ -1,0 +1,7 @@
+<meta
+  name="TileImage"
+  category="Modules"
+  extends="Style.Native"
+/>
+
+<property name=source type=string />

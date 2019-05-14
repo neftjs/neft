@@ -1,0 +1,43 @@
+<meta
+  name="Style.Image"
+  title="Image NML Type"
+  category="API Reference"
+  extends="Style.Item"
+/>
+
+<script lang="nml">
+  Image {
+    source: 'http://lorempixel.com/200/140/'
+    onLoad: function(error){
+      if (error){
+        console.error("Can't load this image");
+      } else {
+        console.log("Image has been loaded");
+      }
+    }
+  }
+</script>
+
+<property name=pixelRatio type=number default=1 withSignal static />
+
+<property name=width type=number default=-1 withSignal />
+
+<property name=height type=number default=-1 withSignal />
+
+<property name=source type=string withSignal>
+  The image source URL or data URI.
+</property>
+
+<property name=resolution type=number default=1 withSignal />
+
+<property name=sourceWidth type=number default=0 withSignal />
+
+<property name=sourceHeight type=number default=0 withSignal />
+
+<property name=loaded type=boolean default=false readonly withSignal />
+
+<signal name=onLoad />
+
+<signal name=onError>
+  <argument name=cause type=Error />
+</signal>

@@ -1,0 +1,28 @@
+
+buildscript {
+    repositories {
+        jcenter()
+        google()
+
+        {{#manifest.project.buildscript.repositories}}
+        {{&.}}
+        {{/manifest.project.buildscript.repositories}}
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.0'
+        {{#manifest.project.dependencies}}
+        {{&.}}
+        {{/manifest.project.dependencies}}
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+
+        {{#manifest.project.allprojects.repositories}}
+        {{&.}}
+        {{/manifest.project.allprojects.repositories}}
+    }
+}

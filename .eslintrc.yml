@@ -1,0 +1,18 @@
+extends: airbnb-base
+rules:
+  semi: [error, never]
+  no-param-reassign: [error, props: false]
+  func-names: off
+  no-underscore-dangle: off
+  no-bitwise: off
+env:
+  jest: true
+globals:
+  assert: true
+settings:
+  import/resolver:
+    node:
+      extensions:
+        - .js
+        - .coffee
+        - .litcoffee

@@ -1,0 +1,27 @@
+<meta
+  name="Style.PropertyAnimation"
+  title="PropertyAnimation NML Abstract Type"
+  category="API Reference/Animation"
+  extends="Style.Animation"
+/>
+
+<property name=property type=string />
+<property name=duration type=number default=250 />
+<property name=startDelay type=number default=0 />
+<property name=loopDelay type=number default=0 />
+<property name=delay type=number default=0 />
+<property name=updateProperty type=bitmask default="PropertyAnimation.ON_START | PropertyAnimation.ON_STOP" />
+<property name=from type=any />
+<property name=to type=any />
+<property name=progress type=number default=0 readonly />
+<property name=updatePending type=boolean default=false readonly />
+<property name=easing.type type=string default=Linear>
+  Supported easing functions:
+Linear, InQuad, OutQuad, InOutQuad, InCubic, OutCubic,
+InOutCubic, InQuart, OutQuart, InOutQuart, InQuint, OutQuint,
+InOutQuint, InSine, OutSine, InOutSine, InExpo, OutExpo,
+InOutExpo, InCirc, OutCirc, InOutCirc, InElastic, OutElastic,
+InOutElastic, InBack, OutBack, InOutBack, InBounce, OutBounce,
+InOutBounce, Steps.
+</property>
+<property name=easing.steps type=number default=1 />

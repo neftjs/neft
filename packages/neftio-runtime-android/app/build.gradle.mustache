@@ -1,0 +1,68 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion {{&manifest.compileSdkVersion}}
+    buildToolsVersion "{{&manifest.buildToolsVersion}}"
+    defaultConfig {
+        applicationId "{{&manifest.package}}"
+        minSdkVersion 18
+        targetSdkVersion {{&manifest.targetSdkVersion}}
+        versionCode {{&manifest.versionCode}}
+        versionName "{{&manifest.versionName}}"
+    }
+    signingConfigs {
+        {{#manifest.signing}}
+        config {
+            storeFile file('{{&storeFile}}')
+            storePassword '{{&storePassword}}'
+            keyPassword '{{&keyPassword}}'
+            keyAlias '{{&keyAlias}}'
+        }
+        {{/manifest.signing}}
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            {{#manifest.signing}}
+            signingConfig signingConfigs.config
+            {{/manifest.signing}}
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jni.srcDirs = []
+            jniLibs.srcDirs = ['src/main/libs']
+        }
+    }
+    productFlavors {
+    }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi', 'armeabi-v7a', 'x86'
+            universalApk true
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    {{#manifest.app.dependencies}}
+    {{&.}}
+    {{/manifest.app.dependencies}}
+    implementation files('src/main/libs/androidsvg-1.2.1.jar')
+    implementation 'com.jakewharton:process-phoenix:1.1.0'
+    compileOnly 'org.projectlombok:lombok:1.18.2'
+    annotationProcessor 'org.projectlombok:lombok:1.18.2'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+}
+
+{{#manifest.app.plugins}}
+{{&.}}
+{{/manifest.app.plugins}}

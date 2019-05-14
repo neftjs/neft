@@ -1,0 +1,7 @@
+{
+  "packages": [
+    "packages/*",
+    "__tests__"
+  ],
+  "version": "0.0.0"
+}
