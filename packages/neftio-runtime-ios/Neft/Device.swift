@@ -77,8 +77,8 @@ class Device {
         app.client.pushBoolean(isPhone)
 
         // notifications
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
     func onEvent(_ event: UIEvent) {
@@ -126,7 +126,7 @@ class Device {
 
     @objc func keyboardWillShow(notification: NSNotification) {
         if let userInfo = notification.userInfo {
-            if let size = userInfo[UIKeyboardFrameEndUserInfoKey] as? CGRect {
+            if let size = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
                 keyboardHeight = size.height
             }
         }

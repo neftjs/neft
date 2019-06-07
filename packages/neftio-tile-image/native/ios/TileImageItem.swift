@@ -40,7 +40,7 @@ extension Extension.TileImage {
                 let scaledImg = UIImage(
                     cgImage: img!.cgImage!,
                     scale: self.resolution,
-                    orientation: UIImageOrientation.up
+                    orientation: UIImage.Orientation.up
                 )
                 self.itemView.backgroundColor = UIColor(patternImage: scaledImg)
             }

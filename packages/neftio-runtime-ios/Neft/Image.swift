@@ -53,7 +53,8 @@ class Image: Item {
     static private func loadDataUriSource(_ source: String) -> Data? {
         let svgPrefix = "data:image/svg+xml;utf8,"
         if source.hasPrefix(svgPrefix) {
-            return (try? Data(contentsOf: URL(fileURLWithPath: source.substring(from: source.characters.index(source.startIndex, offsetBy: svgPrefix.characters.count)))))
+            let sourceWithoutPrefix = String(source.dropFirst(svgPrefix.count))
+            return (try? Data(contentsOf: URL(fileURLWithPath: sourceWithoutPrefix)))
         }
         return self.loadUrlSource(source)
     }

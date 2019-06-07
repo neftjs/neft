@@ -1,6 +1,6 @@
 import UIKit
 
-extension Extension.TextInput {
+extension Extension.Input {
     class TextInputItem: NativeItem {
         override class var name: String { return "TextInput" }
 
@@ -88,16 +88,16 @@ extension Extension.TextInput {
 
         init() {
             super.init(itemView: UITextField())
-            fieldView.addTarget(self, action: #selector(onTextChange(textField:)), for: UIControlEvents.editingChanged)
-            fieldView.addTarget(self, action: #selector(onExit(textField:)), for: UIControlEvents.editingDidEndOnExit)
+            fieldView.addTarget(self, action: #selector(onTextChange(textField:)), for: UIControl.Event.editingChanged)
+            fieldView.addTarget(self, action: #selector(onExit(textField:)), for: UIControl.Event.editingDidEndOnExit)
             fieldView.borderStyle = .none
             fieldView.frame.size.width = 250
             fieldView.frame.size.height = 30
             fieldView.frame = fieldView.frame
 
-            NotificationCenter.default.addObserver(self, selector: #selector(didBeginEditing(_:)), name: Notification.Name.UITextFieldTextDidBeginEditing, object: fieldView)
+            NotificationCenter.default.addObserver(self, selector: #selector(didBeginEditing(_:)), name: UITextField.textDidBeginEditingNotification, object: fieldView)
 
-            NotificationCenter.default.addObserver(self, selector: #selector(didEndEditing(_:)), name: Notification.Name.UITextFieldTextDidEndEditing, object: fieldView)
+            NotificationCenter.default.addObserver(self, selector: #selector(didEndEditing(_:)), name: UITextField.textDidEndEditingNotification, object: fieldView)
         }
 
         private func updatePlaceholder() {
@@ -105,7 +105,7 @@ extension Extension.TextInput {
                 fieldView.placeholder = placeholder
             } else {
                 let attrs = NSAttributedString(string: placeholder,
-                                               attributes: [NSForegroundColorAttributeName: placeholderColor!])
+                                               attributes: [NSAttributedString.Key.foregroundColor: placeholderColor!])
                 fieldView.attributedPlaceholder = attrs
             }
         }

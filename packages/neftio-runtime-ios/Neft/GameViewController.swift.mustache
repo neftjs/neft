@@ -4,14 +4,14 @@ public extension CGFloat {
     /**
      Returns a random floating point number between 0.0 and 1.0, inclusive.
      */
-    public static func random() -> CGFloat {
+    static func random() -> CGFloat {
         return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
     }
 }
 
 extension String {
     var uppercaseFirst: String {
-        return String(characters.prefix(1)).uppercased() + String(characters.dropFirst())
+        return prefix(1).uppercased() + self.dropFirst()
     }
 }
 
@@ -61,7 +61,7 @@ class GameViewController: UIViewController {
         // animation frame
         let updater = CADisplayLink(target: self, selector: #selector(GameViewController.animationFrame))
         updater.frameInterval = 1
-        updater.add(to: RunLoop.current, forMode: RunLoopMode.commonModes)
+        updater.add(to: RunLoop.current, forMode: RunLoop.Mode.common)
 
         super.viewDidLoad()
 

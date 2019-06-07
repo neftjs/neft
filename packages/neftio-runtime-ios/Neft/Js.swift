@@ -149,7 +149,7 @@ class JS {
         context = JSContext()
         proxy = NeftJS()
         proxy.js = self
-        context.setObject(proxy, forKeyedSubscript: "ios" as (NSCopying & NSObjectProtocol)!)
+        context.setObject(proxy, forKeyedSubscript: "ios" as NSCopying & NSObjectProtocol)
         self.runScript("js")
         context.exceptionHandler = {
             (context: JSContext!, value: JSValue!) in
