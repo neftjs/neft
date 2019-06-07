@@ -1,0 +1,5 @@
+const { WebView } = require('./index')
+
+@WebView webview {
+  fillWidth: true
+}
