@@ -4,3 +4,4 @@
 /packages/*/node_modules
 .idea/
 /gh-pages
+.vscode
