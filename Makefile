@@ -11,3 +11,6 @@ lint:
 
 fix:
 	npm run lint -- --fix
+
+link-packages-to-local-npm:
+	npx lerna exec --concurrency 1 --stream --no-bail -- npm link
