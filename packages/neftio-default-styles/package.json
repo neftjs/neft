@@ -1,7 +1,0 @@
-{
-  "name": "@neftio/default-styles",
-  "version": "0.0.1",
-  "dependencies": {
-    "@neftio/core": "0.0.1"
-  }
-}

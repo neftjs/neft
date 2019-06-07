@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const slash = require('slash')
-const loader = require('@neftio/webpack-loader')
+const loader = require('@neft/webpack-loader')
 
 const createLocalRequire = files => (filepath) => {
   const key = slash(filepath)
@@ -14,8 +14,8 @@ const createLocalRequire = files => (filepath) => {
 
 const requireNmlFile = (filepath) => {
   const localRequires = {
-    '@neftio/core/src/renderer': require('@neftio/core/src/renderer'),
-    './img-tag': require('@neftio/default-styles/img-tag'),
+    '@neft/core/src/renderer': require('@neft/core/src/renderer'),
+    './img-tag': require('@neft/default-styles/img-tag'),
   }
   const localRequire = createLocalRequire(localRequires)
 
@@ -29,10 +29,10 @@ const requireNmlFile = (filepath) => {
 }
 
 const localRequires = {
-  '@neftio/core/src/document': require('@neftio/core/src/document'),
-  '@neftio/core/src/document/element': require('@neftio/core/src/document/element'),
-  '@neftio/core/src/renderer': require('@neftio/core/src/renderer'),
-  '@neftio/default-styles/index.nml': requireNmlFile('@neftio/default-styles/index.nml'),
+  '@neft/core/src/document': require('@neft/core/src/document'),
+  '@neft/core/src/document/element': require('@neft/core/src/document/element'),
+  '@neft/core/src/renderer': require('@neft/core/src/renderer'),
+  '@neft/default-styles/index.nml': requireNmlFile('@neft/default-styles/index.nml'),
 }
 
 const localRequire = createLocalRequire(localRequires)
@@ -45,7 +45,7 @@ exports.createView = (html) => {
     emitError: () => {},
     emitWarning: () => {},
     query: {
-      defaultStyles: ['@neftio/default-styles'],
+      defaultStyles: ['@neft/default-styles'],
     },
     context: path.join(__dirname, '../'),
   }, html)

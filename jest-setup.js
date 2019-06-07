@@ -1,1 +1,1 @@
-global.assert = require('./packages/neftio-core/src/assert')
+global.assert = require('./packages/neft-core/src/assert')

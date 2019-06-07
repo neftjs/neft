@@ -1,6 +1,6 @@
 'use strict'
 
-{Struct, ObservableArray} = require '@neftio/core'
+{Struct, ObservableArray} = require '@neft/core'
 {createView, renderParse} = require './utils'
 
 describe 'Document string interpolation', ->
