@@ -127,7 +127,7 @@ public class App {
 
         if (isFirstAttach) {
             windowView = new WindowView(activity.getApplicationContext());
-            startWhenReady();
+            run();
         } else {
             renderer.restore();
         }
@@ -158,16 +158,6 @@ public class App {
         synchronized (keyEvents) {
             keyEvents.add(new FullKeyEvent(keyCode, event));
         }
-    }
-
-    private void startWhenReady() {
-        windowView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                windowView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                run();
-            }
-        });
     }
 
     private void loadCode() {
