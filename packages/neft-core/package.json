@@ -1,0 +1,8 @@
+{
+  "name": "@neft/core",
+  "version": "0.0.1",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "coffee-script": "^1.12.7"
+  }
+}

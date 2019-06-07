@@ -1,6 +1,6 @@
 'use strict'
 
-{ObservableArray} = require '@neftio/core'
+{ObservableArray} = require '@neft/core'
 {createView, renderParse} = require './utils'
 
 describe 'Document n-for', ->

@@ -1,6 +1,6 @@
 references:
     workspace_root: &workspace_root
-        ~/neftio
+        ~/neft
     node_dependencies_cache_key: &node_dependencies_cache_key "\
         node-dependency-cache-\
         {{ checksum \"package-lock.json\" }}"

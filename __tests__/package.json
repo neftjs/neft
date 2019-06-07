@@ -1,11 +1,11 @@
 {
-  "name": "@neftio/tests",
+  "name": "@neft/tests",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@neftio/core": "^0.0.1",
-    "@neftio/default-styles": "^0.0.1",
-    "@neftio/webpack-loader": "^0.0.1",
+    "@neft/core": "^0.0.1",
+    "@neft/default-styles": "^0.0.1",
+    "@neft/webpack-loader": "^0.0.1",
     "slash": "^3.0.0"
   }
 }

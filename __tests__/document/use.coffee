@@ -1,7 +1,7 @@
 'use strict'
 
-Struct = require '@neftio/core/src/struct'
-eventLoop = require '@neftio/core/src/event-loop'
+Struct = require '@neft/core/src/struct'
+eventLoop = require '@neft/core/src/event-loop'
 {createView, renderParse} = require './utils'
 
 describe 'Document n-use', ->

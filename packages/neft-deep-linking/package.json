@@ -1,0 +1,7 @@
+{
+  "name": "@neft/deep-linking",
+  "version": "0.0.1",
+  "dependencies": {
+    "@neft/core": "0.0.1"
+  }
+}
