@@ -64,11 +64,11 @@ class Text: Item {
             (item: Text, val: String) in
             switch val {
             case "center":
-                item.textLayer.alignmentMode = "center"
+                item.textLayer.alignmentMode = .center
             case "right":
-                item.textLayer.alignmentMode = "right"
+                item.textLayer.alignmentMode = .right
             default:
-                item.textLayer.alignmentMode = "left"
+                item.textLayer.alignmentMode = .left
             }
         }
 
@@ -141,8 +141,8 @@ class Text: Item {
             if font == nil {
                 font = UIFont(name: Text.defaultFont, size: fontPixelSize)
             }
-            let attributes: [String : Any] = [
-                NSFontAttributeName: font as Any
+            let attributes: [NSAttributedString.Key : Any] = [
+                NSAttributedString.Key.font: font as Any
             ]
             if font == nil {
                 size = CGSize(width: 0, height: 0)
@@ -154,7 +154,7 @@ class Text: Item {
                     context: nil
                     ).size
             } else {
-                size = (text! as NSString).size(attributes: attributes)
+                size = (text! as NSString).size(withAttributes: attributes)
             }
         }
         pushAction(.textSize, size.width, size.height)
