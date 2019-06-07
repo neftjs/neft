@@ -5,3 +5,4 @@
 .idea/
 /gh-pages
 .vscode
+lerna-debug.log
