@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const cp = require('child_process')
-const log = require('@neft/core/src/log')
+const { logger } = require('@neft/core')
 
 exports.realpath = fs.realpathSync('.')
 
@@ -10,6 +10,8 @@ exports.packageFile = JSON.parse(fs.readFileSync(path.join(exports.realpath, '/p
 exports.packageConfig = exports.packageFile.config || {}
 
 exports.outputDir = path.join(exports.realpath, '/dist')
+
+exports.outputFile = 'bundle.js'
 
 exports.operations = {
   init: true,
@@ -36,41 +38,9 @@ exports.args = {
   production: true,
 }
 
-exports.targetEnvs = {
-  node: {
-    node: true,
-    server: true,
-  },
-  html: {
-    html: true,
-    browser: true,
-    client: true,
-  },
-  webgl: {
-    webgl: true,
-    browser: true,
-    client: true,
-  },
-  android: {
-    android: true,
-    client: true,
-    native: true,
-  },
-  ios: {
-    ios: true,
-    client: true,
-    native: true,
-    apple: true,
-  },
-  macos: {
-    macos: true,
-    client: true,
-    native: true,
-    apple: true,
-  },
-}
+exports.devServerPort = 3101
 
-exports.devServerPort = 3000
+exports.hmrServerPort = 3102
 
 exports.localIp = (() => {
   let result
@@ -85,7 +55,7 @@ exports.localIp = (() => {
     try {
       result = cp.execSync('ipconfig getifaddr en0', { stdio: 'pipe' })
     } catch (error2) {
-      log.warn('Cannot resolve local IP address; is ifconfig or ipconfig commands available?')
+      logger.warn('Cannot resolve local IP address; is ifconfig or ipconfig commands available?')
       return 'localhost'
     }
   }

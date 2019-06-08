@@ -145,26 +145,6 @@ module.exports = class StyleItem
 
             return true
 
-    findAndSetLinkUri: ->
-        assert.isDefined @item
-
-        {element} = @
-
-        tmp = element
-        while tmp
-            if tmp._documentStyle and tmp isnt element
-                break
-            if tmp.name is 'a' and tmp.props.has('href')
-                @setLinkUri tmp.props.href
-                break
-            tmp = tmp.parent
-        return
-
-    setLinkUri: (val) ->
-        if @item
-            @item.linkUri = val + ''
-        return
-
     findAndSetVisibility: ->
         assert.isDefined @item
 
@@ -231,7 +211,7 @@ module.exports = class StyleItem
 
                 loop
                     parentStyle = parent?.element.props[STYLE_ID_PROP]
-                    if parentStyle[0] is file and parentStyle[1] is style
+                    if parentStyle and parentStyle[0] is file and parentStyle[1] is style
                         scope = parent.scope
                         @item = scope?.objects[subid]
 
@@ -263,9 +243,6 @@ module.exports = class StyleItem
             # set text
             if element instanceof Text
                 @updateText()
-
-            # set linkUri
-            @findAndSetLinkUri()
 
             if element instanceof Tag
                 # set props

@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 const RUNNERS = {
   html: require('./browser'),
   webgl: require('./browser'),

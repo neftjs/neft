@@ -1,0 +1,8 @@
+{
+  "name": "parcel-plugin-coffee-script",
+  "version": "0.0.1",
+  "dependencies": {
+    "coffee-script": "^1.12.7",
+    "parcel-bundler": "^1.12.3"
+  }
+}

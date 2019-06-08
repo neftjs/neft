@@ -31,3 +31,5 @@ describe 'Document properties', ->
 
         attrValue = view.element.children[0].props.data
         assert.is attrValue, '+2'
+
+    return

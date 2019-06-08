@@ -56,6 +56,8 @@ describe '<style />', ->
             view = createViewAndRender '<div />'
             assert.instanceOf view.element.query('div').style, Renderer.Item
 
+        return
+
     it 'applies top level selects', ->
         view = createView '''
             <div class="first" />
@@ -69,6 +71,8 @@ describe '<style />', ->
         renderParse view
         testNode = view.element.query 'div'
         assert.ok testNode.style._classList[0].running
+
+    return
 
 describe 'n-style', ->
     it "accepts 'style' syntax", ->
@@ -108,6 +112,8 @@ describe 'n-style', ->
         bNode = view.element.query 'b'
         assert.is bNode.style.element, bNode
 
+    return
+
 describe 'Element.Text', ->
     it 'is rendered as Renderer.Text', ->
         view = createViewAndRender '''
@@ -133,6 +139,8 @@ describe 'Element.Text', ->
         node.text = '123'
 
         assert.is item.text, node.text
+
+    return
 
 describe "style: properties", ->
     it 'are set on a style item', ->
@@ -206,6 +214,8 @@ describe "style: properties", ->
         assert.is item.x, 2
         assert.isEqual oldVals, [2, 0, 4, 0]
 
+    return
+
 describe 'CustomTag style properties', ->
     class CustomStyle1Tag extends Element.Tag.CustomTag
         @registerAs 'custom-style-tag1'
@@ -238,6 +248,7 @@ describe 'CustomTag style properties', ->
         node.props.set 'left', 70
         assert.is item.x, node.props.left
 
+    return
 
 describe 'item visible', ->
     it "is 'true' by default", ->
@@ -342,6 +353,8 @@ describe 'item visible', ->
         divNode.visible = false
         assert.is bNode.style.visible, true
 
+    return
+
 describe "item parent", ->
     it "refers to the first styled parent style", ->
         view = createViewAndRender '''
@@ -403,6 +416,8 @@ describe "item parent", ->
         assert.isDefined bNode.style.parent
         assert.isNot bNode.style.parent, mainNode.style
 
+    return
+
 describe "Style item index", ->
     describe "is valid on", ->
         it "index change", ->
@@ -441,6 +456,8 @@ describe "Style item index", ->
 
             iNode.parent = emNode
             assert.is iNode.style.nextSibling, bNode.style
+
+        return
 
     it "is valid in n-for", ->
         test = ->
@@ -485,3 +502,4 @@ describe "Style item index", ->
 
         assert.is emNode.style.previousSibling, iNode.style
 
+    return

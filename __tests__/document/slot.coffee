@@ -42,3 +42,5 @@ describe 'Document n-slot', ->
 
         elem.props.set 'x', 1
         assert.is view.element.stringify(), '<b></b>'
+
+    return

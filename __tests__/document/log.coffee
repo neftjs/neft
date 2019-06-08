@@ -16,3 +16,5 @@ describe '<n-log />', ->
             <div><n-log a="1">123</n-log></div>
         '''
         assert.is view.element.stringify(), '<div></div>'
+
+    return

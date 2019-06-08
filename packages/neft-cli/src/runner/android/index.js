@@ -2,7 +2,7 @@ const cp = require('child_process')
 const fs = require('fs-promise-native')
 const path = require('path')
 const yaml = require('js-yaml')
-const log = require('@neft/core/src/log')
+const { logger } = require('@neft/core')
 const { realpath } = require('../../config')
 
 const apkDirPath = 'dist/android/app/build/outputs/apk/'
@@ -78,23 +78,23 @@ const startLogcat = () => {
       }
       switch (level) {
         case 'OK':
-          log.ok(msg)
+          logger.ok(msg)
           break
         case 'I':
         case 'INFO':
-          log.info(msg)
+          logger.info(msg)
           break
         case 'W':
         case 'WARN':
-          log.warn(msg)
+          logger.warn(msg)
           break
         case 'E':
         case 'F':
         case 'ERROR':
-          log.error(msg)
+          logger.error(msg)
           break
         default:
-          log.log(msg)
+          logger.log(msg)
       }
     })
   })
@@ -120,15 +120,15 @@ const runApk = manifest => new Promise((resolve, reject) => {
 module.exports = async ({ production }) => {
   const manifestPath = path.join(realpath, 'manifest/android.yaml')
   const manifest = yaml.safeLoad(await fs.readFile(manifestPath, 'utf-8'))
-  log.info('Installing APK on the connected device')
+  logger.info('Installing APK on the connected device')
   await installApk({ production })
   const logcat = startLogcat()
   try {
-    log.info('Running APK on the device')
+    logger.info('Running APK on the device')
     await runApk(manifest)
   } catch (error) {
     logcat.kill()
     throw error
   }
-  log.log('--------------------')
+  logger.log('--------------------')
 }

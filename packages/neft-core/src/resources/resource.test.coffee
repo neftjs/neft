@@ -29,6 +29,8 @@ describe 'parseFileName()', ->
     it 'parses property', ->
         assert.is parseFileName('abc123#prop1').property, 'prop1'
 
+    return
+
 describe 'resolve()', ->
     rsc = format = path1x = path1p5x = path2x = paths = width = file = color = null
 
@@ -101,3 +103,5 @@ describe 'resolve()', ->
         assert.is rsc.resolve(width: 350, height: 150), path2x
         assert.is rsc.resolve(width: 400, height: 200), path2x
         assert.is rsc.resolve(width: 900, height: 500), path2x
+
+    return

@@ -1,0 +1,8 @@
+{
+  "name": "@neft/parcel-plugin-nml",
+  "version": "0.0.1",
+  "dependencies": {
+    "@neft/compiler-style": "0.0.1",
+    "parcel-bundler": "^1.12.3"
+  }
+}

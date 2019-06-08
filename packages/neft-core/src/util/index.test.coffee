@@ -26,6 +26,8 @@ describe 'is()', ->
     it 'returns false for negative zero and positive zero comparison', ->
         assert.is util.is(-0, 0), false
 
+    return
+
 describe 'isFloat()', ->
     it 'returns true for finite numbers', ->
         assert.is util.isFloat(10), true
@@ -46,6 +48,8 @@ describe 'isFloat()', ->
         assert.is util.isFloat({}), false
         assert.is util.isFloat(Object(4)), false
         assert.is util.isFloat('4'), false
+
+    return
 
 describe 'isInteger()', ->
     it 'returns true for finite numbers with no exponent', ->
@@ -72,6 +76,8 @@ describe 'isInteger()', ->
         assert.is util.isInteger(Object(4)), false
         assert.is util.isInteger('4'), false
 
+    return
+
 describe 'isPrimitive()', ->
     it 'returns true for a null, string, number boolean or an undefined', ->
         assert.is util.isPrimitive(null), true
@@ -85,6 +91,8 @@ describe 'isPrimitive()', ->
         assert.is util.isPrimitive([]), false
         assert.is util.isPrimitive(->), false
         assert.is util.isPrimitive(Object(4)), false
+
+    return
 
 describe 'isObject()', ->
     it 'returns true if the given value is an array of an object', ->
@@ -101,6 +109,8 @@ describe 'isObject()', ->
         assert.is util.isObject(false), false
         assert.is util.isObject(undefined), false
         assert.is util.isObject('a'), false
+
+    return
 
 describe 'isPlainObject()', ->
     it 'returns true for the given object with no prototype', ->
@@ -123,6 +133,8 @@ describe 'isPlainObject()', ->
         assert.is util.isPlainObject(false), false
         assert.is util.isPlainObject(undefined), false
         assert.is util.isPlainObject('a'), false
+
+    return
 
 describe 'isArguments()', ->
     # TODO
@@ -151,6 +163,8 @@ describe 'mergeDeep()', ->
         obj = {a: [3]}
         expected = {a: [1, 2, 3]}
         assert.isEqual util.mergeDeep(source, obj), expected
+
+    return
 
 describe 'fill()', ->
     # TODO
@@ -211,6 +225,8 @@ describe 'capitalize()', ->
         assert.is util.capitalize('1abc'), '1abc'
         assert.is util.capitalize(''), ''
 
+    return
+
 describe 'addSlashes()', ->
     # TODO
 
@@ -253,6 +269,8 @@ describe 'bindFunctionContext()', ->
         test ((a, b, c, d, e, f, g, h) -> handleFunc(@, arguments...))
         test ((a, b, c, d, e, f, g, h, i) -> handleFunc(@, arguments...))
 
+    return
+
 describe 'errorToObject()', ->
     it 'returns error name and message', ->
         message = 'random message'
@@ -281,6 +299,8 @@ describe 'errorToObject()', ->
             name: 'TypeError'
             message: 'error message'
             custom: 2
+
+    return
 
 describe 'getOwnProperties()', ->
     # TODO
@@ -311,14 +331,22 @@ describe 'isEqual()', ->
         assert.is util.isEqual({a: [{b: 1}]}, {a: [{b: 2}]}, 2), true
         assert.is util.isEqual({a: [{b: 1}]}, {a: [{b: 2}]}, 3), false
 
+    return
+
 describe 'snakeToCamel()', ->
     it 'returns given string as camel case', ->
         assert.is util.snakeToCamel('ab_cd_23_efg'), 'abCd23Efg'
+
+    return
 
 describe 'kebabToCamel()', ->
     it 'returns given string as camel case', ->
         assert.is util.kebabToCamel('ab-cd-23-efg'), 'abCd23Efg'
 
+    return
+
 describe 'camelToKebab()', ->
     it 'returns given string as kebab case', ->
         assert.is util.camelToKebab('abCd23EfgAbc'), 'ab-cd23efg-abc'
+
+    return

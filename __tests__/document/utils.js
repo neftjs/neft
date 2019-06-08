@@ -1,56 +1,58 @@
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
+/* eslint-disable no-new-func */
 const fs = require('fs')
 const path = require('path')
-const slash = require('slash')
-const loader = require('@neft/webpack-loader')
+const styleCompiler = require('@neft/compiler-style')
 
-const createLocalRequire = files => (filepath) => {
-  const key = slash(filepath)
-  if (!(key in files)) {
-    throw new Error(`Cannot find ${key} in ${Object.keys(files)}`)
-  }
-  const module = files[key]
-  return module
-}
+// we can't use require.extensions inside jest so we're going to mock 'require'
+// for the compiled .neft file
+let defaultStyles
+process.env.NEFT_PARCEL_DEFAULT_STYLES = JSON.stringify((() => {
+  const indexNml = path.join(require.resolve('@neft/default-styles'), '../style.nml')
+  const file = fs.readFileSync(indexNml, 'utf-8')
+  const bundle = styleCompiler.bundle(file, {
+    resourcePath: '@neft/default-styles',
+  })
 
-const requireNmlFile = (filepath) => {
-  const localRequires = {
-    '@neft/core/src/renderer': require('@neft/core/src/renderer'),
-    './img-tag': require('@neft/default-styles/img-tag'),
-  }
-  const localRequire = createLocalRequire(localRequires)
+  defaultStyles = new Function('module', 'require', bundle.bundle)(module, (src) => {
+    return require(require.resolve(src, { paths: [ path.dirname(indexNml) ] }))
+  })
 
-  const body = loader.call({
-    resourcePath: require.resolve(filepath),
-  }, fs.readFileSync(require.resolve(filepath), 'utf-8'))
+  return [{
+    name: '@neft/default-styles',
+    path: path.join('@neft/default-styles', '/style.nml'),
+    queries: bundle.queries,
+  }]
+})())
 
-  const module = {}
-  new Function('module', 'require', body)(module, localRequire)
-  return module.exports
-}
-
-const localRequires = {
-  '@neft/core/src/document': require('@neft/core/src/document'),
-  '@neft/core/src/document/element': require('@neft/core/src/document/element'),
-  '@neft/core/src/renderer': require('@neft/core/src/renderer'),
-  '@neft/default-styles/index.nml': requireNmlFile('@neft/default-styles/index.nml'),
-}
-
-const localRequire = createLocalRequire(localRequires)
+const NeftAsset = require('@neft/parcel-plugin-neft/NeftAsset')
+const NmlAsset = require('@neft/parcel-plugin-nml/NmlAsset')
+const { Document } = require('@neft/core')
 
 exports.createView = (html) => {
+  const asset = new NeftAsset('test.neft', { rootDir: '' })
+  asset.id = 'test.neft'
+  asset.ast = asset.parse(html)
+  let generated = asset.generate()
+  generated = generated.map(({ type, value }) => {
+    if (type === 'nml') {
+      const nmlAsset = new NmlAsset('test.nml', { rootDir: '' })
+      nmlAsset.id = 'test.nml'
+      nmlAsset.contents = value
+      const nmlGenerated = nmlAsset.generate()
+      return nmlAsset.postProcess(nmlGenerated)[0]
+    }
+    return { type, value }
+  })
+  const [{ value }] = asset.postProcess(generated)
+
   const module = {}
-  const viewFuncBody = loader.call({
-    fs,
-    resourcePath: 'test.xhtml',
-    emitError: () => {},
-    emitWarning: () => {},
-    query: {
-      defaultStyles: ['@neft/default-styles'],
-    },
-    context: path.join(__dirname, '../'),
-  }, html)
-  new Function('module', 'require', viewFuncBody)(module, localRequire)
-  return module.exports()
+  new Function('module', 'require', value)(module, (src) => {
+    if (src === '@neft/default-styles/style.nml') return defaultStyles
+    return require(src)
+  })
+  return Document.getComponentConstructorOf(module.exports)()
 }
 
 exports.renderParse = (view, opts) => {

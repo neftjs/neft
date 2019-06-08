@@ -3,8 +3,8 @@ const path = require('path')
 const util = require('util')
 const sharp = require('sharp')
 const glob = util.promisify(require('glob'))
-const log = require('@neft/core/src/log').scope('build:static')
-const { Resources, Resource } = require('@neft/core/src/resources')
+const logger = require('@neft/core').logger.scope('build:static')
+const { Resources, Resource } = require('@neft/core')
 const { realpath, outputDir } = require('../config')
 
 const inDir = path.join(realpath, 'static')
@@ -49,7 +49,7 @@ const createLowResImage = async ({
     }
     return null
   } catch (error) {
-    log.debug(`Resize \`${name}\``)
+    logger.debug(`Resize \`${name}\``)
     await fs.ensureDir(path.dirname(output))
     return sharp(file).resize(lowRestWidth, lowRestHeight).toFile(output)
   }
@@ -113,7 +113,6 @@ exports.loadStaticFiles = async () => {
   const target = new Resources()
   const files = await glob(path.join(inDir, '**/*.*'))
   await Promise.all(files.map(file => mapFile(file, target)))
-  return `const { resources } = require('@neft/core')
-const { Resources } = require('@neft/core/src/resources')
-Resources.fromJSON(${JSON.stringify(target)}, resources)`
+  return `const { Resources, resources } = require('@neft/core')
+Resources.fromJSON(${JSON.stringify(target)}, resources)\n`
 }

@@ -53,13 +53,15 @@ describe 'connectOnce()', ->
         emitter.emit('onTest') for i in [1..10]
         assert.is calls, 1
 
+    return
+
 it 'keeps listeners array clean', ->
-    func1 = () ->
-    func2 = () ->
-    func3 = () ->
-    func4 = () ->
-    func5 = () ->
-    func6 = () ->
+    func1 = ->
+    func2 = ->
+    func3 = ->
+    func4 = ->
+    func5 = ->
+    func6 = ->
     onTest.connect func1
     onTest.connectOnce func2
     onTest.connectOnce func3
@@ -84,4 +86,3 @@ it 'keeps listeners array clean', ->
     assert.isEqual onTest.listeners, [
         func1, null, func4, null, func6, null, func2, null, null, null, null, null,
     ]
-

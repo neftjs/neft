@@ -197,3 +197,5 @@ describe 'Document script', ->
         view.render()
 
         assert.is view.element.stringify(), '<p>2,3,</p>'
+
+    return

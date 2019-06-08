@@ -1,5 +1,4 @@
-const { util, SignalDispatcher } = require('@neft/core')
-const Renderer = require('@neft/core/src/renderer')
+const { util, SignalDispatcher, Renderer } = require('@neft/core')
 
 const { Item } = Renderer.Impl.Types
 

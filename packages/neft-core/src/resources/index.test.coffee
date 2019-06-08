@@ -38,6 +38,8 @@ describe 'getResource()', ->
     it 'returns undefined for child path with suffix', ->
         assert.is rscs.getResource('child_abc'), undefined
 
+    return
+
 describe 'resolve()', ->
     rscUri = uri = rsc = req = result = null
 
@@ -56,3 +58,5 @@ describe 'resolve()', ->
         rscUri = ".abc123"
         uri = "rsc://abc123/#{rsc.file}#{rscUri}"
         assert.is rscs.resolve(uri, req), result
+
+    return

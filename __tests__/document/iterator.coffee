@@ -234,3 +234,5 @@ describe 'Document n-for', ->
         renderParse view
         assert.ok Array.isArray(view.refs.deepElem)
         assert.isEqual Array.from(view.refs.deepElem.map((elem) => elem.elem)), [1, 2]
+
+    return

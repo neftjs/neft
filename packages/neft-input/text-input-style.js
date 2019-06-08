@@ -1,4 +1,4 @@
-const Renderer = require('@neft/core/src/renderer')
+const { Renderer } = require('@neft/core')
 
 const { Impl } = Renderer
 const { setPropertyValue } = Renderer.itemUtils

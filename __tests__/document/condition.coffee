@@ -45,3 +45,5 @@ describe 'Document n-if', ->
 
         elem.props.set 'x', 1
         assert.is view.element.stringify(), '<b>NO</b>'
+
+    return

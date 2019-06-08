@@ -78,6 +78,8 @@ describe 'callInLock()', ->
         eventLoop.setImmediate -> called = true
         assert.ok called
 
+    return
+
 describe 'bindInLock()', ->
     it 'calls given function properly', ->
         called = []
@@ -108,3 +110,4 @@ describe 'bindInLock()', ->
         eventLoop.setImmediate -> called = true
         assert.ok called
 
+    return

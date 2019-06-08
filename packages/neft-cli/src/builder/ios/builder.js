@@ -6,8 +6,7 @@ const yaml = require('js-yaml')
 const xcode = require('xcode')
 const Mustache = require('mustache')
 const { promisify } = require('util')
-const util = require('@neft/core/src/util')
-const log = require('@neft/core/src/log')
+const { util, logger } = require('@neft/core')
 const { realpath, outputDir } = require('../../config')
 
 const runtime = path.join(__dirname, '../../../node_modules/@neft/runtime-ios/')
@@ -65,7 +64,7 @@ const copyRuntime = async (output) => {
 const checkFontsSupported = () => new Promise((resolve) => {
   cp.exec('otfinfo --version', (error) => {
     if (error) {
-      log.error('Custom fonts are not supported; '
+      logger.error('Custom fonts are not supported; '
         + 'install `lcdf-typetools`; '
         + 'e.g. `brew install lcdf-typetools`')
     }
@@ -203,7 +202,7 @@ const prepareXcodeProject = async ({ output, iosExtensions }) => {
 exports.build = async ({
   manifest, output, filepath, extensions,
 }) => {
-  log.info('Preparing iOS build')
+  logger.info('Preparing iOS build')
 
   const bundle = await fs.readFile(filepath, 'utf-8')
   const iosExtensions = await getIosExtensions(extensions)
