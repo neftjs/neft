@@ -12,5 +12,6 @@ lint:
 fix:
 	npm run lint -- --fix
 
-link-packages-to-local-npm:
-	npx lerna exec --concurrency 1 --stream --no-bail -- npm link
+publish-to-verdaccio:
+	npx lerna exec -- npm unpublish --registry http://localhost:4873 -f
+	npx lerna exec -- npm publish --registry http://localhost:4873

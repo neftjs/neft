@@ -1,7 +1,7 @@
 const fs = require('fs-promise-native')
 const path = require('path')
 const yaml = require('js-yaml')
-const util = require('@neft/core/src/util')
+const { util } = require('@neft/core')
 const { realpath } = require('../config')
 
 exports.produceManifest = async ({ target, defaultManifest }) => {

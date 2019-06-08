@@ -15,18 +15,18 @@ class Use {
     this.immediateRenderPending = false
     this.onElementPropsChange = this.element.onPropsChange.asSignalDispatcher()
 
-    this.element.onPropsChange.connect(this.whenElementPropsChange, this)
+    this.element.onPropsChange.connect(this.handleElementPropsChange, this)
 
     let anyElement = this.element
     while (anyElement) {
       if ('n-if' in anyElement.props) {
-        anyElement.onVisibleChange.connect(this.whenElementVisibleChange, this)
+        anyElement.onVisibleChange.connect(this.handleElementVisibleChange, this)
       }
       anyElement = anyElement.parent
     }
   }
 
-  whenElementVisibleChange(oldValue) {
+  handleElementVisibleChange(oldValue) {
     const value = !oldValue
     const hiddenInc = value ? -1 : 1
     this.hiddenDepth += hiddenInc
@@ -37,7 +37,7 @@ class Use {
     }
   }
 
-  whenElementPropsChange(propName) {
+  handleElementPropsChange(propName) {
     if (propName !== 'n-component') return
     if (!this.document.rendered) return
     this.revert()
@@ -54,7 +54,7 @@ class Use {
   }
 
   render() {
-    assert.notOk(this.component, 'Use is already rendered')
+    assert.notOk(this.component, '<n-use /> is already rendered')
     if (this.hiddenDepth > 0) return
 
     const name = this.element.props['n-component']

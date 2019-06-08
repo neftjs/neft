@@ -1,15 +1,18 @@
-const { createServer } = require('http-server')
-const opn = require('opn')
-const log = require('@neft/core/src/log')
-const { localIp, devServerPort } = require('../../config')
+const path = require('path')
+const open = require('better-opn')
+const serve = require('koa-static')
+const Koa = require('koa')
+const { logger } = require('@neft/core')
+const { outputDir, localIp, devServerPort } = require('../../config')
 
 const host = localIp
 
-module.exports = ({ production }) => {
-  if (production) {
-    // webpack runs a browser for development
-    createServer({ root: './dist/html/', cache: 0 }).listen(devServerPort, host)
-    log.info(`Start server on port \`${devServerPort}\``)
-  }
-  opn(`http://${host}:${devServerPort}`)
+module.exports = () => {
+  const root = path.join(outputDir, 'html')
+  const app = new Koa()
+  app.use(serve(root))
+  app.use(serve(outputDir))
+  app.listen(devServerPort, host)
+  logger.info(`Start HTTP server on \`${host}:${devServerPort}\``)
+  open(`http://${host}:${devServerPort}`)
 }

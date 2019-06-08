@@ -3,7 +3,7 @@ Element = require '@neft/core/src/document/element'
 
 {util} = require('@neft/core')
 
-fromHTML = require '@neft/webpack-loader/xhtml-parser'
+fromHTML = require '@neft/compiler-document/xhtml-parser'
 
 class CustomInput extends Element.Tag.CustomTag
     @registerAs 'custom-input'

@@ -2,7 +2,7 @@ Element = require '@neft/core/src/document/element'
 
 {util} = require('@neft/core')
 
-fromHTML = require '@neft/webpack-loader/xhtml-parser'
+fromHTML = require '@neft/compiler-document/xhtml-parser'
 
 describe 'Document Element', ->
     HTML = '<b><em>abc</em></b>' +
@@ -34,6 +34,8 @@ describe 'Document Element', ->
             assert.is b.name, 'b'
             assert.is em.name, 'em'
             assert.is div.name, 'u'
+
+        return
 
     it 'stringify to html', ->
         html = doc.stringify()
@@ -80,6 +82,8 @@ describe 'Document Element', ->
             assert.is b.children[0], em
             assert.is b.stringify(), '<b><em>123</em></b>'
 
+        return
+
     it 'can be cloned deep', ->
         clone = b.cloneDeep()
 
@@ -123,6 +127,8 @@ describe 'Document Element', ->
                 ></p>
             '''
 
+        return
+
     describe 'index property', ->
         it 'returns child index in the parent', ->
             assert.is div.index, 1
@@ -134,6 +140,8 @@ describe 'Document Element', ->
             elemB.index = 0
 
             assert.isEqual elem.children, [elemB, elemA], maxDeep: 1
+
+        return
 
     it 'replace() works properly', ->
         elem = fromHTML '<b><em></em></b><u></u><p></p>'
@@ -260,6 +268,8 @@ describe 'Document Element', ->
         it 'omits blank', ->
             assert.isEqual doc2.queryAll('div > em'), [doc2em1, doc2em2], maxDeep: 1
 
+        return
+
     describe 'query() works with selector', ->
         doc2 = fromHTML """
             <div><b><u color='blue' attr='1'></u></b></div>\
@@ -283,6 +293,8 @@ describe 'Document Element', ->
         it 'omits blank', ->
             assert.is doc2.query('div > em'), doc2em
 
+        return
+
     describe 'queryParents() works with selector', ->
         doc2 = fromHTML """
             <div><b><u color='blue' attr='1'></u></b></div>\
@@ -301,6 +313,8 @@ describe 'Document Element', ->
         it 'E > F', ->
             assert.is doc2u.queryParents('div > b'), doc2div1
             assert.is doc2u.queryParents('div > b >'), doc2div1
+
+        return
 
     describe 'watch()', ->
         it 'is a function', ->
@@ -487,6 +501,8 @@ describe 'Document Element', ->
                     newText.parent = doc2em2
                     assert.isEqual tags, [doc2em1.children[0], newText], maxDeep: 1
 
+            return
+
         it 'supports disconnect() in onRemove()', ->
             tags = []
             removedTags = []
@@ -509,6 +525,8 @@ describe 'Document Element', ->
                 removedTags.push tag
             b1.parent = null
             assert.isEqual removedTags, [b1, b2], maxDeep: 1
+
+        return
 
     it 'visible property is editable', ->
         assert.ok p.visible
@@ -585,3 +603,7 @@ describe 'Document Element', ->
             tag.visible = false
 
             assert.ok ok
+
+        return
+
+    return

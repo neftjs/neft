@@ -23,28 +23,20 @@ exports.release = ->
     return
 
 exports.callInLock = (func, ctx, args) ->
-    error = null
     exports.lock()
     try
         result = func.apply ctx, args
-    catch callError
-        error = callError
-    exports.release()
-    if error
-        throw error
+    finally
+        exports.release()
     result
 
 exports.bindInLock = (func) ->
     ->
-        error = null
         exports.lock()
         try
             result = func.apply @, arguments
-        catch callError
-            error = callError
-        exports.release()
-        if error
-            throw error
+        finally
+            exports.release()
         result
 
 # Register a function which will be called when all locks will be released.

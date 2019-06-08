@@ -1,4 +1,4 @@
-const utils = require('../util')
+const util = require('../util')
 const assert = require('../assert')
 const eventLoop = require('../event-loop')
 const Renderer = require('../renderer')
@@ -13,14 +13,14 @@ const Slot = require('./slot')
 const Iterator = require('./iterator')
 const StyleItem = require('./style-item')
 
-const parseComponents = (components) => {
-  Object.keys(components).forEach((name) => {
-    const file = components[name]
+const parseImports = (imports) => {
+  Object.keys(imports).forEach((name) => {
+    const file = imports[name]
     if (typeof file === 'object' && file != null) {
-      components[name] = file.default
+      imports[name] = file.default
     }
   })
-  return components
+  return imports
 }
 
 const parseRefs = (refs, element) => Object.create(Object.keys(refs).reduce((result, key) => {
@@ -31,6 +31,14 @@ const parseRefs = (refs, element) => Object.create(Object.keys(refs).reduce((res
 const mapToTypes = (Type, list, document) => {
   if (list) return list.map(opts => new Type(document, opts))
   return []
+}
+
+const createInitLocalPool = (components) => {
+  const pool = {}
+  Object.keys(components).forEach((key) => {
+    pool[key] = []
+  })
+  return pool
 }
 
 const isInternalProp = prop => (prop[0] === 'n' && prop[1] === '-') || prop === 'ref'
@@ -47,7 +55,9 @@ const attachStyles = (styles, element) => {
   })
 }
 
-const getComponentGenerator = Symbol('getComponentGenerator')
+const documents = Object.create(null)
+const globalPool = Object.create(null)
+const localPool = Symbol('localPool')
 const renderProps = Symbol('renderProps')
 const renderOnPropsChange = Symbol('renderOnPropsChange')
 const renderSourceElement = Symbol('renderSourceElement')
@@ -66,40 +76,42 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 class Document {
-  constructor(path, options) {
+  constructor(path, config, options) {
     assert.isString(path)
     assert.notLengthOf(path, 0)
 
     this.path = path
-    this.parent = options.parent || null
-    this.element = options.element
-    this.components = options.components ? parseComponents(options.components) : {}
+    this.parent = (options && options.parent) || null
+    this.element = config.element
+    this.imports = config.imports ? parseImports(config.imports) : {}
+    this.components = config.components || {}
 
-    this.refs = options.refs ? parseRefs(options.refs, this.element) : {}
-    this.props = options.props || {}
-    this.script = new Script(this, options.script)
+    this.refs = config.refs ? parseRefs(config.refs, this.element) : {}
+    this.props = config.props || {}
+    this.script = new Script(this, config.script)
     this.exported = null
-    this.root = options.root != null ? options.root : true
+    this.root = options && options.root != null ? options.root : true
 
-    this.inputs = mapToTypes(TextInput, options.textInputs, this)
-      .concat(mapToTypes(PropInput, options.propInputs, this))
-    this.conditions = mapToTypes(Condition, options.conditions, this)
-    this.iterators = mapToTypes(Iterator, options.iterators, this)
-    this.logs = mapToTypes(Log, options.logs, this)
-    this.style = options.style || {}
-    this.styleItems = mapToTypes(StyleItem, options.styleItems, this)
-    this.slot = options.slot ? new Slot(this, options.slot) : null
-    this.uses = mapToTypes(Use, options.uses, this)
+    this.inputs = mapToTypes(TextInput, config.textInputs, this)
+      .concat(mapToTypes(PropInput, config.propInputs, this))
+    this.conditions = mapToTypes(Condition, config.conditions, this)
+    this.iterators = mapToTypes(Iterator, config.iterators, this)
+    this.logs = mapToTypes(Log, config.logs, this)
+    this.style = config.style || {}
+    this.styleItems = mapToTypes(StyleItem, config.styleItems, this)
+    this.slot = config.slot ? new Slot(this, config.slot) : null
+    this.uses = mapToTypes(Use, config.uses, this)
 
     this.context = null
     this.rendered = false
 
+    this[localPool] = createInitLocalPool(this.components)
     this[renderProps] = null
     this[renderOnPropsChange] = null
     this[renderSourceElement] = null
     this[renderListeners] = null
 
-    this.uid = utils.uid()
+    this.uid = util.uid()
     Object.seal(this)
 
     if (process.env.NODE_ENV === 'development') {
@@ -107,12 +119,6 @@ class Document {
     }
 
     attachStyles(this.style, this.element)
-  }
-
-  [getComponentGenerator](name) {
-    const { components } = this
-    if (components[name]) return components[name]
-    return name.split(':').reduce((object, namePart) => object && object[namePart], components)
   }
 
   [callRenderListener](name, arg1, arg2) {
@@ -123,26 +129,43 @@ class Document {
   }
 
   getComponent(name) {
-    const generator = this[getComponentGenerator](name)
-    if (!generator) return this.parent ? this.parent.getComponent(name) : null
-    const { pool } = generator
-    if (pool && pool.length > 0) return pool.pop()
-    return generator({ parent: this })
+    const imported = this.imports[name]
+    if (imported) {
+      const pool = globalPool[imported]
+      if (pool.length > 0) return pool.pop()
+      return documents[imported].constructor()
+    }
+
+    const local = this.components[name]
+    if (local) {
+      const pool = this[localPool][name]
+      if (pool.length > 0) return pool.pop()
+      return local({ parent: this })
+    }
+
+    return this.parent ? this.parent.getComponent(name) : null
   }
 
   returnComponent(name, component) {
-    const generator = this[getComponentGenerator](name)
-    if (!generator) {
-      if (this.parent) {
-        this.parent.returnComponent(name, component)
-      } else {
-        throw new Error('Unknown component given to return')
-      }
+    assert.notOk(component.rendered, 'Cannot return rendered component')
+
+    const imported = this.imports[name]
+    if (imported) {
+      globalPool[imported].push(component)
       return
     }
-    assert.notOk(component.rendered, 'Cannot return rendered component')
-    if (!generator.pool) generator.pool = []
-    generator.pool.push(component)
+
+    const local = this.components[name]
+    if (local) {
+      this[localPool][name].push(component)
+      return
+    }
+
+    if (this.parent) {
+      this.parent.returnComponent(name, component)
+    } else {
+      throw new Error('Unknown component given to return')
+    }
   }
 
   reloadProp(name) {
@@ -227,35 +250,42 @@ class Document {
 Document.prototype.render = eventLoop.bindInLock(Document.prototype.render)
 Document.prototype.revert = eventLoop.bindInLock(Document.prototype.revert)
 
+Document.register = (path, constructor, { dependencies }) => {
+  documents[path] = { constructor, dependencies }
+  globalPool[path] = []
+}
+
+Document.getComponentConstructorOf = (path) => {
+  const config = documents[path]
+  return config ? config.constructor : null
+}
+
 if (process.env.NODE_ENV === 'development') {
-  Document.reload = (path, options) => {
-    const documents = instances[path]
-    if (documents) {
-      eventLoop.callInLock(() => {
-        documents.forEach(document => document.reload(options))
+  Document.reload = (path) => {
+    instances[path] = []
+    globalPool[path] = []
+
+    Object.keys(documents)
+      .filter(docPath => documents[docPath].dependencies.includes(path))
+      .forEach((docPath) => {
+        instances[docPath]
+          .filter(doc => doc.rendered)
+          .forEach((doc) => {
+            eventLoop.callInLock(() => {
+              const { context, exported } = doc
+              const props = doc[renderProps]
+              const onPropsChange = doc[renderOnPropsChange]
+              const sourceElement = doc[renderSourceElement]
+              const listeners = doc[renderListeners]
+              doc.revert()
+              globalPool[path] = []
+              doc.render({
+                context, props, onPropsChange, sourceElement, listeners, exported,
+              })
+            })
+          })
       })
-    }
   }
-
-  Document.prototype.reload = function (options) {
-    const { rendered, context } = this
-    const props = this[renderProps]
-    const onPropsChange = this[renderOnPropsChange]
-    const sourceElement = this[renderSourceElement]
-
-    if (rendered) this.revert()
-
-    const newComponents = options.components ? parseComponents(options.components) : {}
-    this.components = Object.assign(this.components, newComponents)
-
-    if (rendered) {
-      this.render({
-        context, props, onPropsChange, sourceElement,
-      })
-    }
-  }
-
-  Document.prototype.reload = eventLoop.bindInLock(Document.prototype.reload)
 }
 
 module.exports = Document

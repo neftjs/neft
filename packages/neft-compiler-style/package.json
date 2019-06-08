@@ -1,0 +1,10 @@
+{
+  "name": "@neft/compiler-style",
+  "version": "0.0.1",
+  "dependencies": {
+    "@neft/compiler-binding": "0.0.1",
+    "@neft/core": "0.0.1",
+    "@neft/parcel-util": "0.0.1",
+    "pegjs": "^0.10.0"
+  }
+}

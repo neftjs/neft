@@ -17,3 +17,5 @@ describe 'Document View', ->
             <n-use n-component="a" />
         '''
         assert.is view.uses.length, 1
+
+    return

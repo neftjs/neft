@@ -1,4 +1,4 @@
-const log = require('@neft/core/src/log')
+const { logger } = require('@neft/core')
 const { parseArgv } = require('./argv-parser')
 const { initialize } = require('./initializer')
 const { build } = require('./builder')
@@ -7,6 +7,7 @@ const { clean } = require('./cleaner')
 
 module.exports = async (argv) => {
   const { operation, target, args } = parseArgv(argv)
+
   if (operation === 'init') {
     initialize()
   }
@@ -15,13 +16,15 @@ module.exports = async (argv) => {
     try {
       await build(target, args)
     } catch (error) {
-      log.error(error.constructor === Error ? error.message : error.stack)
+      logger.error(error.constructor === Error ? error.message : error.stack)
       process.exit(1)
     }
   }
+
   if (operation === 'run') {
     run(target, args)
   }
+
   if (operation === 'clean') {
     clean()
   }
