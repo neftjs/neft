@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const utils = require('../util')
 const eventLoop = require('../event-loop')
 const { Text } = require('./element')
@@ -22,8 +23,8 @@ class Log {
   }
 
   renderOnChange() {
-    if (this.file.isRendered) {
-      return this.render()
+    if (this.document.rendered) {
+      this.render()
     }
   }
 
@@ -35,23 +36,19 @@ class Log {
   }
 
   log() {
-    let content; let key; let log; let props; let
-      val
     this.isRenderPending = false
     if (utils.isEmpty(this.element.props)) {
       console.log(this.element.stringifyChildren())
     } else {
-      ({ props } = this.element)
-      log = []
-      if (content = this.element.stringifyChildren()) {
+      const { props } = this.element
+      const log = []
+      const content = this.element.stringifyChildren()
+      if (content) {
         log.push(content)
       }
-      for (key in props) {
-        val = props[key]
-        if (props.hasOwnProperty(key)) {
-          log.push(key, '=', val)
-        }
-      }
+      Object.entries(props).forEach(([key, value]) => {
+        log.push(key, '=', value)
+      })
       console.log(...log)
     }
   }
