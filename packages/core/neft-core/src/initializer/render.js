@@ -25,17 +25,16 @@ const createWindowDocument = (Content, options) => {
 
   windowDocument.render(options)
   Renderer.setWindowItem(windowElement.style)
+
+  return windowDocument
 }
 
 let windowDocument
-let rendered
 module.exports = (documentImport, options) => {
   eventLoop.setImmediate(() => {
-    if (rendered) {
-      windowDocument.revert()
-    }
     Document.register('__window__', null, { dependencies: [documentImport] })
     if (windowDocument) {
+      if (windowDocument.rendered) windowDocument.revert()
       windowDocument.imports.Content = documentImport
       windowDocument.render(options)
     } else {

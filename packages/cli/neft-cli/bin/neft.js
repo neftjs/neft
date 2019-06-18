@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+process.env.NODE_NO_WARNINGS = '1'
 process.env.NEFT_NODE = '1'
 process.env.NEFT_SERVER = '1'
 process.env.NEFT_PLATFORM = 'node'

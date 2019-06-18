@@ -97,8 +97,8 @@
         error: (msg, error) ->
             @println (ctx) ->
                 marker.red(marker.bold('ERROR', ctx), ctx) + '  ' + parser.parse(msg, ctx)
-            if error?.stack
-                @println (ctx) -> error.stack
+            if error?
+                @println (ctx) -> error.toString()
 
         progress: (title, value, max) ->
             if typeof title is 'number'

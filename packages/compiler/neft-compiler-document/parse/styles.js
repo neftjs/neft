@@ -71,7 +71,7 @@ module.exports = (element, parser) => {
 
   if (!bare) {
     parser.defaultStyles
-      .forEach((style) => { addStyle(style.name, style, { link: true }) })
+      .forEach((style) => { addStyle(style.name, style, { link: !!style.path }) })
   }
   if (docStyle) {
     const parserStyle = parser.styles[parser.resourcePath]

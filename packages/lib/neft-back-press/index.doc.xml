@@ -5,32 +5,32 @@
 />
 
 <article title="Introduction">
-  <p>Some of the devices can have 'back' button or a gesture which should show previous page.</p>
+  <p>Some of the devices can have 'back' button or a gesture which should show your app's previous page.</p>
 
-  <p>Using this module you can handle for such actions or finally close the app, if there is no previous page to go.</p>
+  <p>Using this module you can handle such actions or finally close the app, if there is no previous page to go.</p>
 
-  <p>Install it by typing <code>npm i @neft/back-press</code> and later use it by <code>const backPress = require('@neft/back-press')</code>.</p>
+  <p>Install it by typing <code>npm i @neft/back-press</code> and later use it by <code>import backPress from '@neft/back-press'</code>.</p>
 </article>
 
 <signal name=onBackPress>
-  <p>Is called any time, user want's to see previous page.</p>
+  <p>Is called any time, user wants to see previous page.</p>
 
-  <script type="html">
-    <script->
-      const { onBackPress } = require('@neft/back-press')
+  <script type="neft">
+    <neft-script>
+      import { onBackPress } from '@neft/back-press'
 
-      exports.default = () => ({
-        handleBackPress() {
-          // show previous screen
-        },
+      export default () => ({
         onRender() {
           onBackPress.connect(this.handleBackPress)
         },
         onRevert() {
           onBackPress.disconnect(this.handleBackPress)
         },
+        handleBackPress() {
+          // show previous screen
+        },
       })
-    </script->
+    </neft-script>
   </script>
 </signal>
 

@@ -8,7 +8,7 @@
   <p>Your app can be open by using custom registered schema URL.</p>
   <p>It's heplful to e.g. redirect links from emails sent to your users directly to the app.</p>
 
-  <p>Install it by typing <code>npm i @neft/deep-linking</code> and later use it by <code>const deepLinking = require('@neft/deep-linking')</code>.</p>
+  <p>Install it by typing <code>npm i @neft/deep-linking</code> and later use it by <code>import deepLinking from '@neft/deep-linking'</code>.</p>
 </article>
 
 <article title="Configure iOS">
@@ -47,27 +47,24 @@
 </article>
 
 <property name=openUrl type=string>
-  <script type="html">
-    <script->
-      const deepLinking = require('@neft/deep-linking')
+  <script type="neft">
+    <n-call>
+      {handleDeepLinkingOpenUrl(deepLinking.openUrl)}
+    </n-call>
 
-      exports.default = () => ({
-        handleOpenUrlChange() {
-          const { openUrl } = deepLinking
+    <neft-script>
+      import deepLinking from '@neft/deep-linking'
+
+      export default () => ({
+        deepLinking,
+        handleDeepLinkingOpenUrl(openUrl) {
           const match = /login\/(.+)$/.exec(openUrl)
           if (!match || !match[1]) return
           const token = match[1]
           // handle token provided in the url e.g. yourapp://login/xyz
         },
-        onRender() {
-          this.handleOpenUrlChange()
-          deepLinking.onOpenUrlChange.connect(this.handleOpenUrlChange)
-        },
-        onRevert() {
-          deepLinking.onOpenUrlChange.disconnect(this.handleOpenUrlChange)
-        },
       })
-    </script->
+    </neft-script>
   </script>
 </property>
 

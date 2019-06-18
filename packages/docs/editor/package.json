@@ -1,0 +1,15 @@
+{
+  "name": "@neft/docs-editor",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src",
+  "scripts": {
+    "bundle": "NODE_ENV=development parcel build src/index.js"
+  },
+  "dependencies": {
+    "@neft/core": "^0.0.1",
+    "@neft/compiler-document": "^0.0.1",
+    "@neft/compiler-style": "^0.0.1",
+    "parcel-plugin-coffee-script": "0.0.1"
+  }
+}

@@ -1,0 +1,87 @@
+@import "colors";
+
+.content {
+    width: 700px;
+    margin-left: 300px;
+    font-size: 17px;
+    color: rgba(0, 0, 0, .8);
+    padding-bottom: 53px;
+
+    a {
+        text-decoration: none;
+        color: @blue-color;
+    }
+
+    p {
+        margin-top: 15px;
+        line-height: 1.58;
+        letter-spacing: -.003em;
+    }
+
+    h1, h2, h3, h4 {
+        font-weight: 700;
+        font-size: 50px;
+        line-height: 1;
+        letter-spacing: -.028em;
+        margin-top: 53px;
+        margin-bottom: 15px;
+    }
+
+    h1 {
+        font-weight: 900;
+    }
+
+    h2 {
+        margin-top: 50px;
+        font-size: 32px;
+    }
+
+    h3 {
+        margin-top: 29px;
+        font-size: 24px;
+    }
+
+    h4 {
+        margin-top: 29px;
+        font-size: 18px;
+    }
+
+    code, pre {
+        font-family: "Source Code Pro", monospace;
+    }
+
+    p > code {
+        display: inline;
+        padding: 0.06em;
+        white-space: nowrap;
+        background: #f8f8f8;
+        cursor: copy;
+
+        &.svg {
+            height: 200px;
+            font-size: 0;
+            overflow: hidden;
+
+            & > svg {
+                height: 100%;
+            }
+        }
+    }
+
+    pre.hljs {
+        font-size: 14px;
+        margin-top: 15px;
+    }
+
+    ul, ol {
+        margin-left: 30px;
+    }
+
+    ul.toc {
+        margin-bottom: 15px;
+    }
+}
+
+#disqus_thread {
+    margin-top: 50px;
+}

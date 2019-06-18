@@ -1,0 +1,6 @@
+require('core-js/stable')
+require('regenerator-runtime/runtime')
+require('@neft/default-styles')
+const { Resources, resources } = require('@neft/core')
+Resources.fromJSON({"__name__":"Resources"}, resources)
+module.exports = require('./')

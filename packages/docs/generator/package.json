@@ -1,0 +1,13 @@
+{
+  "name": "@neft/docs-generator",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/index.js",
+  "dependencies": {
+    "fs-extra": "^8.0.1",
+    "glob": "^7.1.4",
+    "highlight.js": "^9.15.8",
+    "less": "^3.9.0",
+    "lite-html-parser": "^0.2.0"
+  }
+}

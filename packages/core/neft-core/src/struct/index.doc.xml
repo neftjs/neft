@@ -3,3 +3,44 @@
   category="API Reference"
 />
 
+<p>Struct is a class used for observable objects.</p>
+
+<p>It's commonly used in components to keep bindings updated.<p>
+
+<p>Access it by <code>import { Struct } from '@neft/core'</code>.</p>
+
+<article title="Create Struct">
+  <p>Struct constructor accepts an object with default keys and values.</p>
+
+  <p>You cannot add more keys after initialization.</p>
+
+  <script lang="javascript">
+    import { Struct } from '@neft/core'
+
+    const user = new Struct({
+      id: 1,
+      name: 'Max'
+    })
+  </script>
+
+  <p>In the example above <code>user</code> is an object with two keys: <code>id</code> and <code>name</code>.</p>
+</article>
+
+<article title="See Struct updates">
+  <p>Each key in Struct has his corresponding <code>SignalDispatcher</code>.</p>
+
+  <script lang="javascript">
+    import { Struct } from '@neft/core'
+
+    const store = new Struct({
+      counter: 0,
+    })
+
+    store.onCounterChange.connect(() => {
+      console.log(`New counter value = ${store.counter}`)
+    });
+
+    store.counter = 10
+    // New counter value = 10
+  </script>
+</article>

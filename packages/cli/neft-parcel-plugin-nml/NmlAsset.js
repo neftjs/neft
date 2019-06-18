@@ -1,3 +1,4 @@
+require('@neft/parcel-util')
 const { Asset } = require('parcel-bundler')
 const { bundle } = require('@neft/compiler-style')
 

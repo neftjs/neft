@@ -1,3 +1,4 @@
+/* eslint-disable prefer-rest-params */
 const valueToString = function (value) {
   let result
   let useJson = typeof value === 'object' && value !== null
