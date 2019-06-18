@@ -1,7 +1,7 @@
 {
   "packages": [
     "__tests__/",
-    "packages/*"
+    "packages/*/*"
   ],
   "version": "0.0.0"
 }
