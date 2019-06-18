@@ -1,10 +1,9 @@
 'use strict'
 
 fs = require 'fs'
-pathUtils = require 'path'
 PEG = require 'pegjs'
 
-grammar = fs.readFileSync pathUtils.join(__dirname, './grammar.pegjs'), 'utf-8'
+grammar = fs.readFileSync(__dirname + '/grammar.pegjs', 'utf-8')
 pegParser = PEG.generate grammar
 
 getErrorMessage = (nml, error) ->

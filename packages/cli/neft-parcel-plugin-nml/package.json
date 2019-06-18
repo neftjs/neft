@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "dependencies": {
     "@neft/compiler-style": "0.0.1",
+    "@neft/parcel-util": "0.0.1",
     "parcel-bundler": "https://github.com/neftjs/parcel-bundler.git"
   }
 }

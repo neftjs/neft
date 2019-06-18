@@ -5,19 +5,21 @@
 />
 
 <article title="Introduction">
-  <p>This module performs HTTP requests. Inspired by https://github.com/request/request-promise.</p>
+  <p>Performs HTTP requests. Inspired by https://github.com/request/request-promise.</p>
 
-  <p>Install it by typing <code>npm i @neft/request</code> and later use it by <code>const request = require('@neft/request')</code>.</p>
+  <p>Install it by typing <code>npm i @neft/request</code> and later use it by <code>import request from '@neft/request'</code>.</p>
 </article>
 
 <method name=request returns=Promise>
-  <argument name=options.uri type=string />
-  <argument name=options.method type=string default=GET />
-  <argument name=options.headers type=object />
-  <argument name=options.body type=any />
-  <argument name=options.json type=boolean />
-  <argument name=options.timeout type=number default=30000 />
-  <argument name=options.resolveWithFullResponse type=boolean default=false />
+  <argument name=options type=object />
+    <argument name=uri type=string />
+    <argument name=method type=string default=GET />
+    <argument name=headers type=object />
+    <argument name=body type=any />
+    <argument name=json type=boolean />
+    <argument name=timeout type=number default=30000 />
+    <argument name=resolveWithFullResponse type=boolean default=false />
+  </argument>
 
   <article title="Get data from your API endpoint">
     <script lang="javascript">

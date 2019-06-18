@@ -3,7 +3,7 @@
 const { console } = require('./builtin/console')
 const nativeConsole = global.console
 global.console = console((type, msg, args) => {
-  const body = `[${type.toUpperCase()}]${msg}`
+  const body = `[${type.toUpperCase()}] ${msg}`
   ios.log(body)
   nativeConsole[type].apply(nativeConsole, args)
 })

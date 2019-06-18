@@ -1,0 +1,24 @@
+<meta
+  name="DOM.CustomTag"
+  title="DOM CustomTag"
+  category="API Reference"
+  extends="DOM.Element"
+/>
+
+<method name="CustomTag.registerAs">
+  <argument name="tagName" type="string" />
+</method>
+
+<method name="CustomTag.defineProperty">
+  <argument name="options" type="object">
+    <argument name="name" type="string" />
+    <argument name="defaultValue" type="any" default="null" />
+  </argument>
+</method>
+
+<method name="CustomTag.defineStyleProperty">
+  <argument name="options" type="object">
+    <argument name="name" type="string" />
+    <argument name="styleName" type="string" />
+  </argument>
+</method>

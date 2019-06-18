@@ -5,11 +5,11 @@
 />
 
 <article title="Introduction">
-  <p>Storage allows you to save data directly on a device and use it later.</p>
+  <p>Storage allows you to save data directly on the device and use it later.</p>
 
   <p>Data is keep after app restart.</p>
 
-  <p>Install it by typing <code>npm i @neft/storage</code> and later use it by <code>const storage = require('@neft/storage')</code>.</p>
+  <p>Install it by typing <code>npm i @neft/storage</code> and later use it by <code>import storage from '@neft/storage'</code>.</p>
 </article>
 
 <method name=get returns="Promise&lt;String&gt;">
@@ -19,25 +19,36 @@
 
   <p>If no key found, throws an error.</p>
 
-  <script type="html">
-    <p n-if={user}>Welcome {user.name}!</p>
-    <p n-else>You need to log in</p>
+  <p>The returned value is always a string. Use JSON to store structures.</p>
 
-    <script->
-    const storage = require('@neft/storage')
+  <script type="neft">
+    <n-call>
+      {getUser()}
+    </n-call>
 
-    exports.default = () => ({
+    <div n-if={!loading}>
+      <p n-if={user}>Welcome {user.name}!</p>
+      <p n-else>You need to log in</p>
+    </div>
+
+    <neft-script>
+    import storage from '@neft/storage'
+
+    export default () => ({
+      loading: true,
       user: null,
       async getUser() {
         try {
+          this.loading = true
           this.user = JSON.parse(await storage.get('user'))
-        } catch (error) {}
-      },
-      onRender() {
-        getUser()
+        } catch (error) {
+          // handle error
+        } finally {
+          this.loading = false
+        }
       },
     })
-    </script->
+    </neft-script>
   </script>
 </method>
 
@@ -45,14 +56,15 @@
   <argument name=key type=string />
   <argument name=value type=string />
 
-  <p>Saved value under the given key for later usage.</p>
-  <p>To store an object, you need to stringify if firstly to JSON.</p>
+  <p>Saved value under the given key.</p>
+  <p>To store an object, you need to stringify it to JSON.</p>
+  <p><code>await</code> this call to make sure that the key has been updated.</p>
 </method>
 
 <method name=remove returns="Promise">
   <argument name=key type=string />
 
-  <p>Removes the given key from device.</p>
+  <p>Removes the given key from the device.</p>
 
   <p><code>await</code> this call to make sure that the key has been removed.</p>
 </method>

@@ -38,10 +38,12 @@ const getExtensions = () => {
   Object.keys(packageFile.dependencies || {})
     .filter(isExtensionName)
     .forEach((name) => {
+      const extensionPath = require.resolve(name, { paths: [realpath] })
       try {
         result.push({
           name,
-          path: require.resolve(name, { paths: [realpath] }),
+          path: extensionPath,
+          dirPath: path.dirname(extensionPath),
         })
       } catch (error) {
         if (error.code === 'MODULE_NOT_FOUND') {

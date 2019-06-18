@@ -9,7 +9,7 @@ const { promisify } = require('util')
 const { util, logger } = require('@neft/core')
 const { realpath, outputDir } = require('../../config')
 
-const runtime = path.join(__dirname, '../../../node_modules/@neft/runtime-ios/')
+const runtime = path.dirname(require.resolve('@neft/runtime-ios'))
 
 const nativeDir = './native/ios'
 const nativeDirOut = 'Neft/'
@@ -33,14 +33,14 @@ const fontExtnames = {
 }
 
 const getIosExtensions = async (extensions) => {
-  const promises = extensions.map(async (dirpath) => {
-    const nativeDirpath = path.join(dirpath, 'native/ios')
-    if (!(await fs.exists(nativeDirpath))) return null
-    let name = /@neft\/([^/]+)/.exec(dirpath)[1]
+  const promises = extensions.map(async ({ dirPath }) => {
+    const nativeDirPath = path.join(dirPath, 'native/ios')
+    if (!(await fs.exists(nativeDirPath))) return null
+    let name = /@neft\/([^/]+)/.exec(dirPath)[1]
     name = util.kebabToCamel(name)
     name = util.capitalize(name)
     return {
-      dirpath, nativeDirpath, name,
+      dirPath, nativeDirPath, name,
     }
   })
   return (await Promise.all(promises))
@@ -119,8 +119,8 @@ const resolveFont = async (filepath) => {
 const resolveFonts = filepaths => Promise.all(filepaths.map(resolveFont))
 
 const copyExtensions = async (output, extensions) => {
-  await Promise.all(extensions.map(async ({ nativeDirpath, name }) => {
-    await fs.copy(nativeDirpath, path.join(output, extensionsDirOut, name))
+  await Promise.all(extensions.map(async ({ nativeDirPath, name }) => {
+    await fs.copy(nativeDirPath, path.join(output, extensionsDirOut, name))
   }))
 }
 
@@ -150,8 +150,8 @@ const assignManifest = (target, source) => {
 }
 
 const assignExtenionManifests = async (manifest, extensions) => {
-  await Promise.all(extensions.map(async ({ dirpath }) => {
-    const manifestPath = path.join(dirpath, 'manifest/ios.yaml')
+  await Promise.all(extensions.map(async ({ dirPath }) => {
+    const manifestPath = path.join(dirPath, 'manifest/ios.yaml')
     try {
       assignManifest(manifest, yaml.safeLoad(await fs.readFile(manifestPath, 'utf-8')))
     } catch (error) {
@@ -187,11 +187,11 @@ const prepareXcodeProject = async ({ output, iosExtensions }) => {
     const filename = path.relative(manifestAppDir, source)
     project.addSourceFile(filename, null, mainGroupId)
   }))
-  await Promise.all(iosExtensions.map(async ({ nativeDirpath, name }) => {
+  await Promise.all(iosExtensions.map(async ({ nativeDirPath, name }) => {
     const fullName = `Extension${name}`
     const groupId = project.pbxCreateGroup(fullName, `Extension/${name}`)
     project.addToPbxGroup(groupId, mainGroupId)
-    const extensionFiles = await fs.readdir(nativeDirpath)
+    const extensionFiles = await fs.readdir(nativeDirPath)
     extensionFiles.forEach((extFile) => {
       project.addSourceFile(extFile, null, groupId)
     })

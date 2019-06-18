@@ -1,22 +1,21 @@
 <meta
-  name="Neft"
+  name="@neft/core"
   title="@neft/core"
   category="API Reference"
 />
 
-<property name="Struct" type="Struct" />
-<property name="ObservableArray" type="ObservableArray" />
-<property name="SignalDispatcher" type="SignalDispatcher" />
-<property name="NativeStyleItem" type="Style.Native" />
-<property name="Device" type="Style.Device" />
-<property name="Screen" type="Style.Screen" />
-<property name="Navigator" type="Style.Navigator" />
+<method name="callNativeFunction">
+  <argument name="name" type="string" />
+  <argument name="args..." type="boolean|number|string" />
+</method>
+
+<method name="onNativeEvent">
+  <argument name="eventName" type="string" />
+  <argument name="listener" type="function" />
+</method>
 
 <method name="render">
   <argument name="document" type="Document" />
-  <argument name="options" type="object">
-    <argument name="context" type="Struct" />
-  </argument>
 </method>
 
 <method name="loadFont">

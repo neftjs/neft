@@ -132,15 +132,19 @@ class Document {
     const imported = this.imports[name]
     if (imported) {
       const pool = globalPool[imported]
-      if (pool.length > 0) return pool.pop()
-      return documents[imported].constructor()
+      if (pool) {
+        if (pool.length > 0) return pool.pop()
+        return documents[imported].constructor()
+      }
     }
 
     const local = this.components[name]
     if (local) {
       const pool = this[localPool][name]
-      if (pool.length > 0) return pool.pop()
-      return local({ parent: this })
+      if (pool) {
+        if (pool.length > 0) return pool.pop()
+        return local({ parent: this })
+      }
     }
 
     return this.parent ? this.parent.getComponent(name) : null

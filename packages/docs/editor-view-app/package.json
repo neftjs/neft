@@ -1,0 +1,11 @@
+{
+  "name": "@neft/docs-editor-view-app",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src",
+  "dependencies": {
+    "@neft/core": "^0.0.1",
+    "@neft/cli": "^0.0.1",
+    "@neft/default-styles": "^0.0.1"
+  }
+}
