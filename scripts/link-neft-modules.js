@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /**
  * ParcelJS has issues with resolving symlinked dependencies.
  * To fix that issue for local development we can publish @neft packages
@@ -21,6 +22,18 @@ const NEFT_PACKAGES = path.join(__dirname, '../packages')
 
 const getPackage = async dir => JSON.parse(await fs.readFile(path.join(dir, './package.json'), 'utf-8'))
 
+const getNeftPackages = async () => {
+  const result = []
+  const dirs = await fs.readdir(NEFT_PACKAGES)
+  for (const dir of dirs) {
+    const dirPackages = await fs.readdir(path.join(NEFT_PACKAGES, dir))
+    for (const neftPackage of dirPackages) {
+      result.push(path.join(dir, neftPackage))
+    }
+  }
+  return result
+}
+
 const tryMkdir = async (dir) => {
   try {
     await fs.mkdir(dir)
@@ -39,7 +52,7 @@ const main = async () => {
   const realpath = await fs.realpath('.')
   const nodeModulesOut = path.join(realpath, './node_modules/')
   const neftModulesOut = path.join(nodeModulesOut, './@neft/')
-  const neftPackages = await fs.readdir(NEFT_PACKAGES)
+  const neftPackages = await getNeftPackages()
   const internalNames = new Set()
   const packageJsonFiles = {}
   const dependencies = {}
@@ -69,7 +82,6 @@ const main = async () => {
   await tryMkdir(neftModulesOut)
 
   for (const neftPackage of neftPackages) {
-    // eslint-disable-next-line no-await-in-loop
     await scanNeftPackage(neftPackage)
   }
 
@@ -90,12 +102,11 @@ const main = async () => {
   }
 
   for (const neftPackage of neftPackages) {
-    // eslint-disable-next-line no-await-in-loop
     await linkNeftPackage(neftPackage)
   }
 
   // copy bin file
-  await spawnPromise('rsync', [path.join(NEFT_PACKAGES, 'neft-cli/bin/neft.js'), path.join(nodeModulesOut, './.bin/neft')])
+  await spawnPromise('rsync', [path.join(NEFT_PACKAGES, 'cli/neft-cli/bin/neft.js'), path.join(nodeModulesOut, './.bin/neft')])
 }
 
 main()
