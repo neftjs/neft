@@ -18,7 +18,6 @@ install:
     - nvm install 10.15.3
 
     # install project dependencies
-    - rm package-lock.json
     - npm install
     - npx lerna bootstrap
 script:
