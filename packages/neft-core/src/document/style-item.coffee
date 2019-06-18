@@ -2,7 +2,7 @@
 
 assert = require '../assert'
 utils = require '../util'
-signal = require '../signal'
+{Signal} = require '../signal/signal'
 log = require '../log'
 eventLoop = require '../event-loop'
 Renderer = require '../renderer'
@@ -131,15 +131,12 @@ module.exports = class StyleItem
             # set value
             internalProp = getInternalProperty lastPart
 
-            # connect a function to the signal
-            isSignal = obj[internalProp] is undefined
-            isSignal &&= typeof obj[lastPart] is 'function'
-            isSignal &&= obj[lastPart].connect
-            if isSignal
+            # connect function to signal
+            if obj[lastPart] instanceof Signal
                 if typeof oldVal is 'function'
-                    obj[lastPart].disconnect oldVal
+                    obj[lastPart].disconnect oldVal, @element
                 if typeof val is 'function'
-                    obj[lastPart] val
+                    obj[lastPart].connect val, @element
             else
                 @setPropsClassAttribute getPropertyPath(prop), val
 

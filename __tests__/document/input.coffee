@@ -73,14 +73,19 @@ describe 'Document string interpolation', ->
         it 'does not contain internal properties', ->
             view = createView '''
                 <n-component name="a">
-                    {Object.keys(this)}
                     <n-props x />
+                    {getThisKeys()}
+                    <script>
+                    exports.default = () => ({
+                        getThisKeys() { return Object.keys(this) },
+                    })
+                    </script>
                 </n-component>
                 <n-use n-component="a" x="1" n-if={true} />
             '''
 
             renderParse view
-            assert.is view.element.stringify(), 'x'
+            assert.is view.element.stringify(), 'getThisKeys,x'
 
         return
 
@@ -101,15 +106,6 @@ describe 'Document string interpolation', ->
             view = createView '''
                 <a ref="first" label="12" />
                 {$refs.first.props.label}
-            '''
-
-            renderParse view
-            assert.is view.element.children[1].text, '12'
-
-        it 'are accessible by exported', ->
-            view = createView '''
-                <a n-ref="first" label="12" />
-                {this.$refs.first.props.label}
             '''
 
             renderParse view
@@ -172,20 +168,6 @@ describe 'Document string interpolation', ->
                 context: a: '2'
             assert.is view.element.stringify(), '2'
 
-        it 'is accesible by exported', ->
-            view = createView '''
-                {this.$context.a}
-            '''
-
-            renderParse view,
-                context: a: '1'
-            assert.is view.element.stringify(), '1'
-
-            view.revert()
-            renderParse view,
-                context: a: '2'
-            assert.is view.element.stringify(), '2'
-
         it 'lookup use', ->
             view = createView '''
                 <n-component name="a">{$context.a}</n-component>
@@ -231,22 +213,6 @@ describe 'Document string interpolation', ->
                 }
                 </script>
                 {a}
-            '''
-
-            renderParse view
-            assert.is view.element.stringify(), '1'
-
-        it 'is accessible by exported', ->
-            view = createView '''
-                <script>
-                exports.default = {
-                    a: 0,
-                    onRender() {
-                        this.a = 1
-                    },
-                }
-                </script>
-                {this.a}
             '''
 
             renderParse view

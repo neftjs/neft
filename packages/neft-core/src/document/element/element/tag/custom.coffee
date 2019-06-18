@@ -66,22 +66,25 @@ module.exports = (Element, Tag) -> class CustomTag extends Tag
 
     @defineStyleProperty = ({ name, styleName = name }) ->
         if @ is CustomTag
-            throw new Error 'Cannot define a property on CustomTag; create new class'
+            throw new Error 'Cannot define a property on CustomTag; create your own class'
 
         internalStyleName = "_#{styleName}"
         signalName = "on#{util.capitalize(name)}Change"
         signalStyleName = "on#{util.capitalize(styleName)}Change"
 
         @_styleAliases ?= []
-        @_styleAliasesByName ?= []
+        @_styleAliasesByName ?= {}
 
-        alias =
+        @_styleAliases.push
             name: name
             signalName: signalName
             styleName: styleName
 
-        @_styleAliases.push alias
-        @_styleAliasesByName[name] = alias
+        @_styleAliasesByName[signalName] =
+            styleName: signalStyleName
+
+        @_styleAliasesByName[name] =
+            styleName: styleName
 
         signalGetter = -> @_style?[signalStyleName]
         getter = -> @_style?[internalStyleName]

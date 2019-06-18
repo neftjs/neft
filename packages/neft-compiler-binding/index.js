@@ -1,8 +1,8 @@
-var BINDING_THIS_TO_SELF_OPTS, BINDING_THIS_TO_TARGET_OPTS, isArrayElementIndexer, repeatString;
+var CHANGE_THIS_TO_SELF, BINDING_THIS_TO_TARGET_OPTS, isArrayElementIndexer, repeatString;
 
 exports.BINDING_THIS_TO_TARGET_OPTS = BINDING_THIS_TO_TARGET_OPTS = 1 << 0;
 
-exports.BINDING_THIS_TO_SELF_OPTS = BINDING_THIS_TO_SELF_OPTS = 1 << 1;
+exports.CHANGE_THIS_TO_SELF = CHANGE_THIS_TO_SELF = 1 << 1;
 
 repeatString = function(str, amount) {
   var i, j, r, ref;
@@ -93,8 +93,8 @@ exports.parse = function(val, isPublicId, opts, objOpts, isVariableId) {
       continue;
     }
     elem = (typeof objOpts.modifyBindingPart === "function" ? objOpts.modifyBindingPart(elem) : void 0) || elem;
-    if (opts & BINDING_THIS_TO_SELF_OPTS && elem[0] === 'this') {
-      elem.splice(1, 0, '$self');
+    if (opts & CHANGE_THIS_TO_SELF && elem[0] === 'this') {
+      elem[0] = 'self'
     }
     useThis = (ref = elem[0]) === 'parent' || ref === 'nextSibling' || ref === 'previousSibling' || ref === 'target';
     useThis || (useThis = (ref1 = objOpts.globalIdToThis) != null ? ref1[elem[0]] : void 0);

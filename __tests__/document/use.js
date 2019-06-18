@@ -120,9 +120,9 @@ describe('Document n-use', () => {
         <n-props logs name />
       </n-component>
       <div n-if="{false}">
-        <Abc logs="{this.logs}" name="fail" />
+        <Abc logs="{logs}" name="fail" />
       </div>
-      <Abc logs="{this.logs}" name="ok" />
+      <Abc logs="{logs}" name="ok" />
     `)
     renderParse(view)
     assert.isEqual(view.exported.logs, ['ok'])

@@ -248,6 +248,19 @@ describe 'CustomTag style properties', ->
         node.props.set 'left', 70
         assert.is item.x, node.props.left
 
+    it 'signal listeners are supported', ->
+        view = createViewAndRender '''
+        <custom-style-tag1 onLeftChange={calls += 1} />
+        <script>exports.default = () => ({ calls: 0 })</script>
+        <style bare>@Item custom-style-tag1 {}</style>
+        '''
+
+        node = view.element.query 'custom-style-tag1'
+        item = node.style
+
+        item.x = 70
+        assert.is view.exported.calls, 1
+
     return
 
 describe 'item visible', ->

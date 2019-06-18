@@ -81,3 +81,4 @@ it 'style property signal proxies original source', ->
         args.push localArgs
     input.style.x = 50
     assert.isEqual args, [[0, undefined]]
+    assert.is input.left, 50

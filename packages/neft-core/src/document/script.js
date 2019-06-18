@@ -10,7 +10,6 @@ class ScriptExported extends Struct {
     util.defineProperty(this, '$element', PROP_OPTS, document.element)
     util.defineProperty(this, '$refs', PROP_OPTS, document.refs)
     util.defineProperty(this, '$context', PROP_OPTS, () => document.context, null)
-    util.defineProperty(this, '$self', PROP_OPTS, this)
   }
 }
 
@@ -67,11 +66,15 @@ class Script {
   }
 
   afterRender() {
-    if (typeof this.document.exported.onRender === 'function') this.document.exported.onRender()
+    if (typeof this.document.exported.onRender === 'function') {
+      this.document.exported.onRender()
+    }
   }
 
   beforeRevert() {
-    if (typeof this.document.exported.onRevert === 'function') this.document.exported.onRevert()
+    if (typeof this.document.exported.onRevert === 'function') {
+      this.document.exported.onRevert()
+    }
   }
 }
 

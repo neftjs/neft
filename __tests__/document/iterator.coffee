@@ -72,16 +72,6 @@ describe 'Document n-for', ->
             props: a: 'a'
         assert.is view.element.stringify(), '<ul>aa</ul>'
 
-    it 'access global `props` by scope', ->
-        view = createView '''
-        <ul n-for="i in {[1,2]}">{this.a}</ul>
-        <n-props a />
-        '''
-
-        renderParse view,
-            props: a: 'a'
-        assert.is view.element.stringify(), '<ul>aa</ul>'
-
     it 'access `refs`', ->
         view = createView """
             <div n-ref="a" prop="a" n-if={false} />
@@ -103,28 +93,6 @@ describe 'Document n-for', ->
         renderParse view
         assert.is view.element.stringify(), '<ul>aa</ul>'
 
-    it 'uses parent `this` scope', ->
-        view = createView """
-            <n-component name="a">
-                <script>
-                exports.default = {
-                    self1: null,
-                    onCreate() {
-                        this.self1 = this
-                    },
-                    isSelf(any) {
-                        return this === any
-                    },
-                }
-                </script>
-                <ul n-for="i in {[1,2]}">{isSelf(this)}</ul>
-            </n-component>
-            <n-use n-component="a" />
-        """
-
-        renderParse view
-        assert.is view.element.stringify(), '<ul>truetrue</ul>'
-
     it 'access parent component `state` object', ->
         view = createView '''
             <script>
@@ -136,11 +104,10 @@ describe 'Document n-for', ->
             }
             </script>
             <ul n-for="i in {[1,2]}">{a}</ul>
-            <ul n-for="i in {[1,2]}">{this.a}</ul>
         '''
 
         renderParse view
-        assert.is view.element.stringify(), '<ul>11</ul><ul>11</ul>'
+        assert.is view.element.stringify(), '<ul>11</ul>'
 
     it 'updates parent component `state` object bindings', ->
         view = createView '''
@@ -150,14 +117,13 @@ describe 'Document n-for', ->
             }
             </script>
             <ul n-for="i in {[1,2]}">{a}</ul>
-            <ul n-for="i in {[1,2]}">{this.a}</ul>
         '''
 
         renderParse view
         view.exported.a = 2
-        assert.is view.element.stringify(), '<ul>22</ul><ul>22</ul>'
+        assert.is view.element.stringify(), '<ul>22</ul>'
 
-    it 'internal props are not accessible by scope', ->
+    it 'internal props are not accessible by context', ->
         view = createView '''
             <ul n-for="i in {[0]}">
                 {this.item}{this.index}{this.each}
@@ -165,7 +131,7 @@ describe 'Document n-for', ->
         '''
 
         renderParse view
-        assert.is view.element.stringify(), '<ul>undefinedundefinedundefined</ul>'
+        assert.is view.element.stringify(), '<ul></ul>'
 
     it 'can be nested', ->
         view = createView '''
