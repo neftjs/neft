@@ -1,7 +1,5 @@
 .DS_Store
-/node_modules
-/__tests__/node_modules
-/packages/*/node_modules
+node_modules
 .idea/
 /gh-pages
 .vscode
