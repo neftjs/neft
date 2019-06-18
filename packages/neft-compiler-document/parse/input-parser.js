@@ -4,11 +4,11 @@ logger = require('@neft/core').logger;
 
 bindingParser = require('@neft/compiler-binding');
 
-PARSER_FLAGS = bindingParser.BINDING_THIS_TO_SELF_OPTS;
+PARSER_FLAGS = bindingParser.CHANGE_THIS_TO_SELF;
 
 PARSER_OPTS = {
   shouldPrefixByThis: function(key) {
-    return (key !== 'this' && key !== 'global' && key !== 'Neft' && key !== 'typeof' && key !== 'true' && key !== 'false' && key !== 'null' && key !== 'undefined') && !(key in global);
+    return (key !== 'this' && key !== 'global' && key !== 'Neft' && key !== 'typeof' && key !== 'true' && key !== 'false' && key !== 'null' && key !== 'undefined' && key !== 'self') && !(key in global);
   }
 };
 

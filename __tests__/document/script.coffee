@@ -110,14 +110,14 @@ describe 'Document script', ->
     it 'can contains XML text', ->
         view = createView """
             <script>
-            exports.default = {
-                a: null,
+            exports.default = () => ({
+                xml: null,
                 onRender() {
-                    this.a = '<&&</b>'
+                    this.xml = '<&&</b>'
                 },
-            }
+            })
             </script>
-            {this.a}
+            {xml}
         """
 
         renderParse view

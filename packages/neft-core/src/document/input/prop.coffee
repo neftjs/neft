@@ -38,7 +38,7 @@ module.exports = class InputProp extends Input
         ->
             unless input.document.rendered
                 return
-            r = input.interpolation.func.apply input.document.exported
+            r = input.interpolation.func.call input.document.exported, @
             if typeof r is 'function'
                 r = r.apply @, arguments
             r

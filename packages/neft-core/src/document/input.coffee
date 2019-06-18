@@ -45,7 +45,7 @@ class DocumentBinding extends Binding
 
 module.exports = class Input extends SignalsEmitter
     initBindingConfig = (cfg) ->
-        cfg.func ?= new Function cfg.body
+        cfg.func ?= new Function 'self', cfg.body
         cfg.tree ?= [cfg.func, cfg.connections]
         return
 
