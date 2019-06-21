@@ -11,7 +11,10 @@
   ],
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
-  "workspaces": ["__tests__/", "packages/*/*"],
+  "workspaces": [
+    "__tests__/",
+    "packages/*/*"
+  ],
   "scripts": {
     "test": "jest",
     "lint": "eslint packages __tests__"
@@ -36,6 +39,9 @@
     }
   },
   "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "babel-jest": "^24.8.0",
     "coffee-script": "^1.12.7",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
