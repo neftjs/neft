@@ -2,45 +2,26 @@ import UIKit
 
 extension Extension.Switch {
     class SwitchItem: NativeItem {
-        override class var name: String { return "Switch" }
-
-        override class func register() {
-            onCreate() {
-                return SwitchItem()
-            }
-
-            onSet("selected") {
-                (item: SwitchItem, val: Bool) in
-                item.switchView.isOn = val
-            }
-
-            onSet("borderColor") {
-                (item: SwitchItem, val: UIColor?) in
-                item.switchView.tintColor = val
-            }
-
-            onSet("selectedColor") {
-                (item: SwitchItem, val: UIColor?) in
-                item.switchView.onTintColor = val ?? App.getApp().view.tintColor
-            }
-
-            onSet("thumbColor") {
-                (item: SwitchItem, val: UIColor?) in
-                item.switchView.thumbTintColor = val
-            }
-
-            onCall("setSelectedAnimated") {
-                (item: SwitchItem, args: [Any?]) in
-                let val = args[0] as! Bool
-                item.switchView.setOn(val, animated: true)
-            }
+        override class func main() {
+            NativeItemBinding()
+                .onCreate("Switch") { SwitchItem() }
+                .onSet("selected") { (item, val: Bool) in item.setSelected(val) }
+                .onSet("borderColor") { (item, val: UIColor?) in item.setBorderColor(val) }
+                .onSet("selectedColor") { (item, val: UIColor?) in item.setSelectedColor(val) }
+                .onSet("thumbColor") { (item, val: UIColor?) in item.setThumbColor(val) }
+                .onCall("setSelectedAnimated") {
+                    (item, args: [Any?]) in
+                    let val = args[0] as! Bool
+                    item.setSelectedAnimated(val)
+                }
+                .finalize()
         }
 
         var switchView: UISwitch {
             return itemView as! UISwitch
         }
 
-        init() {
+        required init() {
             super.init(itemView: UISwitch())
 
             switchView.addTarget(
@@ -48,6 +29,26 @@ extension Extension.Switch {
                 action: #selector(onValueChange(switchState:)),
                 for: .valueChanged
             )
+        }
+
+        func setSelected(_ val: Bool) {
+            switchView.isOn = val
+        }
+
+        func setBorderColor(_ val: UIColor?) {
+            switchView.tintColor = val
+        }
+
+        func setSelectedColor(_ val: UIColor?) {
+            switchView.onTintColor = val ?? App.getApp().view.tintColor
+        }
+
+        func setThumbColor(_ val: UIColor?) {
+            switchView.thumbTintColor = val
+        }
+
+        func setSelectedAnimated(_ val: Bool) {
+            switchView.setOn(val, animated: true)
         }
 
         @objc

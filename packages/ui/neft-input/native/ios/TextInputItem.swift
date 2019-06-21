@@ -2,67 +2,29 @@ import UIKit
 
 extension Extension.Input {
     class TextInputItem: NativeItem {
-        override class var name: String { return "TextInput" }
-
-        override class func register() {
-            onCreate() {
-                return TextInputItem()
-            }
-
-            onSet("text") {
-                (item: TextInputItem, val: String) in
-                item.fieldView.text = val
-            }
-
-            onSet("textColor") {
-                (item: TextInputItem, val: UIColor?) in
-                item.fieldView.textColor = val
-            }
-
-            onSet("placeholder") {
-                (item: TextInputItem, val: String) in
-                item.placeholder = val
-            }
-
-            onSet("placeholderColor") {
-                (item: TextInputItem, val: UIColor?) in
-                item.placeholderColor = val
-            }
-
-            onSet("keyboardType") {
-                (item: TextInputItem, val: String) in
-                item.fieldView.keyboardType = keyboardTypes[val] ?? UIKeyboardType.default
-            }
-
-            onSet("multiline") {
-                (item: TextInputItem, val: Bool) in
-                // TODO
-            }
-
-            onSet("returnKeyType") {
-                (item: TextInputItem, val: String) in
-                item.fieldView.returnKeyType = returnKeyTypes[val] ?? UIReturnKeyType.default
-            }
-
-            onSet("secureTextEntry") {
-                (item: TextInputItem, val: Bool) in
-                item.fieldView.isSecureTextEntry = val
-            }
-
-            onCall("focus") {
-                (item: TextInputItem, args: [Any?]) in
-                item.fieldView.becomeFirstResponder()
-            }
+        override static func main() {
+            NativeItemBinding()
+                .onCreate("TextInput") { TextInputItem() }
+                .onSet("text") { (item, val: String) in item.setText(val) }
+                .onSet("textColor") { (item, val: UIColor?) in item.setTextColor(val) }
+                .onSet("placeholder") { (item, val: String) in item.setPlaceholder(val) }
+                .onSet("placeholderColor") { (item, val: UIColor?) in item.setPlaceholderColor(val) }
+                .onSet("keyboardType") { (item, val: String) in item.setKeyboardType(val) }
+                .onSet("multiline") { (item, val: Bool) in item.setMultiline(val) }
+                .onSet("returnKeyType") { (item, val: String) in item.setReturnKeyType(val) }
+                .onSet("secureTextEntry") { (item, val: Bool) in item.setSecureTextEntry(val) }
+                .onCall("focus") { item in item.focus() }
+                .finalize()
         }
 
-        static let keyboardTypes: [String: UIKeyboardType] = [
+        private static let keyboardTypes: [String: UIKeyboardType] = [
             "text": .default,
             "numeric": .decimalPad,
             "email": .emailAddress,
             "tel": .phonePad
         ]
 
-        static let returnKeyTypes: [String: UIReturnKeyType] = [
+        private static let returnKeyTypes: [String: UIReturnKeyType] = [
             "done": UIReturnKeyType.done,
             "go": UIReturnKeyType.go,
             "next": UIReturnKeyType.next,
@@ -70,24 +32,22 @@ extension Extension.Input {
             "send": UIReturnKeyType.send
         ]
 
-        var fieldView: UITextField {
-            return itemView as! UITextField
-        }
+        private var fieldView = UITextField()
 
-        var placeholder: String = "" {
+        private var placeholder: String = "" {
             didSet {
                 updatePlaceholder()
             }
         }
 
-        var placeholderColor: UIColor? {
+        private var placeholderColor: UIColor? {
             didSet {
                 updatePlaceholder()
             }
         }
 
         init() {
-            super.init(itemView: UITextField())
+            super.init(itemView: fieldView)
             fieldView.addTarget(self, action: #selector(onTextChange(textField:)), for: UIControl.Event.editingChanged)
             fieldView.addTarget(self, action: #selector(onExit(textField:)), for: UIControl.Event.editingDidEndOnExit)
             fieldView.borderStyle = .none
@@ -98,6 +58,42 @@ extension Extension.Input {
             NotificationCenter.default.addObserver(self, selector: #selector(didBeginEditing(_:)), name: UITextField.textDidBeginEditingNotification, object: fieldView)
 
             NotificationCenter.default.addObserver(self, selector: #selector(didEndEditing(_:)), name: UITextField.textDidEndEditingNotification, object: fieldView)
+        }
+
+        func setText(_ val: String) {
+            fieldView.text = val
+        }
+
+        func setTextColor(_ val: UIColor?) {
+            fieldView.textColor = val
+        }
+
+        func setPlaceholder(_ val: String) {
+            placeholder = val
+        }
+
+        func setPlaceholderColor(_ val: UIColor?) {
+            placeholderColor = val
+        }
+
+        func setKeyboardType(_ val: String) {
+            fieldView.keyboardType = TextInputItem.keyboardTypes[val] ?? UIKeyboardType.default
+        }
+
+        func setMultiline(_ val: Bool) {
+            // TODO
+        }
+
+        func setReturnKeyType(_ val: String) {
+            fieldView.returnKeyType = TextInputItem.returnKeyTypes[val] ?? UIReturnKeyType.default
+        }
+
+        func setSecureTextEntry(_ val: Bool) {
+            fieldView.isSecureTextEntry = val
+        }
+
+        func focus() {
+            fieldView.becomeFirstResponder()
         }
 
         private func updatePlaceholder() {

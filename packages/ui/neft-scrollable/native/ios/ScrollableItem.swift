@@ -2,34 +2,19 @@ import UIKit
 
 extension Extension.Scrollable {
     class ScrollableItem: NativeItem {
-        override class var name: String { return "Scrollable" }
-
-        override class func register() {
-            onCreate() {
-                return ScrollableItem()
-            }
-
-            onSet("contentItem") {
-                (item: ScrollableItem, val: Item?) in
-                item.contentItem = val
-            }
-
-            onSet("contentX") {
-                (item: ScrollableItem, val: CGFloat) in
-                item.scrollView.contentOffset.x = val
-            }
-
-            onSet("contentY") {
-                (item: ScrollableItem, val: CGFloat) in
-                item.scrollView.contentOffset.y = val
-            }
-
-            onCall("animatedScrollTo") {
-                (item: ScrollableItem, args: [Any?]) in
-                let x = (args[0] as! Number).float()
-                let y = (args[1] as! Number).float()
-                item.animatedScrollTo(x, y)
-            }
+        override class func main() {
+            NativeItemBinding()
+                .onCreate("Scrollable") { ScrollableItem() }
+                .onSet("contentItem") { (item, val: Item?) in item.setContentItem(val) }
+                .onSet("contentX") { (item, val: CGFloat) in item.setContentX(val) }
+                .onSet("contentY") { (item, val: CGFloat) in item.setContentY(val) }
+                .onCall("animatedScrollTo") {
+                    (item, args: [Any?]) in
+                    let x = (args[0] as! Number).float()
+                    let y = (args[1] as! Number).float()
+                    item.animatedScrollTo(x, y)
+                }
+                .finalize()
         }
 
         class NeftUIScrollView: UIScrollView, UIScrollViewDelegate {
@@ -88,10 +73,22 @@ extension Extension.Scrollable {
             }
         }
 
-        init() {
+        required init() {
             super.init(itemView: UIView())
             scrollView.scrollable = self
             view.addSubview(scrollView)
+        }
+
+        func setContentItem(_ val: Item?) {
+            contentItem = val
+        }
+
+        func setContentX(_ val: CGFloat) {
+            scrollView.contentOffset.x = val
+        }
+
+        func setContentY(_ val: CGFloat) {
+            scrollView.contentOffset.y = val
         }
 
         func animatedScrollTo(_ x: CGFloat, _ y: CGFloat) {

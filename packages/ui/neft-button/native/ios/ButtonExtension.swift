@@ -1,5 +1,5 @@
 extension Extension.Button {
     static func register() {
-        ButtonItem.register()
+        NativeItem.registerItem(ButtonItem.self)
     }
 }

@@ -4,32 +4,22 @@ import AVFoundation
 
 extension Extension.TileImage {
     class TileImageItem: NativeItem {
-        override class var name: String { return "TileImage" }
-
-        override class func register() {
-            onCreate() {
-                return TileImageItem()
-            }
-
-            onSet("source") {
-                (item: TileImageItem, val: String) in
-                item.setSource(val: val)
-            }
-
-            onSet("resolution") {
-                (item: TileImageItem, val: CGFloat) in
-                item.resolution = val
-            }
+        override class func main() {
+            NativeItemBinding()
+                .onCreate("TileImage") { TileImageItem() }
+                .onSet("source") { (item, val: String) in item.setSource(val) }
+                .onSet("resolution") { (item, val: CGFloat) in item.setResolution(val) }
+                .finalize()
         }
 
         var source: String?
         var resolution: CGFloat = 1
 
-        init() {
+        required init() {
             super.init(itemView: UIView())
         }
 
-        func setSource(val: String) {
+        func setSource(_ val: String) {
             self.source = val
             Image.getImageFromSource(val) { (img: UIImage?) in
                 guard self.source == val else { return }
@@ -44,6 +34,10 @@ extension Extension.TileImage {
                 )
                 self.itemView.backgroundColor = UIColor(patternImage: scaledImg)
             }
+        }
+
+        func setResolution(_ val: CGFloat) {
+            resolution = val
         }
     }
 }
