@@ -1,5 +1,5 @@
 extension Extension.Scrollable {
     static func register() {
-        ScrollableItem.register()
+        NativeItem.registerItem(ScrollableItem.self)
     }
 }

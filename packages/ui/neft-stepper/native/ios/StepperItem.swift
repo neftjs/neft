@@ -2,51 +2,47 @@ import UIKit
 
 extension Extension.Stepper {
     class StepperItem: NativeItem {
-        override class var name: String { return "Stepper" }
-
-        override class func register() {
-            onCreate() {
-                return StepperItem()
-            }
-
-            onSet("value") {
-                (item: StepperItem, val: CGFloat) in
-                item.stepperView.value = Double(val)
-            }
-
-            onSet("color") {
-                (item: StepperItem, val: UIColor?) in
-                item.stepperView.tintColor = val ?? App.getApp().view.tintColor
-            }
-
-            onSet("minValue") {
-                (item: StepperItem, val: CGFloat) in
-                item.stepperView.minimumValue = Double(val)
-            }
-
-            onSet("maxValue") {
-                (item: StepperItem, val: CGFloat) in
-                item.stepperView.maximumValue = Double(val)
-            }
-
-            onSet("stepValue") {
-                (item: StepperItem, val: CGFloat) in
-                item.stepperView.stepValue = Double(val)
-            }
+        override class func main() {
+            NativeItemBinding()
+                .onCreate("Stepper") { StepperItem() }
+                .onSet("value") { (item, val: CGFloat) in item.setValue(val) }
+                .onSet("color") { (item, val: UIColor?) in item.setColor(val) }
+                .onSet("minValue") { (item, val: CGFloat) in item.setMinValue(val) }
+                .onSet("maxValue") { (item, val: CGFloat) in item.setMaxValue(val) }
+                .onSet("stepValue") { (item, val: CGFloat) in item.setStepValue(val) }
+                .finalize()
         }
 
-        var stepperView: UIStepper {
-            return itemView as! UIStepper
-        }
+        var stepperView = UIStepper()
 
         init() {
-            super.init(itemView: UIStepper())
+            super.init(itemView: stepperView)
 
             stepperView.addTarget(
                 self,
                 action: #selector(onValueChange(stepperState:)),
                 for: .valueChanged
             )
+        }
+
+        func setValue(_ val: CGFloat) {
+            stepperView.value = Double(val)
+        }
+
+        func setColor(_ val: UIColor?) {
+            stepperView.tintColor = val ?? App.getApp().view.tintColor
+        }
+
+        func setMinValue(_ val: CGFloat) {
+            stepperView.minimumValue = Double(val)
+        }
+
+        func setMaxValue(_ val: CGFloat) {
+            stepperView.maximumValue = Double(val)
+        }
+
+        func setStepValue(_ val: CGFloat) {
+            stepperView.stepValue = Double(val)
         }
 
         @objc

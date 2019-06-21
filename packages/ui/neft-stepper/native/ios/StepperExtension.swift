@@ -1,5 +1,5 @@
 extension Extension.Stepper {
     static func register() {
-        StepperItem.register()
+        NativeItem.registerItem(StepperItem.self)
     }
 }

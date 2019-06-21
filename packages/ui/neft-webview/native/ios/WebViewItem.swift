@@ -13,32 +13,28 @@ fileprivate class ViewController: UIViewController, WKNavigationDelegate {
 
 extension Extension.Webview {
     class WebViewItem: NativeItem {
-        override class var name: String { return "WebView" }
-
-        override class func register() {
-            onCreate() {
-                return WebViewItem()
-            }
-
-            onSet("source") {
-                (item: WebViewItem, val: String) in
-                let url = URL(string: val) ?? URL(string: "about:")!
-                item.webView.load(URLRequest(url: url))
-            }
+        override class func main() {
+            NativeItemBinding()
+                .onCreate("WebView") { WebViewItem() }
+                .onSet("source") { (item, val: String) in item.setSource(val) }
+                .finalize()
         }
 
-        var webView: WKWebView {
-            return itemView as! WKWebView
-        }
+        private var webView = WKWebView()
 
         fileprivate let controller = ViewController()
 
-        init() {
-            super.init(itemView: WKWebView())
+        required init() {
+            super.init(itemView: webView)
 
             controller.item = self
             webView.navigationDelegate = controller
             webView.addObserver(controller, forKeyPath: #keyPath(WKWebView.url), options: .new, context: nil)
+        }
+
+        func setSource(_ val: String) {
+            let url = URL(string: val) ?? URL(string: "about:")!
+            webView.load(URLRequest(url: url))
         }
 
         fileprivate func handleUrlChange() {

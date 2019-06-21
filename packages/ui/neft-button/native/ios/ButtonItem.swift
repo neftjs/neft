@@ -2,33 +2,29 @@ import UIKit
 
 extension Extension.Button {
     class ButtonItem: NativeItem {
-        override class var name: String { return "Button" }
-
-        override class func register() {
-            onCreate() {
-                return ButtonItem()
-            }
-
-            onSet("text") {
-                (item: ButtonItem, val: String) in
-                item.buttonView.setTitle(val, for: .normal)
-                item.buttonView.sizeToFit()
-                item.updateSize()
-            }
-
-            onSet("textColor") {
-                (item: ButtonItem, val: UIColor?) in
-               item.buttonView.setTitleColor(val, for: .normal)
-            }
+        override class func main() {
+            NativeItemBinding()
+                .onCreate("Button") { ButtonItem() }
+                .onSet("text") { (item, val: String) in item.setText(val) }
+                .onSet("textColor") { (item, val: UIColor?) in item.setTextColor(val) }
+                .finalize()
         }
 
-        var buttonView: UIButton {
-            return itemView as! UIButton
-        }
+        var buttonView = UIButton()
 
         init() {
-            super.init(itemView: UIButton())
-            buttonView.setTitleColor(UIColor.black, for: .normal)
+            super.init(itemView: buttonView)
+            setTextColor(UIColor.black)
+        }
+
+        func setText(_ val: String) {
+            buttonView.setTitle(val, for: .normal)
+            buttonView.sizeToFit()
+            updateSize()
+        }
+
+        func setTextColor(_ val: UIColor?) {
+            buttonView.setTitleColor(val, for: .normal)
         }
     }
 }

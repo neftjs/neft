@@ -1,5 +1,5 @@
 extension Extension.Video {
     static func register() {
-        VideoItem.register()
+        NativeItem.registerItem(VideoItem.self)
     }
 }

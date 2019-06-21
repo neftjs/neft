@@ -1,11 +1,129 @@
 import UIKit
 
+fileprivate var types: Dictionary<String, () -> NativeItem> = [:]
+fileprivate var names: Dictionary<String, String> = [:]
+
+class NativeItemBinding<T: NativeItem> {
+    private var name: String!
+
+    private func on(
+        _ type: String,
+        _ name: String,
+        _ handler: @escaping (T, [Any?]) -> Void
+        ) {
+        let funcName = "renderer\(type)\(self.name.uppercaseFirst)\(name.uppercaseFirst)"
+        App.getApp().client.addCustomFunction(funcName) {
+            (inputArgs: [Any?]) in
+            var args = inputArgs
+            let index = (args[0] as! Number).int()
+            let item = App.getApp().renderer.items[index] as! T
+            args.removeFirst()
+            handler(item, args)
+        }
+    }
+
+    internal func onSet(
+        _ propertyName: String,
+        _ handler: @escaping (T, [Any?]) -> Void
+        ) -> NativeItemBinding<T> {
+        on("Set", propertyName, handler)
+        return self
+    }
+
+    internal func onSet(
+        _ propertyName: String,
+        _ handler: @escaping (T, Bool) -> Void
+        ) -> NativeItemBinding<T> {
+        return onSet(propertyName) {
+            (item: T, args: [Any?]) in
+            handler(item, args[0] as! Bool)
+        }
+    }
+
+    internal func onSet(
+        _ propertyName: String,
+        _ handler: @escaping (T, CGFloat) -> Void
+        ) -> NativeItemBinding<T> {
+        return onSet(propertyName) {
+            (item: T, args: [Any?]) in
+            handler(item, (args[0] as! Number).float())
+        }
+    }
+
+    internal func onSet(
+        _ propertyName: String,
+        _ handler: @escaping (T, Int) -> Void
+        ) -> NativeItemBinding<T> {
+        return onSet(propertyName) {
+            (item: T, args: [Any?]) in
+            handler(item, (args[0] as! Number).int())
+        }
+    }
+
+    internal func onSet(
+        _ propertyName: String,
+        _ handler: @escaping (T, UIColor?) -> Void
+        ) -> NativeItemBinding<T> {
+        return onSet(propertyName) {
+            (item: T, val: Int?) in
+            handler(item, val != nil ? Color.hexColorToUIColor(val!) : nil)
+        }
+    }
+
+    internal func onSet(
+        _ propertyName: String,
+        _ handler: @escaping (T, Item?) -> Void
+        ) -> NativeItemBinding<T> {
+        return onSet(propertyName) {
+            (item: T, val: Int?) in
+            handler(item, val != nil && val! >= 0 ? Item.renderer.items[val!] : nil)
+        }
+    }
+
+    internal func onSet(
+        _ propertyName: String,
+        _ handler: @escaping (T, String) -> Void
+        ) -> NativeItemBinding<T> {
+        return onSet(propertyName) {
+            (item: T, args: [Any?]) in
+            handler(item, args[0] as! String)
+        }
+    }
+
+    internal func onCall(
+        _ funcName: String,
+        _ handler: @escaping (T, [Any?]) -> Void
+        ) -> NativeItemBinding<T> {
+        on("Call", funcName, handler)
+        return self
+    }
+
+    internal func onCall(
+        _ funcName: String,
+        _ handler: @escaping (T) -> Void
+        ) -> NativeItemBinding<T> {
+        return onCall(funcName) {
+            (item: T, args: [Any?]) in
+            handler(item)
+        }
+    }
+
+    internal func onCreate(
+        _ name: String,
+        _ handler: @escaping () -> T
+        ) -> NativeItemBinding<T> {
+        self.name = name
+        let handlerStr = String(describing: type(of: handler))
+        let className = handlerStr.components(separatedBy: "->")[1].trimmingCharacters(in: .whitespaces)
+        names[className] = name
+        types[name] = handler
+        return self
+    }
+
+    internal func finalize() {}
+}
+
 class NativeItem: Item {
-    class NativeUIView: UIView {}
-
-    static var types: Dictionary<String, () -> NativeItem> = [:]
-    class var name: String { return "Unknown" }
-
     override class func register(){
         onAction(.createNativeItem) {
             (reader: Reader) in
@@ -35,100 +153,12 @@ class NativeItem: Item {
         }
     }
 
-    private static func on<T: NativeItem>(
-        _ type: String,
-        _ name: String,
-        _ handler: @escaping (T, [Any?]) -> Void
-        ) {
-        let funcName = "renderer\(type)\(self.name.uppercaseFirst)\(name.uppercaseFirst)"
-        App.getApp().client.addCustomFunction(funcName) {
-            (inputArgs: [Any?]) in
-            var args = inputArgs
-            let index = (args[0] as! Number).int()
-            let item = App.getApp().renderer.items[index] as! T
-            args.removeFirst()
-            handler(item, args)
-        }
+    class func main() {
+        print("Override main function for \(type(of: self))")
     }
 
-    internal static func onSet<T: NativeItem>(
-        _ propertyName: String,
-        _ handler: @escaping (T, [Any?]) -> Void
-        ) {
-        on("Set", propertyName, handler)
-    }
-
-    internal static func onSet<T: NativeItem>(
-        _ propertyName: String,
-        _ handler: @escaping (T, Bool) -> Void
-        ) {
-        onSet(propertyName) {
-            (item: T, args: [Any?]) in
-            handler(item, args[0] as! Bool)
-        }
-    }
-
-    internal static func onSet<T: NativeItem>(
-        _ propertyName: String,
-        _ handler: @escaping (T, CGFloat) -> Void
-        ) {
-        onSet(propertyName) {
-            (item: T, args: [Any?]) in
-            handler(item, (args[0] as! Number).float())
-        }
-    }
-
-    internal static func onSet<T: NativeItem>(
-        _ propertyName: String,
-        _ handler: @escaping (T, Int) -> Void
-        ) {
-        onSet(propertyName) {
-            (item: T, args: [Any?]) in
-            handler(item, (args[0] as! Number).int())
-        }
-    }
-
-    internal static func onSet<T: NativeItem>(
-        _ propertyName: String,
-        _ handler: @escaping (T, UIColor?) -> Void
-        ) {
-        onSet(propertyName) {
-            (item: T, val: Int?) in
-            handler(item, val != nil ? Color.hexColorToUIColor(val!) : nil)
-        }
-    }
-
-    internal static func onSet<T: NativeItem>(
-        _ propertyName: String,
-        _ handler: @escaping (T, Item?) -> Void
-        ) {
-        onSet(propertyName) {
-            (item: T, val: Int?) in
-            handler(item, val != nil && val! >= 0 ? renderer.items[val!] : nil)
-        }
-    }
-
-    internal static func onSet<T: NativeItem>(
-        _ propertyName: String,
-        _ handler: @escaping (T, String) -> Void
-        ) {
-        onSet(propertyName) {
-            (item: T, args: [Any?]) in
-            handler(item, args[0] as! String)
-        }
-    }
-
-    internal static func onCall<T: NativeItem>(
-        _ funcName: String,
-        _ handler: @escaping (T, [Any?]) -> Void
-        ) {
-        on("Call", funcName, handler)
-    }
-
-    internal static func onCreate<T: NativeItem>(
-        handler: @escaping () -> T
-        ) {
-        NativeItem.types[self.name] = handler
+    static func registerItem(_ type: NativeItem.Type) {
+        type.main()
     }
 
     var autoWidth = true
@@ -209,7 +239,8 @@ class NativeItem: Item {
     }
 
     internal func pushEvent(event: String, args: [Any?]?) {
-        let eventName = "rendererOn\(type(of: self).name.uppercaseFirst)\(event.uppercaseFirst)"
+        let className = String(describing: type(of: self))
+        let eventName = "rendererOn\(names[className]!.uppercaseFirst)\(event.uppercaseFirst)"
         var clientArgs: [Any?] = [id]
         if args != nil {
             clientArgs.append(contentsOf: args!)

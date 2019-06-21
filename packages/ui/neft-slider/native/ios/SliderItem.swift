@@ -2,62 +2,61 @@ import UIKit
 
 extension Extension.Slider {
     class SliderItem: NativeItem {
-        override class var name: String { return "Slider" }
-
-        override class func register() {
-            onCreate() {
-                return SliderItem()
-            }
-
-            onSet("value") {
-                (item: SliderItem, val: CGFloat) in
-                item.sliderView.value = Float(val)
-            }
-
-            onSet("thumbColor") {
-                (item: SliderItem, val: UIColor?) in
-                item.sliderView.thumbTintColor = val
-            }
-
-            onSet("minTrackColor") {
-                (item: SliderItem, val: UIColor?) in
-                item.sliderView.minimumTrackTintColor = val
-            }
-
-            onSet("maxTrackColor") {
-                (item: SliderItem, val: UIColor?) in
-                item.sliderView.maximumTrackTintColor = val
-            }
-
-            onSet("minValue") {
-                (item: SliderItem, val: CGFloat) in
-                item.sliderView.minimumValue = Float(val)
-            }
-
-            onSet("maxValue") {
-                (item: SliderItem, val: CGFloat) in
-                item.sliderView.maximumValue = Float(val)
-            }
-
-            onCall("setValueAnimated") {
-                (item: SliderItem, args: [Any?]) in
-                let val = Float(args[0] as! CGFloat)
-                item.sliderView.setValue(val, animated: true)
-            }
+        override class func main() {
+            NativeItemBinding()
+                .onCreate("Slier") { SliderItem() }
+                .onSet("value") { (item, val: CGFloat) in item.setValue(val) }
+                .onSet("thumbColor") { (item, val: UIColor?) in item.setThumbColor(val) }
+                .onSet("minTrackColor") { (item, val: UIColor?) in item.setMinTrackColor(val) }
+                .onSet("maxTrackColor") { (item, val: UIColor?) in item.setMaxTrackColor(val) }
+                .onSet("minValue") { (item, val: CGFloat) in item.setMinValue(val) }
+                .onSet("maxValue") { (item, val: CGFloat) in item.setMaxValue(val) }
+                .onCall("setValueAnimated") {
+                    (item, args: [Any?]) in
+                    let val = args[0] as! CGFloat
+                    item.setValueAnimated(val)
+                }
+                .finalize()
         }
 
-        var sliderView: UISlider {
-            return itemView as! UISlider
-        }
+        var sliderView = UISlider()
 
         init() {
-            super.init(itemView: UISlider())
+            super.init(itemView: sliderView)
 
             sliderView.addTarget(
                 self,
                 action: #selector(onValueChange(sliderState:)),
                 for: .valueChanged
             )
+        }
+
+        func setValue(_ val: CGFloat) {
+            sliderView.value = Float(val)
+        }
+
+        func setThumbColor(_ val: UIColor?) {
+            sliderView.thumbTintColor = val
+        }
+
+        func setMinTrackColor(_ val: UIColor?) {
+            sliderView.minimumTrackTintColor = val
+        }
+
+        func setMaxTrackColor(_ val: UIColor?) {
+            sliderView.maximumTrackTintColor = val
+        }
+
+        func setMinValue(_ val: CGFloat) {
+            sliderView.minimumValue = Float(val)
+        }
+
+        func setMaxValue(_ val: CGFloat) {
+            sliderView.maximumValue = Float(val)
+        }
+
+        func setValueAnimated(_ val: CGFloat) {
+            sliderView.setValue(Float(val), animated: true)
         }
 
         @objc

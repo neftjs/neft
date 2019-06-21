@@ -1,5 +1,5 @@
 extension Extension.Switch {
     static func register() {
-        SwitchItem.register()
+        NativeItem.registerItem(SwitchItem.self)
     }
 }

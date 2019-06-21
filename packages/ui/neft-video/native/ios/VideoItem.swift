@@ -4,35 +4,14 @@ import AVFoundation
 
 extension Extension.Video {
     class VideoItem: NativeItem {
-        override class var name: String { return "Video" }
-
-        override class func register() {
-            onCreate() {
-                return VideoItem()
-            }
-
-            onSet("source") {
-                (item: VideoItem, val: String) in
-                item.setSource(val: val)
-            }
-
-            onSet("loop") {
-                (item: VideoItem, val: Bool) in
-                item.loop = val
-            }
-
-            onCall("start") {
-                (item: VideoItem, args: [Any?]) in
-                item.running = true
-                item.player?.seek(to: kCMTimeZero)
-                item.player?.play()
-            }
-
-            onCall("stop") {
-                (item: VideoItem, args: [Any?]) in
-                item.running = false
-                item.player?.pause()
-            }
+        override class func main() {
+            NativeItemBinding()
+                .onCreate("Video") { VideoItem() }
+                .onSet("source") { (item, val: String) in item.setSource(val) }
+                .onSet("loop") { (item, val: Bool) in item.setLoop(val) }
+                .onCall("start") { (item) in item.start() }
+                .onCall("stop") { (item) in item.stop() }
+                .finalize()
         }
 
         var player: AVPlayer?
@@ -64,12 +43,12 @@ extension Extension.Video {
 
         @objc func playerItemDidReachEnd(notification: Notification) {
             if loop {
-                player?.seek(to: kCMTimeZero)
+                player?.seek(to: CMTime.zero)
                 player?.play()
             }
         }
 
-        func setSource(val: String) {
+        func setSource(_ val: String) {
             layer?.removeFromSuperlayer()
             player = nil
             layer = nil
@@ -92,6 +71,21 @@ extension Extension.Video {
             if running {
                 player?.play()
             }
+        }
+
+        func setLoop(_ val: Bool) {
+            loop = val
+        }
+
+        func start() {
+            running = true
+            player?.seek(to: CMTime.zero)
+            player?.play()
+        }
+
+        func stop() {
+            running = false
+            player?.pause()
         }
     }
 }

@@ -1,4 +1,5 @@
-const { Renderer, assert } = Neft
+const { Renderer, assert } = require('@neft/core')
+
 const { setPropertyValue } = Renderer.itemUtils
 
 class Slider extends Renderer.Native {

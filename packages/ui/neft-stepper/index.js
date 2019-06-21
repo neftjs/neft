@@ -1,4 +1,5 @@
-const { Renderer, assert, utils } = Neft
+const { Renderer } = require('@neft/core')
+
 const { setPropertyValue } = Renderer.itemUtils
 
 class Stepper extends Renderer.Native {}

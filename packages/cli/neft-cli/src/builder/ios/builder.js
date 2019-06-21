@@ -33,11 +33,10 @@ const fontExtnames = {
 }
 
 const getIosExtensions = async (extensions) => {
-  const promises = extensions.map(async ({ dirPath }) => {
+  const promises = extensions.map(async ({ shortName, dirPath }) => {
     const nativeDirPath = path.join(dirPath, 'native/ios')
     if (!(await fs.exists(nativeDirPath))) return null
-    let name = /@neft\/([^/]+)/.exec(dirPath)[1]
-    name = util.kebabToCamel(name)
+    let name = util.kebabToCamel(shortName)
     name = util.capitalize(name)
     return {
       dirPath, nativeDirPath, name,

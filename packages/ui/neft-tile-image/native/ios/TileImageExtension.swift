@@ -1,5 +1,5 @@
 extension Extension.TileImage {
     static func register() {
-        TileImageItem.register()
+        NativeItem.registerItem(TileImageItem.self)
     }
 }

@@ -39,9 +39,13 @@ const getExtensions = () => {
     .filter(isExtensionName)
     .forEach((name) => {
       const extensionPath = require.resolve(name, { paths: [realpath] })
+      const shortName = isOfficialExtensionName(name)
+        ? name.split('@neft/')[1]
+        : name.split('neft-')[1]
       try {
         result.push({
           name,
+          shortName,
           path: extensionPath,
           dirPath: path.dirname(extensionPath),
         })
