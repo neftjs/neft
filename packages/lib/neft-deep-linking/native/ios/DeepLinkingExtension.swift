@@ -1,16 +1,18 @@
 fileprivate let app = App.getApp()
+fileprivate let binding = NativeBinding("DeepLinking")
 
 extension Extension.DeepLinking {
     static func register() {
-        app.client.addCustomFunction("NeftDeepLinking/getOpenUrl") {
-            (args: [Any?]) in
-            pushOpenUrlChange()
-        }
+        binding
+            .onCall("getOpenUrl") { (args: [Any?]) in
+                pushOpenUrlChange()
+            }
+            .finalize()
 
         app.onOpenUrlChange.connect { _ in pushOpenUrlChange() }
     }
 
-    fileprivate static func pushOpenUrlChange() {
-        app.client.pushEvent("NeftDeepLinking/openUrlChange", args: [app.openUrl])
+    private static func pushOpenUrlChange() {
+        binding.pushEvent("openUrlChange", args: [app.openUrl])
     }
 }

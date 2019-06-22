@@ -1,31 +1,32 @@
 import JavaScriptCore
 
+fileprivate let binding = NativeBinding("Request")
+
 extension Extension.Request {
     static let app = App.getApp()
 
     static func register() {
-        app.client.addCustomFunction("NeftRequest/request") {
-            (args: [Any?]) in
-            let uid = args[0] as? String ?? ""
-            let uri = args[1] as? String ?? ""
-            let method = args[2] as? String ?? ""
-            let headersJson = args[3] as? String ?? "{}"
-            let body = args[4] as? String ?? ""
-            let timeout = (args[5] as? Number)?.int() ?? 0
+        binding
+            .onCall("request") { (args: [Any?]) in
+                let uid = args[0] as? String ?? ""
+                let uri = args[1] as? String ?? ""
+                let method = args[2] as? String ?? ""
+                let headersJson = args[3] as? String ?? "{}"
+                let body = args[4] as? String ?? ""
+                let timeout = (args[5] as? Number)?.int() ?? 0
 
-            let headers: [String: String] = (try? JSONDecoder().decode([String: String].self, from: headersJson.data(using: String.Encoding.utf8)!)) ?? [:]
+                let headers: [String: String] = (try? JSONDecoder().decode([String: String].self, from: headersJson.data(using: String.Encoding.utf8)!)) ?? [:]
 
-
-            request(uri, method, headers, body, timeout) {
-                (error: String, code: Int, data: String, headers: [String: String]) in
-                let headersData = try? JSONEncoder().encode(headers)
-                let headersJson = headersData == nil ? "{}" : String(data: headersData!, encoding: .utf8)
-                app.client.pushEvent("NeftRequest/response", args: [uid, error, code, data, headersJson] as [Any?]?)
+                request(uri, method, headers, body, timeout) {
+                    (error: String, code: Int, data: String, headers: [String: String]) in
+                    let headersData = try? JSONEncoder().encode(headers)
+                    let headersJson = headersData == nil ? "{}" : String(data: headersData!, encoding: .utf8)
+                    binding.pushEvent("response", args: [uid, error, code, data, headersJson] as [Any?]?)
+                }
             }
-        }
+            .finalize()
     }
 
-    // @export Request.request(string, string, string, string, number) => Promise as request
     static func request(_ uri: String, _ method: String, _ headers: [String: String], _ body: String, _ timeout: Int, _ completion: @escaping (_ error: String, _ code: Int, _ data: String, _ headers: [String: String]) -> Void) {
         var req = URLRequest(url: URL(string: uri)!)
         let session = URLSession.shared

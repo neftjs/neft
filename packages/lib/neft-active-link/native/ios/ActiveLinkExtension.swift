@@ -1,35 +1,30 @@
 import UIKit
 
+fileprivate let binding = NativeBinding("ActiveLink")
+
 extension Extension.ActiveLink {
-    static let app = App.getApp()
-
     static func register() {
-        app.client.addCustomFunction("NeftActiveLink/web") {
-            (args: [Any?]) in
-            let url = args[0] as? String
-            web(url: url)
-        }
-
-        app.client.addCustomFunction("NeftActiveLink/mailto") {
-            (args: [Any?]) in
-            let address = args[0] as? String
-            let subject = args[1] as? String
-            mailto(address: address, subject: subject)
-        }
-
-        app.client.addCustomFunction("NeftActiveLink/tel") {
-            (args: [Any?]) in
-            let number = args[0] as? String
-            tel(number: number)
-        }
-
-        app.client.addCustomFunction("NeftActiveLink/geo") {
-            (args: [Any?]) in
-            let latitude = (args[0] as? Number)?.float()
-            let longitude = (args[1] as? Number)?.float()
-            let address = args[2] as? String
-            geo(latitude, longitude, address)
-        }
+        binding
+            .onCall("web") { (args: [Any?]) in
+                web(url: args[0] as? String)
+            }
+            .onCall("mailto", { (args: [Any?]) in
+                mailto(
+                    address: args[0] as? String,
+                    subject: args[1] as? String
+                )
+            })
+            .onCall("tel", { (args: [Any?]) in
+                tel(number: args[0] as? String)
+            })
+            .onCall("geo", { (args: [Any?]) in
+                geo(
+                    latitude: (args[0] as? Number)?.float(),
+                    longitude: (args[1] as? Number)?.float(),
+                    address: args[2] as? String
+                )
+            })
+            .finalize()
     }
 
     private static func web(url: String?) {
@@ -51,7 +46,7 @@ extension Extension.ActiveLink {
         }
     }
 
-    private static func geo(_ latitude: CGFloat?, _ longitude: CGFloat?, _ address: String?) {
+    private static func geo(latitude: CGFloat?, longitude: CGFloat?, address: String?) {
         var url = URLComponents(string: "http://maps.apple.com/")
         var query: [URLQueryItem] = []
         if address != nil {
