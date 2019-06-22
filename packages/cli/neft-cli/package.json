@@ -8,7 +8,6 @@
     "@neft/cli-env": "0.0.1",
     "@neft/compiler-style": "0.0.1",
     "@neft/core": "0.0.1",
-    "@neft/event-source": "0.0.1",
     "@neft/parcel-plugin-neft": "0.0.1",
     "@neft/parcel-plugin-nml": "0.0.1",
     "@neft/request": "0.0.1",
