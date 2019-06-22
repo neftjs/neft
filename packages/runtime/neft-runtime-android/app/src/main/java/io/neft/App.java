@@ -32,11 +32,11 @@ public class App {
         }
     }
 
-    private static final String TAG = "Neft";
+    public static final String TAG = "Neft";
     private static final String ASSET_FILE_PATH = "javascript/neft.js";
     private static final App INSTANCE = new App();
     private static final Choreographer CHOREOGRAPHER = Choreographer.getInstance();
-    @Getter private MainActivity activity;
+    private MainActivity activity;
     @Getter private WindowView windowView;
     private CustomApp customApp;
     @Getter private Client client;
@@ -46,7 +46,8 @@ public class App {
     private final List<MotionEvent> touchEvents = new ArrayList<>();
     private final List<FullKeyEvent> keyEvents = new ArrayList<>();
     public Signal onBackPress = new Signal();
-    @Getter String intentData = null;
+
+    String intentData = null;
     public Signal onIntentDataChange = new Signal();
 
     public static App getInstance() {
@@ -73,6 +74,14 @@ public class App {
         frameCallback = new FrameCallback();
     }
 
+    public MainActivity getActivity() {
+        return activity;
+    }
+
+    public String getIntentData() {
+        return intentData;
+    }
+
     private void onAnimationFrame() {
         synchronized (touchEvents) {
             while (!touchEvents.isEmpty()) {
@@ -89,7 +98,9 @@ public class App {
         }
         Native.Bridge.callRendererAnimationFrame();
         client.sendData();
-        windowView.windowItem.measure();
+        if (windowView.windowItem != null) {
+            windowView.windowItem.measure();
+        }
         Item.onAnimationFrame();
     }
 

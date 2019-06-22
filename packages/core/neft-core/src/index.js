@@ -1,7 +1,5 @@
 const { render } = require('./initializer')
-const {
-  callNativeFunction, onNativeEvent, registerNativeFunction, publishNativeEvent,
-} = require('./native')
+const { NativeClientBinding, NativeServerBinding } = require('./native')
 const { SignalDispatcher, SignalsEmitter } = require('./signal')
 const Resources = require('./resources')
 const Renderer = require('./renderer')
@@ -10,10 +8,8 @@ const Document = require('./document')
 const Element = require('./document/element')
 
 // native
-exports.callNativeFunction = callNativeFunction
-exports.onNativeEvent = onNativeEvent
-exports.registerNativeFunction = registerNativeFunction
-exports.publishNativeEvent = publishNativeEvent
+exports.NativeClientBinding = NativeClientBinding
+exports.NativeServerBinding = NativeServerBinding
 
 // utilities
 exports.logger = log

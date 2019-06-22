@@ -1,5 +1,6 @@
 /* eslint-disable global-require */
 const fs = require('fs').promises
+const { unlinkSync } = require('fs')
 const path = require('path')
 const ParcelBundler = require('parcel-bundler')
 const { logger } = require('@neft/core')
@@ -85,7 +86,7 @@ const getDefaultStyles = async ({ extensions }) => {
   return styleExtensions.filter(Boolean)
 }
 
-const createEntryFile = async ({ input, extensions, initCode }) => {
+const createEntryFile = async ({ input, extensions, imports }) => {
   const polyfills = ['core-js/stable', 'regenerator-runtime/runtime']
 
   let file = ''
@@ -98,17 +99,24 @@ const createEntryFile = async ({ input, extensions, initCode }) => {
     file += `require('${extension.name}')\n`
   })
 
-  file += initCode
+  imports.forEach((importPath) => {
+    file += `require('${importPath}')\n`
+  })
 
   file += "module.exports = require('./')"
 
   const filename = path.join(input, '.neft-entry.js')
   await fs.writeFile(filename, file)
+
+  process.on('exit', () => {
+    unlinkSync(filename)
+  })
+
   return filename
 }
 
 exports.bundle = async (target, {
-  input, output, extensions = [], production = false, watch = false, initCode = '',
+  input, output, extensions = [], imports = [], production = false, watch = false,
 }) => {
   const parcelOptions = {
     outDir: output,
@@ -124,7 +132,7 @@ exports.bundle = async (target, {
     logLevel: 2,
   }
   const defaultStyles = await getDefaultStyles({ extensions })
-  const entry = await createEntryFile({ input, extensions, initCode })
+  const entry = await createEntryFile({ input, extensions, imports })
   const entries = [entry]
   const bundler = new ParcelBundler(entries, parcelOptions)
   bundler.options.env = {
@@ -162,13 +170,17 @@ exports.build = async (target, args) => {
   const output = path.join(outputDir, target)
   const filepath = path.join(output, outputFile)
   const extensions = getExtensions()
+  let imports
 
   logline.loading(`Build **${target}** - parse static files`)
   const staticFilesCode = await loadStaticFiles()
 
   logline.loading(`Build **${target}** - bundle`)
+  if (typeof targetBuilder.getImports === 'function') {
+    imports = await targetBuilder.getImports({ input, target, extensions })
+  }
   await exports.bundle(target, {
-    input, output, extensions, production, watch, initCode: staticFilesCode,
+    input, output, extensions, imports, production, watch, initCode: staticFilesCode,
   })
 
   logline.loading(`Build **${target}** - produce manifest`)

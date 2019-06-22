@@ -6,6 +6,18 @@ class CoffeeScriptAsset extends Asset {
   constructor(name, options) {
     super(name, options)
     this.type = 'js'
+    this.cacheData.env = {}
+  }
+
+  shouldInvalidate(cacheData) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const key in cacheData.env) {
+      if (cacheData.env[key] !== process.env[key]) {
+        return true
+      }
+    }
+
+    return false
   }
 
   async generate() {

@@ -7,9 +7,9 @@ exports.defaultManifest = {
   versionCode: 1,
   versionName: '1.0',
   label: 'Neft.io App',
-  compileSdkVersion: 25,
-  targetSdkVersion: 25,
-  buildToolsVersion: '25.0.0',
+  compileSdkVersion: 28,
+  targetSdkVersion: 28,
+  buildToolsVersion: '28.0.3',
 }
 
 exports.icons = [

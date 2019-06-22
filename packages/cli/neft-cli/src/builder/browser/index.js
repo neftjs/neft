@@ -16,6 +16,30 @@ const HTML = `<!doctype html>
 </html>
 `
 
+exports.getImports = async ({ target, extensions }) => {
+  const imports = []
+
+  await Promise.all(extensions.map(async ({ name }) => {
+    const indexTarget = `${name}/native/${target}`
+    try {
+      require.resolve(indexTarget)
+      imports.push(indexTarget)
+    } catch (error) {
+      // NOP
+    }
+
+    const indexBrowser = `${name}/native/browser`
+    try {
+      require.resolve(indexBrowser)
+      imports.push(indexBrowser)
+    } catch (error) {
+      // NOP
+    }
+  }))
+
+  return imports
+}
+
 exports.build = async ({ output }) => {
   const indexHtml = path.join(output, '/index.html')
   await fs.writeFile(indexHtml, HTML)

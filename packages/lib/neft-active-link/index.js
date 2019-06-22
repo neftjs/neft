@@ -1,24 +1,20 @@
-const { util, callNativeFunction } = require('@neft/core')
+const { util, NativeClientBinding } = require('@neft/core')
 
-const NATIVE_PREFIX = 'NeftActiveLink'
-const WEB = `${NATIVE_PREFIX}/web`
-const MAILTO = `${NATIVE_PREFIX}/mailto`
-const TEL = `${NATIVE_PREFIX}/tel`
-const GEO = `${NATIVE_PREFIX}/geo`
+const { callNativeFunction } = new NativeClientBinding('ActiveLink')
 
 exports.web = (url) => {
-  callNativeFunction(WEB, String(url))
+  callNativeFunction('web', String(url))
 }
 
 exports.mailto = (opts) => {
   const isOpts = util.isObject(opts)
   const address = String(isOpts ? opts.address : opts)
   const subject = isOpts ? String(opts.subject) : null
-  callNativeFunction(MAILTO, address, subject)
+  callNativeFunction('mailto', address, subject)
 }
 
 exports.tel = (number) => {
-  callNativeFunction(TEL, String(number))
+  callNativeFunction('ref', String(number))
 }
 
 exports.geo = (opts) => {
@@ -26,5 +22,5 @@ exports.geo = (opts) => {
   const latitude = parseFloat(isOpts ? isOpts.latitude : 0)
   const longitude = parseFloat(isOpts ? isOpts.longitude : 0)
   const address = String(isOpts ? isOpts.address : opts)
-  callNativeFunction(GEO, latitude, longitude, address)
+  callNativeFunction('geo', latitude, longitude, address)
 }

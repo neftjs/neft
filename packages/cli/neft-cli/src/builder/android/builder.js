@@ -6,7 +6,7 @@ const Mustache = require('mustache')
 const { util, logger } = require('@neft/core')
 const { realpath, outputDir } = require('../../config')
 
-const runtime = path.join(__dirname, '../../../node_modules/@neft/runtime-android/')
+const runtime = path.dirname(require.resolve('@neft/runtime-android'))
 
 const nativeDir = './native/android'
 const nativeDirOut = 'app/src/main/java/io/neft/customapp'
@@ -26,15 +26,14 @@ const mainActivity = 'app/src/main/java/__MainActivity__.java'
 const mainActivityDirOut = 'app/src/main/java/'
 
 const getAndroidExtensions = async (extensions) => {
-  const promises = extensions.map(async (dirpath) => {
-    const nativeDirpath = path.join(dirpath, 'native/android')
-    if (!(await fs.exists(nativeDirpath))) return null
-    let name = /@neft\/([^/]+)/.exec(dirpath)[1]
-    name = util.kebabToCamel(name)
+  const promises = extensions.map(async ({ shortName, dirPath }) => {
+    const nativeDirPath = path.join(dirPath, 'native/android')
+    if (!(await fs.exists(nativeDirPath))) return null
+    let name = util.kebabToCamel(shortName)
     name = util.capitalize(name)
     const packageName = `${name.toLowerCase()}_extension`
     return {
-      dirpath, nativeDirpath, name, packageName,
+      dirPath, nativeDirPath, name, packageName,
     }
   })
   return (await Promise.all(promises))
@@ -77,8 +76,8 @@ const copyStaticFiles = async (output) => {
 }
 
 const copyExtensions = async (output, extensions) => {
-  await Promise.all(extensions.map(async ({ nativeDirpath, packageName }) => {
-    await fs.copy(nativeDirpath, path.join(output, extensionsDirOut, packageName))
+  await Promise.all(extensions.map(async ({ nativeDirPath, packageName }) => {
+    await fs.copy(nativeDirPath, path.join(output, extensionsDirOut, packageName))
   }))
 }
 
@@ -134,8 +133,8 @@ const assignManifest = (target, source) => {
 }
 
 const assignExtenionManifests = async (manifest, extensions) => {
-  await Promise.all(extensions.map(async ({ dirpath }) => {
-    const manifestPath = path.join(dirpath, 'manifest/android.yaml')
+  await Promise.all(extensions.map(async ({ dirPath }) => {
+    const manifestPath = path.join(dirPath, 'manifest/android.yaml')
     try {
       assignManifest(manifest, yaml.safeLoad(await fs.readFile(manifestPath, 'utf-8')))
     } catch (error) {
