@@ -12,10 +12,11 @@ const getHeadersFromXhr = (xhr) => {
 }
 
 exports.send = ({
-  method, uri, headers, body, callback,
-}) => {
+  uri, method, headers, body, timeout,
+}, callback) => {
   const xhr = new global.XMLHttpRequest()
   xhr.open(method, uri, true)
+  xhr.timeout = timeout
   Object.keys(headers).forEach((key) => {
     xhr.setRequestHeader(key, headers[key])
   })

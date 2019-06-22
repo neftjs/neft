@@ -18,10 +18,9 @@ import java.util.List;
 import java.util.Map;
 
 import io.neft.App;
+import io.neft.utils.Consumer;
 
 class HttpRequest {
-    private static App APP = App.getInstance();
-
     private String uid;
     private String uri;
     private String method;
@@ -38,7 +37,7 @@ class HttpRequest {
         this.timeout = timeout;
     }
 
-    private static class Response {
+    public static class Response {
         final String error;
         final int code;
         final String data;
@@ -120,7 +119,7 @@ class HttpRequest {
             }
         } catch (IOException error) {
             String respError;
-            Log.e("Neft", "Cannot do http request", error);
+            Log.e(App.TAG, "Cannot do http request", error);
             try {
                 JSONObject json = new JSONObject();
                 json.put("name", "NativeError");
@@ -128,27 +127,18 @@ class HttpRequest {
                 json.put("message", error.getMessage());
                 respError = json.toString();
             } catch (JSONException error2) {
-                Log.e("Neft", "Cannot parse error", error2);
+                Log.e(App.TAG, "Cannot parse error", error2);
                 respError = "InternalError";
             }
             return new Response(respError, 0, "", "{}");
         }
     }
 
-    void sendResponse(final Response response) {
-        APP.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                APP.getClient().pushEvent(RequestExtension.ON_RESPONSE, uid, response.error, response.code, response.data, response.headers);
-            }
-        });
-    }
-
-    void resolveAsync() {
+    void resolveAsync(final Consumer<Response> consumer) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                sendResponse(resolve());
+                consumer.accept(resolve());
             }
         });
 

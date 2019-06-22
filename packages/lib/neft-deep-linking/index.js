@@ -1,15 +1,13 @@
-const { SignalDispatcher, callNativeFunction, onNativeEvent } = require('@neft/core')
+const { SignalDispatcher, NativeClientBinding } = require('@neft/core')
 
-const NATIVE_PREFIX = 'NeftDeepLinking'
-const GET_OPEN_URL = `${NATIVE_PREFIX}/getOpenUrl`
-const OPEN_URL_CHANGE = `${NATIVE_PREFIX}/openUrlChange`
+const { callNativeFunction, onNativeEvent } = new NativeClientBinding('DeepLinking')
 
 exports.openUrl = null
 exports.onOpenUrlChange = new SignalDispatcher()
 
-callNativeFunction(GET_OPEN_URL)
+callNativeFunction('getOpenUrl')
 
-onNativeEvent(OPEN_URL_CHANGE, (openUrl) => {
+onNativeEvent('openUrlChange', (openUrl) => {
   const old = exports.openUrl
   if (old !== openUrl) {
     exports.openUrl = openUrl

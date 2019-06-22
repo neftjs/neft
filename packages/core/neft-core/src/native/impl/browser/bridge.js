@@ -61,7 +61,7 @@ module.exports = (bridge) => {
     registerNativeFunction(name, func) {
       functions[name] = func
     },
-    publishNativeEvent(name, ...args) {
+    publishNativeEvent(name, args) {
       const outActions = [bridgeActions.in.EVENT]
       const outBooleans = []
       const outIntegers = [args.length]
@@ -75,7 +75,7 @@ module.exports = (bridge) => {
           outBooleans.push(arg)
         } else if (typeof arg === 'number') {
           outIntegers.push(EVENT_FLOAT_TYPE)
-          outFloats.push(arg)
+          outFloats.push(arg || 0)
         } else if (typeof arg === 'string') {
           outIntegers.push(EVENT_STRING_TYPE)
           outStrings.push(arg)

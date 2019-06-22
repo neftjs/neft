@@ -1,11 +1,11 @@
-const { SignalDispatcher, callNativeFunction, onNativeEvent } = require('@neft/core')
+const { SignalDispatcher, NativeClientBinding } = require('@neft/core')
+
+const { callNativeFunction, onNativeEvent } = new NativeClientBinding('BackPress')
 
 exports.onBackPress = new SignalDispatcher()
 
-exports.killApp = () => callNativeFunction('extensionBackKillApp')
+exports.killApp = () => callNativeFunction('killApp')
 
-if (process.env.NEFT_NATIVE) {
-  onNativeEvent('extensionBackOnBackPress', () => {
-    exports.onBackPress.emit()
-  })
-}
+onNativeEvent('backPress', () => {
+  exports.onBackPress.emit()
+})

@@ -1,16 +1,14 @@
-const { util, callNativeFunction, onNativeEvent } = require('@neft/core')
-const xhr = process.env.NEFT_BROWSER ? require('./xhr') : null
+const { util, NativeClientBinding } = require('@neft/core')
 
-const NATIVE_PREFIX = 'NeftRequest'
-const REQUEST = `${NATIVE_PREFIX}/request`
-const ON_RESPONSE = `${NATIVE_PREFIX}/response`
+const { callNativeFunction, onNativeEvent } = new NativeClientBinding('Request')
+
 const METHODS = ['get', 'post', 'put', 'patch', 'delete', 'head', 'options']
 const DEFAULT_TIMEOUT = 1000 * 30 // 30 seconds
 
 const callbacks = Object.create(null)
 
 if (process.env.NEFT_NATIVE) {
-  onNativeEvent(ON_RESPONSE, (uid, error, statusCode, body, headers) => {
+  onNativeEvent('response', (uid, error, statusCode, body, headers) => {
     const callback = callbacks[uid]
     if (callback) {
       delete callbacks[uid]
@@ -72,15 +70,9 @@ const request = (optionsOrUri, optionsOrNull, defaultMethod) => new Promise((res
     json, resolveWithFullResponse, resolve, reject,
   })
 
-  if (process.env.NEFT_NATIVE) {
-    callbacks[uid] = callback
-    headers = JSON.stringify(headers)
-    callNativeFunction(REQUEST, uid, uri, method, headers, body, timeout)
-  } else {
-    xhr.send({
-      method, uri, headers, body, callback,
-    })
-  }
+  callbacks[uid] = callback
+  headers = JSON.stringify(headers)
+  callNativeFunction('request', uid, uri, method, headers, body, timeout)
 })
 
 module.exports = optionsOrUri => request(optionsOrUri, null, 'get')
