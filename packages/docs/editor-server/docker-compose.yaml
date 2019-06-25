@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  server:
+    build: .
+    environment:
+      - NODE_ENV=production
+    restart: always
+    ports:
+      - 443:443
+    volumes:
+      - /etc/letsencrypt/live/editor.neft.io/cert.pem:/cert/cert.pem
+      - /etc/letsencrypt/live/editor.neft.io/privkey.pem:/cert/privkey.pem

@@ -4,3 +4,4 @@ node_modules
 /gh-pages
 .vscode
 lerna-debug.log
+.cache
