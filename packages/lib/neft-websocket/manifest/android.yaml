@@ -1,0 +1,3 @@
+app:
+  dependencies:
+  - implementation 'com.neovisionaries:nv-websocket-client:2.8'
