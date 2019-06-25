@@ -1,0 +1,8 @@
+{
+  "name": "@neft/websocket",
+  "version": "0.0.1",
+  "source": true,
+  "dependencies": {
+    "@neft/core": "^0.0.1"
+  }
+}

@@ -26,7 +26,7 @@ public class NativeBinding {
         APP.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                APP.getClient().pushEvent(name, args);
+                APP.getClient().pushEvent(getFullName(name), args);
             }
         });
     }
