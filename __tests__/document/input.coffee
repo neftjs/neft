@@ -204,19 +204,16 @@ describe 'Document string interpolation', ->
     describe '`state`', ->
         it 'is accessed in rendered file', ->
             view = createView '''
+                Hi {name}!
                 <script>
                 exports.default = {
-                    a: 0,
-                    onRender() {
-                        this.a = 1
-                    },
+                    name: 'John',
                 }
                 </script>
-                {a}
             '''
 
             renderParse view
-            assert.is view.element.stringify(), '1'
+            assert.is view.element.stringify(), 'Hi John!'
 
         it 'is cleared on revert', ->
             view = createView '''

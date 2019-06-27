@@ -4,6 +4,6 @@
   "dependencies": {
     "@neft/core": "0.0.1",
     "@neft/compiler-binding": "0.0.1",
-    "lite-html-parser": "^0.2.0"
+    "lite-html-parser": "^0.2.1"
   }
 }
