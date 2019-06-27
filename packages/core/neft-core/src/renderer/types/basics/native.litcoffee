@@ -10,7 +10,7 @@
 
     IS_NATIVE = process.env.NEFT_NATIVE
     if process.env.NEFT_NATIVE
-        {callNativeFunction, onNativeEvent} = require '../../../native'
+        {callNativeFunction, onNativeEvent} = require '../../../native/handler'
 
     module.exports = (Renderer, Impl, itemUtils) ->
 
@@ -176,7 +176,7 @@ where `XYZ` is the given name.
                     if IS_NATIVE
                         funcName = "rendererSet#{ctorName}#{name}"
                         (val) ->
-                            callNativeFunction funcName, @_impl.id, val
+                            callNativeFunction funcName, [@_impl.id, val]
                     else
                         funcName = "set#{ctorName}#{name}"
                         (val) ->
@@ -242,7 +242,7 @@ where `XYZ` is the given name.
 
                 if IS_NATIVE
                     funcName = "rendererSet#{ctorName}#{name}"
-                    callNativeFunction funcName, id, val
+                    callNativeFunction funcName, [id, val]
                 else
                     funcName = "set#{ctorName}#{name}"
                     Impl[funcName]?.call @, val
@@ -259,7 +259,7 @@ where `XYZ` is the given name.
 
                 if IS_NATIVE
                     funcName = "rendererCall#{ctorName}#{name}"
-                    callArgs = [funcName, id, args...]
+                    callArgs = [funcName, [id, args...]]
                     callNativeFunction callArgs...
                 else
                     funcName = "call#{ctorName}#{name}"
