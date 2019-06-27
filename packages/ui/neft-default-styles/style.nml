@@ -3,21 +3,12 @@
   fillWidth: true
 }
 
-@Item p, address, blockquote, h1, h2, h3, h4, h5, h6, h7, legend {
-  layout: 'flow'
+@Text p, address, blockquote, h1, h2, h3, h4, h5, h6, h7, legend {
   fillWidth: true
-
-  #text {
-    fillWidth: true
-  }
 }
 
-@Item u, strong, b, i, em, code, mark {
+@Text u, strong, b, i, em, code, mark {
   layout: 'flow'
-
-  #text {
-    fillWidth: true
-  }
 }
 
 @Image img {}
