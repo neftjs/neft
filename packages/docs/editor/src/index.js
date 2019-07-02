@@ -5,11 +5,20 @@ const fs = require('fs')
 const { util } = require('@neft/core')
 const { parseToAst, parseToCode } = require('@neft/compiler-document')
 const { bundle: parseNml } = require('@neft/compiler-style')
+require('@neft/input')
 
 const DEFAULT_STYLES = [
   {
     name: '@neft/default-styles',
     file: fs.readFileSync('../../ui/neft-default-styles/style.nml', 'utf-8'),
+  },
+  {
+    name: '@neft/button',
+    file: fs.readFileSync('../../ui/neft-button/style.nml', 'utf-8'),
+  },
+  {
+    name: '@neft/input',
+    file: fs.readFileSync('../../ui/neft-input/style.nml', 'utf-8'),
   },
 ].map(({ name, file }) => {
   const { queries } = parseNml(file, { resourcePath: name })

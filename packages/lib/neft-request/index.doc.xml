@@ -11,7 +11,7 @@
 </article>
 
 <method name=request returns=Promise>
-  <argument name=options type=object />
+  <argument name=options type=object>
     <argument name=uri type=string />
     <argument name=method type=string default=GET />
     <argument name=headers type=object />

@@ -19,6 +19,10 @@ DEFAULT_PROP_ALIASES =
     onPress: 'pointer:onPress'
     onRelease: 'pointer:onRelease'
     onMove: 'pointer:onMove'
+    onKeyPress: 'keys:onPress'
+    onKeyHold: 'keys:onHold'
+    onKeyRelease: 'keys:onRelease'
+    onKeyInput: 'keys:onInput'
 
 module.exports = class StyleItem
     {isHandler} = InputProp

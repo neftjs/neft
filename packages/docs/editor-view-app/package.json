@@ -4,8 +4,26 @@
   "private": true,
   "main": "./src",
   "dependencies": {
-    "@neft/core": "^0.0.1",
+    "@neft/active-link": "^0.0.1",
+    "@neft/back-press": "^0.0.1",
+    "@neft/button": "^0.0.1",
     "@neft/cli": "^0.0.1",
-    "@neft/default-styles": "^0.0.1"
+    "@neft/core": "^0.0.1",
+    "@neft/deep-linking": "^0.0.1",
+    "@neft/default-styles": "^0.0.1",
+    "@neft/input": "^0.0.1",
+    "@neft/request": "^0.0.1",
+    "@neft/scrollable": "^0.0.1",
+    "@neft/slider": "^0.0.1",
+    "@neft/sprite-image": "^0.0.1",
+    "@neft/stepper": "^0.0.1",
+    "@neft/storage": "^0.0.1",
+    "@neft/switch": "^0.0.1",
+    "@neft/tile-image": "^0.0.1",
+    "@neft/video": "^0.0.1",
+    "@neft/websocket": "^0.0.1",
+    "@neft/webview": "^0.0.1",
+    "components": "^0.1.0",
+    "src": "^1.1.2"
   }
 }

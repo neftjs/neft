@@ -11,6 +11,10 @@
     overflow: hidden;
     vertical-align: top;
 
+    textarea {
+      word-wrap: normal;
+    }
+
     textarea, .codeflask__flatten {
       padding: 20px;
     }
@@ -20,10 +24,44 @@
     }
   }
 
-  iframe {
+  .preview {
+    display: inline-block;
     position: absolute;
-    width: 250px;
-    height: 300px;
     margin-left: 15px;
+    width: 250px;
+
+    iframe {
+      width: 250px;
+      height: 272px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, .1);
+      border-radius: 8px 8px 0 0;
+      padding: 4px 8px;
+    }
+
+    .key {
+      font-size: 10px;
+    }
+  }
+
+  .badges {
+    flex: 1;
+    list-style: none;
+    margin: 0;
+    text-align: right;
+    font-size: 0;
+
+    li {
+      display: inline-block;
+
+      img {
+        height: 20px;
+        margin-left: 5px;
+      }
+    }
   }
 }

@@ -10,6 +10,7 @@ exports.STYLE = {
 }
 exports.COPY = [
   { in: 'media', out: 'gh-pages' },
+  { cwd: PUBLIC, in: 'media', out: 'gh-pages' },
   { cwd: PUBLIC, in: 'styles/**/*.css', out: 'gh-pages' },
   { cwd: PUBLIC, in: 'scripts', out: 'gh-pages' },
   { cwd: path.join(EDITOR_VIEW_APP, 'dist/html'), in: 'bundle.js', out: 'gh-pages/editor-view-app' },
@@ -23,4 +24,8 @@ exports.HTML_FILES = {
   out: 'gh-pages',
 }
 exports.API_FILES = 'packages/**/*.doc.xml'
+exports.DOCS_FILES = 'docs/**/*.md'
+exports.DOCS_NAV = 'docs/nav.yaml'
+exports.EXAMPLES_FILES = 'examples/*.html'
+exports.EXAMPLES_NAV = 'examples/nav.yaml'
 exports.SEARCH_FILE = 'gh-pages/scripts/search-texts.js'

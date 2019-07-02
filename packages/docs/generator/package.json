@@ -4,10 +4,14 @@
   "private": true,
   "main": "./src/index.js",
   "dependencies": {
+    "escape-html": "^1.0.3",
     "fs-extra": "^8.0.1",
     "glob": "^7.1.4",
     "highlight.js": "^9.15.8",
+    "js-yaml": "^3.13.1",
     "less": "^3.9.0",
-    "lite-html-parser": "^0.2.0"
+    "lite-html-parser": "^0.2.1",
+    "marked": "^0.6.2",
+    "mustache": "^3.0.1"
   }
 }

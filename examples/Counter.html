@@ -1,0 +1,34 @@
+<main>
+  <button onClick={decrement()}>-</button>
+  <span>{value}</span>
+  <button onClick={increment()}>+</button>
+</main>
+
+<script>
+export default () => ({
+  value: 0,
+  increment() {
+    this.value += 1
+  },
+  decrement() {
+    this.value -= 1
+  },
+})
+</script>
+
+<style>
+main {
+  layout: 'row'
+  height: 50
+
+  * {
+    fillWidth: true
+    fillHeight: true
+  }
+
+  span {
+    alignment: 'center'
+    font.pixelSize: 20
+  }
+}
+</style>

@@ -1,0 +1,7 @@
+package: io.neft.example.app
+versionCode: 1
+versionName: '1.0'
+label: Neft.io App
+compileSdkVersion: 28
+targetSdkVersion: 28
+buildToolsVersion: 28.0.3

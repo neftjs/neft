@@ -1,0 +1,41 @@
+<n-call>
+  {fetchCommits(page)}
+</n-call>
+
+<h1>Latest Neft commits</h1>
+
+<p n-if={loading}>Loading ...</p>
+<div n-else>
+  <p n-if={error}>{error}</p>
+
+  <ul n-for="commit in {commits}">
+    <li><a href={commit.html_url}>{commit.sha.slice(0, 7)}</a> by {commit.author.login}</li>
+  </ul>
+
+  <button onClick={page -= 1} n-if={page > 1}>Previous page</button>
+  <button onClick={page += 1}>Next page</button>
+</div>
+
+<script>
+import request from '@neft/request'
+
+const apiUrl = 'https://api.github.com/repos/neftjs/neft/commits?per_page=5'
+
+export default () => ({
+  page: 1,
+  loading: false,
+  commits: [],
+  error: null,
+  async fetchCommits(page) {
+    this.error = null
+    this.loading = true
+    try {
+      this.commits = await request(`${apiUrl}&page=${page}`, { json: true })
+    } catch (error) {
+      this.error = error.message
+    } finally {
+      this.loading = false
+    }
+  },
+})
+</script>

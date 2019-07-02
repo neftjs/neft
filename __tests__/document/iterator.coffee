@@ -34,7 +34,7 @@ describe 'Document n-for', ->
             <n-props arr />
         '''
 
-        arr = new ObservableArray 1, 2
+        arr = new ObservableArray [1, 2]
 
         renderParse view,
             props:

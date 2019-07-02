@@ -7,8 +7,6 @@
   fillWidth: true
 }
 
-@Text u, strong, b, i, em, code, mark {
-  layout: 'flow'
-}
+@Text span, u, strong, b, i, em, code, mark {}
 
 @Image img {}

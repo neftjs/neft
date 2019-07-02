@@ -1,9 +1,11 @@
+/* global document */
 const { util, SignalDispatcher, Renderer } = require('@neft/core')
 
-const { Item } = Renderer.Impl.Types
+const { Impl } = Renderer
+const { Item: ItemImpl, Native: NativeImpl } = Impl.Types
 
 exports.create = function (data) {
-  Item.create.call(this, data)
+  ItemImpl.create.call(this, data)
 
   const innerElem = document.createElement('input')
   data.innerElem = innerElem
@@ -14,6 +16,8 @@ exports.create = function (data) {
   innerElem.addEventListener('input', () => {
     data.onTextChange.emit(innerElem.value)
   })
+
+  NativeImpl.updateNativeSize.call(this)
 }
 
 exports.createData = function () {
@@ -21,7 +25,7 @@ exports.createData = function () {
     innerElem: null,
     innerElemStyle: null,
     onTextChange: new SignalDispatcher(),
-  }, Item.DATA)
+  }, ItemImpl.DATA)
 }
 
 exports.setTextInputText = function (val) {
@@ -35,3 +39,5 @@ exports.setTextInputPlaceholder = function (val) {
 exports.setTextInputTextColor = function (val) {
   this._impl.innerElemStyle.color = val
 }
+
+Impl.addTypeImplementation('TextInput', exports)
