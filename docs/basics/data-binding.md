@@ -128,7 +128,7 @@ You can use to in your components to e.g. render list of items and change them i
 import { ObservableArray } from '@neft/core'
 
 export default () => ({
-    items: new ObservableArray(['First', 'Second', 'Third']),
+    items: new ObservableArray('First', 'Second', 'Third'),
     removeItem(item) {
         const index = this.items.indexOf(item)
         if (index >= 0) {

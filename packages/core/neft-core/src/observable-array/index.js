@@ -1,7 +1,7 @@
 const { SignalDispatcher } = require('../signal')
 
 class ObservableArray extends Array {
-  constructor(elements) {
+  constructor(...elements) {
     super(...elements)
     this.onPush = new SignalDispatcher()
     this.onPop = new SignalDispatcher()
