@@ -26,14 +26,23 @@ function getViewObject(uri, view) {
   return {
     ...view,
     nav: [
-      { title: 'Docs', uri: '', className: '' },
+      {
+        title: 'Docs',
+        uri: '/docs/basics/installation',
+        className: getClassName({ uri: '/docs/' }),
+      },
+      {
+        title: 'Examples',
+        uri: '/examples/Counter',
+        className: getClassName({ uri: '/examples/' }),
+      },
       {
         title: 'Modules',
         uri: '/modules/activelink',
         className: getClassName({ uri: '/modules/' }),
       },
       {
-        title: 'API Reference',
+        title: 'API',
         uri: '/api-reference/neft/core',
         className: getClassName({ uri: '/api-reference/' }),
       },

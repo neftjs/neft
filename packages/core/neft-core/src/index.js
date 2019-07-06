@@ -31,9 +31,9 @@ exports.render = render
 exports.Renderer = Renderer
 exports.loadFont = Renderer.loadFont
 exports.NativeStyleItem = Renderer.Native
-exports.Device = Renderer.Device
-exports.Screen = Renderer.Screen
-exports.Navigator = Renderer.Navigator
+exports.device = Renderer.Device
+exports.screen = Renderer.Screen
+exports.navigator = Renderer.Navigator
 
 // resources
 exports.Resource = Resources.Resource

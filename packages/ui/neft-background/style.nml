@@ -1,3 +1,0 @@
-@Rectangle background {
-  anchors.fill: parent
-}

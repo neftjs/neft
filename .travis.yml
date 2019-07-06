@@ -2,23 +2,19 @@ dist: trusty
 sudo: false
 language: generic
 notifications:
-    email: false
+  email: false
 branches:
-    only:
-        - master
-cache:
-    directories:
-        - $HOME/.nvm
-        - node_modules
+  only:
+    - master
 install:
-    # install nvm
-    - if test ! -e ~/.nvm ; then curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash ; fi
-    - export NVM_DIR="$HOME/.nvm"
-    - "[ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\""
-    - nvm install 10.15.3
+  # install nvm
+  - if test ! -e ~/.nvm ; then curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash ; fi
+  - export NVM_DIR="$HOME/.nvm"
+  - "[ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\""
+  - nvm install 10.15.3
 
-    # install project dependencies
-    - npm install
-    - npx lerna bootstrap
+  # install project dependencies
+  - npm install
+  - npx lerna bootstrap
 script:
-    - npm test
+  - npm test

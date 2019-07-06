@@ -19,6 +19,10 @@ DEFAULT_PROP_ALIASES =
     onPress: 'pointer:onPress'
     onRelease: 'pointer:onRelease'
     onMove: 'pointer:onMove'
+    onKeyPress: 'keys:onPress'
+    onKeyHold: 'keys:onHold'
+    onKeyRelease: 'keys:onRelease'
+    onKeyInput: 'keys:onInput'
 
 module.exports = class StyleItem
     {isHandler} = InputProp
@@ -29,6 +33,7 @@ module.exports = class StyleItem
         @item = null
         @propsClass = null
         @scope = null
+        @hasText = false
 
         if @element instanceof Tag
             styleAttr = @element.props[STYLE_ID_PROP]
@@ -53,7 +58,10 @@ module.exports = class StyleItem
         r
 
     updateText: ->
-        @item.text = @element.text
+        if @element instanceof Tag
+            @item.text = @element.stringifyChildren()
+        else if @element instanceof Text
+            @item.text = @element.text
         return
 
     setPropsClassAttribute: (attr, val) ->
@@ -238,7 +246,9 @@ module.exports = class StyleItem
             @findAndSetVisibility()
 
             # set text
-            if element instanceof Text
+            @hasText = element instanceof Text
+            @hasText ||= element instanceof Tag and 'text' of @item
+            if @hasText
                 @updateText()
 
             if element instanceof Tag
@@ -270,7 +280,7 @@ module.exports = class StyleItem
         @createItem()
 
         # optimization - don't create styles inside the text style
-        if @children
+        unless @hasText
             for child in @children
                 child.createItemDeeply()
         return

@@ -1,0 +1,10 @@
+infoPlist: |
+  <key>UIBackgroundModes</key>
+  <array>
+    <string>remote-notification</string>
+  </array>
+pods:
+- pod 'Firebase/Core'
+- pod 'Firebase/Messaging'
+applicationDidFinishLaunching: |
+  Extension.FirebaseMessaging.registerForNotifications(application)

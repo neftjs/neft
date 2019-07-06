@@ -18,6 +18,7 @@ exports.onSetParent = do ->
     (element, val) ->
         newParent = findItemParent val
         setItemParent element, newParent
+        return
 
 exports.onSetIndex = do ->
     updateItemIndex = (node) ->
@@ -30,6 +31,7 @@ exports.onSetIndex = do ->
 
     (element) ->
         updateItemIndex element
+        return
 
 exports.onSetVisible = do ->
     setVisibleForNode = (node, val) ->
@@ -44,7 +46,7 @@ exports.onSetVisible = do ->
     updateTextNode = (node) ->
         while node
             if (docStyle = node._documentStyle)
-                if docStyle.textProp
+                if docStyle.hasText
                     docStyle.updateText()
                 break
             node = node.parent
@@ -53,10 +55,21 @@ exports.onSetVisible = do ->
     (element, val) ->
         setVisibleForNode element, val
         updateTextNode element
+        return
 
-exports.onSetText = (element) ->
-    element._documentStyle?.updateText()
-    return
+exports.onSetText = do ->
+    updateTextNode = (node) ->
+        while node
+            docStyle = node._documentStyle
+            if docStyle?.hasText
+                docStyle.updateText()
+                break
+            node = node.parent
+        return
+
+    (element) ->
+        updateTextNode element
+        return
 
 exports.onSetProp = (element, name, val, oldVal) ->
     docStyle = element._documentStyle
@@ -64,3 +77,4 @@ exports.onSetProp = (element, name, val, oldVal) ->
 
     # update style props
     docStyle.setProp name, val, oldVal
+    return

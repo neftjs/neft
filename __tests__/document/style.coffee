@@ -117,7 +117,7 @@ describe 'n-style', ->
 describe 'Element.Text', ->
     it 'is rendered as Renderer.Text', ->
         view = createViewAndRender '''
-        <b>abc</b>
+        <div>abc</div>
         '''
 
         node = view.element.query '#text'
@@ -128,7 +128,7 @@ describe 'Element.Text', ->
 
     it 'text is properly synchronized', ->
         view = createViewAndRender '''
-        <b>abc</b>
+        <div>abc</div>
         '''
 
         node = view.element.query '#text'
@@ -139,6 +139,23 @@ describe 'Element.Text', ->
         node.text = '123'
 
         assert.is item.text, node.text
+
+    it 'text is set under text property of a parent style', ->
+        view = createViewAndRender '''
+        <div>abc</div>
+        <style bare>
+        @Text div {}
+        </style>
+        '''
+
+        div = view.element.query 'div'
+        text = view.element.query '#text'
+
+        assert.is div.style.text, 'abc'
+
+        text.text = '123'
+
+        assert.is div.style.text, '123'
 
     return
 

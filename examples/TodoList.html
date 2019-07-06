@@ -1,0 +1,30 @@
+<input type="text" ref="input" />
+<button onClick={handleAddButtonClick}>Add</button>
+
+<ul n-for="item in {items}">
+  <li>{item} <button onClick={removeItem(item)}>Remove</button></li>
+</ul>
+
+<script>
+const { ObservableArray } = require('@neft/core')
+
+export default () => ({
+  items: new ObservableArray(),
+  addItem(item) {
+    this.items.push(item)
+  },
+  removeItem(item) {
+    const itemIndex = this.items.indexOf(item)
+    if (itemIndex >= 0) {
+      this.items.splice(itemIndex, 1)
+    }
+  },
+  handleAddButtonClick() {
+    const { input } = this.$refs
+    if (input.value.trim()) {
+      this.addItem(input.value)
+      input.value = ''
+    }
+  }
+})
+</script>

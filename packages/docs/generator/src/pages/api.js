@@ -305,7 +305,6 @@ function generateHtmlFile(elements, { files }) {
 <div class="main">
   <main class="content api">
     ${html}
-    <div id="disqus_thread"></div>
   </main>
   <aside id="aside">
     ${aside.html}
@@ -318,7 +317,6 @@ function generateHtmlFile(elements, { files }) {
 }
 
 exports.getPages = async () => {
-  const pages = []
   const filenames = await promisify(glob)(API_FILES, { ignore: '**/node_modules/**' })
   const files = await Promise.all(filenames.map(async (filename) => {
     const file = await fs.readFile(filename, 'utf-8')
@@ -328,12 +326,11 @@ exports.getPages = async () => {
       throw new Error(`Cannot parse ${filename}: ${error}`)
     }
   }))
-  await Promise.all(files.map(async ({ filename, elements }) => {
+  return Promise.all(files.map(async ({ filename, elements }) => {
     try {
-      pages.push(generateHtmlFile(elements, { files }))
+      return generateHtmlFile(elements, { files })
     } catch (error) {
       throw new Error(`Cannot generate HTML file for ${filename}: ${error}`)
     }
   }))
-  return pages
 }

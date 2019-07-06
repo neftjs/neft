@@ -1,0 +1,38 @@
+- title: The Basics
+  nav:
+  - title: Installation
+    file: basics/installation.md
+  - title: Introduction
+    file: basics/introduction.md
+  - title: Template syntax
+    file: basics/template-syntax.md
+  - title: Scripting
+    file: basics/scripting.md
+  - title: Data binding
+    file: basics/data-binding.md
+  - title: Components
+    file: basics/components.md
+  - title: Input handling
+    file: basics/input-handling.md
+  - title: Modules
+    file: basics/modules.md
+- title: Styling
+  nav:
+  - title: Introduction
+    file: ./
+  - title: Layout
+    file: ./
+  - title: Backgrounds
+    file: ./
+  - title: Animations
+    file: ./
+  - title: Images
+    file: ./
+  - title: Colors
+    file: ./
+- title: Native
+  nav:
+  - title: Native Modules
+    file: ./
+  - title: Native UI Items
+    file: ./

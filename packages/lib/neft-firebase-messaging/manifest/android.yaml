@@ -1,0 +1,20 @@
+project:
+  dependencies:
+  - classpath 'com.google.gms:google-services:4.2.0'
+app:
+  dependencies:
+  - implementation 'com.google.firebase:firebase-core:16.0.4'
+  - implementation 'com.google.firebase:firebase-messaging:17.3.4'
+  plugins:
+  - "apply plugin: 'com.google.gms.google-services'"
+applicationXmlManifest: |
+  <service android:name="io.neft.extensions.firebasemessaging_extension.MyFirebaseMessagingService">
+    <intent-filter>
+      <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+    </intent-filter>
+  </service>
+  <service android:name="io.neft.extensions.firebasemessaging_extension.FirebaseIDService">
+    <intent-filter>
+      <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+    </intent-filter>
+  </service>

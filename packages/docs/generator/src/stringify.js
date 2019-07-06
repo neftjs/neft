@@ -7,7 +7,16 @@ exports.script = ({ lang, body, interactive }, { tag = 'pre' } = {}) => {
         <div class="code">
           <textarea readonly>${body}</textarea>
         </div>
-        <iframe src="/editor-view-app"></iframe>
+        <div class="preview">
+          <header>
+            <span class="key"></span>
+            <ul class="badges">
+              <li><img src="/media/badges/app-store.svg"></li>
+              <li><img src="/media/badges/google-play.svg"></li>
+            </ul>
+          </header>
+          <iframe src="/editor-view-app"></iframe>
+        </div>
       </div>`
   }
 

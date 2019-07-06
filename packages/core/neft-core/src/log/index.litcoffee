@@ -98,7 +98,11 @@
             @println (ctx) ->
                 marker.red(marker.bold('ERROR', ctx), ctx) + '  ' + parser.parse(msg, ctx)
             if error?
-                @println (ctx) -> error.toString()
+                @println (ctx) ->
+                    if process.env.NEFT_ANDROID
+                        String(error.stack)
+                    else
+                        error.toString()
 
         progress: (title, value, max) ->
             if typeof title is 'number'

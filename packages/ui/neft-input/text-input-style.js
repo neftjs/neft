@@ -1,6 +1,5 @@
 const { Renderer } = require('@neft/core')
 
-const { Impl } = Renderer
 const { setPropertyValue } = Renderer.itemUtils
 
 class TextInput extends Renderer.Native {
@@ -58,9 +57,5 @@ TextInput.defineProperty({
   type: 'boolean',
   name: 'secureTextEntry',
 })
-
-if (process.env.NEFT_HTML) {
-  Impl.addTypeImplementation('TextInput', require('./impl/css/textInput'))
-}
 
 module.exports = TextInput

@@ -127,7 +127,7 @@ if (impl != null) {
 if (process.env.NODE_ENV !== 'production') {
   exports.pushAction = (function (_super) {
     return function (val) {
-      assert.isInteger(val, `integer expected, but '${val}' given`)
+      assert.isInteger(val, `integer action expected, but '${val}' given`)
       _super(val)
     }
   }(exports.pushAction))

@@ -7,15 +7,13 @@ const DEFAULT_TIMEOUT = 1000 * 30 // 30 seconds
 
 const callbacks = Object.create(null)
 
-if (process.env.NEFT_NATIVE) {
-  onNativeEvent('response', (uid, error, statusCode, body, headers) => {
-    const callback = callbacks[uid]
-    if (callback) {
-      delete callbacks[uid]
-      callback(error, { statusCode, body, headers: JSON.parse(headers) })
-    }
-  })
-}
+onNativeEvent('response', (uid, error, statusCode, body, headers) => {
+  const callback = callbacks[uid]
+  if (callback) {
+    delete callbacks[uid]
+    callback(error, { statusCode, body, headers: JSON.parse(headers) })
+  }
+})
 
 const createCallback = ({
   json, resolveWithFullResponse, resolve, reject,
@@ -75,7 +73,7 @@ const request = (optionsOrUri, optionsOrNull, defaultMethod) => new Promise((res
   callNativeFunction('request', uid, uri, method, headers, body, timeout)
 })
 
-module.exports = optionsOrUri => request(optionsOrUri, null, 'get')
+module.exports = (optionsOrUri, options) => request(optionsOrUri, options, 'get')
 
 METHODS.forEach((method) => {
   module.exports[method] = (optionsOrUri, options) => request(optionsOrUri, options, method)
