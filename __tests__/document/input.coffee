@@ -304,23 +304,6 @@ describe 'Document string interpolation', ->
             elem.props.set 'x', 1
             assert.is view.element.stringify(), '1'
 
-        it 'on `props` list element', ->
-            view = createView '''
-                <n-component name="a">
-                    {list[0]}
-                    <n-props list />
-                </n-component>
-                <n-use n-component="a" list="{$context.list}" />
-            '''
-            elem = view.element.children[0]
-            list = new ObservableArray()
-
-            renderParse view,
-                context:
-                    list: list
-            list.push 'a'
-            assert.is view.element.stringify(), 'a'
-
         it 'on `context`', ->
             view = createView '{$context.x}'
 

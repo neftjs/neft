@@ -1,4 +1,9 @@
 {
   "name": "@neft/compiler-binding",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "dependencies": {
+    "acorn": "^6.1.1",
+    "acorn-walk": "^6.1.1",
+    "astring": "^1.4.0"
+  }
 }

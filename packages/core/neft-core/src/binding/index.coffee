@@ -3,7 +3,6 @@
 util = require '../util'
 log = require '../log'
 assert = require '../assert'
-ObservableArray = require '../observable-array'
 
 log = log.scope 'Binding'
 
@@ -34,7 +33,7 @@ class Connection
 
     constructor: (@binding, item, @prop, @parent) ->
         @handlerName = getPropHandlerName @prop
-        @isConnected = false
+        @isItemConnected = false
 
         if isArray(item)
             @itemId = ''
@@ -49,10 +48,8 @@ class Connection
         Object.seal @
 
     getSignalChangeListener: do ->
-        withParent = (prop, val) ->
-            # TODO: provide special signal emitted with property changed
-            if val is undefined or typeof prop isnt 'string' or @parent.prop is prop
-                @parent.updateItem()
+        withParent = ->
+            @parent.updateItem()
             return
 
         noParent = ->
@@ -69,44 +66,30 @@ class Connection
         @getSignalChangeListener().call @
 
     connect: ->
-        {item} = @
-        if item
-            if item instanceof ObservableArray
-                @isConnected = true
-                handler = @getSignalChangeListener()
-                item.onPush.connect handler, @
-                item.onPop.connect handler, @
-            else if handler = item[@handlerName]
-                @isConnected = true
+        unless @isItemConnected
+            handler = @item?[@handlerName]
+            if handler
                 handler.connect @getSignalChangeListener(), @
+                @isItemConnected = true
         return
 
     disconnect: ->
-        {item} = @
-        if item and @isConnected
-            handler = @getSignalChangeListener()
-            if item instanceof ObservableArray
-                item.onPush.disconnect handler, @
-                item.onPop.disconnect handler, @
-            else
-                item[@handlerName].disconnect handler, @
-        @isConnected = false
+        if @isItemConnected
+            listener = @getSignalChangeListener()
+            @item[@handlerName].disconnect listener, @
+            @isItemConnected = false
         return
 
     updateItem: ->
-        oldVal = @item
+        oldItem = @item
         if @child
-            val = @child.getValue()
+            item = @child.getValue()
         else
-            val = @binding.getItemById @itemId
+            item = @binding.getItemById @itemId
 
-        if oldVal and not @isConnected
-            @connect()
-            oldVal = null
-
-        if oldVal isnt val
+        if oldItem isnt item or (item and not @isItemConnected)
             @disconnect()
-            @item = val
+            @item = item
             @connect()
             unless @parent
                 @binding.update()
@@ -152,10 +135,9 @@ class Binding
         @connections ||= []
 
         # update
-        `//<development>`
-        @updatePending = false
-        @updateLoop = 0
-        `//</development>`
+        if process.env.NODE_ENV is 'development'
+            @updatePending = false
+            @updateLoop = 0
 
     getItemById: (item) ->
         throw new Error "Not implemented"
@@ -180,32 +162,28 @@ class Binding
     onError: (err) ->
 
     update: ->
-        null
-        `//<development>`
-        if @updatePending
-            if @updateLoop > MAX_LOOPS
-                return
-            if ++@updateLoop is MAX_LOOPS
-                log.error @getLoopDetectedErrorMessage()
-                return
-        else
-            @updateLoop = 0
-        `//</development>`
+        if process.env.NODE_ENV is 'development'
+            if @updatePending
+                if @updateLoop > MAX_LOOPS
+                    return
+                if ++@updateLoop is MAX_LOOPS
+                    log.error @getLoopDetectedErrorMessage()
+                    return
+            else
+                @updateLoop = 0
 
         result = util.tryFunction @func, @ctx, @args
         if result instanceof Error
             @onError result
             result = @getDefaultValue()
 
-        `//<development>`
-        @updatePending = true
-        `//</development>`
+        if process.env.NODE_ENV is 'development'
+            @updatePending = true
 
         @setValue result
 
-        `//<development>`
-        @updatePending = false
-        `//</development>`
+        if process.env.NODE_ENV is 'development'
+            @updatePending = false
         return
 
     getLoopDetectedErrorMessage: ->

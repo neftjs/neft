@@ -10,18 +10,15 @@ PUBLIC_BINDING_VARIABLES =
     __proto__: null
     Renderer: true
 
+RENDERER_KEYS = new Set Object.keys(Renderer)
+
 RESERVED_MAIN_IDS =
     __proto__: null
     New: true
 
-{BINDING_THIS_TO_TARGET_OPTS} = bindingParser
-
-BINDING_PARSER_OPTS =
-    modifyBindingPart: (elem) ->
-        # Prefix all Renderer.* direct access by the namespace accessible in style file
-        if Renderer[elem[0]]
-            elem.unshift 'Renderer'
-        elem
+bindingPrefixIdBy = (id) ->
+    if RENDERER_KEYS.has(id)
+        'Renderer'
 
 class Stringifier
     constructor: (@ast, @path, lastUID = 0) ->
@@ -37,9 +34,6 @@ class Stringifier
 
     isBindingPublicVariable: (id) =>
         PUBLIC_BINDING_VARIABLES[id] or util.has(@publicIds, id)
-
-    isBindingPublicId: (id) =>
-        id is 'this' or @isBindingPublicVariable(id)
 
     stringifyObject: (ast) ->
         ids = []
@@ -171,7 +165,7 @@ class Stringifier
             name: 'running'
             value:
                 type: PRIMITIVE_TYPE
-                value: @bindingToString ast.condition, BINDING_THIS_TO_TARGET_OPTS
+                value: @bindingToString ast.condition, suffixThisByTarget: true
         @stringifyObject object
 
     stringifySelect: (ast) ->
@@ -207,9 +201,12 @@ class Stringifier
             else
                 throw new Error "Unknown NML object '#{ast.type}'"
 
-    bindingToString: (value, opts = 0) ->
-        binding = bindingParser.parse value, @isBindingPublicId, opts,
-            BINDING_PARSER_OPTS, @isBindingPublicVariable
+    bindingToString: (value, {suffixThisByTarget} = {}) ->
+        binding = bindingParser.parse value,
+            shouldUseIdInConnections: @isBindingPublicVariable
+            isHeadIdConnectionPublic: @isBindingPublicVariable
+            suffixThisByTarget: suffixThisByTarget
+            prefixBy: bindingPrefixIdBy
         func = "function(){return #{binding.hash}}"
         "[#{func}, #{binding.connections}]"
 
