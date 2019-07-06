@@ -4,3 +4,6 @@ node_modules
 /gh-pages
 .vscode
 lerna-debug.log
+.cache
+yarn-error.log
+dist

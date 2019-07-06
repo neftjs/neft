@@ -151,7 +151,7 @@ it 'sets item bindings', ->
     expected = '''
         const _i0 = Item.New()
         const child = Rectangle.New()
-        _RendererObject.setOpts(_i0, {"width": [function(){return child.width}, [[child, 'width']]], \
+        _RendererObject.setOpts(_i0, {"width": [function(){return child.width}, [[child,"width"]]], \
         "children": [_RendererObject.setOpts(child, {"id": "child"})]})
         return { objects: {"_i0": _i0, "child": child}, item: _i0 }
     '''
@@ -168,12 +168,12 @@ it 'sets item deep bindings', ->
     expected = '''
         const _i0 = Class.New()
         _RendererObject.setOpts(_i0, {"changes": {"width": [\
-        function(){return Renderer.width}, [[Renderer, 'width']]]}})
+        function(){return Renderer.width}, [[Renderer,"width"]]]}})
         return { objects: {"_i0": _i0}, item: _i0 }
     '''
     assert.is getObjectCode(code), expected
 
-it 'prefixes Renderer types in bindings', ->
+it 'supports Renderer types in bindings', ->
     code = '''
         @NumberAnimation {
             updateProperty: PropertyAnimation.ALWAYS
@@ -182,7 +182,7 @@ it 'prefixes Renderer types in bindings', ->
     expected = '''
         const _i0 = NumberAnimation.New()
         _RendererObject.setOpts(_i0, {"updateProperty": [function(){\
-        return Renderer.PropertyAnimation.ALWAYS}, [[[Renderer, 'PropertyAnimation'], 'ALWAYS']]]})
+        return Renderer.PropertyAnimation.ALWAYS}, [[[Renderer,"PropertyAnimation"],"ALWAYS"]]]})
         return { objects: {"_i0": _i0}, item: _i0 }
     '''
     assert.is getObjectCode(code), expected
@@ -214,8 +214,8 @@ it 'parses conditions', ->
         _RendererObject.setOpts(_i0, {"children": [\
         _RendererObject.setOpts(_r0, {\
         "running": [function(){return this.target.width > 50}, \
-        [[['this', 'target'], 'width']]], \
-        "changes": {"height": [function(){return Renderer.width}, [[Renderer, 'width']]]}\
+        [[["this","target"],"width"]]], \
+        "changes": {"height": [function(){return Renderer.width}, [[Renderer,"width"]]]}\
         })\
         ]})
         return { objects: {"_i0": _i0, "_r0": _r0}, item: _i0 }
@@ -236,7 +236,7 @@ it 'parses conditions returning value', ->
         _RendererObject.setOpts(_i0, {"children": [\
         _RendererObject.setOpts(_r0, {\
         "running": [function(){return Renderer.props.hover}, \
-        [[[Renderer, 'props'], 'hover']]], \
+        [[[Renderer,"props"],"hover"]]], \
         "changes": {"height": 100}\
         })\
         ]})

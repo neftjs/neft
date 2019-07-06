@@ -1,172 +1,293 @@
-var CHANGE_THIS_TO_SELF, BINDING_THIS_TO_TARGET_OPTS, isArrayElementIndexer, repeatString;
+const acorn = require('acorn')
+const walk = require('acorn-walk')
+const astring = require('astring')
 
-exports.BINDING_THIS_TO_TARGET_OPTS = BINDING_THIS_TO_TARGET_OPTS = 1 << 0;
+// comes from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
+const GLOBAL_KEYS = new Set([
+  // Neft globals
+  'global',
 
-exports.CHANGE_THIS_TO_SELF = CHANGE_THIS_TO_SELF = 1 << 1;
+  // value properties
+  'Infinity', 'NaN', 'undefined', 'null',
 
-repeatString = function(str, amount) {
-  var i, j, r, ref;
-  r = str;
-  for (i = j = 0, ref = amount - 1; j < ref; i = j += 1) {
-    r += str;
-  }
-  return r;
-};
+  // function properties
+  'isFinite', 'isNaN', 'parseFloat', 'parseInt',
+  'decodeURI', 'decodeURIComponent',
+  'encodeURI', 'encodeURIComponent',
 
-isArrayElementIndexer = function(string, index) {
-  var char;
-  if (string[index] !== '[') {
-    return false;
-  }
-  while (index++ < string.length) {
-    char = string[index];
-    if (char === ']') {
-      return true;
-    }
-    if (!/[0-9]/.test(char)) {
-      return false;
-    }
-  }
-  return false;
-};
+  // fundamental objects
+  'Object', 'Function', 'Boolean', 'Symbol',
+  'Error', 'EvalError', 'InternalError', 'RangeError', 'ReferenceError',
+  'SyntaxError', 'TypeError', 'URIError',
 
-exports.isBinding = function(code) {
-  var func;
+  // numbers and dates
+  'Number', 'Math', 'Date',
+
+  // text processing
+  'String', 'RegExp',
+
+  // collections
+  'Array', 'Map', 'Set', 'WeakMap', 'WeakSet',
+
+  // structured data
+  'JSON',
+
+  // control abstraction objects
+  'Promise', 'Generator', 'GeneratorFunction', 'AsyncFunction',
+])
+
+exports.isBinding = (code) => {
   try {
-    func = new Function('console', "'use strict'; return " + code + ";");
-    func.call(null);
-    return false;
-  } catch (error) {}
-  return true;
-};
+    // eslint-disable-next-line no-new-func
+    const func = new Function('console', `'use strict'; return ${code}`)
+    func.call(null)
+    return false
+  } catch (error) {
+    // NOP
+  }
+  return true
+}
 
-exports.parse = function(val, isPublicId, opts, objOpts, isVariableId) {
-  var binding, char, elem, hash, i, id, isArrayIndexer, isCurrentArrayIndexer, isString, j, k, l, lastBinding, len, len1, len2, len3, m, n, ref, ref1, text, useThis;
-  if (opts == null) {
-    opts = 0;
-  }
-  if (objOpts == null) {
-    objOpts = {};
-  }
-  if (isVariableId == null) {
-    isVariableId = function() {
-      return false;
-    };
-  }
-  binding = [''];
-  val += ' ';
-  lastBinding = null;
-  isString = false;
-  isArrayIndexer = false;
-  for (i = j = 0, len = val.length; j < len; i = ++j) {
-    char = val[i];
-    if (isArrayIndexer && char === ']') {
-      isArrayIndexer = false;
-      continue;
-    }
-    isCurrentArrayIndexer = !isString && isArrayElementIndexer(val, i);
-    if ((char === '.' || isCurrentArrayIndexer) && lastBinding) {
-      isArrayIndexer = isCurrentArrayIndexer;
-      lastBinding.push('');
-      continue;
-    }
-    if (lastBinding && (isString || /[a-zA-Z_0-9$]/.test(char))) {
-      lastBinding[lastBinding.length - 1] += char;
-    } else if (!isString && /[a-zA-Z_$]/.test(char)) {
-      lastBinding = [char];
-      binding.push(lastBinding);
-    } else {
-      if (lastBinding === null) {
-        binding[binding.length - 1] += char;
-      } else {
-        lastBinding = null;
-        binding.push(char);
+const prefixByThis = node => ({
+  type: 'MemberExpression',
+  object: {
+    type: 'ThisExpression',
+  },
+  property: node,
+  computed: false,
+})
+
+const prefixById = (node, prefix) => ({
+  type: 'MemberExpression',
+  object: {
+    type: 'Identifier',
+    name: prefix,
+  },
+  property: node,
+  computed: false,
+})
+
+const suffixByTarget = node => ({
+  type: 'MemberExpression',
+  object: node,
+  property: {
+    type: 'Identifier',
+    name: 'target',
+  },
+  computed: false,
+})
+
+const changeNodes = (ast, types, getNewNode) => {
+  const typeCallback = (leaf, ancestors) => {
+    const parent = ancestors[ancestors.length - 2]
+    switch (parent.type) {
+      case 'CallExpression': {
+        const argumentIndex = parent.arguments.indexOf(leaf)
+        if (parent.callee === leaf) {
+          parent.callee = getNewNode(leaf)
+        } else if (argumentIndex >= 0) {
+          parent.arguments[argumentIndex] = getNewNode(leaf)
+        }
+        break
       }
-    }
-    if ((char === '\'' || char === '"') && val[i - 1] !== '\\') {
-      isString = !isString;
+      case 'ExpressionStatement':
+        if (parent.expression === leaf) {
+          parent.expression = getNewNode(leaf)
+        }
+        break
+      case 'MemberExpression':
+        if (parent.object === leaf) {
+          parent.object = getNewNode(leaf)
+        }
+        if (parent.computed && parent.property === leaf) {
+          parent.property = getNewNode(leaf)
+        }
+        break
+      case 'LogicalExpression':
+        if (parent.left === leaf) {
+          parent.left = getNewNode(leaf)
+        } else if (parent.right === leaf) {
+          parent.right = getNewNode(leaf)
+        }
+        break
+      case 'UnaryExpression':
+        if (parent.argument === leaf) {
+          parent.argument = getNewNode(leaf)
+        }
+        break
+      case 'ConditionalExpression':
+        if (parent.test === leaf) {
+          parent.test = getNewNode(leaf)
+        } else if (parent.consequent === leaf) {
+          parent.consequent = getNewNode(leaf)
+        } else if (parent.alternate === leaf) {
+          parent.alternate = getNewNode(leaf)
+        }
+        break
+      case 'BinaryExpression':
+        if (parent.left === leaf) {
+          parent.left = getNewNode(leaf)
+        } else if (parent.right === leaf) {
+          parent.right = getNewNode(leaf)
+        }
+        break
+      case 'TemplateLiteral': {
+        const expressionIndex = parent.expressions.indexOf(leaf)
+        if (expressionIndex >= 0) {
+          parent.expressions[expressionIndex] = getNewNode(leaf)
+        }
+        break
+      }
+      case 'ArrayExpression': {
+        const elementIndex = parent.elements.indexOf(leaf)
+        if (elementIndex >= 0) {
+          parent.elements[elementIndex] = getNewNode(leaf)
+        }
+        break
+      }
+      case 'AssignmentExpression':
+        if (parent.left === leaf) {
+          parent.left = getNewNode(leaf)
+        }
+        if (parent.right === leaf) {
+          parent.right = getNewNode(leaf)
+        }
+        break
+      case 'SpreadElement':
+        if (parent.argument === leaf) {
+          parent.argument = getNewNode(leaf)
+        }
+        break
+      case 'Property':
+        if (parent.value === leaf) {
+          parent.shorthand = false
+          parent.value = getNewNode(leaf)
+        }
+        break
+      default:
+        // NOP
     }
   }
-  for (i = k = 0, len1 = binding.length; k < len1; i = ++k) {
-    elem = binding[i];
-    if (!(typeof elem !== 'string')) {
-      continue;
-    }
-    elem = (typeof objOpts.modifyBindingPart === "function" ? objOpts.modifyBindingPart(elem) : void 0) || elem;
-    if (opts & CHANGE_THIS_TO_SELF && elem[0] === 'this') {
-      elem[0] = 'self'
-    }
-    useThis = (ref = elem[0]) === 'parent' || ref === 'nextSibling' || ref === 'previousSibling' || ref === 'target';
-    useThis || (useThis = (ref1 = objOpts.globalIdToThis) != null ? ref1[elem[0]] : void 0);
-    useThis || (useThis = typeof objOpts.shouldPrefixByThis === "function" ? objOpts.shouldPrefixByThis(elem[0]) : void 0);
-    if (useThis) {
-      elem.unshift("this");
-    }
-    if (opts & BINDING_THIS_TO_TARGET_OPTS && elem[0] === 'this') {
-      elem.splice(1, 0, 'target');
-    }
-    if (isPublicId(elem[0]) && (i === 0 || binding[i - 1][binding[i - 1].length - 1] !== '.')) {
-      continue;
-    } else {
-      binding[i] = elem.join('.');
-    }
+
+  walk.ancestor(ast, types.reduce((target, type) => ({
+    ...target,
+    [type]: typeCallback,
+  }), {}))
+}
+
+const changeThisExpressionsToSelfIdentifier = (ast) => {
+  walk.simple(ast, {
+    ThisExpression(node) {
+      node.type = 'Identifier'
+      node.name = 'self'
+    },
+  })
+}
+
+const getMemberExpressionsChain = (node, chain = []) => {
+  const { object, property } = node
+
+  // object
+  if (object.type === 'MemberExpression') getMemberExpressionsChain(object, chain)
+  else if (object.type === 'ThisExpression') chain.push('this')
+  else if (object.name) chain.push(object.name)
+
+  // property
+  if (property.type === 'MemberExpression') getMemberExpressionsChain(property, chain)
+  else if (property.name) chain.push(property.name)
+
+  return chain
+}
+
+const expressionsChainToSubArrays = (chain) => {
+  if (chain.length > 2) {
+    return [expressionsChainToSubArrays(chain.slice(0, -1)), chain[chain.length - 1]]
   }
-  i = -1;
-  n = binding.length;
-  while (++i < n) {
-    if (typeof binding[i] === 'string') {
-      if (typeof binding[i - 1] === 'string') {
-        binding[i - 1] += binding[i];
-      } else if (binding[i].trim() !== '') {
-        continue;
-      }
-      binding.splice(i, 1);
-      n--;
-    }
+  return chain
+}
+
+const getRootMemberExpression = (ancestors) => {
+  let root
+  for (let i = ancestors.length - 2; i >= 0; i -= 1) {
+    const parent = ancestors[i]
+    if (parent.type !== 'MemberExpression') break
+    if (parent.computed) break
+    root = parent
   }
-  text = '';
-  hash = '';
-  for (i = l = 0, len2 = binding.length; l < len2; i = ++l) {
-    elem = binding[i];
-    if (typeof elem === 'string') {
-      hash += elem;
-    } else if (elem.length > 1) {
-      if ((binding[i - 1] != null) && text) {
-        text += ", ";
-      }
-      text += repeatString('[', elem.length - 1);
-      if (isVariableId(elem[0])) {
-        text += "" + elem[0];
-      } else {
-        text += "'" + elem[0] + "'";
-      }
-      if (elem[0] === "this") {
-        hash += "this";
-      } else {
-        hash += "" + elem[0];
-      }
-      elem.shift();
-      for (i = m = 0, len3 = elem.length; m < len3; i = ++m) {
-        id = elem[i];
-        text += ", '" + id + "']";
-        if (isFinite(id)) {
-          hash += "[" + id + "]";
-        } else {
-          hash += "." + id;
+  return root
+}
+
+const ancestorsToConnection = (ancestors, {
+  shouldUseIdInConnections,
+  isHeadIdConnectionPublic,
+} = {}) => {
+  const node = ancestors[ancestors.length - 1]
+  const root = getRootMemberExpression(ancestors)
+  const chain = root ? getMemberExpressionsChain(root) : [node.name]
+  const head = chain[0]
+  if (typeof shouldUseIdInConnections !== 'function' || shouldUseIdInConnections(head)) {
+    if (typeof isHeadIdConnectionPublic === 'function' && isHeadIdConnectionPublic(head)) {
+      chain[0] = `{{${head}}}`
+    }
+    const subArrays = expressionsChainToSubArrays(chain)
+    const connection = JSON.stringify(subArrays)
+      .replace(/"{{/g, '')
+      .replace(/}}"/g, '')
+    return `${connection},`
+  }
+  return ''
+}
+
+const getConnections = (ast, { shouldUseIdInConnections, isHeadIdConnectionPublic }) => {
+  let result = ''
+  walk.ancestor(ast, {
+    ThisExpression(leaf, ancestors) {
+      result += ancestorsToConnection(ancestors)
+    },
+    Identifier(leaf, ancestors) {
+      result += ancestorsToConnection(ancestors, {
+        shouldUseIdInConnections,
+        isHeadIdConnectionPublic,
+      })
+    },
+  })
+  return `[${result.slice(0, -1)}]`
+}
+
+exports.parse = (code, {
+  shouldBePrefixByThis = () => true,
+  shouldUseIdInConnections = () => true,
+  isHeadIdConnectionPublic = () => true,
+  prefixIdsByThis = false,
+  changeThisToSelf = false,
+  suffixThisByTarget = false,
+  prefixBy,
+} = {}) => {
+  const ast = acorn.parse(code)
+  if (changeThisToSelf) {
+    changeThisExpressionsToSelfIdentifier(ast)
+  }
+  if (prefixIdsByThis || typeof prefixBy === 'function') {
+    changeNodes(ast, ['Identifier', 'Pattern'], (node) => {
+      if (GLOBAL_KEYS.has(node.name)) return node
+      if (changeThisToSelf && node.name === 'self') return node
+      if (prefixIdsByThis) {
+        if (shouldBePrefixByThis(node.name)) {
+          return prefixByThis(node)
         }
       }
-    } else {
-      if (elem[0] === "this") {
-        hash += "this";
-      } else {
-        hash += "" + elem[0];
+      const idToPut = prefixBy(node.name)
+      if (idToPut) {
+        return prefixById(node, idToPut)
       }
-    }
+      return node
+    })
   }
-  hash = hash.trim();
-  text = "[" + (text.trim()) + "]";
+  if (suffixThisByTarget) {
+    changeNodes(ast, ['ThisExpression'], suffixByTarget)
+  }
   return {
-    hash: hash,
-    connections: text
-  };
-};
+    hash: astring.generate(ast).trim().slice(0, -1),
+    connections: getConnections(ast, { shouldUseIdInConnections, isHeadIdConnectionPublic }),
+  }
+}
