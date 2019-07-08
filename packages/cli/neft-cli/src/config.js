@@ -11,6 +11,8 @@ exports.packageConfig = exports.packageFile.config || {}
 
 exports.outputDir = path.join(exports.realpath, '/dist')
 
+exports.staticDir = path.join(exports.realpath, '/static')
+
 exports.outputFile = 'bundle.js'
 
 exports.operations = {

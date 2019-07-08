@@ -86,7 +86,9 @@ const getDefaultStyles = async ({ extensions }) => {
   return styleExtensions.filter(Boolean)
 }
 
-const createEntryFile = async ({ input, extensions, imports }) => {
+const createEntryFile = async ({
+  input, extensions, imports, initCode,
+}) => {
   const polyfills = ['core-js/stable', 'regenerator-runtime/runtime']
 
   let file = ''
@@ -103,6 +105,8 @@ const createEntryFile = async ({ input, extensions, imports }) => {
     file += `require('${importPath}')\n`
   })
 
+  file += initCode
+
   file += "module.exports = require('./')"
 
   const filename = path.join(input, '.neft-entry.js')
@@ -117,6 +121,7 @@ const createEntryFile = async ({ input, extensions, imports }) => {
 
 exports.bundle = async (target, {
   input, output, extensions = [], imports = [], production = false, watch = false,
+  initCode = '',
 }) => {
   const parcelOptions = {
     outDir: output,
@@ -132,7 +137,9 @@ exports.bundle = async (target, {
     logLevel: 2,
   }
   const defaultStyles = await getDefaultStyles({ extensions })
-  const entry = await createEntryFile({ input, extensions, imports })
+  const entry = await createEntryFile({
+    input, extensions, imports, initCode,
+  })
   const entries = [entry]
   const bundler = new ParcelBundler(entries, parcelOptions)
   bundler.options.env = {

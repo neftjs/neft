@@ -5,9 +5,8 @@ const sharp = require('sharp')
 const glob = util.promisify(require('glob'))
 const logger = require('@neft/core').logger.scope('build:static')
 const { Resources, Resource } = require('@neft/core')
-const { realpath, outputDir } = require('../config')
+const { outputDir, staticDir } = require('../config')
 
-const inDir = path.join(realpath, 'static')
 const imageExtensions = {
   '.jpg': true,
   '.jpeg': true,
@@ -103,7 +102,7 @@ const processAnyFile = (file, dir, base, name, ext, target) => {
 const mapFile = async (file, target) => {
   const {
     dir, base, name, ext,
-  } = path.parse(path.relative(inDir, file))
+  } = path.parse(path.relative(staticDir, file))
   const resources = ensureDir(target, dir.split('/'))
   if (imageExtensions[ext]) await processImage(file, dir, base, name, ext, resources)
   else await processAnyFile(file, dir, base, name, ext, resources)
@@ -111,7 +110,7 @@ const mapFile = async (file, target) => {
 
 exports.loadStaticFiles = async () => {
   const target = new Resources()
-  const files = await glob(path.join(inDir, '**/*.*'))
+  const files = await glob(path.join(staticDir, '**/*.*'))
   await Promise.all(files.map(file => mapFile(file, target)))
   return `const { Resources, resources } = require('@neft/core')
 Resources.fromJSON(${JSON.stringify(target)}, resources)\n`
