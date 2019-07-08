@@ -127,7 +127,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Image extends Renderer.Ite
                 itemUtils.setPropertyValue @, 'resolution', 1
                 if Resources.testUri(val)
                     if res = Impl.resources?.getResource(val)
-                        resolution = Renderer.Device.pixelRatio * Image.pixelRatio
+                        resolution = Renderer.device.pixelRatio * Image.pixelRatio
                         RESOURCE_REQUEST.resolution = resolution
                         val = res.resolve RESOURCE_REQUEST
 

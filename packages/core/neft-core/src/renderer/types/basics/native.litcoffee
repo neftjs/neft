@@ -78,7 +78,7 @@ where `XYZ` is the given name.
                     RESOURCE_REQUEST =
                         resolution: 1
                     requestAnimationFrame? ->
-                        RESOURCE_REQUEST.resolution = Renderer.Device.pixelRatio
+                        RESOURCE_REQUEST.resolution = Renderer.device.pixelRatio
                     getResourceResolutionByPath = (rsc, path) ->
                         for format in rsc.formats
                             paths = rsc.paths[format]

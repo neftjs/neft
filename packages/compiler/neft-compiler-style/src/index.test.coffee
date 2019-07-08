@@ -14,9 +14,9 @@ const _RendererObject = Renderer.itemUtils.Object'''
 
 DEFAULT_IMPORTS = '''
 const Class = Renderer.Class
-const Device = Renderer.Device
-const Navigator = Renderer.Navigator
-const Screen = Renderer.Screen
+const device = Renderer.device
+const navigator = Renderer.navigator
+const screen = Renderer.screen
 '''
 
 it 'bundles items', ->

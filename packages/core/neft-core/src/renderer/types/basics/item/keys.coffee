@@ -7,7 +7,7 @@ assert = require '../../../../assert'
 module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class Keys extends itemUtils.DeepObject
     @__name__ = 'Keys'
 
-    {Device} = Renderer
+    {device} = Renderer
 
     itemUtils.defineProperty
         constructor: ctor
@@ -20,7 +20,7 @@ module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class Keys exten
         constructor: ->
             Object.preventExtensions @
 
-        @:: = Object.create Device.keyboard
+        @:: = Object.create device.keyboard
         @::constructor = KeysEvent
 
     constructor: (ref) ->
@@ -56,16 +56,16 @@ module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class Keys exten
                     Keys.focusedItem = null
             return
 
-    Device.onKeyPress.connect (event) ->
+    device.onKeyPress.connect (event) ->
         focusedKeys?.emit 'onPress', keysEvent
 
-    Device.onKeyHold.connect (event) ->
+    device.onKeyHold.connect (event) ->
         focusedKeys?.emit 'onHold', keysEvent
 
-    Device.onKeyRelease.connect (event) ->
+    device.onKeyRelease.connect (event) ->
         focusedKeys?.emit 'onRelease', keysEvent
 
-    Device.onKeyInput.connect (event) ->
+    device.onKeyInput.connect (event) ->
         focusedKeys?.emit 'onInput', keysEvent
 
     @event = keysEvent = new KeysEvent
