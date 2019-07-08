@@ -8,9 +8,9 @@ getImports = (nml) ->
 
 DEFAULT_IMPORTS = [
     {name: 'Class', ref: 'Renderer.Class'},
-    {name: 'Device', ref: 'Renderer.Device'},
-    {name: 'Navigator', ref: 'Renderer.Navigator'},
-    {name: 'Screen', ref: 'Renderer.Screen'},
+    {name: 'device', ref: 'Renderer.device'},
+    {name: 'navigator', ref: 'Renderer.navigator'},
+    {name: 'screen', ref: 'Renderer.screen'},
 ]
 
 it 'default items', ->
