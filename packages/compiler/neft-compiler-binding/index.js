@@ -278,7 +278,7 @@ exports.parse = (code, {
       }
       const idToPut = prefixBy(node.name)
       if (idToPut) {
-        return prefixById(node, idToPut)
+        return idToPut === 'this' ? prefixByThis(node) : prefixById(node, idToPut)
       }
       return node
     })
