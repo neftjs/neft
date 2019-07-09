@@ -25,9 +25,9 @@ IDS_PREFIXED_BY_DEFAULT = new Set [
 
 bindingPrefixIdBy = (id) ->
     if RENDERER_KEYS.has(id)
-        'Renderer'
+        return 'Renderer'
     if IDS_PREFIXED_BY_DEFAULT.has(id)
-        'this'
+        return 'this'
 
 class Stringifier
     constructor: (@ast, @path, lastUID = 0) ->
