@@ -14,7 +14,7 @@ extension Extension.FirebaseMessaging {
 
     fileprivate static func pushToken() {
         let token = Messaging.messaging().fcmToken
-        app.client.pushEvent("NeftFirebaseMessaging/Token", args: [token])
+        app.client.pushEvent("FirebaseMessaging/token", args: [token])
     }
 
     fileprivate static func registerNotifications() {
@@ -35,6 +35,7 @@ extension Extension.FirebaseMessaging {
         }
 
         application.registerForRemoteNotifications()
+        pushToken()
     }
 
     fileprivate static func onMessage(_ userInfo: [AnyHashable: Any]) {
@@ -49,15 +50,15 @@ extension Extension.FirebaseMessaging {
         let dataJsonRow = try? JSONSerialization.data(withJSONObject: data)
         let dataJson = dataJsonRow.map { it in String(data: it, encoding: .ascii) } ?? nil
 
-        app.client.pushEvent("NeftFirebaseMessaging/MessageReceived", args: [dataJson])
+        app.client.pushEvent("FirebaseMessaging/messageReceived", args: [dataJson])
     }
 
     static func register() {
-        app.client.addCustomFunction("NeftFirebaseMessaging/Register") { _ in
+        app.client.addCustomFunction("FirebaseMessaging/register") { _ in
             registerNotifications()
         }
 
-        app.client.addCustomFunction("NeftFirebaseMessaging/GetToken") { _ in
+        app.client.addCustomFunction("FirebaseMessaging/getToken") { _ in
             pushToken()
         }
     }
