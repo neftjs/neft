@@ -11,9 +11,9 @@ class ImportsFinder
         used =
             __proto__: null
             Class: true
-            Device: true
-            Navigator: true
-            Screen: true
+            device: true
+            navigator: true
+            screen: true
         for object in @objects
             nmlAst.forEachLeaf
                 ast: object, onlyType: nmlAst.OBJECT_TYPE, includeGiven: true,

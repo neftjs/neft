@@ -21,11 +21,11 @@ exports.sizeUtils = require('./utils/size')(exports)
 
 exports.colorUtils = require('./utils/color')
 
-exports.Screen = require('./types/namespace/screen')(exports, Impl, itemUtils)
+exports.screen = require('./types/namespace/screen')(exports, Impl, itemUtils)
 
-exports.Device = require('./types/namespace/device')(exports, Impl, itemUtils)
+exports.device = require('./types/namespace/device')(exports, Impl, itemUtils)
 
-exports.Navigator = require('./types/namespace/navigator')(exports, Impl, itemUtils)
+exports.navigator = require('./types/namespace/navigator')(exports, Impl, itemUtils)
 
 exports.Extension = require('./types/extension')(exports, Impl, itemUtils)
 

@@ -93,7 +93,7 @@ module.exports = (impl) ->
     hoverItems = []
 
     impl.Renderer.onReady.connect ->
-        {Device} = impl.Renderer
+        {device} = impl.Renderer
         {event} = impl.Renderer.Item.Pointer
 
         getEventStatus = ->
@@ -103,7 +103,7 @@ module.exports = (impl) ->
                 PROPAGATE_UP | STOP_ASIDE_PROPAGATION
 
         # support press event
-        Device.onPointerPress.connect do ->
+        device.onPointerPress.connect do ->
             onItem = (item, itemX, itemY) ->
                 {capturePointer} = item._impl
                 if capturePointer & CLICK
@@ -130,7 +130,7 @@ module.exports = (impl) ->
                 return
 
         # support release and click events
-        Device.onPointerRelease.connect do ->
+        device.onPointerRelease.connect do ->
             onItem = (item, itemX, itemY) ->
                 data = item._impl
                 {capturePointer} = data
@@ -161,7 +161,7 @@ module.exports = (impl) ->
                 event._itemY = -1
 
                 # exit all entered items on touch screen
-                if impl.Renderer.Screen.touch
+                if impl.Renderer.screen.touch
                     while item = hoverItems.pop()
                         data = item._impl
                         data.pointerHover = false
@@ -181,7 +181,7 @@ module.exports = (impl) ->
                 return
 
         # support move, enter and exit events
-        Device.onPointerMove.connect do ->
+        device.onPointerMove.connect do ->
             flag = 0
 
             onItem = (item, itemX, itemY) ->
@@ -234,7 +234,7 @@ module.exports = (impl) ->
                 return
 
         # support wheel event
-        Device.onPointerWheel.connect do ->
+        device.onPointerWheel.connect do ->
             onItem = (item, itemX, itemY) ->
                 event._stopPropagation = true
                 if item._impl.capturePointer & WHEEL

@@ -6,6 +6,6 @@
     "@neft/compiler-document": "0.0.1",
     "@neft/compiler-style": "0.0.1",
     "@neft/parcel-util": "0.0.1",
-    "parcel-bundler": "https://github.com/neftjs/parcel-bundler.git"
+    "parcel-bundler": "https://github.com/neftjs/parcel-bundler.git#1.12.3-neft.2"
   }
 }

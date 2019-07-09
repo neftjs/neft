@@ -3,6 +3,6 @@
   "version": "0.0.1",
   "dependencies": {
     "coffee-script": "^1.12.7",
-    "parcel-bundler": "https://github.com/neftjs/parcel-bundler.git"
+    "parcel-bundler": "https://github.com/neftjs/parcel-bundler.git#1.12.3-neft.2"
   }
 }

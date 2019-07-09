@@ -132,7 +132,17 @@ it('left assignment', () => {
   })
 })
 
-it('pass in object', () => {
+it('comparement', () => {
+  const result = parser.parse('counter > 1', {
+    prefixIdsByThis: true,
+  })
+  assert.isEqual(result, {
+    hash: 'this.counter > 1',
+    connections: '[["this","counter"]]',
+  })
+})
+
+it('passes in object', () => {
   const result = parser.parse('user.format({ age: user.currentAge })', {
     prefixIdsByThis: true,
   })
@@ -142,7 +152,7 @@ it('pass in object', () => {
   })
 })
 
-it('omits array literals', () => {
+it('ternary operator', () => {
   const result = parser.parse('(dict ? dict.list : error)', {
     prefixIdsByThis: true,
   })
@@ -178,7 +188,7 @@ it('suffix this by target', () => {
 it('discovers custom ids in connections', () => {
   const result = parser.parse('name.deep', {
     shouldUseIdInConnections: id => id === 'name',
-    isHeadIdConnectionPublic: id => id === 'name'
+    isHeadIdConnectionPublic: id => id === 'name',
   })
   assert.isEqual(result, {
     hash: 'name.deep',

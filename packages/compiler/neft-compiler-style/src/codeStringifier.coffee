@@ -16,9 +16,18 @@ RESERVED_MAIN_IDS =
     __proto__: null
     New: true
 
+IDS_PREFIXED_BY_DEFAULT = new Set [
+    'parent',
+    'nextSibling',
+    'previousSibling',
+    'target'
+]
+
 bindingPrefixIdBy = (id) ->
     if RENDERER_KEYS.has(id)
-        'Renderer'
+        return 'Renderer'
+    if IDS_PREFIXED_BY_DEFAULT.has(id)
+        return 'this'
 
 class Stringifier
     constructor: (@ast, @path, lastUID = 0) ->

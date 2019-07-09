@@ -13,10 +13,10 @@ import io.neft.utils.Consumer;
 
 public final class FirebaseMessagingExtension {
     private static final App APP = App.getInstance();
-    private static final String GET_TOKEN_FUNC = "NeftFirebaseMessaging/GetToken";
-    private static final String TOKEN_EVENT = "NeftFirebaseMessaging/Token";
-    private static final String REGISTER = "NeftFirebaseMessaging/Register";
-    private static final String MESSAGE_RECEIVED_EVENT = "NeftFirebaseMessaging/MessageReceived";
+    private static final String GET_TOKEN_FUNC = "FirebaseMessaging/getToken";
+    private static final String TOKEN_EVENT = "FirebaseMessaging/token";
+    private static final String REGISTER = "FirebaseMessaging/register";
+    private static final String MESSAGE_RECEIVED_EVENT = "FirebaseMessaging/messageReceived";
 
     static void pushToken() {
         String token = FirebaseInstanceId.getInstance().getToken();

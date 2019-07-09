@@ -187,6 +187,21 @@ it 'supports Renderer types in bindings', ->
     '''
     assert.is getObjectCode(code), expected
 
+it 'supports Renderer namespaces in bindings', ->
+    code = '''
+        @Item {
+            width: screen.navigationBar.height
+        }
+    '''
+    expected = '''
+        const _i0 = Item.New()
+        _RendererObject.setOpts(_i0, {"width": [function(){\
+        return Renderer.screen.navigationBar.height}, \
+        [[[[Renderer,"screen"],"navigationBar"],"height"]]]})
+        return { objects: {"_i0": _i0}, item: _i0 }
+    '''
+    assert.is getObjectCode(code), expected
+
 it 'sets item anchors', ->
     code = '''
         @Item {

@@ -145,7 +145,7 @@ module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class Pointer ex
             @_preventClick = false
             Object.preventExtensions @
 
-        @:: = Object.create Renderer.Device.pointer
+        @:: = Object.create Renderer.device.pointer
         @::constructor = PointerEvent
 
         utils.defineProperty @::, 'itemX', null, (-> @_itemX), null
