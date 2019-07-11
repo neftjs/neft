@@ -1,6 +1,5 @@
 {
   "packages": [
-    "__tests__/",
     "packages/*/*"
   ],
   "version": "independent",
