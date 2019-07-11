@@ -66,6 +66,9 @@ class Client {
     }
 
     func onData(_ reader: Reader) {
+        objc_sync_enter(self)
+        defer { objc_sync_exit(self) }
+
         while let action = reader.getAction() {
             let actionFunc = actions[action]
             if actionFunc != nil {
@@ -112,6 +115,9 @@ class Client {
     }
 
     func pushEvent(_ name: String, args: [Any?]?) {
+        objc_sync_enter(self)
+        defer { objc_sync_exit(self) }
+
         pushAction(OutAction.event)
         pushString(name)
         if args != nil {
@@ -157,6 +163,9 @@ class Client {
 
     func sendData() {
         guard outActionsIndex > 0 else { return; }
+
+        objc_sync_enter(self)
+        defer { objc_sync_exit(self) }
 
         cutDataArray(&outActions, length: outActionsIndex)
         cutDataArray(&outBooleans, length: outBooleansIndex)

@@ -1,6 +1,7 @@
 {
   "name": "@neft/cli",
   "version": "0.0.1",
+  "main": "./src",
   "bin": {
     "neft": "bin/neft.js"
   },

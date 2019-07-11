@@ -1,4 +1,4 @@
-const { WebView } = require('./')
+const { WebView } = require('@neft/webview')
 
 @WebView webview {
   fillWidth: true

@@ -41,15 +41,12 @@ module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Font extends ite
 
         Object.preventExtensions @
 
-    setFontFamilyImpl = Impl["set#{ctor.name}FontFamily"]
+    setFontFamilyImpl = Impl["set#{ctor.__name__}FontFamily"]
     reloadFontFamily = (font) ->
         name = Renderer.FontLoader.getInternalFontName font._family, font._weight, font._italic
         name ||= 'sans-serif'
         setFontFamilyImpl.call font._ref, name
 
-    `//<development>`
-    checkingFamily = {}
-    `//</development>`
     itemUtils.defineProperty
         constructor: @
         name: 'family'
@@ -68,7 +65,7 @@ module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Font extends ite
         defaultValue: 14
         namespace: 'font'
         parentConstructor: ctor
-        implementation: Impl["set#{ctor.name}FontPixelSize"]
+        implementation: Impl["set#{ctor.__name__}FontPixelSize"]
         developmentSetter: (val) ->
             assert.isFloat val, "Font.pixelSize needs to be a float, but #{val} given"
 
@@ -92,7 +89,7 @@ module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Font extends ite
         defaultValue: 0
         namespace: 'font'
         parentConstructor: ctor
-        implementation: Impl["set#{ctor.name}FontWordSpacing"]
+        implementation: Impl["set#{ctor.__name__}FontWordSpacing"]
         developmentSetter: (val) ->
             assert.isFloat val, "Font.wordSpacing needs to be a float, but #{val} given"
 
@@ -102,7 +99,7 @@ module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Font extends ite
         defaultValue: 0
         namespace: 'font'
         parentConstructor: ctor
-        implementation: Impl["set#{ctor.name}FontLetterSpacing"]
+        implementation: Impl["set#{ctor.__name__}FontLetterSpacing"]
         developmentSetter: (val) ->
             assert.isFloat val, "Font.letterSpacing needs to be a float, but #{val} given"
 

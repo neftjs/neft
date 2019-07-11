@@ -1,6 +1,7 @@
 {
   "name": "@neft/compiler-document",
   "version": "0.0.1",
+  "main": "./src/index.js",
   "dependencies": {
     "@neft/core": "0.0.1",
     "@neft/compiler-binding": "0.0.1",

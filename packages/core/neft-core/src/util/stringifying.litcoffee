@@ -49,13 +49,10 @@ console.log(clone instanceof Sample)
             nativeCtors = [Array, Object]
 
             (obj, opts = {}) ->
-                null
-                `//<development>`
                 unless utils.isObject(obj)
                     throw new Error 'utils.simplify object must be an object'
                 unless utils.isPlainObject(opts)
                     throw new Error 'utils.simplify options must be a plain object'
-                `//</development>`
 
                 optsProps = opts.properties ?= false
                 optsProtos = opts.protos ?= false
@@ -193,11 +190,8 @@ Backward utils.simplify() operation.
             ctorPropConfig = value: null
 
             (obj) ->
-                null
-                `//<development>`
                 unless utils.isPlainObject(obj)
                     throw new Error 'utils.assemble object must be a plain object'
-                `//</development>`
 
                 {opts, objects, references, protos, constructors} = obj
 

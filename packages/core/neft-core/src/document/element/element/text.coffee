@@ -9,7 +9,6 @@ assert = assert.scope 'View.Element.Text'
 
 module.exports = (Element) -> class Text extends Element
     @__name__ = 'Text'
-    @__path__ = 'File.Element.Text'
 
     JSON_CTOR_ID = @JSON_CTOR_ID = Element.JSON_CTORS.push(Text) - 1
 
@@ -17,7 +16,7 @@ module.exports = (Element) -> class Text extends Element
     JSON_TEXT = i++
     JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
-    @_fromJSON = (arr, obj=new Text) ->
+    @_fromJSON = (arr, obj = new Text) ->
         Element._fromJSON arr, obj
         obj._text = arr[JSON_TEXT]
         obj
@@ -27,10 +26,8 @@ module.exports = (Element) -> class Text extends Element
 
         @_text = ''
 
-        `//<development>`
-        if @constructor is Text
+        if process.env.NODE_ENV isnt 'production' and @constructor is Text
             Object.seal @
-        `//</development>`
 
     clone: (clone = new Text) ->
         super clone

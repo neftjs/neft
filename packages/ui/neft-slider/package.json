@@ -1,8 +1,21 @@
 {
   "name": "@neft/slider",
   "version": "0.0.1",
-  "source": true,
+  "main": "./lib/index.js",
+  "engines": {
+    "node": "0"
+  },
+  "source": {
+    "./lib/**": "./src/$1"
+  },
+  "scripts": {
+    "build": "build-neft-module",
+    "prepublishOnly": "yarn build"
+  },
   "dependencies": {
     "@neft/core": "0.0.1"
+  },
+  "devDependencies": {
+    "@neft/modules-builder": "0.0.1"
   }
 }

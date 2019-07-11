@@ -1,7 +1,4 @@
-'use strict'
-
-Renderer = require '@neft/core/src/renderer'
-Element = require '@neft/core/src/document/element'
+{Element, Renderer} = require '@neft/core'
 {createView, renderParse, createViewAndRender} = require './utils'
 
 describe '<style />', ->

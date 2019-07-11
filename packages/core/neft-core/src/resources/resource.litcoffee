@@ -10,7 +10,6 @@
 
     module.exports = (Resources) -> class Resource
         @__name__ = 'Resource'
-        @__path__ = 'Resources.Resource'
         @FILE_NAME = ///
             ^
             (.*?) # file

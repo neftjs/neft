@@ -245,7 +245,7 @@ class Stringifier
         result = ""
         for child in @objects
             result += "const #{child.id} = #{child.name}.New()\n"
-            if @path
+            if process.env.NODE_ENV isnt 'production' and @path
                 result += "#{child.id}._path = \"#{@path}\"\n"
         result
 

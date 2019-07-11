@@ -135,7 +135,7 @@ class Binding
         @connections ||= []
 
         # update
-        if process.env.NODE_ENV is 'development'
+        if process.env.NODE_ENV isnt 'production'
             @updatePending = false
             @updateLoop = 0
 
@@ -162,7 +162,7 @@ class Binding
     onError: (err) ->
 
     update: ->
-        if process.env.NODE_ENV is 'development'
+        if process.env.NODE_ENV isnt 'production'
             if @updatePending
                 if @updateLoop > MAX_LOOPS
                     return
@@ -177,12 +177,12 @@ class Binding
             @onError result
             result = @getDefaultValue()
 
-        if process.env.NODE_ENV is 'development'
+        if process.env.NODE_ENV isnt 'production'
             @updatePending = true
 
         @setValue result
 
-        if process.env.NODE_ENV is 'development'
+        if process.env.NODE_ENV isnt 'production'
             @updatePending = false
         return
 

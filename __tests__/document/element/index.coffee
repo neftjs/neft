@@ -1,8 +1,6 @@
-Element = require '@neft/core/src/document/element'
+{util, Element} = require('@neft/core')
 
-{util} = require('@neft/core')
-
-fromHTML = require '@neft/compiler-document/xhtml-parser'
+fromHTML = require('@neft/compiler-document').parseToAst
 
 describe 'Document Element', ->
     HTML = '<b><em>abc</em></b>' +

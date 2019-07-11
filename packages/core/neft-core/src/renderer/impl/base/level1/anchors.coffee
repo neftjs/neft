@@ -353,18 +353,17 @@ module.exports = (impl) ->
                 return
 
             if targetItem
-                `//<development>`
-                fails = @item._parent
-                fails &&= targetItem isnt @item._children
-                fails &&= @item._parent isnt targetItem
-                fails &&= @item._parent isnt targetItem._parent
-                if fails
-                    log.error """
-                        Invalid anchor point; \
-                        you can anchor only to a parent or a sibling; \
-                        item '#{@item.toString()}.anchors.#{@source}: #{@target}'
-                    """
-                `//</development>`
+                if process.env.NODE_ENV isnt 'production'
+                    fails = @item._parent
+                    fails &&= targetItem isnt @item._children
+                    fails &&= @item._parent isnt targetItem
+                    fails &&= @item._parent isnt targetItem._parent
+                    if fails
+                        log.error """
+                            Invalid anchor point; \
+                            you can anchor only to a parent or a sibling; \
+                            item '#{@item.toString()}.anchors.#{@source}: #{@target}'
+                        """
 
                 r = @getSourceValue(@item) + @getTargetValue(targetItem)
             else

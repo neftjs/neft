@@ -34,7 +34,7 @@ module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Spacing extends 
         defaultValue: 0
         namespace: 'spacing'
         parentConstructor: ctor
-        implementation: Impl["set#{ctor.name}ColumnSpacing"]
+        implementation: Impl["set#{ctor.__name__}ColumnSpacing"]
         developmentSetter: (val) ->
             assert.isFloat val
 
@@ -44,7 +44,7 @@ module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Spacing extends 
         defaultValue: 0
         namespace: 'spacing'
         parentConstructor: ctor
-        implementation: Impl["set#{ctor.name}RowSpacing"]
+        implementation: Impl["set#{ctor.__name__}RowSpacing"]
         developmentSetter: (val) ->
             assert.isFloat val
 

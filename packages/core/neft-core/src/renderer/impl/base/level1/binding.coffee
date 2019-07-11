@@ -55,18 +55,17 @@ module.exports = (impl) ->
                 Property binding `#{@prop}` on `#{@ctx}` has been disabled.
             """
 
-        `//<development>`
         onError: (err) ->
-            if @obj.running isnt undefined
-                shouldPrint = @obj.running isnt false
-            else if @obj.parent isnt undefined
-                shouldPrint = @obj.parent isnt null
-            else
-                shouldPrint = true
-            if shouldPrint
-                log.error "Failed property `#{@prop}` binding in style `#{@ctx}`: `#{err}`"
+            if process.env.NODE_ENV isnt 'production'
+                if @obj.running isnt undefined
+                    shouldPrint = @obj.running isnt false
+                else if @obj.parent isnt undefined
+                    shouldPrint = @obj.parent isnt null
+                else
+                    shouldPrint = true
+                if shouldPrint
+                    log.error "Failed property `#{@prop}` binding in style `#{@ctx}`: `#{err}`"
             return
-        `//</development>`
 
         destroy: ->
             # remove from the list

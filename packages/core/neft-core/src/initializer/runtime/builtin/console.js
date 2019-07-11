@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable prefer-rest-params */
 const valueToString = function (value) {
   let result

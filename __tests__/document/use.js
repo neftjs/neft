@@ -1,5 +1,4 @@
-const Struct = require('@neft/core/src/struct')
-const eventLoop = require('@neft/core/src/event-loop')
+const { Struct, eventLoop } = require('@neft/core')
 const { createView, renderParse } = require('./utils')
 
 describe('Document n-use', () => {

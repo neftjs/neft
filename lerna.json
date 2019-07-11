@@ -3,7 +3,7 @@
     "__tests__/",
     "packages/*/*"
   ],
-  "version": "0.0.1",
+  "version": "independent",
   "useWorkspaces": true,
   "npmClient": "yarn"
 }

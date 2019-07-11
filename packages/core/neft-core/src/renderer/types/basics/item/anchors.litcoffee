@@ -67,7 +67,7 @@
 
             Object.preventExtensions @
 
-        implMethod = Impl["set#{ctor.name}Anchor"]
+        implMethod = Impl["set#{ctor.__name__}Anchor"]
         stringValuesCache = Object.create null
         createAnchorProp = (type, opts=0, getter) ->
             internalProp = "_#{type}"
@@ -81,35 +81,34 @@
                     val = arr
 
                 if val?
-                    `//<development>`
-                    allowedLines = if H_LINES[type] then H_LINES else V_LINES
+                    if process.env.NODE_ENV isnt 'production'
+                        allowedLines = if H_LINES[type] then H_LINES else V_LINES
 
-                    unless Array.isArray(val) and val.length > 0 and val.length < 3
-                        log.error "`anchors.#{type}` expects an array; `'#{val}'` given"
+                        unless Array.isArray(val) and val.length > 0 and val.length < 3
+                            log.error "`anchors.#{type}` expects an array; `'#{val}'` given"
 
-                    [target, line] = val
+                        [target, line] = val
 
-                    if opts & ONLY_TARGET_ALLOW
-                        unless line is undefined
-                            log.error "`anchors.#{type}` expects only a target to be defined; " +
-                              "`'#{val}'` given;\npointing to the line is not required " +
-                              "(e.g `anchors.centerIn = parent`)"
+                        if opts & ONLY_TARGET_ALLOW
+                            unless line is undefined
+                                log.error "`anchors.#{type}` expects only a target to be defined; " +
+                                "`'#{val}'` given;\npointing to the line is not required " +
+                                "(e.g `anchors.centerIn = parent`)"
 
-                    if opts & LINE_REQ
-                        unless H_LINES[line] or V_LINES[line]
-                            log.error "`anchors.#{type}` expects an anchor line to be defined; " +
-                              "`'#{val}'` given;\nuse one of the `#{Object.keys allowedLines}`"
+                        if opts & LINE_REQ
+                            unless H_LINES[line] or V_LINES[line]
+                                log.error "`anchors.#{type}` expects an anchor line to be defined; " +
+                                "`'#{val}'` given;\nuse one of the `#{Object.keys allowedLines}`"
 
-                    if opts & H_LINE_REQ
-                        unless H_LINES[line]
-                            log.error "`anchors.#{type}` can't be anchored to the vertical edge; " +
-                              "`'#{val}'` given;\nuse one of the `#{Object.keys H_LINES}`"
+                        if opts & H_LINE_REQ
+                            unless H_LINES[line]
+                                log.error "`anchors.#{type}` can't be anchored to the vertical edge; " +
+                                "`'#{val}'` given;\nuse one of the `#{Object.keys H_LINES}`"
 
-                    if opts & V_LINE_REQ
-                        unless V_LINES[line]
-                            log.error "`anchors.#{type}` can't be anchored to the horizontal edge; " +
-                              "`'#{val}'` given;\nuse one of the `#{Object.keys V_LINES}`"
-                    `//</development>`
+                        if opts & V_LINE_REQ
+                            unless V_LINES[line]
+                                log.error "`anchors.#{type}` can't be anchored to the horizontal edge; " +
+                                "`'#{val}'` given;\nuse one of the `#{Object.keys V_LINES}`"
 
                     if val[0] is 'this'
                         val[0] = @

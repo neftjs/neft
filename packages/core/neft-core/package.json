@@ -1,9 +1,21 @@
 {
   "name": "@neft/core",
   "version": "0.0.1",
-  "source": true,
+  "main": "./lib/index.js",
+  "engines": {
+    "node": "0"
+  },
+  "source": {
+    "./lib/**": "./src/$1"
+  },
+  "scripts": {
+    "build": "build-neft-module",
+    "prepublishOnly": "yarn build"
+  },
   "dependencies": {
-    "chalk": "^2.4.1",
-    "coffee-script": "^1.12.7"
+    "chalk": "^2.4.1"
+  },
+  "devDependencies": {
+    "@neft/modules-builder": "0.0.1"
   }
 }

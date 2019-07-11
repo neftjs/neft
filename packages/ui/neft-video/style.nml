@@ -1,0 +1,6 @@
+const { Video } = require('@neft/video')
+
+@Video video {
+  width: 304
+  height: 171
+}

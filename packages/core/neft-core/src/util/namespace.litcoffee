@@ -120,10 +120,7 @@ Checks whether the given string references into an array according
 to the notation in the utils.get() function.
 
         isStringArray = utils.isStringArray = (arg) ->
-            null
-            `//<development>`
-            if typeof arg isnt 'string'
+            if process.env.NODE_ENV isnt 'production' and typeof arg isnt 'string'
                 throw new Error 'utils.isStringArray value must be a string'
-            `//</development>`
 
             ///\[\]$///.test arg

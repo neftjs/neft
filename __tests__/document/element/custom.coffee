@@ -1,9 +1,6 @@
-Element = require '@neft/core/src/document/element'
-{Item} = require '@neft/core/src/renderer'
+{util, Element, Item} = require('@neft/core')
 
-{util} = require('@neft/core')
-
-fromHTML = require '@neft/compiler-document/xhtml-parser'
+fromHTML = require('@neft/compiler-document').parseToAst
 
 class CustomInput extends Element.Tag.CustomTag
     @registerAs 'custom-input'
