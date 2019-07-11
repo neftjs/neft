@@ -16,7 +16,6 @@
 
         class Native extends Renderer.Item
             @__name__ = 'Native'
-            @__path__ = 'Renderer.Native'
 
 ## *Native* Native.New([*Object* options])
 
@@ -136,7 +135,7 @@ where `XYZ` is the given name.
                         val
 
             @defineProperty = (config) ->
-                itemName = @name
+                itemName = @__name__
                 properties = @_properties ?= []
                 config = util.clone config
 
@@ -189,8 +188,6 @@ where `XYZ` is the given name.
                 itemUtils.defineProperty config
 
             @setPropertyValue = itemUtils.setPropertyValue
-            @addTypeImplementation = (impl) ->
-                Impl.addTypeImplementation @constructor.name, impl
 
 ## *Native* Native::constructor() : *Item*
 
@@ -236,7 +233,7 @@ where `XYZ` is the given name.
             set: (name, val) ->
                 assert.isString name, "NativeItem.set name must be a string, but #{name} given"
 
-                ctorName = util.capitalize @constructor.name
+                ctorName = util.capitalize @constructor.__name__
                 id = @_impl.id
                 name = util.capitalize name
 
@@ -253,7 +250,7 @@ where `XYZ` is the given name.
             call: (name, args...) ->
                 assert.isString name, "NativeItem.call name must be a string, but #{name} given"
 
-                ctorName = util.capitalize @constructor.name
+                ctorName = util.capitalize @constructor.__name__
                 id = @_impl.id
                 name = util.capitalize name
 
@@ -298,7 +295,7 @@ where `XYZ` is the given name.
                 name = util.capitalize name
 
                 if IS_NATIVE
-                    ctorName = util.capitalize @constructor.name
+                    ctorName = util.capitalize @constructor.__name__
                     eventName = "rendererOn#{ctorName}#{name}"
 
                     unless listeners = eventListeners[eventName]

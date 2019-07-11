@@ -42,7 +42,7 @@ module.exports = (impl) ->
     create: (data) ->
         if data.id is -1
             pushAction outActions.CREATE_NATIVE_ITEM
-            pushString @constructor.name
+            pushString @constructor.__name__
             data.id = bridge.getId @
 
         @pointer.onPress.connect onPointerPress, @

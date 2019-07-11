@@ -1,3 +1,3 @@
-const { TextInput } = require('./index')
+const { TextInput } = require('@neft/input')
 
 @TextInput input[type="text"] {}

@@ -11,7 +11,6 @@ assert = assert.scope 'View.Element'
 
 class Element extends SignalsEmitter
     @__name__ = 'Element'
-    @__path__ = 'File.Element'
 
     @JSON_CTORS = []
     JSON_CTOR_ID = @JSON_CTOR_ID = @JSON_CTORS.push(Element) - 1
@@ -48,10 +47,8 @@ class Element extends SignalsEmitter
         @_inWatchers = null
         @_checkWatchers = 0
 
-        `//<development>`
-        if @constructor is Element
+        if process.env.NODE_ENV isnt 'production' and @constructor is Element
             Object.seal @
-        `//</development>`
 
     opts = utils.CONFIGURABLE
     utils.defineProperty @::, 'index', opts, ->

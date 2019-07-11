@@ -17,42 +17,44 @@ const reader = {
   strings: null,
   stringsIndex: 0,
   getBoolean() {
-    // <development>;
-    if (this.booleansIndex >= this.booleans.length) {
-      throw new Error(`Index ${this.booleansIndex} out of range for native booleans array`)
+    if (process.env.NODE_ENV === 'development') {
+      if (this.booleansIndex >= this.booleans.length) {
+        throw new Error(`Index ${this.booleansIndex} out of range for native booleans array`)
+      }
     }
-    // </development>;
     return this.booleans[this.booleansIndex++]
   },
   getInteger() {
-    // <development>;
-    if (this.integersIndex >= this.integers.length) {
-      throw new Error(`Index ${this.booleansIndex} out of range for native integers array`)
+    if (process.env.NODE_ENV === 'development') {
+      if (this.integersIndex >= this.integers.length) {
+        throw new Error(`Index ${this.booleansIndex} out of range for native integers array`)
+      }
     }
-    // </development>;
     return this.integers[this.integersIndex++]
   },
   getFloat() {
-    // <development>;
-    if (this.floatsIndex >= this.floats.length) {
-      throw new Error(`Index ${this.booleansIndex} out of range for native floats array`)
+    if (process.env.NODE_ENV === 'development') {
+      if (this.floatsIndex >= this.floats.length) {
+        throw new Error(`Index ${this.booleansIndex} out of range for native floats array`)
+      }
     }
-    // </development>;
     return this.floats[this.floatsIndex++]
   },
   getString() {
-    // <development>;
-    if (this.stringsIndex >= this.strings.length) {
-      throw new Error(`Index ${this.booleansIndex} out of range for native strings array`)
+    if (process.env.NODE_ENV === 'development') {
+      if (this.stringsIndex >= this.strings.length) {
+        throw new Error(`Index ${this.booleansIndex} out of range for native strings array`)
+      }
     }
-    // </development>;
     return this.strings[this.stringsIndex++]
   },
 }
 
 Object.seal(reader)
 
-exports.onData = function (actions, booleans, integers, floats, strings) {
+const bridge = {}
+
+bridge.onData = function (actions, booleans, integers, floats, strings) {
   reader.booleans = booleans
   reader.booleansIndex = 0
   reader.integers = integers
@@ -72,35 +74,31 @@ exports.onData = function (actions, booleans, integers, floats, strings) {
     }
   })
   eventLoop.release()
-  exports.sendData()
+  bridge.sendData()
 }
 
-exports.addActionListener = function (action, listener) {
+bridge.addActionListener = function (action, listener) {
   assert.isInteger(action)
   assert.isFunction(listener)
   assert.isNotDefined(listeners[action], `action '${action}' already has a listener`)
   listeners[action] = listener
 }
 
-exports.sendData = function () {}
+bridge.sendData = function () {}
 
-exports.pushAction = function () {}
+bridge.pushAction = function () {}
 
-exports.pushBoolean = function () {}
+bridge.pushBoolean = function () {}
 
-exports.pushInteger = function () {}
+bridge.pushInteger = function () {}
 
-exports.pushFloat = function () {}
+bridge.pushFloat = function () {}
 
-exports.pushString = function () {}
+bridge.pushString = function () {}
 
-exports.registerNativeFunction = function () {}
+bridge.registerNativeFunction = function () {}
 
-exports.publishNativeEvent = function () {}
-
-exports.sendDataInLock = function () {
-  return exports.sendData()
-}
+bridge.publishNativeEvent = function () {}
 
 let impl
 
@@ -121,42 +119,53 @@ if (process.env.NEFT_BROWSER) {
 }
 
 if (impl != null) {
-  utils.merge(exports, impl(exports))
+  utils.merge(bridge, impl(bridge))
 }
 
-if (process.env.NODE_ENV !== 'production') {
-  exports.pushAction = (function (_super) {
+if (process.env.NODE_ENV === 'development') {
+  bridge.pushAction = (function (_super) {
     return function (val) {
       assert.isInteger(val, `integer action expected, but '${val}' given`)
       _super(val)
     }
-  }(exports.pushAction))
+  }(bridge.pushAction))
 
-  exports.pushBoolean = (function (_super) {
+  bridge.pushBoolean = (function (_super) {
     return function (val) {
       assert.isBoolean(val, `boolean expected, but '${val}' given`)
       _super(val)
     }
-  }(exports.pushBoolean))
+  }(bridge.pushBoolean))
 
-  exports.pushInteger = (function (_super) {
+  bridge.pushInteger = (function (_super) {
     return function (val) {
       assert.isInteger(val, `integer expected, but '${val}' given`)
       _super(val)
     }
-  }(exports.pushInteger))
+  }(bridge.pushInteger))
 
-  exports.pushFloat = (function (_super) {
+  bridge.pushFloat = (function (_super) {
     return function (val) {
       assert.isFloat(val, `float expected, but '${val}' given`)
       _super(val)
     }
-  }(exports.pushFloat))
+  }(bridge.pushFloat))
 
-  exports.pushString = (function (_super) {
+  bridge.pushString = (function (_super) {
     return function (val) {
       assert.isString(val, `string expected, but '${val}' given`)
       _super(val)
     }
-  }(exports.pushString))
+  }(bridge.pushString))
 }
+
+exports.onData = bridge.onData
+exports.addActionListener = bridge.addActionListener
+exports.sendData = bridge.sendData
+exports.registerNativeFunction = bridge.registerNativeFunction
+exports.publishNativeEvent = bridge.publishNativeEvent
+exports.pushAction = bridge.pushAction
+exports.pushBoolean = bridge.pushBoolean
+exports.pushInteger = bridge.pushInteger
+exports.pushFloat = bridge.pushFloat
+exports.pushString = bridge.pushString

@@ -3,7 +3,6 @@ const { NativeClientBinding, NativeServerBinding } = require('./native')
 const { SignalDispatcher, SignalsEmitter } = require('./signal')
 const Resources = require('./resources')
 const Renderer = require('./renderer')
-const log = require('./log')
 const Document = require('./document')
 const Element = require('./document/element')
 
@@ -12,10 +11,12 @@ exports.NativeClientBinding = NativeClientBinding
 exports.NativeServerBinding = NativeServerBinding
 
 // utilities
-exports.logger = log
+exports.logger = require('./log')
 exports.util = require('./util')
+exports.assert = require('./assert')
 exports.Struct = require('./struct')
 exports.ObservableArray = require('./observable-array')
+exports.eventLoop = require('./event-loop')
 
 // signal
 exports.SignalDispatcher = SignalDispatcher
@@ -30,6 +31,7 @@ exports.CustomTag = Element.Tag.CustomTag
 exports.render = render
 exports.Renderer = Renderer
 exports.loadFont = Renderer.loadFont
+exports.Item = Renderer.Item
 exports.NativeStyleItem = Renderer.Native
 exports.device = Renderer.device
 exports.screen = Renderer.screen

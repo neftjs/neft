@@ -335,7 +335,7 @@ Throws an error if the given *object* is not an instance of the given *construct
 
     assert.instanceOf = (val, ctor, msg) ->
         unless val instanceof ctor
-            ctorName = ctor.__path__ or ctor.__name__ or ctor.name or ctor
+            ctorName = ctor.__name__ or ctor.name or ctor
             @fail val, ctorName, msg, 'instanceof', assert.instanceOf
 
 ## assert.notInstanceOf(*Any* object, *Function* constructor, [*String* message])
@@ -344,7 +344,7 @@ Throws an error if the given *object* is an instance of the given *constructor*.
 
     assert.notInstanceOf = (val, ctor, msg) ->
         if val instanceof ctor
-            ctorName = ctor.__path__ or ctor.__name__ or ctor.name or ctor
+            ctorName = ctor.__name__ or ctor.name or ctor
             @fail val, ctorName, msg, 'instanceof', assert.notInstanceOf
 
 ## assert.lengthOf(*Any* value, *Integer* length, [*String* message])

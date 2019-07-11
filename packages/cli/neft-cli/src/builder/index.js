@@ -134,6 +134,7 @@ exports.bundle = async (target, {
     minify: production,
     target: 'browser',
     bundleNodeModules: true,
+    sourceMaps: false,
     logLevel: 2,
   }
   const defaultStyles = await getDefaultStyles({ extensions })

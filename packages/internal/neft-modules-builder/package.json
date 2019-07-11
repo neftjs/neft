@@ -1,0 +1,13 @@
+{
+  "name": "@neft/modules-builder",
+  "version": "0.0.1",
+  "main": "./src",
+  "bin": {
+    "build-neft-module": "bin/build-neft-module.js"
+  },
+  "dependencies": {
+    "fs-extra": "^8.1.0",
+    "parcel-bundler": "https://github.com/neftjs/parcel-bundler.git#1.12.3-neft.2",
+    "parcel-plugin-coffee-script": "0.0.1"
+  }
+}

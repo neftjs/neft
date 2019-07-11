@@ -10,7 +10,6 @@ log = log.scope 'Renderer', 'Image'
 
 module.exports = (Renderer, Impl, itemUtils) -> class Image extends Renderer.Item
     @__name__ = 'Image'
-    @__path__ = 'Renderer.Image'
 
     @New = (opts) ->
         item = new Image

@@ -63,7 +63,7 @@ module.exports = (Renderer) ->
                 obj = Object.getPrototypeOf(obj)
                 unless obj
                     break
-                type = obj.constructor.name
+                type = obj.constructor.__name__
 
         object._impl = impl.Types[type]?.createData?() or {}
         object._impl.bindings ?= {}
@@ -74,7 +74,7 @@ module.exports = (Renderer) ->
             obj = object
             while type and not impl.Types[type]?
                 obj = Object.getPrototypeOf(obj)
-                type = obj.constructor.name
+                type = obj.constructor.__name__
 
             impl.Types[type]?.create?.call object, object._impl
 

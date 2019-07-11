@@ -12,7 +12,6 @@ module.exports = (Element) -> class Tag extends Element
     @Props = Props = require('./tag/props') @
 
     @__name__ = 'Tag'
-    @__path__ = 'File.Element.Tag'
 
     JSON_CTOR_ID = @JSON_CTOR_ID = Element.JSON_CTORS.push(Tag) - 1
 
@@ -50,10 +49,8 @@ module.exports = (Element) -> class Tag extends Element
         @children = []
         @props = new Props @
 
-        `//<development>`
-        if @constructor is Tag
+        if process.env.NODE_ENV isnt 'production' and @constructor is Tag
             Object.seal @
-        `//</development>`
 
     SignalsEmitter.createSignal @, 'onChildrenChange'
 

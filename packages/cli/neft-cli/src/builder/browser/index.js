@@ -20,21 +20,23 @@ exports.getImports = async ({ target, extensions }) => {
   const imports = []
 
   await Promise.all(extensions.map(async ({ name }) => {
-    const indexTarget = `${name}/native/${target}`
-    try {
-      require.resolve(indexTarget)
-      imports.push(indexTarget)
-    } catch (error) {
-      // NOP
-    }
+    const possibleImports = [
+      `${name}/lib/native/${target}`,
+      `${name}/lib/native/browser`,
+      `${name}/native/${target}`,
+      `${name}/native/browser`,
+    ]
 
-    const indexBrowser = `${name}/native/browser`
-    try {
-      require.resolve(indexBrowser)
-      imports.push(indexBrowser)
-    } catch (error) {
-      // NOP
-    }
+    possibleImports.find((possibleImport) => {
+      try {
+        require.resolve(possibleImport)
+        imports.push(possibleImport)
+        return true
+      } catch (error) {
+        // NOP
+      }
+      return false
+    })
   }))
 
   return imports

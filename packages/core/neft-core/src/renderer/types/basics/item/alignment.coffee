@@ -26,7 +26,7 @@ module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Alignment extend
         defaultValue: 'left'
         namespace: 'alignment'
         parentConstructor: ctor
-        implementation: Impl["set#{ctor.name}AlignmentHorizontal"]
+        implementation: Impl["set#{ctor.__name__}AlignmentHorizontal"]
         developmentSetter: (val) ->
             assert.isString val
         setter: (_super) -> (val='left') ->
@@ -38,7 +38,7 @@ module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Alignment extend
         defaultValue: 'top'
         namespace: 'alignment'
         parentConstructor: ctor
-        implementation: Impl["set#{ctor.name}AlignmentVertical"]
+        implementation: Impl["set#{ctor.__name__}AlignmentVertical"]
         developmentSetter: (val) ->
             assert.isString val
         setter: (_super) -> (val='top') ->

@@ -182,15 +182,15 @@ updateItem = (item) ->
             length = lastColumn + 1
             perCell = (gridWidth + freeWidthSpace) / length
 
-            update = true
-            while update
-                update = false
+            updateCell = true
+            while updateCell
+                updateCell = false
                 for i in [0..lastColumn] by 1
                     if unusedFills[i] is 0 and (columnsFills[i] is 0 or columnsSizes[i] > perCell)
                         length--
                         perCell -= (columnsSizes[i] - perCell) / length
                         unusedFills[i] = 1
-                        update = true
+                        updateCell = true
 
             for i in [0..lastColumn] by 1
                 if unusedFills[i] is 0
@@ -204,15 +204,15 @@ updateItem = (item) ->
             length = lastRow+1
             perCell = (gridHeight + freeHeightSpace) / length
 
-            update = true
-            while update
-                update = false
+            updateCell = true
+            while updateCell
+                updateCell = false
                 for i in [0..lastRow] by 1
                     if unusedFills[i] is 0 and (rowsFills[i] is 0 or rowsSizes[i] > perCell)
                         length--
                         perCell -= (rowsSizes[i] - perCell) / length
                         unusedFills[i] = 1
-                        update = true
+                        updateCell = true
 
             for i in [0..lastRow] by 1
                 if unusedFills[i] is 0

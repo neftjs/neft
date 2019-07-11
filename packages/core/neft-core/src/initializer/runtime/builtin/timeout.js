@@ -1,3 +1,4 @@
+/* eslint-disable prefer-rest-params */
 const shots = Object.create(null)
 
 exports.registerTimeoutCallback = (callback) => {
@@ -10,7 +11,7 @@ exports.registerTimeoutCallback = (callback) => {
   })
 }
 
-exports.setTimeout = shot => (func, delay, arg1, arg2, arg3) => {
+exports.setTimeout = shot => function (func, delay, arg1, arg2, arg3) {
   if (typeof func !== 'function') {
     throw new TypeError('callback argument must be a function')
   }

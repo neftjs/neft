@@ -87,7 +87,7 @@ exports.callNativeFunction = function (name, args) {
         bridge.pushInteger(EVENT_NULL_TYPE)
     }
   })
-  if (!pushPending && process.env.NEFT_BROWSER) {
+  if (!pushPending && !process.env.NEFT_NATIVE) {
     pushPending = true
     setImmediate(sendData)
   }

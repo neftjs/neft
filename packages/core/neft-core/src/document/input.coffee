@@ -22,11 +22,10 @@ class DocumentBinding extends Binding
         if item is 'this'
             @ctx
 
-    `//<development>`
     onError: (err) ->
-        log.error "Failed `#{@input.text}` binding in file `#{@input.document.path}`: `#{err}`"
+        if process.env.NODE_ENV isnt 'production'
+            log.error "Failed `#{@input.text}` binding in file `#{@input.document.path}`: `#{err}`"
         return
-    `//</development>`
 
     update: ->
         # disable updates for reverted files

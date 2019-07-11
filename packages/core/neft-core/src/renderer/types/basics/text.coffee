@@ -10,7 +10,6 @@ log = log.scope 'Renderer', 'Text'
 module.exports = (Renderer, Impl, itemUtils) ->
     class Text extends Renderer.Item
         @__name__ = 'Text'
-        @__path__ = 'Renderer.Text'
 
         @SUPPORTED_HTML_TAGS =
             b: true

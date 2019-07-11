@@ -1,5 +1,5 @@
 const { setImmediate, callInLock } = require('../../../event-loop')
-const { sendDataInLock } = require('../../../native/bridge')
+const { sendData } = require('../../../native/bridge')
 
 const queue = []
 let requested = false
@@ -11,10 +11,11 @@ const callRequests = () => {
 }
 
 const onAnimationFrame = () => {
-  if (!requested) return
-  requested = false
-  setImmediate(callRequests)
-  sendDataInLock()
+  if (requested) {
+    requested = false
+    setImmediate(callRequests)
+  }
+  sendData()
 }
 
 exports.requestAnimationFrame = nativeRequestAnimationFrame => function (callback) {

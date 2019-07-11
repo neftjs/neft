@@ -9,7 +9,7 @@ const styleCompiler = require('@neft/compiler-style')
 // for the compiled .neft file
 let defaultStyles
 process.env.NEFT_PARCEL_DEFAULT_STYLES = JSON.stringify((() => {
-  const indexNml = path.join(require.resolve('@neft/default-styles'), '../style.nml')
+  const indexNml = path.join(require.resolve('@neft/default-styles'), '../../style.nml')
   const file = fs.readFileSync(indexNml, 'utf-8')
   const bundle = styleCompiler.bundle(file, {
     resourcePath: '@neft/default-styles',

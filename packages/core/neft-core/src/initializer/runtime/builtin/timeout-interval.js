@@ -1,3 +1,4 @@
+/* eslint-disable prefer-rest-params */
 let lastId = 0
 const timers = Object.create(null)
 

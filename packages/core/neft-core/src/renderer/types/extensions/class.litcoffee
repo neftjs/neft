@@ -488,11 +488,10 @@ Grid {
                         object = getObjectByPath item, path
 
                     if not object or not (lastPath of object)
-                        `//<development>`
-                        log.error """
-                            Attribute '#{attr}' doesn't exist in '#{item}'
-                        """
-                        `//</development>`
+                        if process.env.NODE_ENV isnt 'production'
+                            log.error """
+                                Attribute '#{attr}' doesn't exist in '#{item}'
+                            """
                         continue
 
                     if bindings[attr]

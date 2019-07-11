@@ -194,15 +194,15 @@ updateItem = (item) ->
         unusedFills = getCleanArray unusedFills, length
         perCell = (flowHeight + freeHeightSpace) / length
 
-        update = true
-        while update
-            update = false
+        updateCell = true
+        while updateCell
+            updateCell = false
             for i in [0..currentRow] by 1
                 if unusedFills[i] is 0 and (rowsFills[i] is 0 or rowsHeight[i] > perCell)
                     length--
                     perCell -= (rowsHeight[i] - perCell) / length
                     unusedFills[i] = 1
-                    update = true
+                    updateCell = true
 
         yShift = currentYShift = 0
         nextChild = firstChild

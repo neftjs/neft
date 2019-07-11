@@ -1,8 +1,3 @@
-SOURCES = packages __tests__
-
-bootstrap:
-	yarn lerna bootstrap
-
 test:
 	yarn test
 
@@ -16,10 +11,13 @@ lint-fix:
 	yarn lint --fix
 
 publish-to-verdaccio:
-	npx lerna exec -- npm unpublish --registry http://localhost:4873 -f
-	npx lerna exec -- npm publish --registry http://localhost:4873
+	yarn lerna exec -- npm unpublish --registry http://localhost:4873 -f
+	yarn lerna exec -- npm publish --registry http://localhost:4873
 
 generate-docs:
 	(cd ./packages/docs/editor && yarn bundle)
 	(cd ./packages/docs/editor-view-app && yarn neft build html)
 	node ./packages/docs/generator
+
+build-packages:
+	yarn lerna run build --stream --no-sort --concurrency=1

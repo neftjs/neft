@@ -13,7 +13,7 @@ module.exports = (Renderer, Impl) ->
     NOP = ->
 
     getObjAsString = (item) ->
-        ctorName = item.constructor.name
+        ctorName = item.constructor.__name__
         attrs = []
         if item.id
             attrs.push "id=#{item.id}"
@@ -112,7 +112,7 @@ module.exports = (Renderer, Impl) ->
             object
 
         @initialize = (object, opts) ->
-            Impl.initializeObject object, object.constructor.name
+            Impl.initializeObject object, object.constructor.__name__
             if opts
                 UtilsObject.setOpts object, opts
             return
@@ -121,9 +121,8 @@ module.exports = (Renderer, Impl) ->
             SignalsEmitter.call @
 
             @id = ''
-            `//<development>`
-            @_path = ''
-            `//</development>`
+            if process.env.NODE_ENV isnt 'production'
+                @_path = ''
             @_impl = null
             @_bindings = null
             unless @ instanceof Renderer.Class
@@ -131,20 +130,19 @@ module.exports = (Renderer, Impl) ->
                 @_classQueue = []
                 @_extensions = []
 
-            Impl.createObject @, @constructor.name
+            Impl.createObject @, @constructor.__name__
 
         createBinding: (prop, val, ctx = @) ->
             assert.isString prop
             assert.isArray val if val?
 
-            `//<development>`
-            unless prop of @
-                log.warn """
-                    Binding on the '#{prop}' property can't be created, \
-                    because this object (#{@toString()}) doesn't have such property
-                """
-                return
-            `//</development>`
+            if process.env.NODE_ENV isnt 'production'
+                unless prop of @
+                    log.warn """
+                        Binding on the '#{prop}' property can't be created, \
+                        because this object (#{@toString()}) doesn't have such property
+                    """
+                    return
 
             if not val and (not @_bindings or not @_bindings.hasOwnProperty(prop))
                 return
@@ -232,9 +230,8 @@ module.exports = (Renderer, Impl) ->
 
         {name, namespace, valueConstructor, implementation, implementationValue} = opts
 
-        `//<development>`
-        {developmentSetter} = opts
-        `//</development>`
+        if process.env.NODE_ENV isnt 'production'
+            {developmentSetter} = opts
 
         prototype = opts.object or opts.constructor::
         customGetter = opts.getter
@@ -259,10 +256,8 @@ module.exports = (Renderer, Impl) ->
 
         # setter
         if valueConstructor
-            if developmentSetter
-                `//<development>`
+            if process.env.NODE_ENV isnt 'production' and developmentSetter
                 propSetter = basicSetter = developmentSetter
-                `//</development>`
             else
                 propSetter = basicSetter = NOP
         else if namespace?
@@ -271,10 +266,8 @@ module.exports = (Renderer, Impl) ->
 
             func = do ->
                 funcStr = "return function(val){\n"
-                `//<development>`
-                if developmentSetter?
+                if process.env.NODE_ENV isnt 'production' and developmentSetter?
                     funcStr += "debug.call(this, val);\n"
-                `//</development>`
                 funcStr += "var oldVal = this.#{internalName};\n"
                 funcStr += "if (oldVal === val) return;\n"
                 if implementation?
@@ -292,10 +285,8 @@ module.exports = (Renderer, Impl) ->
         else
             func = do ->
                 funcStr = "return function(val){\n"
-                `//<development>`
-                if developmentSetter?
+                if process.env.NODE_ENV isnt 'production' and developmentSetter?
                     funcStr += "debug.call(this, val);\n"
-                `//</development>`
                 funcStr += "var oldVal = this.#{internalName};\n"
                 funcStr += "if (oldVal === val) return;\n"
                 if implementation?

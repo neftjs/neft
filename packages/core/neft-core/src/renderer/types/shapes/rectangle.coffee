@@ -25,7 +25,6 @@ module.exports = (Renderer, Impl, itemUtils) ->
 
     class Rectangle extends Renderer.Item
         @__name__ = 'Rectangle'
-        @__path__ = 'Renderer.Rectangle'
 
         @New = (opts) ->
             item = new Rectangle

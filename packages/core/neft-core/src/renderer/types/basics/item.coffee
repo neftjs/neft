@@ -11,7 +11,6 @@ assert = assert.scope 'Renderer.Item'
 
 module.exports = (Renderer, Impl, itemUtils) -> class Item extends itemUtils.Object
     @__name__ = 'Item'
-    @__path__ = 'Renderer.Item'
 
     DocElement = require '../../../document/element'
 
@@ -281,20 +280,19 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends itemUtils.Obj
             @_parent = val
             insertItemInImpl @
 
-            `//<development>`
-            assert.is @nextSibling, null
-            if val
-                assert.is val.children.lastChild, @
-                assert.isDefined val.children.firstChild
-                assert.isDefined val.children.lastChild
-                assert.isDefined val.children.topChild
-                assert.isDefined val.children.bottomChild
-            if old and old.children.length is 0
-                assert.isNotDefined old.children.firstChild
-                assert.isNotDefined old.children.lastChild
-                assert.isNotDefined old.children.topChild
-                assert.isNotDefined old.children.bottomChild
-            `//</development>`
+            if process.env.NODE_ENV isnt 'production'
+                assert.is @nextSibling, null
+                if val
+                    assert.is val.children.lastChild, @
+                    assert.isDefined val.children.firstChild
+                    assert.isDefined val.children.lastChild
+                    assert.isDefined val.children.topChild
+                    assert.isDefined val.children.bottomChild
+                if old and old.children.length is 0
+                    assert.isNotDefined old.children.firstChild
+                    assert.isNotDefined old.children.lastChild
+                    assert.isNotDefined old.children.topChild
+                    assert.isNotDefined old.children.bottomChild
 
             # signals
             if old isnt null
@@ -488,20 +486,19 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends itemUtils.Obj
         # implementation
         insertItemInImpl @
 
-        `//<development>`
-        assert.is @_nextSibling, val
-        assert.is @_parent, newParent
-        if val
-            assert.is @_parent, val._parent
-        if @_previousSibling
-            assert.is @_previousSibling._nextSibling, @
-        if @_nextSibling
-            assert.is @_nextSibling._previousSibling, @
-        if oldPreviousSibling
-            assert.is oldPreviousSibling._nextSibling, oldNextSibling
-        if oldNextSibling
-            assert.is oldNextSibling._previousSibling, oldPreviousSibling
-        `//</development>`
+        if process.env.NODE_ENV isnt 'production'
+            assert.is @_nextSibling, val
+            assert.is @_parent, newParent
+            if val
+                assert.is @_parent, val._parent
+            if @_previousSibling
+                assert.is @_previousSibling._nextSibling, @
+            if @_nextSibling
+                assert.is @_nextSibling._previousSibling, @
+            if oldPreviousSibling
+                assert.is oldPreviousSibling._nextSibling, oldNextSibling
+            if oldNextSibling
+                assert.is oldNextSibling._previousSibling, oldPreviousSibling
 
         # children signal
         if oldParent isnt newParent
@@ -687,16 +684,15 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends itemUtils.Obj
             if oldAboveSibling isnt @_aboveSibling
                 insertItemInImpl @
 
-            `//<development>`
-            assert.isNot @_belowSibling, @
-            assert.isNot @_belowSibling?._belowSibling, @
-            assert.isNot @_aboveSibling, @
-            assert.isNot @_aboveSibling?._aboveSibling, @
-            if @_belowSibling
-                assert.is @_belowSibling._aboveSibling, @
-            if @_aboveSibling
-                assert.is @_aboveSibling._belowSibling, @
-            `//</development>`
+            if process.env.NODE_ENV isnt 'production'
+                assert.isNot @_belowSibling, @
+                assert.isNot @_belowSibling?._belowSibling, @
+                assert.isNot @_aboveSibling, @
+                assert.isNot @_aboveSibling?._aboveSibling, @
+                if @_belowSibling
+                    assert.is @_belowSibling._aboveSibling, @
+                if @_aboveSibling
+                    assert.is @_aboveSibling._belowSibling, @
             return
 
     itemUtils.defineProperty
