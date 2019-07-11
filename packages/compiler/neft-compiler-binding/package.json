@@ -1,6 +1,6 @@
 {
   "name": "@neft/compiler-binding",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.0",
   "main": "./src/index.js",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",

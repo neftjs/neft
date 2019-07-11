@@ -1,12 +1,12 @@
 {
   "name": "@neft/compiler-style",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.0",
   "main": "./src",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
   "dependencies": {
-    "@neft/compiler-binding": "0.0.1",
-    "@neft/core": "0.0.1",
+    "@neft/compiler-binding": "^1.0.0-alpha.0",
+    "@neft/core": "^1.0.0-alpha.0",
     "pegjs": "^0.10.0"
   }
 }

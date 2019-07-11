@@ -1,6 +1,6 @@
 {
   "name": "@neft/deep-linking",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.0",
   "main": "./lib/index.js",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
@@ -15,9 +15,9 @@
     "prepublishOnly": "yarn build"
   },
   "dependencies": {
-    "@neft/core": "0.0.1"
+    "@neft/core": "^1.0.0-alpha.0"
   },
   "devDependencies": {
-    "@neft/modules-builder": "0.0.1"
+    "@neft/modules-builder": "^1.0.0-alpha.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "parcel-plugin-coffee-script",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.0",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
   "dependencies": {
