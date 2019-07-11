@@ -4,9 +4,13 @@
   "main": "./src/index.js",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "acorn": "^6.1.1",
     "acorn-walk": "^6.1.1",
     "astring": "^1.4.0"
-  }
+  },
+  "gitHead": "9d14395fe2f6ff003da37f358dbfee354327f7ca"
 }

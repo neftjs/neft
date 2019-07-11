@@ -4,6 +4,9 @@
   "main": "./src",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "build-neft-module": "bin/build-neft-module.js"
   },
@@ -11,5 +14,6 @@
     "fs-extra": "^8.1.0",
     "parcel-bundler": "https://github.com/neftjs/parcel-bundler.git#1.12.3-neft.2",
     "parcel-plugin-coffee-script": "^1.0.0-alpha.0"
-  }
+  },
+  "gitHead": "9d14395fe2f6ff003da37f358dbfee354327f7ca"
 }

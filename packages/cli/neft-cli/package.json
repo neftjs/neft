@@ -7,6 +7,9 @@
   },
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@neft/cli-env": "^1.0.0-alpha.0",
     "@neft/compiler-style": "^1.0.0-alpha.0",
@@ -33,5 +36,6 @@
     "rimraf": "^2.6.2",
     "sharp": "^0.21.0",
     "xcode": "^1.0.0"
-  }
+  },
+  "gitHead": "9d14395fe2f6ff003da37f358dbfee354327f7ca"
 }

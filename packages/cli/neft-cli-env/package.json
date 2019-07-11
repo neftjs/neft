@@ -2,5 +2,9 @@
   "name": "@neft/cli-env",
   "version": "1.0.0-alpha.0",
   "license": "Apache-2.0",
-  "homepage": "http://neft.io"
+  "homepage": "http://neft.io",
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "9d14395fe2f6ff003da37f358dbfee354327f7ca"
 }
