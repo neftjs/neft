@@ -2,6 +2,8 @@
   "name": "@neft/compiler-binding",
   "version": "0.0.1",
   "main": "./src/index.js",
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
   "dependencies": {
     "acorn": "^6.1.1",
     "acorn-walk": "^6.1.1",

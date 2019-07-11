@@ -5,6 +5,8 @@
   "bin": {
     "neft": "bin/neft.js"
   },
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
   "dependencies": {
     "@neft/cli-env": "0.0.1",
     "@neft/compiler-style": "0.0.1",

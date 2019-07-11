@@ -2,6 +2,8 @@
   "name": "@neft/tests",
   "version": "0.0.1",
   "private": true,
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
   "dependencies": {
     "@neft/core": "^0.0.1",
     "@neft/default-styles": "^0.0.1",

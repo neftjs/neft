@@ -2,6 +2,8 @@
   "name": "@neft/storage",
   "version": "0.0.1",
   "main": "./lib/index.js",
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
   "engines": {
     "node": "0"
   },

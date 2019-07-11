@@ -1,6 +1,8 @@
 {
   "name": "@neft/parcel-plugin-neft",
   "version": "0.0.1",
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
   "dependencies": {
     "@neft/core": "0.0.1",
     "@neft/compiler-document": "0.0.1",

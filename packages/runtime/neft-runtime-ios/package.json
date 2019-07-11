@@ -1,4 +1,6 @@
 {
   "name": "@neft/runtime-ios",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io"
 }

@@ -2,6 +2,8 @@
   "name": "@neft/docs-editor-view-app",
   "version": "0.0.1",
   "private": true,
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
   "main": "./src",
   "dependencies": {
     "@neft/active-link": "^0.0.1",

@@ -2,6 +2,8 @@
   "name": "@neft/compiler-style",
   "version": "0.0.1",
   "main": "./src",
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
   "dependencies": {
     "@neft/compiler-binding": "0.0.1",
     "@neft/core": "0.0.1",

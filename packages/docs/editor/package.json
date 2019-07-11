@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "main": "./src",
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
   "scripts": {
     "bundle": "NODE_ENV=development parcel build src/index.js --no-minify"
   },
