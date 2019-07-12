@@ -1,7 +1,12 @@
 {
   "name": "@neft/core",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.0",
   "main": "./lib/index.js",
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": "0"
   },
@@ -16,6 +21,7 @@
     "chalk": "^2.4.1"
   },
   "devDependencies": {
-    "@neft/modules-builder": "0.0.1"
-  }
+    "@neft/modules-builder": "^1.0.0-alpha.0"
+  },
+  "gitHead": "9d14395fe2f6ff003da37f358dbfee354327f7ca"
 }

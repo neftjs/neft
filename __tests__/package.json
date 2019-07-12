@@ -1,14 +1,16 @@
 {
   "name": "@neft/tests",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.0",
   "private": true,
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
   "dependencies": {
-    "@neft/core": "^0.0.1",
-    "@neft/default-styles": "^0.0.1",
-    "@neft/parcel-plugin-neft": "^0.0.1",
-    "@neft/parcel-plugin-nml": "^0.0.1",
-    "@neft/compiler-document": "^0.0.1",
-    "@neft/compiler-style": "^0.0.1",
+    "@neft/compiler-document": "^1.0.0-alpha.0",
+    "@neft/compiler-style": "^1.0.0-alpha.0",
+    "@neft/core": "^1.0.0-alpha.0",
+    "@neft/default-styles": "^1.0.0-alpha.0",
+    "@neft/parcel-plugin-neft": "^1.0.0-alpha.0",
+    "@neft/parcel-plugin-nml": "^1.0.0-alpha.0",
     "slash": "^3.0.0"
   }
 }

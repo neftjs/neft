@@ -1,10 +1,16 @@
 {
   "name": "@neft/compiler-document",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.0",
   "main": "./src/index.js",
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
-    "@neft/core": "0.0.1",
-    "@neft/compiler-binding": "0.0.1",
+    "@neft/compiler-binding": "^1.0.0-alpha.0",
+    "@neft/core": "^1.0.0-alpha.0",
     "lite-html-parser": "^0.2.1"
-  }
+  },
+  "gitHead": "9d14395fe2f6ff003da37f358dbfee354327f7ca"
 }

@@ -11,6 +11,9 @@
   ],
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
+  "publishConfig": {
+    "access": "public"
+  },
   "workspaces": [
     "__tests__/",
     "packages/*/*"

@@ -1,16 +1,18 @@
 {
   "name": "@neft/docs-editor",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.0",
   "private": true,
   "main": "./src",
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
   "scripts": {
     "bundle": "NODE_ENV=development parcel build src/index.js --no-minify"
   },
   "dependencies": {
-    "@neft/core": "^0.0.1",
-    "@neft/compiler-document": "^0.0.1",
-    "@neft/compiler-style": "^0.0.1",
-    "@neft/input": "^0.0.1",
-    "parcel-plugin-coffee-script": "0.0.1"
+    "@neft/compiler-document": "^1.0.0-alpha.0",
+    "@neft/compiler-style": "^1.0.0-alpha.0",
+    "@neft/core": "^1.0.0-alpha.0",
+    "@neft/input": "^1.0.0-alpha.0",
+    "parcel-plugin-coffee-script": "^1.0.0-alpha.0"
   }
 }

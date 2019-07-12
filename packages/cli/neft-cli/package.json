@@ -1,20 +1,25 @@
 {
   "name": "@neft/cli",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.0",
   "main": "./src",
   "bin": {
     "neft": "bin/neft.js"
   },
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
-    "@neft/cli-env": "0.0.1",
-    "@neft/compiler-style": "0.0.1",
-    "@neft/core": "0.0.1",
-    "@neft/parcel-plugin-neft": "0.0.1",
-    "@neft/parcel-plugin-nml": "0.0.1",
-    "@neft/request": "0.0.1",
-    "@neft/runtime-android": "0.0.1",
-    "@neft/runtime-ios": "0.0.1",
-    "@neft/runtime-macos": "0.0.1",
+    "@neft/cli-env": "^1.0.0-alpha.0",
+    "@neft/compiler-style": "^1.0.0-alpha.0",
+    "@neft/core": "^1.0.0-alpha.0",
+    "@neft/parcel-plugin-neft": "^1.0.0-alpha.0",
+    "@neft/parcel-plugin-nml": "^1.0.0-alpha.0",
+    "@neft/request": "^1.0.0-alpha.0",
+    "@neft/runtime-android": "^1.0.0-alpha.0",
+    "@neft/runtime-ios": "^1.0.0-alpha.0",
+    "@neft/runtime-macos": "^1.0.0-alpha.0",
     "better-opn": "^0.1.4",
     "core-js": "^3.1.3",
     "fs-extra": "^7.0.0",
@@ -26,10 +31,11 @@
     "mustache": "^3.0.0",
     "npm": "^6.4.1",
     "parcel-bundler": "https://github.com/neftjs/parcel-bundler.git#1.12.3-neft.2",
-    "parcel-plugin-coffee-script": "0.0.1",
+    "parcel-plugin-coffee-script": "^1.0.0-alpha.0",
     "regenerator-runtime": "^0.13.2",
     "rimraf": "^2.6.2",
     "sharp": "^0.21.0",
     "xcode": "^1.0.0"
-  }
+  },
+  "gitHead": "9d14395fe2f6ff003da37f358dbfee354327f7ca"
 }

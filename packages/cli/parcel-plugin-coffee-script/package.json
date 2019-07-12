@@ -1,8 +1,14 @@
 {
   "name": "parcel-plugin-coffee-script",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.0",
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "coffee-script": "^1.12.7",
     "parcel-bundler": "https://github.com/neftjs/parcel-bundler.git#1.12.3-neft.2"
-  }
+  },
+  "gitHead": "9d14395fe2f6ff003da37f358dbfee354327f7ca"
 }

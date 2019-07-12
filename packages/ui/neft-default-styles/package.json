@@ -1,7 +1,12 @@
 {
   "name": "@neft/default-styles",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.0",
   "main": "./lib/index.js",
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": "0"
   },
@@ -13,9 +18,10 @@
     "prepublishOnly": "yarn build"
   },
   "dependencies": {
-    "@neft/core": "0.0.1"
+    "@neft/core": "^1.0.0-alpha.0"
   },
   "devDependencies": {
-    "@neft/modules-builder": "0.0.1"
-  }
+    "@neft/modules-builder": "^1.0.0-alpha.0"
+  },
+  "gitHead": "9d14395fe2f6ff003da37f358dbfee354327f7ca"
 }
