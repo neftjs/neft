@@ -20,6 +20,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Renderer
     itemUtils.defineProperty
         constructor: @
         name: 'paused'
+        defaultValue: false
         developmentSetter: (val) ->
             assert.isBoolean val
         setter: (_super) -> (val) ->
@@ -38,6 +39,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Renderer
     itemUtils.defineProperty
         constructor: @
         name: 'reversed'
+        defaultValue: false
         implementation: Impl.setAnimationReversed
         developmentSetter: (val) ->
             assert.isBoolean val
@@ -45,6 +47,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Renderer
     itemUtils.defineProperty
         constructor: @
         name: 'loop'
+        defaultValue: false
         implementation: Impl.setAnimationLoop
         developmentSetter: (val) ->
             assert.isBoolean val
