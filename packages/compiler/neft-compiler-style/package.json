@@ -1,6 +1,6 @@
 {
   "name": "@neft/compiler-style",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "main": "./src",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
@@ -8,8 +8,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@neft/compiler-binding": "^1.0.0-alpha.0",
-    "@neft/core": "^1.0.0-alpha.0",
+    "@neft/compiler-binding": "^1.0.0-alpha.1",
+    "@neft/core": "^1.0.0-alpha.1",
     "pegjs": "^0.10.0"
   },
   "gitHead": "9d14395fe2f6ff003da37f358dbfee354327f7ca"
