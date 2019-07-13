@@ -16,14 +16,12 @@ exports.staticDir = path.join(exports.realpath, '/static')
 exports.outputFile = 'bundle.js'
 
 exports.operations = {
-  init: true,
   build: true,
   run: true,
   clean: true,
 }
 
 exports.operationsWithoutTarget = {
-  init: true,
   clean: true,
 }
 

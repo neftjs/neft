@@ -19,7 +19,6 @@ const printHelp = () => {
   logger.log(`         <u>operation</u> = ${listToLog(possibleOperations)}`)
   logger.log(`         <u>target</u> = ${listToLog(possibleTargets)}\n`)
   logger.log('<u>operation:</u>')
-  logger.log('init       creates basic files inside your project')
   logger.log('build      builds given target without running it')
   logger.log('run        builds given target and runs it')
   logger.log('clean      removes temporary files and built targets\n')
