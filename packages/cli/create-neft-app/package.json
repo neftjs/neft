@@ -1,0 +1,19 @@
+{
+  "name": "create-neft-app",
+  "version": "1.0.0-alpha.0",
+  "main": "./src",
+  "bin": {
+    "create-neft-app": "bin/create-neft-app.js"
+  },
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
+  "engineStrict": true,
+  "engines": {
+    "node": ">8.0.0"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "fs-extra": "^8.1.0",
+    "validate-npm-package-name": "^3.0.0"
+  }
+}

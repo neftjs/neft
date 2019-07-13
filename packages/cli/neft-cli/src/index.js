@@ -1,16 +1,11 @@
 const { logger } = require('@neft/core')
 const { parseArgv } = require('./argv-parser')
-const { initialize } = require('./initializer')
 const { build } = require('./builder')
 const { run } = require('./runner')
 const { clean } = require('./cleaner')
 
 module.exports = async (argv) => {
   const { operation, target, args } = parseArgv(argv)
-
-  if (operation === 'init') {
-    initialize()
-  }
 
   if (operation === 'build' || operation === 'run') {
     try {

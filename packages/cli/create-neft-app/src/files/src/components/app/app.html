@@ -1,0 +1,33 @@
+<main>
+  <h1>Hello World!</h1>
+  <img class="logo" src="rsc:images/neft-logo" />
+</main>
+
+<style>
+main {
+  layout: 'column'
+  alignment: 'center'
+  fillWidth: true
+  fillHeight: true
+  spacing: 50
+}
+
+h1 {
+  font.pixelSize: 30
+  alignment.horizontal: 'center'
+  color: '#444'
+}
+
+.logo {
+  if (this.pointer.hover) {
+      scale: 1.5
+  }
+
+  @Transition {
+      property: 'scale'
+      animation: @NumberAnimation {
+          easing: 'OutBack'
+      }
+  }
+}
+</style>
