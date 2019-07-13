@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 const fs = require('fs').promises
-const { unlinkSync } = require('fs')
+const { unlinkSync, existsSync } = require('fs')
 const path = require('path')
 const ParcelBundler = require('parcel-bundler')
 const { logger } = require('@neft/core')
@@ -43,12 +43,16 @@ const getExtensions = () => {
       const shortName = isOfficialExtensionName(name)
         ? name.split('@neft/')[1]
         : name.split('neft-')[1]
+      let dirPath = extensionPath
+      do {
+        dirPath = path.dirname(dirPath)
+      } while (!existsSync(path.join(dirPath, 'package.json')) || !dirPath)
       try {
         result.push({
           name,
           shortName,
           path: extensionPath,
-          dirPath: path.dirname(extensionPath),
+          dirPath,
         })
       } catch (error) {
         if (error.code === 'MODULE_NOT_FOUND') {
@@ -67,7 +71,7 @@ const getExtensions = () => {
 
 const getDefaultStyles = async ({ extensions }) => {
   const styleExtensions = await Promise.all(extensions.map(async (ext) => {
-    const indexNml = path.join(path.dirname(ext.path), '/style.nml')
+    const indexNml = path.join(ext.dirPath, '/style.nml')
     try {
       const file = await fs.readFile(indexNml, 'utf-8')
       const bundle = styleCompiler.bundle(file, {
