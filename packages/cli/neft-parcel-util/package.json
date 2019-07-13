@@ -1,14 +1,14 @@
 {
   "name": "@neft/parcel-util",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@neft/cli-env": "^1.0.0-alpha.0",
-    "@neft/core": "^1.0.0-alpha.0",
+    "@neft/cli-env": "^1.0.0-alpha.1",
+    "@neft/core": "^1.0.0-alpha.1",
     "coffee-script": "^1.12.7"
   },
   "gitHead": "9d14395fe2f6ff003da37f358dbfee354327f7ca"
