@@ -37,7 +37,7 @@ class ComponentParser {
     this.defaultComponentsByName = defaultComponents.reduce((target, { name, ...rest }) => ({
       ...target,
       [name]: rest,
-    }))
+    }), {})
     this.components = new Set(components)
     this.dependencies = []
     this[props] = {}
