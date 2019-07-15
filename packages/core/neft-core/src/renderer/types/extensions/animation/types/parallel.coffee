@@ -3,6 +3,7 @@
 utils = require '../../../../../util'
 assert = require '../../../../../assert'
 log = require '../../../../../log'
+{setImmediate} = require '../../../../../event-loop'
 
 log = log.scope 'Renderer', 'ParallelAnimation'
 
@@ -18,8 +19,8 @@ module.exports = (Renderer, Impl, itemUtils) -> class ParallelAnimation extends 
         super()
         @_children = []
         @_runningChildren = 0
-        @onStart.connect onStart
-        @onStop.connect onStop
+        @onStart.connect onStartImmediate
+        @onStop.connect onStopImmediate
 
     itemUtils.defineProperty
         constructor: @
@@ -45,6 +46,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class ParallelAnimation extends 
         return
 
     onStart = ->
+        return if not @_running
         unless @_children.length
             @running = false
             return
@@ -55,10 +57,17 @@ module.exports = (Renderer, Impl, itemUtils) -> class ParallelAnimation extends 
         return
 
     onStop = ->
+        return if @_running
         for child in @_children
             child.onStop.disconnect onChildStop, @
             child.running = false
         return
+
+    onStartImmediate = ->
+        setImmediate => onStart.call @
+
+    onStopImmediate = ->
+        setImmediate => onStop.call @
 
     itemUtils.defineProperty
         constructor: @
