@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const parseXHTML = require('./xhtml-parser')
 
 /* eslint-disable global-require */
@@ -24,7 +25,7 @@ const propsToAdd = Symbol('propsToAdd')
 
 class ComponentParser {
   constructor({
-    scripts, styles, resourcePath, defaultStyles,
+    scripts, styles, resourcePath, defaultStyles, defaultComponents,
   }) {
     this.error = console.error
     this.warning = console.warn
@@ -32,6 +33,11 @@ class ComponentParser {
     this.styles = styles
     this.resourcePath = resourcePath
     this.defaultStyles = defaultStyles
+    this.defaultComponents = defaultComponents
+    this.defaultComponentsByName = defaultComponents.reduce((target, { name, ...rest }) => ({
+      ...target,
+      [name]: rest,
+    }))
     this.dependencies = []
     this[props] = {}
     this[propsToAdd] = {}
@@ -93,12 +99,14 @@ exports.parseToCode = (ast, {
   scripts,
   styles,
   defaultStyles = [],
+  defaultComponents = [],
 } = {}) => {
   const parser = new ComponentParser({
     resourcePath,
     scripts,
     styles,
     defaultStyles,
+    defaultComponents,
   })
 
   return parseComponent(parser, ast)

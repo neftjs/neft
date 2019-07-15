@@ -90,6 +90,20 @@ const getDefaultStyles = async ({ extensions }) => {
   return styleExtensions.filter(Boolean)
 }
 
+const getDefaultComponents = async ({ extensions }) => {
+  const components = await Promise.all(extensions.map(async (ext) => {
+    const files = await fs.readdir(ext.dirPath)
+    return files
+      .filter(file => neftParcelPlugin.neftExtnames.has(path.extname(file)))
+      .map(file => ({
+        name: path.parse(file).name,
+        path: path.join(ext.name, file),
+      }))
+  }))
+
+  return [].concat(...components) // flat
+}
+
 const createEntryFile = async ({
   input, extensions, imports, initCode,
 }) => {
@@ -141,16 +155,20 @@ exports.bundle = async (target, {
     sourceMaps: false,
     logLevel: 2,
   }
-  const defaultStyles = await getDefaultStyles({ extensions })
-  const entry = await createEntryFile({
-    input, extensions, imports, initCode,
-  })
+  const [defaultStyles, defaultComponents, entry] = await Promise.all([
+    getDefaultStyles({ extensions }),
+    getDefaultComponents({ extensions }),
+    createEntryFile({
+      input, extensions, imports, initCode,
+    }),
+  ])
   const entries = [entry]
   const bundler = new ParcelBundler(entries, parcelOptions)
   bundler.options.env = {
     ...getTargetEnv({ production, target }),
     NEFT_PARCEL_EXTENSIONS: JSON.stringify(extensions),
     NEFT_PARCEL_DEFAULT_STYLES: JSON.stringify(defaultStyles),
+    NEFT_PARCEL_DEFAULT_COMPONENTS: JSON.stringify(defaultComponents),
   }
   neftParcelPlugin(bundler)
   nmlParcelPlugin(bundler)

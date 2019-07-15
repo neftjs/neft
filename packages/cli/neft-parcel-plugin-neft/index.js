@@ -5,3 +5,5 @@ module.exports = (bundler) => {
     bundler.addAssetType(asset, require.resolve('./NeftAsset.js'))
   })
 }
+
+module.exports.neftExtnames = new Set(ASSET_TYPES.map(type => `.${type}`))

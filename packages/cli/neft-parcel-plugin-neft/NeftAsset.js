@@ -4,6 +4,7 @@ const { logger } = require('@neft/core')
 const { parseToAst, parseToCode } = require('@neft/compiler-document')
 
 const defaultStyles = JSON.parse(process.env.NEFT_PARCEL_DEFAULT_STYLES || '[]')
+const defaultComponents = JSON.parse(process.env.NEFT_PARCEL_DEFAULT_COMPONENTS || '[]')
 const extensions = JSON.parse(process.env.NEFT_PARCEL_EXTENSIONS || '[]')
 
 extensions.forEach((extension) => {
@@ -76,6 +77,7 @@ class NeftAsset extends Asset {
 
     const { code, dependencies } = parseToCode(this.ast, {
       defaultStyles,
+      defaultComponents,
       resourcePath: this.id,
       scripts,
       styles,
@@ -83,6 +85,7 @@ class NeftAsset extends Asset {
 
     this.addDependency('@neft/core')
     defaultStyles.forEach(({ path }) => { this.addDependency(path) })
+    defaultComponents.forEach(({ path }) => { this.addDependency(path) })
     dependencies.forEach((name) => { this.addDependency(name) })
 
     return [{

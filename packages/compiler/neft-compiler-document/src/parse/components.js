@@ -13,22 +13,15 @@ const findImports = (element, parser) => {
 }
 
 module.exports = function (element, parser) {
-  let imports = ''
-  let components = ''
-
-  // merge components from files
-  const links = findImports(element, parser)
-  links.forEach((link) => {
-    parser.dependencies.push(link.src)
-    imports += `"${link.name}": require('${link.src}'),`
-  })
-
-  if (imports.length) parser.addProp('imports', () => `{${imports}}`)
+  const usedNames = new Set()
+  const imports = {}
+  const components = {}
 
   // find components in file
   element.queryAll('n-component').forEach((child) => {
     const { name } = child.props
     if (!name) return
+    if (usedNames.has(name)) return
     if (child.queryParents('n-component')) return
 
     child.name = ''
@@ -36,8 +29,42 @@ module.exports = function (element, parser) {
     const options = {
       resourcePath: `${parser.resourcePath}#${name}`,
     }
-    components += `"${name}": ${parser.parseComponentElement(child, options)}, `
+    components[name] = { child, options }
+    usedNames.add(name)
   })
 
-  if (components.length) parser.addProp('components', () => `{${components}}`)
+  // add imports
+  const links = findImports(element, parser)
+  links.forEach(({ name, src }) => {
+    if (usedNames.has(name)) return
+    parser.dependencies.push(src)
+    usedNames.add(name)
+    imports[name] = src
+  })
+
+  // add default components
+  parser.defaultComponents.forEach(({ name, path: compPath }) => {
+    if (usedNames.has(name)) return
+    usedNames.add(name)
+    imports[name] = compPath
+  })
+
+
+  // stringify imports
+  if (Object.keys(imports).length) {
+    let importsText = ''
+    Object.entries(imports).forEach(([name, src]) => {
+      importsText += `"${name}": require('${src}'),`
+    })
+    parser.addProp('imports', () => `{${importsText}}`)
+  }
+
+  // stringify components
+  if (Object.keys(components).length) {
+    let componensText = ''
+    Object.entries(imports).forEach(([name, { child, options }]) => {
+      componensText += `"${name}": ${parser.parseComponentElement(child, options)}, `
+    })
+    parser.addProp('components', () => `{${componensText}}`)
+  }
 }
