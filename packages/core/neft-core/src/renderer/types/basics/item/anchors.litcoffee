@@ -45,8 +45,6 @@
                 anchors.verticalCenter = val.verticalCenter if val.verticalCenter?
                 anchors.centerIn = val.centerIn if val.centerIn?
                 anchors.fill = val.fill if val.fill?
-                anchors.fillWidth = val.fillWidth if val.fillWidth?
-                anchors.fillHeight = val.fillHeight if val.fillHeight?
                 _super.call @, val
                 return
 
@@ -62,8 +60,6 @@
             @_horizontalCenter = null
             @_centerIn = null
             @_fill = null
-            @_fillWidth = null
-            @_fillHeight = null
 
             Object.preventExtensions @
 
@@ -160,11 +156,3 @@
         createAnchorProp 'fill', ONLY_TARGET_ALLOW, ->
             if @_ref
                 [@_ref._x, @_ref._y, @_ref._width, @_ref._height]
-
-        createAnchorProp 'fillWidth', ONLY_TARGET_ALLOW, ->
-            if @_ref
-                [@_ref._x, @_ref._width]
-
-        createAnchorProp 'fillHeight', ONLY_TARGET_ALLOW, ->
-            if @_ref
-                [@_ref._y, @_ref._height]

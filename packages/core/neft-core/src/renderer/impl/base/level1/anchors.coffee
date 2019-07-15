@@ -415,8 +415,6 @@ module.exports = (impl) ->
 
     getBaseAnchors =
         centerIn: ['horizontalCenter', 'verticalCenter']
-        fillWidth: ['fillWidthSize', 'left']
-        fillHeight: ['fillHeightSize', 'top']
         fill: ['fillWidthSize', 'fillHeightSize', 'left', 'top']
 
     getBaseAnchorsPerAnchorType =
@@ -466,8 +464,7 @@ module.exports = (impl) ->
         else
             Anchor.factory item, source, def
 
-    exports =
-    setItemAnchor: (type, val) ->
+    setItemAnchor = (type, val) ->
         if val isnt null
             assert.isArray val
 
@@ -483,4 +480,63 @@ module.exports = (impl) ->
         if val
             anchors[type] = createAnchor(@, type, val)
 
+        return
+
+    isAutoFillWidth = -> @_impl.anchors?.fillWidthSize
+
+    isAutoFillHeight = -> @_impl.anchors?.fillHeightSize
+
+    enableAutoFillWidth = ->
+        setItemAnchor.call @, 'fillWidthSize', ['parent']
+
+    enableAutoFillHeight = ->
+        setItemAnchor.call @, 'fillHeightSize', ['parent']
+
+    disableAutoFillWidth = ->
+        setItemAnchor.call @, 'fillWidthSize', null
+
+    disableAutoFillHeight = ->
+        setItemAnchor.call @, 'fillHeightSize', null
+
+    shouldAutoFillWidth = (fillWidth = @fillWidth) ->
+        @parent and not @parent.layout and fillWidth
+
+    shouldAutoFillHeight = (fillHeight = @fillHeight) ->
+        @parent and not @parent.layout and fillHeight
+
+    handleParentChangeForAutoFillWidth = (fillWidth) ->
+        isSet = isAutoFillWidth.call(@)
+        shouldBeSet = shouldAutoFillWidth.call(@, fillWidth)
+        if isSet and not shouldBeSet
+            disableAutoFillWidth.call @
+        if not isSet and shouldBeSet
+            enableAutoFillWidth.call @
+        return
+
+    handleParentChangeForAutoFillHeight = (fillHeight) ->
+        isSet = isAutoFillHeight.call(@)
+        shouldBeSet = shouldAutoFillHeight.call(@, fillHeight)
+        if isSet and not shouldBeSet
+            disableAutoFillHeight.call @
+        if not isSet and shouldBeSet
+            enableAutoFillHeight.call @
+        return
+
+    exports =
+    setItemAnchor: setItemAnchor
+
+    setItemFillWidth: (val) ->
+        if val
+            @onParentChange.connect handleParentChangeForAutoFillWidth, @
+        else
+            @onParentChange.disconnect handleParentChangeForAutoFillWidth, @
+        handleParentChangeForAutoFillWidth.call @, val
+        return
+
+    setItemFillHeight: (val) ->
+        if val
+            @onParentChange.connect handleParentChangeForAutoFillHeight, @
+        else
+            @onParentChange.disconnect handleParentChangeForAutoFillHeight, @
+        handleParentChangeForAutoFillHeight.call @, val
         return

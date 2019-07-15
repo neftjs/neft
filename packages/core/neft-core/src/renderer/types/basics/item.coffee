@@ -732,6 +732,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends itemUtils.Obj
         constructor: @
         name: 'fillWidth'
         defaultValue: false
+        implementation: Impl.setItemFillWidth
         developmentSetter: (val) ->
             assert.isBoolean val
 
@@ -739,6 +740,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends itemUtils.Obj
         constructor: @
         name: 'fillHeight'
         defaultValue: false
+        implementation: Impl.setItemFillHeight
         developmentSetter: (val) ->
             assert.isBoolean val
 
