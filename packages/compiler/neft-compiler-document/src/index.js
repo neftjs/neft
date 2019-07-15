@@ -25,7 +25,7 @@ const propsToAdd = Symbol('propsToAdd')
 
 class ComponentParser {
   constructor({
-    scripts, styles, resourcePath, defaultStyles, defaultComponents,
+    scripts, styles, resourcePath, defaultStyles, defaultComponents, components,
   }) {
     this.error = console.error
     this.warning = console.warn
@@ -38,6 +38,7 @@ class ComponentParser {
       ...target,
       [name]: rest,
     }))
+    this.components = new Set(components)
     this.dependencies = []
     this[props] = {}
     this[propsToAdd] = {}

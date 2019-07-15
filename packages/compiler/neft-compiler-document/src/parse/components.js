@@ -13,7 +13,6 @@ const findImports = (element, parser) => {
 }
 
 module.exports = function (element, parser) {
-  const usedNames = new Set()
   const imports = {}
   const components = {}
 
@@ -21,7 +20,6 @@ module.exports = function (element, parser) {
   element.queryAll('n-component').forEach((child) => {
     const { name } = child.props
     if (!name) return
-    if (usedNames.has(name)) return
     if (child.queryParents('n-component')) return
 
     child.name = ''
@@ -30,25 +28,24 @@ module.exports = function (element, parser) {
       resourcePath: `${parser.resourcePath}#${name}`,
     }
     components[name] = { child, options }
-    usedNames.add(name)
+    parser.components.add(name)
   })
 
   // add imports
   const links = findImports(element, parser)
   links.forEach(({ name, src }) => {
-    if (usedNames.has(name)) return
+    if (parser.components.has(name)) return
     parser.dependencies.push(src)
-    usedNames.add(name)
+    parser.components.add(name)
     imports[name] = src
   })
 
   // add default components
   parser.defaultComponents.forEach(({ name, path: compPath }) => {
-    if (usedNames.has(name)) return
-    usedNames.add(name)
+    if (parser.components.has(name)) return
+    parser.components.add(name)
     imports[name] = compPath
   })
-
 
   // stringify imports
   if (Object.keys(imports).length) {
@@ -61,10 +58,10 @@ module.exports = function (element, parser) {
 
   // stringify components
   if (Object.keys(components).length) {
-    let componensText = ''
-    Object.entries(imports).forEach(([name, { child, options }]) => {
-      componensText += `"${name}": ${parser.parseComponentElement(child, options)}, `
+    let componentsText = ''
+    Object.entries(components).forEach(([name, { child, options }]) => {
+      componentsText += `"${name}": ${parser.parseComponentElement(child, options)}, `
     })
-    parser.addProp('components', () => `{${componensText}}`)
+    parser.addProp('components', () => `{${componentsText}}`)
   }
 }
