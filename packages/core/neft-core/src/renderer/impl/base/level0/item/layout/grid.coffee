@@ -403,6 +403,8 @@ module.exports = (impl) ->
             enableChild.call @, child
             child = child.nextSibling
 
+        onWidthChange.call @
+        onHeightChange.call @
         update.call @
 
         return
