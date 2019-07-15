@@ -1,0 +1,18 @@
+<main>
+  <content>
+    <n-slot />
+  </content>
+</main>
+
+<style>
+const { Scrollable } = require('@neft/scrollable')
+
+@Scrollable main {
+  fillWidth: true
+  fillHeight: true
+  contentItem: @Item content {
+    layout: 'flow'
+    width: parent.width
+  }
+}
+</style>

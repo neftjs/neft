@@ -8,14 +8,16 @@ module.exports = (element, parser) => {
     child.children.forEach(forChild)
     const { name } = child
 
-    // short syntax
-    if (name.length > 0 && name[0].toUpperCase() === name[0]) {
+    if (parser.components.has(name)) {
+      // short syntax
       child.props['n-component'] = name
       nUses.push(child)
-    }
-
-    // long formula
-    if (child.name === 'n-use') {
+    } else if (parser.defaultComponentsByName[name]) {
+      // default component
+      child.props['n-component'] = name
+      nUses.push(child)
+    } else if (child.name === 'n-use') {
+      // long formula
       nUses.push(child)
       child.name = 'blank'
     }

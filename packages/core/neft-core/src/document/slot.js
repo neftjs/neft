@@ -8,16 +8,21 @@ class Slot {
   render(sourceElement) {
     if (!sourceElement) return
     this.sourceElement = sourceElement
-    sourceElement.children.forEach((child) => {
+    const { children } = sourceElement
+
+    for (let i = 0, n = children.length; i < n; i += 1) {
+      const child = children[0]
       child.parent = this.element
-    })
+    }
   }
 
   revert() {
     if (!this.sourceElement) return
-    this.element.children.forEach((child) => {
+    const { children } = this.element
+    for (let i = 0, n = children.length; i < n; i += 1) {
+      const child = children[0]
       child.parent = this.sourceElement
-    })
+    }
     this.sourceElement = null
   }
 }

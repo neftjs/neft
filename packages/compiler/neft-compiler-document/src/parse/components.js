@@ -13,17 +13,8 @@ const findImports = (element, parser) => {
 }
 
 module.exports = function (element, parser) {
-  let imports = ''
-  let components = ''
-
-  // merge components from files
-  const links = findImports(element, parser)
-  links.forEach((link) => {
-    parser.dependencies.push(link.src)
-    imports += `"${link.name}": require('${link.src}'),`
-  })
-
-  if (imports.length) parser.addProp('imports', () => `{${imports}}`)
+  const imports = {}
+  const components = {}
 
   // find components in file
   element.queryAll('n-component').forEach((child) => {
@@ -36,8 +27,41 @@ module.exports = function (element, parser) {
     const options = {
       resourcePath: `${parser.resourcePath}#${name}`,
     }
-    components += `"${name}": ${parser.parseComponentElement(child, options)}, `
+    components[name] = { child, options }
+    parser.components.add(name)
   })
 
-  if (components.length) parser.addProp('components', () => `{${components}}`)
+  // add imports
+  const links = findImports(element, parser)
+  links.forEach(({ name, src }) => {
+    if (parser.components.has(name)) return
+    parser.dependencies.push(src)
+    parser.components.add(name)
+    imports[name] = src
+  })
+
+  // add default components
+  parser.defaultComponents.forEach(({ name, path: compPath }) => {
+    if (parser.components.has(name)) return
+    parser.components.add(name)
+    imports[name] = compPath
+  })
+
+  // stringify imports
+  if (Object.keys(imports).length) {
+    let importsText = ''
+    Object.entries(imports).forEach(([name, src]) => {
+      importsText += `"${name}": require('${src}'),`
+    })
+    parser.addProp('imports', () => `{${importsText}}`)
+  }
+
+  // stringify components
+  if (Object.keys(components).length) {
+    let componentsText = ''
+    Object.entries(components).forEach(([name, { child, options }]) => {
+      componentsText += `"${name}": ${parser.parseComponentElement(child, options)}, `
+    })
+    parser.addProp('components', () => `{${componentsText}}`)
+  }
 }
