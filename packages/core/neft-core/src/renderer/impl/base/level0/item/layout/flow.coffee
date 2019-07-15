@@ -338,8 +338,8 @@ module.exports = (impl) ->
 
     enableChild = (child) ->
         child.onVisibleChange.connect update, @
-        child.onWidthChange.connect updateSize, @
-        child.onHeightChange.connect updateSize, @
+        child.onWidthChange.connect update, @
+        child.onHeightChange.connect update, @
         child.onFillWidthChange.connect update, @
         child.onFillHeightChange.connect update, @
         child.onMarginChange.connect update, @
@@ -347,8 +347,8 @@ module.exports = (impl) ->
 
     disableChild = (child) ->
         child.onVisibleChange.disconnect update, @
-        child.onWidthChange.disconnect updateSize, @
-        child.onHeightChange.disconnect updateSize, @
+        child.onWidthChange.disconnect update, @
+        child.onHeightChange.disconnect update, @
         child.onFillWidthChange.disconnect update, @
         child.onFillHeightChange.disconnect update, @
         child.onMarginChange.disconnect update, @
