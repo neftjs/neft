@@ -65,7 +65,7 @@ module.exports = (impl) ->
             stateFlags |= Renderer.PropertyAnimation.ON_STOP
 
         if val is val and target and property # isNaN hack
-            if (anim._updateProperty & stateFlags) > 0 or not data.propertySetter
+            if ((anim._updateProperty & stateFlags) > 0 and target[property] isnt val) or not data.propertySetter
                 anim._updatePending = true
                 target[property] = val
                 anim._updatePending = false

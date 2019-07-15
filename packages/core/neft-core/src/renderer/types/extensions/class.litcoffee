@@ -388,8 +388,8 @@ Grid {
         ATTRS_CONFLICTS = [
             ['x', 'anchors.left', 'anchors.right', 'anchors.horizontalCenter', 'anchors.centerIn'],
             ['y', 'anchors.top', 'anchors.bottom', 'anchors.verticalCenter', 'anchors.centerIn'],
-            ['width', 'anchors.fill', 'anchors.fillWidth', 'fillWidth'],
-            ['height', 'anchors.fill', 'anchors.fillHeight', 'fillHeight'],
+            ['width', 'anchors.fill', 'fillWidth'],
+            ['height', 'anchors.fill', 'fillHeight'],
         ]
 
         ATTRS_ALIAS = Object.create null
