@@ -3,6 +3,7 @@
 utils = require '../../../../../util'
 assert = require '../../../../../assert'
 log = require '../../../../../log'
+{setImmediate} = require '../../../../../event-loop'
 
 log = log.scope 'Renderer', 'SequentialAnimation'
 
@@ -18,8 +19,8 @@ module.exports = (Renderer, Impl, itemUtils) -> class SequentialAnimation extend
         super()
         @_children = []
         @_runningChildIndex = -1
-        @onStart.connect onStart
-        @onStop.connect onStop
+        @onStart.connect onStartImmediate
+        @onStop.connect onStopImmediate
 
     itemUtils.defineProperty
         constructor: @
@@ -51,6 +52,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class SequentialAnimation extend
         return
 
     onStart = ->
+        return if not @_running
         unless @_children.length
             @running = false
             return
@@ -58,9 +60,16 @@ module.exports = (Renderer, Impl, itemUtils) -> class SequentialAnimation extend
         return
 
     onStop = ->
+        return if @_running
         @_children[@_runningChildIndex]?.running = false
         @_runningChildIndex = -1
         return
+
+    onStartImmediate = ->
+        setImmediate => onStart.call @
+
+    onStopImmediate = ->
+        setImmediate => onStop.call @
 
     itemUtils.defineProperty
         constructor: @

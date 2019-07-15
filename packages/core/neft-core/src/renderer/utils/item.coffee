@@ -64,7 +64,7 @@ module.exports = (Renderer, Impl) ->
                         child.parent = @
                     else if @ instanceof Renderer.Extension and @_children
                         @_children = opts.children
-                    else if child instanceof Renderer.Extension and not child._bindings?.target
+                    else if child instanceof Renderer.Extension and not child.target and not child._bindings?.target
                         child.target = @
 
             classElem = createClass opts
