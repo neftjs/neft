@@ -12,7 +12,7 @@ TextInput.__name__ = 'TextInput'
 
 TextInput.Initialize = (item) => {
   item.on('textChange', function (value) {
-    setPropertyValue(this, 'text', value)
+    setPropertyValue(this, 'text', value || '')
   })
 }
 
