@@ -24,7 +24,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class PropertyAnimation extends 
         @_duration = 250
         @_startDelay = 0
         @_loopDelay = 0
-        @_updateProperty = PropertyAnimation.ON_START | PropertyAnimation.ON_STOP
+        @_updateProperty = PropertyAnimation.ON_STOP
         @_easing = null
         @_updatePending = false
 
