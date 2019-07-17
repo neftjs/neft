@@ -27,7 +27,8 @@ module.exports = (Renderer, Impl, itemUtils) -> class SequentialAnimation extend
         name: 'target'
         setter: (_super) -> (val) ->
             for child in @_children
-                child.target = val
+                if child.target is @target
+                    child.target = val
             _super.call @, val
             return
 
