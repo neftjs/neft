@@ -79,6 +79,8 @@ module.exports = (Renderer) ->
             impl.Types[type]?.create?.call object, object._impl
 
     windowItemClass = null
+    windowWidth = 0
+    windowHeight = 0
 
     impl.setWindow = do (_super = impl.setWindow) -> (item) ->
         utils.defineProperty impl, 'windowItem', utils.ENUMERABLE, item
@@ -90,9 +92,13 @@ module.exports = (Renderer) ->
         _super.call impl, item
         impl.onWindowItemReady.emit item
         item.keys.focus = true
+
+        impl.setWindowSize windowWidth, windowHeight
         return
 
     impl.setWindowSize = (width, height) ->
+        windowWidth = width
+        windowHeight = height
         return unless impl.windowItem
         eventLoop.lock()
         windowItemClass.changes = width: width, height: height
