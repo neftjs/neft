@@ -1,0 +1,62 @@
+<n-import src="./text-input" as="text-input" />
+<n-import src="./separator" as="separator" />
+
+<main class="content">
+  <h1>Hi!</h1>
+
+  <p>
+    Welcome to the Neft Playground.
+    You can learn and test your app here.
+  </p>
+
+  <p>Open neft.io in a browser and enter your 6 digit code below:</p>
+
+  <text-input
+    keyboardType="numeric"
+    placeholder="000 000"
+    onValueChange={handleCodeChange(this.value)}
+  />
+
+  <!-- <separator>OR</separator>
+
+  <p>
+    Run your project using Neft CLI and enter your computer IP below.
+    Make sure your phone is in the same WiFi network.
+  </p>
+
+  <text-input keyboardType="text" /> -->
+</main>
+
+<script>
+import { device } from '@neft/core'
+import * as api from '~/src/api'
+
+export const handleCodeChange = (codeString) => {
+  const code = api.parseCode(codeString)
+  if (api.isCodeValid(code)) {
+    device.keyboard.hide()
+    api.connectToCode(code)
+  }
+}
+</script>
+
+<style>
+.content {
+  layout: 'column'
+  padding: '0 15 20'
+  spacing: 20
+
+  if (device.keyboard.visible) {
+    padding.bottom: device.keyboard.height + 20
+  }
+}
+
+h1 {
+  font.weight: 1
+}
+
+p, h1, #text {
+  font.pixelSize: 16
+  color: '#444'
+}
+</style>

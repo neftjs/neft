@@ -1,0 +1,22 @@
+<n-import src="~/src/components/landing" as="landing" />
+
+<n-log connected={api.socket.connected} />
+<n-log component={api.socket.component} />
+<main class="app">
+  <n-use n-component={api.socket.component} n-if={api.socket.connected} />
+  <landing n-else />
+</main>
+
+<script>
+import * as api from '~/src/api'
+
+export { api }
+</script>
+
+<style>
+.app {
+  fillHeight: true
+  padding.top: screen.statusBar.height
+  padding.bottom: screen.navigationBar.height
+}
+</style>

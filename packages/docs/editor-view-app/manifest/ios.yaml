@@ -1,4 +1,5 @@
-package: io.neft.example.app
-label: Neft.io App
+package: io.neft.playground
+label: Neft Playground
 version: '1.0'
 bundleVersion: 1
+icon: ./icon-padding.png

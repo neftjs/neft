@@ -129,7 +129,7 @@ class Document {
   }
 
   getComponent(name) {
-    const imported = this.imports[name]
+    const imported = this.imports[name] || name
     if (imported) {
       const pool = globalPool[imported]
       if (pool) {
@@ -153,10 +153,13 @@ class Document {
   returnComponent(name, component) {
     assert.notOk(component.rendered, 'Cannot return rendered component')
 
-    const imported = this.imports[name]
+    const imported = this.imports[name] || name
     if (imported) {
-      globalPool[imported].push(component)
-      return
+      const pool = globalPool[imported]
+      if (pool) {
+        pool.push(component)
+        return
+      }
     }
 
     const local = this.components[name]

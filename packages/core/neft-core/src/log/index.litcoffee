@@ -103,6 +103,7 @@
                         error.toString()
                     else
                         String(error.stack)
+            @
 
         progress: (title, value, max) ->
             if typeof title is 'number'

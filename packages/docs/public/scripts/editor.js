@@ -58,7 +58,7 @@
     const sendCodeNow = (code) => {
       const compiled = NeftEditor.compile(code)
       iframe.contentWindow.postMessage(compiled, '*')
-      sendToWs()
+      sendToWs(compiled)
     }
 
     const sendCode = (code) => {

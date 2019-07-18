@@ -1,5 +1,4 @@
-import { render } from '@neft/core'
-
+import '@neft/core'
 import '@neft/active-link'
 import '@neft/back-press'
 import '@neft/button'
@@ -27,8 +26,10 @@ export default (code) => {
     const body = new Function('module', 'require', code)
     const bodyModule = { exports: {} }
     body(bodyModule, require)
-    render(bodyModule.exports)
+    return bodyModule.exports
   } catch (error) {
+    console.error(error.message)
     // NOP
   }
+  return null
 }
