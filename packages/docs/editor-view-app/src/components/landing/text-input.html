@@ -1,0 +1,71 @@
+<n-props placeholder keyboardType onSubmit onValueChange />
+
+<main>
+  <input
+    ref="input"
+    type="text"
+    placeholder={placeholder}
+    keyboardType={keyboardType}
+    returnKeyType="go"
+    onValueChange={onValueChange}
+    style:keys:onFocusChange={this.style.keys.focus && scrollToElement(this)}
+    style:keys:onRelease={onSubmit(this.value)}
+  />
+</main>
+
+<script>
+const { device } = require('@neft/core')
+const { Scrollable } = require('@neft/scrollable')
+
+export const scrollToElement = (element) => {
+  // const { style } = element
+  // let scrollable
+  // let parent = style
+  // while (parent != null) {
+  //   if (parent instanceof Scrollable) {
+  //     scrollable = parent
+  //     break
+  //   }
+  //   parent = parent.parent
+  // }
+
+  // if (scrollable) {
+  //   const scrollableComputes = scrollable.getGlobalComputes()
+  //   const styleComputes = style.getGlobalComputes()
+  //   const x = scrollable.contentX
+  //   const y = styleComputes.y
+  //     - scrollableComputes.y
+  //     - scrollable.height
+  //     + device.keyboard.height
+  //     + style.height
+  //     + 25
+  //   scrollable.scrollTo(x, y, { animate: true })
+  // }
+}
+
+export default () => ({
+  placeholder: '',
+  onSubmit: () => {},
+  onValueChange: () => {},
+})
+</script>
+
+<style>
+main {
+  height: 50
+  padding: 10
+
+  @Rectangle {
+    anchors.fill: parent
+    border.width: 2
+    border.color: '#ccc'
+    z: -1
+  }
+
+  input {
+    fillWidth: true
+    fillHeight: true
+  }
+}
+</style>
+

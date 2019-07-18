@@ -1,7 +1,8 @@
-package: io.neft.example.app
+package: io.neft.playground
 versionCode: 1
 versionName: '1.0'
-label: Neft.io App
+label: Neft Playground
+icon: ./icon.png
 compileSdkVersion: 28
 targetSdkVersion: 28
 buildToolsVersion: 28.0.3

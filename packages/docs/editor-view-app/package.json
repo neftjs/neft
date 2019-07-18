@@ -24,8 +24,6 @@
     "@neft/tile-image": "^1.0.0-alpha.1",
     "@neft/video": "^1.0.0-alpha.1",
     "@neft/websocket": "^1.0.0-alpha.1",
-    "@neft/webview": "^1.0.0-alpha.1",
-    "components": "^0.1.0",
-    "src": "^1.1.2"
+    "@neft/webview": "^1.0.0-alpha.1"
   }
 }

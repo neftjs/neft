@@ -1,0 +1,152 @@
+<n-import src="./logo-img" as="logo-img" />
+<n-import src="./logo-text" as="logo-text" />
+<n-import src="./content" as="content" />
+
+<main>
+  <header>
+    <logo-img />
+    <logo-text />
+  </header>
+  <scrollable>
+    <content />
+  </scrollable>
+</main>
+
+<style>
+const logoImgFadeInAnimMs = 1500
+const logoImgAnimMs = 700
+const logoTextAnimMs = 300
+
+@Item main {
+  id: main
+  layout: 'column'
+  fillWidth: true
+  fillHeight: true
+
+  @SequentialAnimation {
+    running: true
+
+    @ParallelAnimation {
+      target: logoImg
+
+      @NumberAnimation {
+        property: 'opacity'
+        from: 0
+        to: 1
+        duration: logoImgFadeInAnimMs
+        easing: 'InQuad'
+      }
+
+      @NumberAnimation {
+        property: 'x'
+        from: logoImg.animX
+        to: logoImg.animX
+        duration: logoImgFadeInAnimMs
+        updateProperty: PropertyAnimation.NEVER
+      }
+
+      @NumberAnimation {
+        property: 'y'
+        from: logoImg.animY + 100
+        to: logoImg.animY
+        duration: logoImgFadeInAnimMs
+        updateProperty: PropertyAnimation.NEVER
+        easing: 'OutCubic'
+      }
+    }
+
+    @ParallelAnimation {
+      @NumberAnimation {
+        target: logoImg
+        property: 'scale'
+        from: 3
+        to: 1
+        duration: logoImgAnimMs
+        easing: 'OutSine'
+      }
+
+      @ParallelAnimation {
+        target: logoImg
+
+        @NumberAnimation {
+          property: 'x'
+          from: logoImg.animX
+          to: logoImg.x
+          duration: logoImgAnimMs
+          easing: 'InOutCubic'
+        }
+
+        @NumberAnimation {
+          property: 'y'
+          from: logoImg.animY
+          to: logoImg.y
+          duration: logoImgAnimMs
+          easing: 'InOutCubic'
+        }
+      }
+
+      @ParallelAnimation {
+        target: logoText
+
+        @NumberAnimation {
+          property: 'x'
+          from: logoText.x - 20
+          to: logoText.x
+          duration: logoTextAnimMs
+          startDelay: logoImgAnimMs
+          easing: 'InQuad'
+        }
+
+        @NumberAnimation {
+          property: 'opacity'
+          from: 0
+          to: 1
+          duration: logoTextAnimMs
+          startDelay: logoImgAnimMs
+          easing: 'InQuad'
+        }
+      }
+    }
+
+    @NumberAnimation {
+      target: scrollable
+      property: 'opacity'
+      to: 1
+      duration: 500
+    }
+  }
+
+  @Item header {
+    id: header
+    layout: 'row'
+    fillWidth: true
+    padding: 20
+    spacing: 10
+    alignment: 'center'
+
+    @Item logo-img {
+      id: logoImg
+      property animX: main.width / 2 - this.width / 2
+      property animY: main.height / 2 - this.height / 2
+      layout: 'column'
+      width: 70
+      scale: 3
+    }
+
+    @Item logo-text {
+      id: logoText
+      layout: 'column'
+      fillWidth: true
+      opacity: 0
+    }
+  }
+
+  @Item scrollable {
+    id: scrollable
+    layout: 'flow'
+    fillWidth: true
+    fillHeight: true
+    opacity: 0
+  }
+}
+</style>

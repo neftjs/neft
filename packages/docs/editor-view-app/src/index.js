@@ -1,14 +1,24 @@
 /* global window */
 
-import { render } from '@neft/core'
-import NativeApp from './components/NativeApp'
-import renderFromCode from '~/src/lib/render-from-code'
+import { render, loadFont } from '@neft/core'
+import app from './components/app'
+import parseStringComponentCode from '~/src/lib/parse-string-component-code'
 
 // for browser we put app inside an iframe
 if (process.env.NEFT_BROWSER) {
   window.onmessage = (event) => {
-    renderFromCode(event.data)
+    render(parseStringComponentCode(event.data))
   }
 } else {
-  render(NativeApp)
+  const main = async () => {
+    await Promise.all([
+      loadFont({ name: 'sans-serif', source: 'rsc:/fonts/Lato-Black' }),
+      loadFont({ name: 'sans-serif', source: 'rsc:/fonts/Lato-Bold' }),
+      loadFont({ name: 'sans-serif', source: 'rsc:/fonts/Lato-Light' }),
+      loadFont({ name: 'sans-serif', source: 'rsc:/fonts/Lato-Medium' }),
+      loadFont({ name: 'sans-serif', source: 'rsc:/fonts/Lato-Regular' }),
+    ])
+    render(app)
+  }
+  main()
 }

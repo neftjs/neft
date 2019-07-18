@@ -1,0 +1,23 @@
+<div class="separator">
+    <hr />
+    <n-slot />
+    <hr />
+</div>
+
+<style>
+.separator {
+    layout: 'row'
+    alignment.vertical: 'center'
+    spacing: 5
+
+    #text {
+        font.weight: 1
+    }
+}
+
+@Rectangle hr {
+    fillWidth: true
+    height: 1
+    color: '#ccc'
+}
+</style>
