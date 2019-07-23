@@ -21,21 +21,6 @@ const { utils } = Neft;
 
     log = require '../log'
 
-    ###
-    Link subfiles
-    ###
-    require('./namespace') exports
-    require('./stringifying') exports
-    require('./async') exports
-
-    ['isNode', 'isServer', 'isClient', 'isBrowser',
-    'isWebGL', 'isAndroid', 'isIOS', 'isMacOS'].forEach (prop) ->
-        Object.defineProperty exports, prop,
-            get: -> throw new Error "utils.#{prop} is replaced by process.env.NEFT_PLATFORM"
-
-    Object.defineProperty exports, 'isNative',
-        get: -> throw new Error "utils.isNative is replaced by process.env.NEFT_NATIVE"
-
 ## *Function* utils.NOP
 
 No operation (an empty function).
