@@ -7,7 +7,7 @@ object StorageExtension {
 
     private fun createCallback(uid: String): FileStorage.Callback {
         return object : FileStorage.Callback() {
-            override fun handle(error: Exception?, result: String) {
+            override fun handle(error: Exception?, result: String?) {
                 val errMsg = error?.message
                 BINDING.pushEvent("response", uid, errMsg, result)
             }
