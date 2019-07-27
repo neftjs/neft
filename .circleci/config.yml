@@ -25,7 +25,6 @@ jobs:
                 key: *node_dependencies_cache_key
             - run: npm install
             - run: npx lerna bootstrap
-            - run: make build-packages
             - save_cache:
                 key: *node_dependencies_cache_key
                 paths:

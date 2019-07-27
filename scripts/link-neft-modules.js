@@ -74,7 +74,13 @@ const main = async () => {
     await spawnPromise('rm', ['-rf', packageModules])
 
     console.time(`Copy ${packageName}`)
-    const source = path.join(packagePath, DIST)
+    let source
+    try {
+      source = path.join(packagePath, DIST)
+      await fs.stat(source)
+    } catch (error) {
+      source = packagePath
+    }
     const destination = path.join(nodeModulesOut, packageJson.name)
     await spawnPromise('rsync', ['-a', `${source}/`, destination])
     console.timeEnd(`Copy ${packageName}`)

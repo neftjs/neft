@@ -37,10 +37,9 @@ const PARSERS = {
 
 exports.build = async () => {
   // const realpath = await fs.realpath('.')
-  const tmpOut = path.join(os.tmpdir(), 'neft-module-dist')
+  const tmpOut = path.join(os.tmpdir(), `neft-module-dist-${String(Math.random()).slice(2)}`)
 
   await fs.remove(OUT)
-  await fs.remove(tmpOut)
 
   const filesToParse = []
   await fs.copy('.', tmpOut, {

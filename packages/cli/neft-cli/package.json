@@ -10,6 +10,7 @@
     "access": "public",
     "publishConfig": "dist"
   },
+  "main": "./src",
   "dependencies": {
     "@neft/cli-env": "^1.0.0-alpha.1",
     "@neft/compiler-style": "^1.0.0-alpha.1",
