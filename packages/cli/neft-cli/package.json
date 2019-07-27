@@ -1,14 +1,14 @@
 {
   "name": "@neft/cli",
   "version": "1.0.0-alpha.1",
-  "main": "./src",
   "bin": {
     "neft": "bin/neft.js"
   },
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "publishConfig": "dist"
   },
   "dependencies": {
     "@neft/cli-env": "^1.0.0-alpha.1",

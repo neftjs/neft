@@ -1,17 +1,12 @@
 {
   "name": "@neft/core",
   "version": "1.0.0-alpha.1",
-  "main": "./lib/index.js",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
+  "main": "./src",
   "publishConfig": {
-    "access": "public"
-  },
-  "engines": {
-    "node": "0"
-  },
-  "source": {
-    "./lib/**": "./src/$1"
+    "access": "public",
+    "publishConfig": "dist"
   },
   "scripts": {
     "build": "build-neft-module",

@@ -19,6 +19,7 @@ const path = require('path')
 const { spawn } = require('child_process')
 
 const NEFT_PACKAGES = path.join(__dirname, '../packages')
+const DIST = 'dist'
 
 const getPackage = async dir => JSON.parse(await fs.readFile(path.join(dir, './package.json'), 'utf-8'))
 
@@ -73,8 +74,9 @@ const main = async () => {
     await spawnPromise('rm', ['-rf', packageModules])
 
     console.time(`Copy ${packageName}`)
+    const source = path.join(packagePath, DIST)
     const destination = path.join(nodeModulesOut, packageJson.name)
-    await spawnPromise('rsync', ['-a', `${packagePath}/`, destination])
+    await spawnPromise('rsync', ['-a', `${source}/`, destination])
     console.timeEnd(`Copy ${packageName}`)
   }
 
