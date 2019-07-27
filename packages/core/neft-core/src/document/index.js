@@ -70,7 +70,9 @@ if (process.env.NODE_ENV === 'development') {
   instances = {}
   saveInstance = (document) => {
     const { path } = document
-    instances[path] = instances[path] || []
+    if (!instances[path]) {
+      instances[path] = []
+    }
     instances[path].push(document)
   }
 }
@@ -258,7 +260,13 @@ Document.prototype.render = eventLoop.bindInLock(Document.prototype.render)
 Document.prototype.revert = eventLoop.bindInLock(Document.prototype.revert)
 
 Document.register = (path, constructor, { dependencies }) => {
-  documents[path] = { constructor, dependencies }
+  documents[path] = {
+    constructor,
+    dependencies: parseImports(dependencies),
+  }
+  if (process.env.NODE_ENV === 'development') {
+    instances[path] = []
+  }
   globalPool[path] = []
 }
 
@@ -284,6 +292,7 @@ if (process.env.NODE_ENV === 'development') {
               const onPropsChange = doc[renderOnPropsChange]
               const sourceElement = doc[renderSourceElement]
               const listeners = doc[renderListeners]
+              log.debug(`Render changed \`${doc.path}\``)
               doc.revert()
               globalPool[path] = []
               doc.render({
