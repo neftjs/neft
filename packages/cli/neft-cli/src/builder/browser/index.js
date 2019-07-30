@@ -21,8 +21,6 @@ exports.getImports = async ({ target, extensions }) => {
 
   await Promise.all(extensions.map(async ({ name }) => {
     const possibleImports = [
-      `${name}/lib/native/${target}`,
-      `${name}/lib/native/browser`,
       `${name}/native/${target}`,
       `${name}/native/browser`,
     ]

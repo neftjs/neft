@@ -4,7 +4,8 @@
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "publishConfig": "dist"
   },
   "dependencies": {
     "@neft/compiler-style": "^1.0.0-alpha.1",

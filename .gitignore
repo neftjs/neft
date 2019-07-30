@@ -7,4 +7,3 @@ lerna-debug.log
 .cache
 yarn-error.log
 dist
-packages/*/*/lib

@@ -2,7 +2,6 @@
   "name": "@neft/docs-editor",
   "version": "1.0.0-alpha.1",
   "private": true,
-  "main": "./src",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
   "scripts": {

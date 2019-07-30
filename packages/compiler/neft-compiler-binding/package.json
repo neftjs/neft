@@ -1,12 +1,13 @@
 {
   "name": "@neft/compiler-binding",
   "version": "1.0.0-alpha.1",
-  "main": "./src/index.js",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "publishConfig": "dist"
   },
+  "main": "./src",
   "dependencies": {
     "acorn": "^6.1.1",
     "acorn-walk": "^6.1.1",

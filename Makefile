@@ -20,4 +20,4 @@ generate-docs:
 	node ./packages/docs/generator
 
 build-packages:
-	yarn lerna run build --stream --no-sort --concurrency=1
+	yarn lerna run build --stream --no-sort

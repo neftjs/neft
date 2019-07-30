@@ -16,6 +16,5 @@ install:
   # install project dependencies
   - npm install
   - npx lerna bootstrap
-  - make build-packages
 script:
   - npm test

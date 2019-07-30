@@ -4,7 +4,6 @@
   "private": true,
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
-  "main": "./src/index.js",
   "dependencies": {
     "escape-html": "^1.0.3",
     "fs-extra": "^8.0.1",
