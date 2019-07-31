@@ -40,8 +40,20 @@ describe 'Document Element', ->
 
         assert.is html, HTML
 
-    it 'hidden props are omitted in the stringified process', ->
+    it 'internal tags are omitted in the stringified process', ->
+        elem = fromHTML '<n-component><div /></n-component>'
+        html = elem.stringify()
+
+        assert.is html, '<div></div>'
+
+    it 'internal props are omitted in the stringified process', ->
         elem = fromHTML '<span n-if="a" n-each="a"></span>'
+        html = elem.stringify()
+
+        assert.is html, '<span></span>'
+
+    it 'style props are omitted in the stringified process', ->
+        elem = fromHTML '<span style:color="red"></span>'
         html = elem.stringify()
 
         assert.is html, '<span></span>'
@@ -67,6 +79,27 @@ describe 'Document Element', ->
             em.parent = em
         catch err
         assert.isDefined err
+
+    describe 'when includeInternals is true', ->
+        it 'internal tags are stringified', ->
+            elem = fromHTML '<n-component><div /></n-component>'
+            html = elem.stringifyChildren({includeInternals: true})
+
+            assert.is html, '<n-component><div></div></n-component>'
+
+        it 'internal props are stringified', ->
+            elem = fromHTML '<span n-if="a" n-each="a"></span>'
+            html = elem.stringifyChildren({includeInternals: true})
+
+            assert.is html, '<span n-if="a" n-each="a"></span>'
+
+        it 'style props are stringified', ->
+            elem = fromHTML '<span style:color="red"></span>'
+            html = elem.stringifyChildren({includeInternals: true})
+
+            assert.is html, '<span style:color="red"></span>'
+
+        return
 
     describe 'text property', ->
         it 'is filled properly', ->

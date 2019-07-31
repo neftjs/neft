@@ -32,9 +32,16 @@ exports.targets = {
   android: true,
   ios: true,
   macos: true,
+  file: true,
 }
 
 exports.args = {
+  build: {
+    file: ['file'],
+  },
+}
+
+exports.options = {
   production: true,
 }
 

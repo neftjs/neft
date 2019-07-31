@@ -1,6 +1,6 @@
 const { logger } = require('@neft/core')
 const {
-  operations, operationsWithoutTarget, targets, args,
+  operations, operationsWithoutTarget, targets, args, options,
 } = require('./config')
 
 const possibleOperations = Object.keys(operations)
@@ -22,7 +22,7 @@ const printHelp = () => {
   logger.log('build      builds given target without running it')
   logger.log('run        builds given target and runs it')
   logger.log('clean      removes temporary files and built targets\n')
-  logger.log('<u>arguments:</u>')
+  logger.log('<u>options:</u>')
   logger.log('--production       creates production build')
   logger.log('')
 }
@@ -45,16 +45,20 @@ exports.parseArgv = ([operation, target, ...rest]) => {
   }
 
   const foundArgs = { [operation]: true }
-  rest.forEach((arg) => {
-    if (!arg.startsWith('--')) {
-      logger.warning(`Argument \`${arg}\` must starts with --`)
-      return
-    }
-    if (!args[arg.slice(2)]) {
+  let possibleArgs = args[operation] || {}
+  if (target) possibleArgs = possibleArgs[target] || {}
+  rest.forEach((arg, index) => {
+    if (arg.startsWith('--')) {
+      if (!options[arg.slice(2)]) {
+        logger.warning(`Unknown option \`${arg}\``)
+        return
+      }
+      foundArgs[arg.slice(2)] = true
+    } else if (possibleArgs[index]) {
+      foundArgs[possibleArgs[index]] = arg
+    } else {
       logger.warning(`Unknown argument \`${arg}\``)
-      return
     }
-    foundArgs[arg.slice(2)] = true
   })
 
   return { operation, target, args: foundArgs }

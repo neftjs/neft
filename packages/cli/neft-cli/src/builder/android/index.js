@@ -1,6 +1,12 @@
 const { build } = require('./builder')
 
-exports.webpackConfig = {}
+exports.shouldLoadStaticFiles = true
+
+exports.shouldBundle = true
+
+exports.shouldProduceManifest = true
+
+exports.shouldGenerateIcons = true
 
 exports.defaultManifest = {
   package: 'io.neft.example.app',

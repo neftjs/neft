@@ -13,6 +13,7 @@
   "gitHead": "9d14395fe2f6ff003da37f358dbfee354327f7ca",
   "browserslist": "> 0.25%, not dead",
   "dependencies": {
+    "@neft/compiler-document": "1.0.0-alpha.1",
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "coffee-script": "^1.12.7",

@@ -38,9 +38,8 @@ exports.cliEnv = {
   NEFT_PLATFORM: 'node',
 }
 
-exports.getTargetEnv = ({ production, target }) => {
+exports.getTargetEnv = ({ target }) => {
   const env = {
-    NODE_ENV: production ? 'production' : 'development',
     NEFT_PLATFORM: target,
   }
   Object.keys(targetEnvs).forEach((possibleTarget) => {

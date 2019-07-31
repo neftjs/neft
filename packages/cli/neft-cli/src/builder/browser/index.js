@@ -16,6 +16,14 @@ const HTML = `<!doctype html>
 </html>
 `
 
+exports.shouldLoadStaticFiles = true
+
+exports.shouldBundle = true
+
+exports.shouldProduceManifest = true
+
+exports.shouldGenerateIcons = true
+
 exports.getImports = async ({ target, extensions }) => {
   const imports = []
 

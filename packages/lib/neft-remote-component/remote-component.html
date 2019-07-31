@@ -1,0 +1,22 @@
+<n-props url />
+
+<n-call>
+  {loadComponent(url)}
+</n-call>
+
+<n-use n-component={component} />
+
+<script>
+import request from '@neft/request'
+
+export default () => ({
+  component: null,
+  async loadComponent(url) {
+    const res = await request(url)
+    const parcelRequire = require
+    const module = { exports: {} }
+    eval(res)
+    this.component = module.exports
+  },
+})
+</script>
