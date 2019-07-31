@@ -35,10 +35,16 @@ describe 'Document Element', ->
 
         return
 
-    it 'stringifies to html', ->
-        html = doc.stringifyChildren()
+    it 'stringify to html', ->
+        html = doc.stringify()
 
         assert.is html, HTML
+
+    it 'hidden props are omitted in the stringified process', ->
+        elem = fromHTML '<span n-if="a" n-each="a"></span>'
+        html = elem.stringify()
+
+        assert.is html, '<span></span>'
 
     it 'stringify children to html', ->
         elem = fromHTML '<span><b></b></span>'
@@ -48,7 +54,7 @@ describe 'Document Element', ->
         assert.is htmlOuter, '<span><b></b></span>'
         assert.is htmlInner, '<b></b>'
 
-    it 'changes parents properly', ->
+    it 'change parents properly', ->
         em.parent = div
         p.parent = undefined
 
@@ -56,7 +62,7 @@ describe 'Document Element', ->
         assert.is b.children.length, 0
         assert.is div.children.length, 1
         assert.is div.children[0], em
-        assert.is doc.stringifyChildren(), '<b></b><u><em>abc</em></u>'
+        assert.is doc.stringify(), '<b></b><u><em>abc</em></u>'
         try
             em.parent = em
         catch err
@@ -145,7 +151,7 @@ describe 'Document Element', ->
 
         assert.is elem.children.length, 2
         assert.is elem.children[0], elemP
-        assert.is elem.stringifyChildren(), '<p></p><u></u>'
+        assert.is elem.stringify(), '<p></p><u></u>'
 
         elem.replace elemP, elemB
         elemP.parent = elem
@@ -154,7 +160,7 @@ describe 'Document Element', ->
         assert.is elem.children[0], elemB
         assert.is elem.children[1], elemDiv
         assert.is elem.children[2], elemP
-        assert.is elem.stringifyChildren(), '<b><em></em></b><u></u><p></p>'
+        assert.is elem.stringify(), '<b><em></em></b><u></u><p></p>'
 
     describe 'queryAll() works with selector', ->
         doc2 = fromHTML """
