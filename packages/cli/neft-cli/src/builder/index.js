@@ -21,6 +21,7 @@ const targetBuilders = {
   webgl: require('./browser'),
   android: require('./android'),
   ios: require('./ios'),
+  file: require('./file'),
 }
 
 const getExtensions = () => {
@@ -139,7 +140,8 @@ const createEntryFile = async ({
 
 exports.bundle = async (target, {
   input, output, extensions = [], imports = [], production = false, watch = false,
-  initCode = '',
+  initCode = '', injectEnvs = true, bundleNodeModules = true,
+  createMainAppEntryFile = true,
 }) => {
   const parcelOptions = {
     outDir: output,
@@ -150,22 +152,23 @@ exports.bundle = async (target, {
     hmrHostname: localIp,
     hmrPort: hmrServerPort,
     minify: production,
-    target: 'browser',
-    bundleNodeModules: true,
+    target: injectEnvs ? 'browser' : 'node',
+    bundleNodeModules,
     sourceMaps: false,
     logLevel: 2,
   }
   const [defaultStyles, defaultComponents, entry] = await Promise.all([
     getDefaultStyles({ extensions }),
     getDefaultComponents({ extensions }),
-    createEntryFile({
+    createMainAppEntryFile ? createEntryFile({
       input, extensions, imports, initCode,
-    }),
+    }) : input,
   ])
   const entries = [entry]
   const bundler = new ParcelBundler(entries, parcelOptions)
   bundler.options.env = {
-    ...getTargetEnv({ production, target }),
+    ...(injectEnvs && getTargetEnv({ production, target })),
+    NODE_ENV: production ? 'production' : 'development',
     NEFT_PARCEL_EXTENSIONS: JSON.stringify(extensions),
     NEFT_PARCEL_DEFAULT_STYLES: JSON.stringify(defaultStyles),
     NEFT_PARCEL_DEFAULT_COMPONENTS: JSON.stringify(defaultComponents),
@@ -197,32 +200,53 @@ exports.build = async (target, args) => {
   const watch = !!args.run
   const targetBuilder = targetBuilders[target]
   const input = realpath
-  const output = path.join(outputDir, target)
+  let output = path.join(outputDir, target)
   const filepath = path.join(output, outputFile)
   const extensions = getExtensions()
-  let imports
+  const {
+    shouldLoadStaticFiles, shouldBundle,
+    shouldProduceManifest, shouldGenerateIcons,
+  } = targetBuilder
 
-  logline.loading(`Build **${target}** - parse static files`)
-  const staticFilesCode = await loadStaticFiles()
-
-  logline.loading(`Build **${target}** - bundle`)
-  if (typeof targetBuilder.getImports === 'function') {
-    imports = await targetBuilder.getImports({ input, target, extensions })
+  let staticFilesCode
+  if (shouldLoadStaticFiles) {
+    logline.loading(`Build **${target}** - parse static files`)
+    staticFilesCode = await loadStaticFiles()
   }
-  await exports.bundle(target, {
-    input, output, extensions, imports, production, watch, initCode: staticFilesCode,
-  })
 
-  logline.loading(`Build **${target}** - produce manifest`)
-  const manifest = await produceManifest({ ...targetBuilder, target, output })
+  if (shouldBundle) {
+    logline.loading(`Build **${target}** - bundle`)
+    let imports
+    if (typeof targetBuilder.getImports === 'function') {
+      imports = await targetBuilder.getImports({ input, target, extensions })
+    }
+    let config = {
+      input, output, extensions, imports, production, watch, initCode: staticFilesCode,
+    }
+    if (typeof targetBuilder.getBundleConfig === 'function') {
+      config = targetBuilder.getBundleConfig({ config, args })
+    }
+    ({ output } = config)
+    await exports.bundle(target, config)
+  }
 
-  logline.loading(`Build **${target}** - generate icons`)
-  await generateIcons({ ...targetBuilder, target, manifest })
+  let manifest
+  if (shouldProduceManifest) {
+    logline.loading(`Build **${target}** - produce manifest`)
+    manifest = await produceManifest({ ...targetBuilder, target, output })
+  }
 
-  logline.loading(`Build **${target}** - build ${target} project`)
-  await targetBuilder.build({
-    manifest, output, filepath, production, extensions,
-  })
+  if (shouldGenerateIcons) {
+    logline.loading(`Build **${target}** - generate icons`)
+    await generateIcons({ ...targetBuilder, target, manifest })
+  }
+
+  if (typeof targetBuilder.build === 'function') {
+    logline.loading(`Build **${target}** - build ${target} project`)
+    await targetBuilder.build({
+      manifest, output, filepath, production, extensions,
+    })
+  }
 
   logline.log(`✔ Built **${target}**`).stop()
   if (!args.run) logger.log(`Bundle is located in \`${path.relative(realpath, output)}\``)

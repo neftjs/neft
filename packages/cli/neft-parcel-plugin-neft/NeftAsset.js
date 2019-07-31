@@ -1,3 +1,5 @@
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
 const { Asset } = require('parcel-bundler')
 require('@neft/parcel-util')
 const { logger } = require('@neft/core')
@@ -83,9 +85,11 @@ class NeftAsset extends Asset {
       styles,
     })
 
-    this.addDependency('@neft/core')
-    defaultStyles.forEach(({ path }) => { this.addDependency(path) })
-    defaultComponents.forEach(({ path }) => { this.addDependency(path) })
+    if (this.options.bundleNodeModules) {
+      this.addDependency('@neft/core')
+      defaultStyles.forEach(({ path }) => { this.addDependency(path) })
+      defaultComponents.forEach(({ path }) => { this.addDependency(path) })
+    }
     dependencies.forEach((name) => { this.addDependency(name) })
 
     return [{
