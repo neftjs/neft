@@ -28,16 +28,18 @@ isPublicTag = (name) ->
 isPublicProp = (name) ->
     not /^(?:n-|style:)/.test(name)
 
-getInnerHTML = (elem) ->
+getInnerHTML = (elem, opts) ->
     if elem.children
         r = ''
         for child in elem.children
-            r += getOuterHTML child
+            r += getOuterHTML child, opts
         r
     else
         ''
 
-getOuterHTML = (elem) ->
+getOuterHTML = (elem, opts) ->
+    {includeInternals} = opts
+
     if elem._visible is false
         return ''
 
@@ -45,20 +47,26 @@ getOuterHTML = (elem) ->
         return elem._text
 
     {name} = elem
-    if not name or not isPublicTag(name)
-        return getInnerHTML elem
+    skipTag = not name
+    unless includeInternals
+        skipTag or= not isPublicTag(name)
+    if skipTag
+        return getInnerHTML elem, opts
 
     ret = '<' + name
     {props} = elem
     for propName, propValue of props
-        if not props.hasOwnProperty(propName)
-            continue
-        if not propValue? or typeof propValue is 'function' or not isPublicProp(propName)
+        skipProp = not props.hasOwnProperty(propName)
+        skipProp or= not propValue?
+        skipProp or= typeof propValue is 'function'
+        unless includeInternals
+            skipProp or= not isPublicProp(propName)
+        if skipProp
             continue
 
         ret += ' ' + propName + '="' + propValue + '"'
 
-    innerHTML = getInnerHTML elem
+    innerHTML = getInnerHTML elem, opts
     if not innerHTML and SINGLE_TAG[name]
         ret + ' />'
     else

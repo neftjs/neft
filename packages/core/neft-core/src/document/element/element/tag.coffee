@@ -125,11 +125,11 @@ module.exports = (Element) -> class Tag extends Element
 
     watch: query.watch
 
-    stringify: ->
-        stringify.getOuterHTML @
+    stringify: (opts = {}) ->
+        stringify.getOuterHTML @, opts
 
-    stringifyChildren: ->
-        stringify.getInnerHTML @
+    stringifyChildren: (opts = {}) ->
+        stringify.getInnerHTML @, opts
 
     replace: (oldElement, newElement) ->
         assert.instanceOf oldElement, Element

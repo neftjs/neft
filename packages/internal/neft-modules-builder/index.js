@@ -42,7 +42,9 @@ const NEFT_PARSER = async ({ name, file }) => {
     }
   })
 
-  const compiled = ast.stringifyChildren()
+  const compiled = ast.stringifyChildren({
+    includeInternals: true,
+  })
 
   return {
     file: compiled,
