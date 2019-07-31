@@ -22,6 +22,12 @@ SINGLE_TAG =
     track: true
     wbr: true
 
+isPublicTag = (name) ->
+    name isnt '' and name isnt 'blank' and not /^(?:[A-Z]|n-)/.test(name)
+
+isPublicProp = (name) ->
+    not /^(?:n-|style:)/.test(name)
+
 getInnerHTML = (elem) ->
     if elem.children
         r = ''
@@ -39,7 +45,7 @@ getOuterHTML = (elem) ->
         return elem._text
 
     {name} = elem
-    if not name
+    if not name or not isPublicTag(name)
         return getInnerHTML elem
 
     ret = '<' + name
@@ -47,7 +53,7 @@ getOuterHTML = (elem) ->
     for propName, propValue of props
         if not props.hasOwnProperty(propName)
             continue
-        if not propValue? or typeof propValue is 'function'
+        if not propValue? or typeof propValue is 'function' or not isPublicProp(propName)
             continue
 
         ret += ' ' + propName + '="' + propValue + '"'
