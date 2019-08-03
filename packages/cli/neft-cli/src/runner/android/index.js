@@ -120,11 +120,11 @@ const runApk = manifest => new Promise((resolve, reject) => {
 module.exports = async ({ production }) => {
   const manifestPath = path.join(realpath, 'manifest/android.yaml')
   const manifest = yaml.safeLoad(await fs.readFile(manifestPath, 'utf-8'))
-  logger.info('Installing APK on the connected device')
+  logger.log('-> Installing APK on the connected device')
   await installApk({ production })
   const logcat = startLogcat()
   try {
-    logger.info('Running APK on the device')
+    logger.log('-> Running APK on the device')
     await runApk(manifest)
   } catch (error) {
     logcat.kill()

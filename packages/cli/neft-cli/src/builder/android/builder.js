@@ -184,7 +184,7 @@ exports.build = async ({
     throw new Error('ANDROID_HOME environment variable need to be set to the Android SDK location')
   }
 
-  logger.info('Preparing Android build')
+  logger.log('   Copying runtime files')
 
   const bundle = await fs.readFile(filepath, 'utf-8')
   const androidExtensions = await getAndroidExtensions(extensions)
@@ -206,6 +206,8 @@ exports.build = async ({
 
   await prepareMainActivity(manifest, output)
 
-  logger.info('Building Android APK')
+  logger.log('   Building Android APK')
+  logger.log('\n------------------')
   await assembleApk(production, output)
+  logger.log('------------------\n')
 }

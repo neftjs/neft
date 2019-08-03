@@ -180,22 +180,20 @@ exports.bundle = async (target, {
   await bundler.bundle()
 
   if (watch) {
-    let logline
     bundler.on('buildStart', () => {
-      logline = logger.line().timer().loading('Build changes')
+      logger.log('Building changed files')
     })
     bundler.on('buildError', (err) => {
-      logline.error(`Cannot build changes: \`${err.message}\``).stop()
+      logger.error(`Cannot build changes: \`${err.message}\``)
     })
     bundler.on('bundled', () => {
-      logline.ok('Changes built').stop()
+      logger.ok('Changes built')
     })
   }
 }
 
 exports.build = async (target, args) => {
-  const logline = logger.line().timer().loading(`Build **${target}**`)
-
+  logger.log(`\`Building **${target}** target\``)
   const production = !!args.production
   const watch = !!args.run
   const targetBuilder = targetBuilders[target]
@@ -208,14 +206,20 @@ exports.build = async (target, args) => {
     shouldProduceManifest, shouldGenerateIcons,
   } = targetBuilder
 
+  if (typeof targetBuilder.test === 'function') {
+    if (!targetBuilder.test({ args })) {
+      process.exit(1)
+    }
+  }
+
   let staticFilesCode
   if (shouldLoadStaticFiles) {
-    logline.loading(`Build **${target}** - parse static files`)
+    logger.log('-> Parsing static files')
     staticFilesCode = await loadStaticFiles()
   }
 
   if (shouldBundle) {
-    logline.loading(`Build **${target}** - bundle`)
+    logger.log('-> Bundling')
     let imports
     if (typeof targetBuilder.getImports === 'function') {
       imports = await targetBuilder.getImports({ input, target, extensions })
@@ -232,22 +236,22 @@ exports.build = async (target, args) => {
 
   let manifest
   if (shouldProduceManifest) {
-    logline.loading(`Build **${target}** - produce manifest`)
+    logger.log('-> Reading manifest file')
     manifest = await produceManifest({ ...targetBuilder, target, output })
   }
 
   if (shouldGenerateIcons) {
-    logline.loading(`Build **${target}** - generate icons`)
+    logger.log('-> Generating icons')
     await generateIcons({ ...targetBuilder, target, manifest })
   }
 
   if (typeof targetBuilder.build === 'function') {
-    logline.loading(`Build **${target}** - build ${target} project`)
+    logger.log('-> Building platform project')
     await targetBuilder.build({
       manifest, output, filepath, production, extensions,
     })
   }
 
-  logline.log(`✔ Built **${target}**`).stop()
-  if (!args.run) logger.log(`Bundle is located in \`${path.relative(realpath, output)}\``)
+  logger.ok(`Target **${target}** is ready`)
+  if (!args.run) logger.log(`The bundle is located in \`${path.relative(realpath, output)}\``)
 }

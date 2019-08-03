@@ -3,9 +3,9 @@ const path = require('path')
 const util = require('util')
 const sharp = require('sharp')
 const glob = util.promisify(require('glob'))
-const logger = require('@neft/core').logger.scope('build:static')
+const { logger } = require('@neft/core')
 const { Resources, Resource } = require('@neft/core')
-const { outputDir, staticDir } = require('../config')
+const { realpath, outputDir, staticDir } = require('../config')
 
 const imageExtensions = {
   '.jpg': true,
@@ -37,7 +37,7 @@ const getNeededResolutions = (input) => {
 }
 
 const createLowResImage = async ({
-  file, name, stat, metadata, resolution, initialResolution, output,
+  file, stat, metadata, resolution, initialResolution, output,
 }) => {
   const lowRestWidth = Math.round(metadata.width * resolution / initialResolution)
   const lowRestHeight = Math.round(metadata.height * resolution / initialResolution)
@@ -48,7 +48,9 @@ const createLowResImage = async ({
     }
     return null
   } catch (error) {
-    logger.debug(`Resize \`${name}\``)
+    const relativeInput = path.relative(realpath, file)
+    const relativeOutput = path.relative(realpath, output)
+    logger.log(`   Resize \`${relativeInput}\` -> \`${relativeOutput}\``)
     await fs.ensureDir(path.dirname(output))
     return sharp(file).resize(lowRestWidth, lowRestHeight).toFile(output)
   }

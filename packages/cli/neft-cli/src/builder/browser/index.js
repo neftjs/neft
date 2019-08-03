@@ -20,9 +20,9 @@ exports.shouldLoadStaticFiles = true
 
 exports.shouldBundle = true
 
-exports.shouldProduceManifest = true
+exports.shouldProduceManifest = false
 
-exports.shouldGenerateIcons = true
+exports.shouldGenerateIcons = false
 
 exports.getImports = async ({ target, extensions }) => {
   const imports = []
