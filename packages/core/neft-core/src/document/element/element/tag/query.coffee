@@ -294,7 +294,7 @@ class Watcher extends SignalsEmitter
             watcher = pool.pop()
             watcher.node = node
             watcher.queries = queries
-            watcher._forceUpdate = true
+            watcher.forceUpdate = true
         else
             watcher = new Watcher node, queries
 
@@ -305,7 +305,7 @@ class Watcher extends SignalsEmitter
 
     constructor: (node, queries) ->
         super()
-        @_forceUpdate = true
+        @forceUpdate = true
         @node = node
         @queries = queries
         @uid = (lastUid++)+''
@@ -369,7 +369,7 @@ module.exports = (Element, _Tag) ->
         if Array.isArray(target)
             target
 
-    queryAllParents: (selector, target=[], targetCtx=target) ->
+    queryAllParents: (selector, target = [], targetCtx = target) ->
         unless typeof target is 'function'
             assert.isArray target
         func = if Array.isArray(target) then target.push else target
@@ -390,7 +390,7 @@ module.exports = (Element, _Tag) ->
         resultFunc = (arg) ->
             result = arg
 
-        (selector, opts=0) ->
+        (selector, opts = 0) ->
             assert.isString selector
             assert.notLengthOf selector, 0
 
@@ -447,7 +447,7 @@ module.exports = (Element, _Tag) ->
                     watchersQueue.push watcher
 
                     # mark as forced watcher
-                    if not hasForcedWatcher and watcher._forceUpdate
+                    if not hasForcedWatcher and watcher.forceUpdate
                         hasForcedWatcher = true
 
                     # remove abandoned watcher nodes
@@ -461,7 +461,7 @@ module.exports = (Element, _Tag) ->
                             delete childNode._inWatchers[watcher.uid]
 
                             # remove from watcher
-                            nodes[i] = nodes[n-1]
+                            nodes[i] = nodes[n - 1]
                             nodes.pop()
                             watcher.nodesToRemove.push childNode
                             invalidateWatcher watcher
@@ -471,7 +471,7 @@ module.exports = (Element, _Tag) ->
             if hasForcedWatcher or flags & CHECK_WATCHERS_THIS
                 inWatchers = node._inWatchers
                 for watcher in watchersQueue
-                    if hasForcedWatcher and not watcher._forceUpdate and not (flags & CHECK_WATCHERS_THIS)
+                    if hasForcedWatcher and not watcher.forceUpdate and not (flags & CHECK_WATCHERS_THIS)
                         continue
                     watcherUid = watcher.uid
                     if (not inWatchers or not inWatchers[watcherUid]) and watcher.test(node)
@@ -502,6 +502,8 @@ module.exports = (Element, _Tag) ->
             if watchers
                 for i in [0...watchers.length] by 1
                     watcher = watchersQueue.pop()
+                    if watcher.forceUpdate
+                        watcher.forceUpdate = false
 
             # clear node
             node._checkWatchers = 0
