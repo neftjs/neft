@@ -16,6 +16,6 @@ module.exports = () => {
   app.use(serve(outputDir))
   app.use(serve(path.join(staticDir, '../')))
   app.listen(devServerPort, host)
-  logger.info(`Start HTTP server on \`${host}:${devServerPort}\``)
+  logger.log(`-> Starting HTTP server on \`${host}:${devServerPort}\``)
   open(`http://${host}:${devServerPort}`)
 }

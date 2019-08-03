@@ -1,3 +1,4 @@
+const fs = require('fs').promises
 const { logger } = require('@neft/core')
 const { parseArgv } = require('./argv-parser')
 const { build } = require('./builder')
@@ -6,6 +7,8 @@ const { clean } = require('./cleaner')
 
 module.exports = async (argv) => {
   const { operation, target, args } = parseArgv(argv)
+
+  await fs.realpath('.') // show warning log first
 
   if (operation === 'build' || operation === 'run') {
     try {

@@ -109,6 +109,7 @@ const copyStaticFiles = async (output, { fontsSupported }) => {
 const resolveFont = async (filepath) => {
   const fileRealpath = await fs.realpath(filepath)
   const { stdout: name } = await promisify(cp.exec)(`otfinfo -p ${fileRealpath}`)
+  logger.log(`     Found font \`${filepath}\` with name \`${name.trim()}\``)
   return {
     source: `/${filepath}`,
     name: name.trim(),
@@ -148,7 +149,7 @@ const assignManifest = (target, source) => {
   }
 }
 
-const assignExtenionManifests = async (manifest, extensions) => {
+const assignExtensionManifests = async (manifest, extensions) => {
   await Promise.all(extensions.map(async ({ dirPath }) => {
     const manifestPath = path.join(dirPath, 'manifest/ios.yaml')
     try {
@@ -201,11 +202,10 @@ const prepareXcodeProject = async ({ output, iosExtensions }) => {
 exports.build = async ({
   manifest, output, filepath, extensions,
 }) => {
-  logger.info('Preparing iOS build')
-
   const bundle = await fs.readFile(filepath, 'utf-8')
   const iosExtensions = await getIosExtensions(extensions)
 
+  logger.log('   Copying runtime files')
   await fs.emptyDir(output)
   const { mustacheFiles } = await copyRuntime(output)
   const fontsSupported = await checkFontsSupported()
@@ -213,9 +213,10 @@ exports.build = async ({
   const [{ fonts: fontPaths }] = await Promise.all([
     copyStaticFiles(output, { fontsSupported }), copyNativeDir(output),
     copyIcons(output), copyManifestApp(output), copyExtensions(output, iosExtensions),
-    assignExtenionManifests(manifest, iosExtensions),
+    assignExtensionManifests(manifest, iosExtensions),
   ])
 
+  logger.log('   Resolving fonts')
   const fonts = await resolveFonts(fontPaths)
 
   await processMustacheFiles(mustacheFiles, {
@@ -225,7 +226,12 @@ exports.build = async ({
     extensions: iosExtensions,
   })
 
-  if (manifest.pods && manifest.pods.length > 0) await installPods({ output })
+  if (manifest.pods && manifest.pods.length > 0) {
+    logger.log('   Installing pods')
+    logger.log('\n------------------')
+    await installPods({ output })
+    logger.log('------------------\n')
+  }
 
   await prepareXcodeProject({ output, iosExtensions })
 }
