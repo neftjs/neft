@@ -3,6 +3,7 @@ package io.neft;
 import android.content.Context;
 import io.neft.client.Client;
 import io.neft.utils.Consumer;
+import io.neft.utils.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +30,7 @@ public final class Db {
                     @Override
                     String resolve(Context context) throws IOException {
                         InputStream inputStream = context.openFileInput(key);
-                        return Http.getStringFromInputStream(inputStream);
+                        return StringUtils.getStringFromInputStream(inputStream);
                     }
                 });
             }

@@ -24,7 +24,10 @@ namespace timers {
         Isolate *isolate = JS::GetIsolate();
         Isolate::Scope isolate_scope(isolate);
 
-        jint delay = args[0]->Int32Value();
+        Local<Context> context = Local<Context>::New(isolate, JS::GetContext());
+        Context::Scope context_scope(context);
+
+        jint delay = args[0]->Int32Value(context).ToChecked();
         int id = Java::GetEnv()->CallIntMethod(jniObject, jniShotMethod, delay);
 
         args.GetReturnValue().Set(Integer::New(isolate, id));

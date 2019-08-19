@@ -8,31 +8,17 @@
 
 using namespace v8;
 
+static std::unique_ptr<v8::Platform> platformInstance;
 static Isolate* isolate_;
-static Persistent<Context, CopyablePersistentTraits<Context>> context_;
 static Persistent<Script> script_;
+static Persistent<Context, CopyablePersistentTraits<Context>> context_;
 static Persistent<Object, CopyablePersistentTraits<Object>> global_;
 static Persistent<Object, CopyablePersistentTraits<Object>> globalAndroid_;
 static Persistent<Object, CopyablePersistentTraits<Object>> globalNeft_;
 
-class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
-public:
-    virtual void* Allocate(size_t length) {
-        return calloc(length, 1);
-    }
-    virtual void* AllocateUninitialized(size_t length) {
-        return malloc(length);
-    }
-    virtual void Free(void* data, size_t) {
-        free(data);
-    }
-};
-
-ArrayBufferAllocator allocator;
-
 void OnMessage(Local<Message> message, Local<Value> error) {
     HandleScope scope(isolate_);
-    String::Utf8Value str(message->Get());
+    String::Utf8Value str(isolate_, message->Get());
 
     __android_log_write(ANDROID_LOG_ERROR, "Neft", *str);
 }
@@ -71,7 +57,8 @@ namespace JS {
 
         // Create new object and add it to the target
         Local<Object> object = Object::New(isolate_);
-        localTarget->Set(String::NewFromUtf8(isolate_, name), object);
+        auto objectName = String::NewFromUtf8(isolate_, name, NewStringType::kNormal).ToLocalChecked();
+        (void) localTarget->Set(context, objectName, object);
 
         // Get persistent link to the created object
         Persistent<Object, CopyablePersistentTraits<Object>> persistentObject(isolate_, object);
@@ -91,8 +78,9 @@ namespace JS {
         Local<Object> localTarget = Local<Object>::New(isolate_, target);
 
         // Create new function and add it to the target
-        Local<Function> function = Function::New(isolate_, callback);
-        localTarget->Set(String::NewFromUtf8(isolate_, name), function);
+        Local<Function> function = Function::New(context, callback).ToLocalChecked();
+        auto functionName = String::NewFromUtf8(isolate_, name, NewStringType::kNormal).ToLocalChecked();
+        (void) localTarget->Set(context, functionName, function);
 
         // Get persistent link to the created function
         Persistent<Function, CopyablePersistentTraits<Function>> persistentFunction(isolate_, function);
@@ -113,24 +101,24 @@ namespace JS {
         Local<Function> local = Local<Function>::New(isolate_, function);
 
         // Call function
-        local->Call(isolate_->GetCurrentContext()->Global(), argc, argv);
+        (void) local->Call(context, isolate_->GetCurrentContext()->Global(), argc, argv);
     }
     void Initialize(const char *js){
         // Initialize V8.
         V8::InitializeICU();
-        Platform* platform = platform::CreateDefaultPlatform();
-        V8::InitializePlatform(platform);
+        platformInstance = platform::NewDefaultPlatform();
+        V8::InitializePlatform(platformInstance.get());
         V8::Initialize();
 
         // Create a new Isolate and make it the current one.
         Isolate::CreateParams create_params;
-        create_params.array_buffer_allocator = &allocator;
+        create_params.array_buffer_allocator = ArrayBuffer::Allocator::NewDefaultAllocator();
         Isolate* isolate = isolate_ = Isolate::New(create_params);
         {
             Isolate::Scope isolate_scope(isolate);
 
             // configure
-            isolate->SetAutorunMicrotasks(true);
+            isolate->SetMicrotasksPolicy(MicrotasksPolicy::kAuto);
             isolate->SetCaptureStackTraceForUncaughtExceptions(true);
             isolate->AddMessageListener(OnMessage);
             isolate->SetFatalErrorHandler(OnFatalError);
@@ -147,23 +135,18 @@ namespace JS {
             Handle<Object> global = context->Global();
             global_.Reset(isolate, global);
 
-            // Set config
-            isolate->SetAutorunMicrotasks(true);
-
             // Prepare global object
             globalAndroid_ = JS::CreateObject(global_, "android");
             globalNeft_ = JS::CreateObject(global_, "_neft");
 
             // Create a string containing the JavaScript source code.
-            Local<String> source =
-                    String::NewFromUtf8(isolate, js,
-                                        NewStringType::kNormal).ToLocalChecked();
+            Local<String> source = String::NewFromUtf8(isolate, js, NewStringType::kNormal).ToLocalChecked();
 
             // Compile the source code.
             Local<Script> script;
             TryCatch try_catch(isolate);
             if (!Script::Compile(context, source).ToLocal(&script)){
-                String::Utf8Value error(try_catch.StackTrace());
+                String::Utf8Value error(isolate, try_catch.StackTrace(context).ToLocalChecked());
                 __android_log_write(ANDROID_LOG_ERROR, "Neft", *error);
                 return;
             }
@@ -184,7 +167,7 @@ namespace JS {
         Local<Value> result;
         TryCatch try_catch(isolate_);
         if (!script->Run(context).ToLocal(&result)){
-            String::Utf8Value error(try_catch.StackTrace());
+            String::Utf8Value error(isolate_, try_catch.StackTrace(context).ToLocalChecked());
             __android_log_write(ANDROID_LOG_ERROR, "Neft", *error);
         }
     }
