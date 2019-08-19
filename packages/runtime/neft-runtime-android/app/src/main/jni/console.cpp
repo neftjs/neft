@@ -7,7 +7,15 @@
 using namespace v8;
 
 static void androidLog(int level, const FunctionCallbackInfo<Value>& args) {
-    __android_log_write(level, LOG_TAG, *String::Utf8Value(args[0]->ToString()));
+    Isolate *isolate = JS::GetIsolate();
+    HandleScope scope(isolate);
+
+    Local<Context> context = Local<Context>::New(isolate, JS::GetContext());
+    Context::Scope context_scope(context);
+
+    String::Utf8Value str(isolate, args[0]->ToString(context).ToLocalChecked());
+
+    __android_log_write(level, LOG_TAG, *str);
 }
 
 namespace console {

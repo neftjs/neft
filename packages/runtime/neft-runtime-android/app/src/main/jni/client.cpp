@@ -40,16 +40,19 @@ namespace client {
         Isolate *isolate = JS::GetIsolate();
         Isolate::Scope isolate_scope(isolate);
 
+        Local<Context> context = Local<Context>::New(isolate, JS::GetContext());
+        Context::Scope context_scope(context);
+
         // actions
         jbyteArray outActions;
         jbyte* outActionsFill;
         {
             Local<Array> array = Local<Array>::Cast(args[0]);
-            const int length = args[1]->Int32Value();
+            const int length = args[1]->Int32Value(context).ToChecked();
             outActions = jniEnv->NewByteArray(length);
             outActionsFill = new jbyte[length];
             for (int i = 0; i < length; i++) {
-                outActionsFill[i] = array->Get(i)->Uint32Value();
+                outActionsFill[i] = array->Get(context, i).ToLocalChecked()->Uint32Value(context).ToChecked();
             }
             jniEnv->SetByteArrayRegion(outActions, 0, length, outActionsFill);
         }
@@ -59,11 +62,11 @@ namespace client {
         jboolean* outBooleansFill;
         {
             Local<Array> array = Local<Array>::Cast(args[2]);
-            const int length = args[3]->Int32Value();
+            const int length = args[3]->Int32Value(context).ToChecked();
             outBooleans = jniEnv->NewBooleanArray(length);
             outBooleansFill = new jboolean[length];
             for (int i = 0; i < length; i++) {
-                outBooleansFill[i] = array->Get(i)->BooleanValue();
+                outBooleansFill[i] = array->Get(context, i).ToLocalChecked()->BooleanValue(isolate);
             }
             jniEnv->SetBooleanArrayRegion(outBooleans, 0, length, outBooleansFill);
         }
@@ -73,11 +76,11 @@ namespace client {
         jint* outIntsFill;
         {
             Local<Array> array = Local<Array>::Cast(args[4]);
-            const int length = args[5]->Int32Value();
+            const int length = args[5]->Int32Value(context).ToChecked();
             outInts = jniEnv->NewIntArray(length);
             outIntsFill = new jint[length];
             for (int i = 0; i < length; i++) {
-                outIntsFill[i] = array->Get(i)->Uint32Value();
+                outIntsFill[i] = array->Get(context, i).ToLocalChecked()->Uint32Value(context).ToChecked();
             }
             jniEnv->SetIntArrayRegion(outInts, 0, length, outIntsFill);
         }
@@ -87,11 +90,11 @@ namespace client {
         jfloat* outFloatsFill;
         {
             Local<Array> array = Local<Array>::Cast(args[6]);
-            const int length = args[7]->Int32Value();
+            const int length = args[7]->Int32Value(context).ToChecked();
             outFloats = jniEnv->NewFloatArray(length);
             outFloatsFill = new jfloat[length];
             for (int i = 0; i < length; i++) {
-                outFloatsFill[i] = array->Get(i)->NumberValue();
+                outFloatsFill[i] = array->Get(context, i).ToLocalChecked()->NumberValue(context).ToChecked();
             }
             jniEnv->SetFloatArrayRegion(outFloats, 0, length, outFloatsFill);
         }
@@ -100,10 +103,11 @@ namespace client {
         jobjectArray outStrings;
         {
             Local<Array> array = Local<Array>::Cast(args[8]);
-            const int length = args[9]->Int32Value();
+            const int length = args[9]->Int32Value(context).ToChecked();
             outStrings = jniEnv->NewObjectArray(length, jniEnv->FindClass("java/lang/String"), jniEnv->NewStringUTF(""));
             for (int i = 0; i < length; i++) {
-                jstring stringUtf = jniEnv->NewStringUTF(*String::Utf8Value(array->Get(i)->ToString()));
+                String::Utf8Value string(isolate, array->Get(context, i).ToLocalChecked()->ToString(context).ToLocalChecked());
+                jstring stringUtf = jniEnv->NewStringUTF(*string);
                 jniEnv->SetObjectArrayElement(outStrings, i, stringUtf);
                 jniEnv->DeleteLocalRef(stringUtf);
             }
@@ -169,16 +173,16 @@ extern "C" void Java_io_neft_Native_client_1sendData(JNIEnv * env, jobject obj,
     Local<Array> localOutActions = Local<Array>::New(isolate, outActions);
     jbyte *actionsArr = env->GetByteArrayElements(actions, 0);
     for (int i = 0; i < actionsLength; i++) {
-        localOutActions->Set(i, Integer::New(isolate, actionsArr[i]));
+        (void) localOutActions->Set(context, i, Integer::New(isolate, actionsArr[i]));
     }
-    localOutActions->Set(String::NewFromUtf8(isolate, "length"), Integer::New(isolate, actionsLength));
+    (void) localOutActions->Set(context, String::NewFromUtf8(isolate, "length", NewStringType::kNormal).ToLocalChecked(), Integer::New(isolate, actionsLength));
     env->ReleaseByteArrayElements(actions, actionsArr, 0);
 
     // booleans
     jboolean *booleansArr = env->GetBooleanArrayElements(booleans, 0);
     Local<Array> localOutBooleans = Local<Array>::New(isolate, outBooleans);
     for (int i = 0; i < booleansLength; i++) {
-        localOutBooleans->Set(i, Boolean::New(isolate, booleansArr[i]));
+        (void) localOutBooleans->Set(context, i, Boolean::New(isolate, booleansArr[i]));
     }
     env->ReleaseBooleanArrayElements(booleans, booleansArr, 0);
 
@@ -186,7 +190,7 @@ extern "C" void Java_io_neft_Native_client_1sendData(JNIEnv * env, jobject obj,
     jint *integersArr = env->GetIntArrayElements(integers, 0);
     Local<Array> localOutIntegers = Local<Array>::New(isolate, outIntegers);
     for (int i = 0; i < integersLength; i++) {
-        localOutIntegers->Set(i, Integer::New(isolate, integersArr[i]));
+        (void) localOutIntegers->Set(context, i, Integer::New(isolate, integersArr[i]));
     }
     env->ReleaseIntArrayElements(integers, integersArr, 0);
 
@@ -194,7 +198,7 @@ extern "C" void Java_io_neft_Native_client_1sendData(JNIEnv * env, jobject obj,
     jfloat *floatsArr = env->GetFloatArrayElements(floats, 0);
     Local<Array> localOutFloats = Local<Array>::New(isolate, outFloats);
     for (int i = 0; i < floatsLength; i++) {
-        localOutFloats->Set(i, Number::New(isolate, floatsArr[i]));
+        (void) localOutFloats->Set(context, i, Number::New(isolate, floatsArr[i]));
     }
     env->ReleaseFloatArrayElements(floats, floatsArr, 0);
 
@@ -204,7 +208,7 @@ extern "C" void Java_io_neft_Native_client_1sendData(JNIEnv * env, jobject obj,
         jobject stringUtfObject = env->GetObjectArrayElement(strings, i);
         jstring stringUtf = (jstring) stringUtfObject;
         const char *stringUtfChar = env->GetStringUTFChars(stringUtf, 0);
-        localOutStrings->Set(i, String::NewFromUtf8(isolate, stringUtfChar));
+        (void) localOutStrings->Set(context, i, String::NewFromUtf8(isolate, stringUtfChar, NewStringType::kNormal).ToLocalChecked());
         env->ReleaseStringUTFChars(stringUtf, stringUtfChar);
         env->DeleteLocalRef(stringUtfObject);
     }
@@ -216,5 +220,5 @@ extern "C" void Java_io_neft_Native_client_1sendData(JNIEnv * env, jobject obj,
     const unsigned argc = 5;
     Local<Value> argv[argc] = {localOutActions, localOutBooleans, localOutIntegers,
                                localOutFloats, localOutStrings};
-    local->Call(Null(isolate), argc, argv);
+    (void) local->Call(context, Null(isolate), argc, argv);
 }

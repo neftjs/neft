@@ -9,6 +9,7 @@ import io.neft.client.Client;
 import io.neft.customapp.CustomApp;
 import io.neft.renderer.*;
 import io.neft.utils.Signal;
+import io.neft.utils.StringUtils;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -107,7 +108,6 @@ public class App {
     public void run() {
         System.loadLibrary("neft");
 
-        new Http();
         new Timers();
         client = new Client();
         renderer = new Renderer();
@@ -178,7 +178,7 @@ public class App {
 
     private String getAssetFile(String path) {
         try {
-            return Http.getStringFromInputStream(activity.getAssets().open(path));
+            return StringUtils.getStringFromInputStream(activity.getAssets().open(path));
         } catch (IOException error) {
             Log.d(TAG, "IO ERROR!");
             Log.d(TAG, error.toString());

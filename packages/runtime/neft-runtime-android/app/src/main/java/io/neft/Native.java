@@ -10,9 +10,6 @@ public final class Native {
     private static native void timers_init(Timers timers);
     private static native void timers_callback(int id);
 
-    private static native void http_init(Http http);
-    private static native void http_onResponse(int id, String err, int code, String resp, String cookies);
-
     private static native void client_init(Client client);
     private static native void client_sendData(byte[] actions, int actionsLength,
                                               boolean[] booleans, int booleansLength,
@@ -42,16 +39,6 @@ public final class Native {
         public static void callbackTimer(int id) {
             ensureMainThread();
             Native.timers_callback(id);
-        }
-
-        public static void initHttp(Http http) {
-            ensureMainThread();
-            Native.http_init(http);
-        }
-
-        public static void onHttpResponse(int id, String err, int code, String resp, String cookies) {
-            ensureMainThread();
-            Native.http_onResponse(id, err, code, resp, cookies);
         }
 
         public static void initClient(Client client) {

@@ -64,7 +64,7 @@ extern "C" void Java_io_neft_Native_renderer_1callAnimationFrame(JNIEnv * env, j
         Local<Function> localFunc = Local<Function>::New(isolate, func);
 
         // call function
-        localFunc->Call(context->Global(), 0, NULL);
+        (void) localFunc->Call(context, context->Global(), 0, NULL);
 
         // clear persistent
         func.Reset();
