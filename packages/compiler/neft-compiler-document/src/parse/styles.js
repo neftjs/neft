@@ -21,7 +21,7 @@ const findDefinitions = (rootElement, element) => {
   const nStyle = isTag && element.props['n-style']
 
   const children = []
-  if (isTag) {
+  if (isTag && element.name.slice(0, 2) !== 'n-') {
     element.children.forEach((child) => {
       children.push(...findDefinitions(rootElement, child))
     })
