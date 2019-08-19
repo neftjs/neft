@@ -289,26 +289,28 @@ class Watcher extends SignalsEmitter
     lastUid = 0
     pool = []
 
-    @create = (node, queries) ->
+    @create = (node, queries, watchElements) ->
         if pool.length
             watcher = pool.pop()
             watcher.node = node
             watcher.queries = queries
-            watcher._forceUpdate = true
+            watcher.watchElements = watchElements
+            watcher.forceUpdate = true
         else
-            watcher = new Watcher node, queries
+            watcher = new Watcher node, queries, watchElements
 
         nodeWatchers = node._watchers ?= []
         nodeWatchers.push watcher
 
         watcher
 
-    constructor: (node, queries) ->
+    constructor: (node, queries, watchElements) ->
         super()
-        @_forceUpdate = true
+        @forceUpdate = true
         @node = node
         @queries = queries
-        @uid = (lastUid++)+''
+        @watchElements = watchElements
+        @uid = (lastUid++) + ''
         @nodes = []
         @nodesToAdd = []
         @nodesToRemove = []
@@ -320,16 +322,16 @@ class Watcher extends SignalsEmitter
 
     test: (tag) ->
         for funcs in @queries
-            funcs[funcs.length-2] = @node # set byTag anchor data1
+            funcs[funcs.length - 2] = @node # set byTag anchor data1
             if test(tag, funcs, 0, NOP, null, true)
                 return true
         false
 
     disconnect: ->
         assert.ok @node
-        {uid, node, nodes, nodesToAdd, nodesToRemove} = this
+        {uid, node, nodes, nodesToAdd, nodesToRemove} = @
 
-        utils.remove node._watchers, this
+        utils.remove node._watchers, @
 
         while node = nodesToAdd.pop()
             delete node._inWatchers[uid]
@@ -345,7 +347,7 @@ class Watcher extends SignalsEmitter
         @onRemove.disconnectAll()
 
         @node = @queries = null
-        pool.push this
+        pool.push @
         return
 
 module.exports = (Element, _Tag) ->
@@ -354,7 +356,7 @@ module.exports = (Element, _Tag) ->
 
     getSelectorCommandsLength: module.exports.getSelectorCommandsLength
 
-    queryAll: queryAll = (selector, target=[], targetCtx=target, opts=0) ->
+    queryAll: queryAll = (selector, target = [], targetCtx = target, opts = 0) ->
         assert.isString selector
         assert.notLengthOf selector, 0
         unless typeof target is 'function'
@@ -369,7 +371,7 @@ module.exports = (Element, _Tag) ->
         if Array.isArray(target)
             target
 
-    queryAllParents: (selector, target=[], targetCtx=target) ->
+    queryAllParents: (selector, target = [], targetCtx = target) ->
         unless typeof target is 'function'
             assert.isArray target
         func = if Array.isArray(target) then target.push else target
@@ -390,7 +392,7 @@ module.exports = (Element, _Tag) ->
         resultFunc = (arg) ->
             result = arg
 
-        (selector, opts=0) ->
+        (selector, opts = 0) ->
             assert.isString selector
             assert.notLengthOf selector, 0
 
@@ -404,12 +406,13 @@ module.exports = (Element, _Tag) ->
     queryParents: (selector) ->
         query.call @, selector, OPTS_REVERSED | OPTS_QUERY_BY_PARENTS
 
-    watch: (selector) ->
+    watch: (selector, watchElements) ->
         assert.isString selector
         assert.notLengthOf selector, 0
+        assert.isArray watchElements if watchElements?
 
         queries = getQueries selector, OPTS_REVERSED | OPTS_ADD_ANCHOR
-        watcher = Watcher.create @, queries
+        watcher = Watcher.create @, queries, watchElements
         checkWatchersDeeply @
         watcher
 
@@ -437,18 +440,44 @@ module.exports = (Element, _Tag) ->
                     return true
             false
 
+        testNode = (node, watcher) ->
+            inWatchers = node._inWatchers
+            watcherUid = watcher.uid
+            if (not inWatchers or not inWatchers[watcherUid]) and watcher.test(node)
+                # add in node
+                unless inWatchers
+                    inWatchers = node._inWatchers = {}
+                inWatchers[watcherUid] = true
+
+                # add in watcher
+                watcher.nodesToAdd.push node
+                invalidateWatcher watcher
+            else if inWatchers and inWatchers[watcherUid] and not watcher.test(node)
+                # remove from node
+                delete inWatchers[watcherUid]
+
+                # remove from watcher
+                utils.removeFromUnorderedArray watcher.nodes, node
+                watcher.nodesToRemove.push node
+                invalidateWatcher watcher
+            return
+
         checkNodeRec = (node, watchersQueue, flags, hasForcedWatcher) ->
             checkWatchers = node._checkWatchers
             flags |= checkWatchers
+            addedWatchersToQueue = 0
 
             # add node watchers to the queue
             if watchers = node._watchers
                 for watcher in watchers
-                    watchersQueue.push watcher
+                    # only global watchers are saved into watchersQueue
+                    unless watcher.watchElements
+                        watchersQueue.push watcher
+                        addedWatchersToQueue += 1
 
-                    # mark as forced watcher
-                    if not hasForcedWatcher and watcher._forceUpdate
-                        hasForcedWatcher = true
+                        # mark as forced watcher
+                        if not hasForcedWatcher and watcher.forceUpdate
+                            hasForcedWatcher = true
 
                     # remove abandoned watcher nodes
                     watcherNode = watcher.node
@@ -461,36 +490,32 @@ module.exports = (Element, _Tag) ->
                             delete childNode._inWatchers[watcher.uid]
 
                             # remove from watcher
-                            nodes[i] = nodes[n-1]
+                            nodes[i] = nodes[n - 1]
                             nodes.pop()
                             watcher.nodesToRemove.push childNode
                             invalidateWatcher watcher
                             n--
 
+                    if watcher.watchElements
+                        # for watcher with watchElement we're going to test
+                        # all elements in any of them changed
+                        anyElementChange = watcher.forceUpdate
+                        unless anyElementChange
+                            for element in watcher.watchElements
+                                if element._checkWatchers & CHECK_WATCHERS_THIS
+                                    anyElementChange = true
+                                    break
+                        if anyElementChange
+                            for element in watcher.watchElements
+                                testNode element, watcher
+                            watcher.forceUpdate = false
+
             # test this node
             if hasForcedWatcher or flags & CHECK_WATCHERS_THIS
-                inWatchers = node._inWatchers
                 for watcher in watchersQueue
-                    if hasForcedWatcher and not watcher._forceUpdate and not (flags & CHECK_WATCHERS_THIS)
+                    if hasForcedWatcher and not watcher.forceUpdate and not (flags & CHECK_WATCHERS_THIS)
                         continue
-                    watcherUid = watcher.uid
-                    if (not inWatchers or not inWatchers[watcherUid]) and watcher.test(node)
-                        # add in node
-                        unless inWatchers
-                            inWatchers = node._inWatchers = {}
-                        inWatchers[watcherUid] = true
-
-                        # add in watcher
-                        watcher.nodesToAdd.push node
-                        invalidateWatcher watcher
-                    else if inWatchers and inWatchers[watcherUid] and not watcher.test(node)
-                        # remove from node
-                        delete inWatchers[watcherUid]
-
-                        # remove from watcher
-                        utils.removeFromUnorderedArray watcher.nodes, node
-                        watcher.nodesToRemove.push node
-                        invalidateWatcher watcher
+                    testNode node, watcher
 
             # check recursively
             if flags & CHECK_WATCHERS_CHILDREN and node instanceof Tag
@@ -500,8 +525,10 @@ module.exports = (Element, _Tag) ->
 
             # remove added watchers from the queue
             if watchers
-                for i in [0...watchers.length] by 1
+                for i in [0...addedWatchersToQueue] by 1
                     watcher = watchersQueue.pop()
+                    if watcher.forceUpdate
+                        watcher.forceUpdate = false
 
             # clear node
             node._checkWatchers = 0
@@ -528,9 +555,12 @@ module.exports = (Element, _Tag) ->
 
         (node, parent = node._parent) ->
             # mark this node
-            node._checkWatchers |= CHECK_WATCHERS_THIS
-            if node instanceof Tag
-                node._checkWatchers |= CHECK_WATCHERS_CHILDREN
+            checkWatchers = node._checkWatchers
+            unless checkWatchers & CHECK_WATCHERS_THIS
+                checkWatchers |= CHECK_WATCHERS_THIS
+                if node instanceof Tag
+                    checkWatchers |= CHECK_WATCHERS_CHILDREN
+                node._checkWatchers = checkWatchers
 
             # mark parents
             tmp = node

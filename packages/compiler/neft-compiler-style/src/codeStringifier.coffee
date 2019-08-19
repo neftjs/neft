@@ -181,6 +181,10 @@ class Stringifier
         object = @createClass ast
         object.body.unshift
             type: nmlAst.ATTRIBUTE_TYPE
+            name: 'document.queryElements'
+            value: '__elements'
+        object.body.unshift
+            type: nmlAst.ATTRIBUTE_TYPE
             name: 'document.query'
             value: ast.query
         @stringifyObject object

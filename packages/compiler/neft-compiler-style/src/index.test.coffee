@@ -54,14 +54,25 @@ it 'bundles top level selects', ->
         exports.selects = []
         exports.selects.push(() => {
           const _r0 = Class.New()
-          _RendererObject.setOpts(_r0, {"document.query": 'a > b', "changes": {"color": 'red'}})
+          _RendererObject.setOpts(_r0, {\
+          "document.query": 'a > b', \
+          "document.queryElements": [function(){return __elements}, []], \
+          "changes": {"color": 'red'}})
           return { objects: {"_r0": _r0}, select: _r0 }
         })
         exports.selects.push(() => {
           const _r0 = Class.New()
-          _RendererObject.setOpts(_r0, {"document.query": 'div', "changes": [], "nesting": function(){
+          _RendererObject.setOpts(_r0, {\
+          "document.query": 'div', \
+          "document.queryElements": [function(){return __elements}, []], \
+          "changes": [], \
+          "nesting": function(){
           const _r10 = Class.New()
-          return [_RendererObject.setOpts(_r10, {"document.query": 'strong', "changes": {"font.weight": 1}})]
+          return [_RendererObject.setOpts(_r10, {\
+          "document.query": 'strong', \
+          "document.queryElements": [function(){return __elements}, []], \
+          "changes": {"font.weight": 1}\
+          })]
           }})
           return { objects: {"_r0": _r0}, select: _r0 }
         })

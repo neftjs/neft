@@ -342,7 +342,7 @@ module.exports = class StyleItem
                                     item.previousSibling = tmpSiblingTargetItem
                                 return true
                     # check children of special tags
-                    else unless tmpSiblingDocStyle
+                    else if not tmpSiblingDocStyle and tmpSiblingNode instanceof Tag
                         tmpIndexNode = tmpSiblingNode
                         tmpSiblingNode = utils.last tmpIndexNode.children
                         continue
