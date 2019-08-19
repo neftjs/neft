@@ -335,6 +335,14 @@ Grid {
         updateClassList = (item) ->
             item._classList.sort classListSortFunc
 
+        initializeNesting = (classElem) ->
+            if typeof classElem._nesting is 'function'
+                for child in classElem._nesting()
+                    if child instanceof Class and not child._document
+                        initializeNesting child
+                    classElem.children.append child
+            return
+
         cloneClassChild = (classElem, child) ->
             child.clone()
 
@@ -359,9 +367,7 @@ Grid {
                     clone.children.append childClone
 
             # create nested objects
-            if typeof @_nesting is 'function'
-                for child in @_nesting()
-                    clone.children.append child
+            initializeNesting clone
 
             clone
 
