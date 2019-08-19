@@ -64,10 +64,14 @@ class ComponentParser {
 
   toCode(element) {
     PARSERS.forEach(parser => parser(element, this))
-    this.addProp('element', () => `Element.fromJSON(${JSON.stringify(element)})`)
+    this.addProp('element', () => '__element')
     Object.keys(this[propsToAdd]).forEach((key) => { this[props][key] = this[propsToAdd][key]() })
     return {
-      exports: `(options) => new Document('${this.resourcePath}', ${this.propsToCode()}, options)`,
+      exports: `(options) => {
+        const __element = Element.fromJSON(${JSON.stringify(element)})
+        const __elements = Element.Tag.getDescendantsArray(__element)
+        return new Document('${this.resourcePath}', ${this.propsToCode()}, options)
+      }`,
       dependencies: this.dependencies,
     }
   }

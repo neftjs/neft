@@ -647,6 +647,7 @@ Grid {
 
             constructor: (ref) ->
                 @_query = ''
+                @_queryElements = null
                 @_classesInUse = []
                 @_classesPool = []
                 @_nodeWatcher = null
@@ -703,6 +704,25 @@ Grid {
 
                     unless val
                         loadObjects @, @_target
+                    return
+
+            itemUtils.defineProperty
+                constructor: @
+                name: 'queryElements'
+                defaultValue: ''
+                namespace: 'document'
+                parentConstructor: ClassDocument
+                developmentSetter: (val) ->
+                    assert.isArray val if val?
+                setter: (_super) -> (val) ->
+                    assert.notOk @_parent
+
+                    if @_queryElements is val
+                        return
+
+                    _super.call @, val
+                    @reloadQuery()
+
                     return
 
             getChildClass = (style, parentClass) ->
@@ -777,7 +797,7 @@ Grid {
 
                 # add new ones
                 if (query = @_query) and (target = @_ref.target) and (node = target.element) and node.watch
-                    watcher = @_nodeWatcher = node.watch query
+                    watcher = @_nodeWatcher = node.watch query, @_queryElements
                     watcher.onAdd.connect onNodeAdd, @
                     watcher.onRemove.connect onNodeRemove, @
                 return

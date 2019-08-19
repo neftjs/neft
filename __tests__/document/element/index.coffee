@@ -348,26 +348,26 @@ describe 'Document Element', ->
         return
 
     describe 'watch()', ->
+        tags = doc2 = doc2div1 = doc2b = doc2u = doc2u2 = doc2div2 = doc2em1 = doc2em2 = null
+
+        beforeEach ->
+            tags = []
+            doc2 = fromHTML """
+                <div><b><u color='blue' attr='1'><u></u></u></b></div>
+                <div attr='2'><blank><em>text1</em></blank><em></em></div>
+                """
+            doc2div1 = doc2.children[0]
+            doc2b = doc2div1.children[0]
+            doc2u = doc2b.children[0]
+            doc2u2 = doc2b.children[0].children[0]
+            doc2div2 = doc2.children[1]
+            doc2em1 = doc2div2.children[0].children[0]
+            doc2em2 = doc2div2.children[1]
+
         it 'is a function', ->
             assert.instanceOf doc.watch, Function
 
         describe 'works with selector', ->
-            tags = doc2 = doc2div1 = doc2b = doc2u = doc2u2 = doc2div2 = doc2em1 = doc2em2 = null
-
-            beforeEach ->
-                tags = []
-                doc2 = fromHTML """
-                    <div><b><u color='blue' attr='1'><u></u></u></b></div>
-                    <div attr='2'><blank><em>text1</em></blank><em></em></div>
-                    """
-                doc2div1 = doc2.children[0]
-                doc2b = doc2div1.children[0]
-                doc2u = doc2b.children[0]
-                doc2u2 = doc2b.children[0].children[0]
-                doc2div2 = doc2.children[1]
-                doc2em1 = doc2div2.children[0].children[0]
-                doc2em2 = doc2div2.children[1]
-
             it 'E', ->
                 doc2b.parent = null
                 watcher = doc2.watch 'b'
@@ -556,6 +556,21 @@ describe 'Document Element', ->
                 removedTags.push tag
             b1.parent = null
             assert.isEqual removedTags, [b1, b2], maxDeep: 1
+
+        describe 'with watchElements array given', ->
+            it 'tests only provided elements', ->
+                watcher = doc2.watch '[attr="1"]', [doc2u]
+                tags.push watcher.nodes...
+                watcher.onAdd.connect (tag) ->
+                    tags.push tag
+                watcher.onRemove.connect (tag) ->
+                    util.remove tags, tag
+                assert.isEqual tags, [doc2u], maxDeep: 1
+                doc2div2.props.set 'attr', '1'
+                assert.isEqual tags, [doc2u], maxDeep: 1
+                doc2u.props.set 'attr', '2'
+                assert.isEqual tags, [], maxDeep: 1
+            return
 
         return
 

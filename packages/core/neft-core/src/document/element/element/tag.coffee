@@ -23,6 +23,13 @@ module.exports = (Element) -> class Tag extends Element
 
     @CustomTag = require('./tag/custom') Element, @
 
+    @getDescendantsArray = (element, target = []) ->
+        if element instanceof Tag
+            for child in element.children
+                target.push child
+                Tag.getDescendantsArray child, target
+        return target
+
     @_fromJSON = (arr, obj) ->
         name = arr[JSON_NAME]
         unless obj
