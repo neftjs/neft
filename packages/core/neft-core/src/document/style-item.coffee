@@ -309,6 +309,7 @@ module.exports = class StyleItem
         if @isAutoParent and @item
             @item.parent = val
             @findItemIndex()
+            @findAndSetVisibility()
         return
 
     findItemWithParent = (item, parent) ->
