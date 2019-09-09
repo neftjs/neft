@@ -2,6 +2,8 @@ const log = require('../log')
 const assert = require('../assert')
 const eventLoop = require('../event-loop')
 
+const { hasOwnProperty } = Object.prototype
+
 class Use {
   constructor(document, element) {
     this.document = document
@@ -19,7 +21,8 @@ class Use {
 
     let anyElement = this.element
     while (anyElement) {
-      if ('n-if' in anyElement.props) {
+      const anyElementProps = anyElement.props
+      if (hasOwnProperty.call(anyElementProps, 'n-if') || hasOwnProperty.call(anyElementProps, 'n-else')) {
         anyElement.onVisibleChange.connect(this.handleElementVisibleChange, this)
       }
       anyElement = anyElement.parent
