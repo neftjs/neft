@@ -3,6 +3,8 @@ const assert = require('../assert')
 const eventLoop = require('../event-loop')
 const ObservableArray = require('../observable-array')
 
+const { hasOwnProperty } = Object.prototype
+
 class Iterator {
   constructor(document, { element, component, naming }) {
     this.document = document
@@ -25,7 +27,8 @@ class Iterator {
 
     let anyElement = this.element
     while (anyElement) {
-      if ('n-if' in anyElement.props) {
+      const anyElementProps = anyElement.props
+      if (hasOwnProperty.call(anyElementProps, 'n-if') || hasOwnProperty.call(anyElementProps, 'n-else')) {
         anyElement.onVisibleChange.connect(this.handleElementVisibleChange, this)
       }
       anyElement = anyElement.parent

@@ -66,7 +66,7 @@ describe('Document n-use', () => {
         </script>
       </n-component>
       <Abc logs="{logs}" name="fail" n-if={data} />
-      <Abc logs="{logs}" name="ok" />
+      <Abc logs="{logs}" name="ok" n-else />
     `)
     renderParse(view)
     assert.isEqual(view.exported.logs, ['ok'])
@@ -81,6 +81,7 @@ describe('Document n-use', () => {
       </script>
       <n-component name="Abc">
         <n-props logs status />
+        {status}
         <script>
         exports.default = {
           onRender() {
@@ -90,6 +91,7 @@ describe('Document n-use', () => {
         </script>
       </n-component>
       <Abc logs="{logs}" status={$context.status} n-if={$context.status} />
+      <Abc logs="{logs}" status="fail" n-else />
     `)
     const context = new Struct({
       status: null,
@@ -98,7 +100,8 @@ describe('Document n-use', () => {
       context,
     })
     eventLoop.callInLock(() => { context.status = 'ok' })
-    assert.isEqual(view.exported.logs, ['ok'])
+    assert.isEqual(view.exported.logs, ['fail', 'ok'])
+    assert.is(view.element.stringify(), 'ok')
   })
 
   it('does not render component inside hidden element', () => {
