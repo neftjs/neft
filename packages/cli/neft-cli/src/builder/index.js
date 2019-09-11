@@ -138,6 +138,19 @@ const createEntryFile = async ({
   return filename
 }
 
+const createEntryLink = async (input) => {
+  const file = `module.exports = require('./${path.relative(realpath, input)}')`
+
+  const filename = path.join(realpath, '.neft-entry.js')
+  await fs.writeFile(filename, file)
+
+  process.on('exit', () => {
+    unlinkSync(filename)
+  })
+
+  return filename
+}
+
 exports.bundle = async (target, {
   input, output, extensions = [], imports = [], production = false, watch = false,
   initCode = '', injectEnvs = true, bundleNodeModules = true,
@@ -162,7 +175,7 @@ exports.bundle = async (target, {
     getDefaultComponents({ extensions }),
     createMainAppEntryFile ? createEntryFile({
       input, extensions, imports, initCode,
-    }) : input,
+    }) : createEntryLink(input),
   ])
   const entries = [entry]
   const bundler = new ParcelBundler(entries, parcelOptions)
