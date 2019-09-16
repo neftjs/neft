@@ -103,12 +103,14 @@ it('new class', () => {
 })
 
 it('left assignment', () => {
+  // connections in left side of assignment needs to be omitted
+  // to not let bindings update without a break
   const result = parser.parse('counter += 1', {
     prefixIdsByThis: true,
   })
   assert.isEqual(result, {
     hash: 'this.counter += 1',
-    connections: '[["this","counter"]]',
+    connections: '[]',
   })
 })
 
@@ -118,17 +120,7 @@ it('right assignment', () => {
   })
   assert.isEqual(result, {
     hash: 'this.counter = this.sum',
-    connections: '[["this","counter"],["this","sum"]]',
-  })
-})
-
-it('left assignment', () => {
-  const result = parser.parse('counter += 1', {
-    prefixIdsByThis: true,
-  })
-  assert.isEqual(result, {
-    hash: 'this.counter += 1',
-    connections: '[["this","counter"]]',
+    connections: '[["this","sum"]]',
   })
 })
 

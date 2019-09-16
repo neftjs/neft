@@ -217,12 +217,24 @@ const getRootMemberExpression = (ancestors) => {
   return root
 }
 
+const isMemberInAssignmentExpression = (ancestors, member) => {
+  for (let i = ancestors.length - 2; i >= 0; i -= 1) {
+    const ancestor = ancestors[i]
+    const parent = ancestors[i - 1]
+    if (ancestor === member && parent) {
+      return parent.type === 'AssignmentExpression' && parent.left === member
+    }
+  }
+  return false
+}
+
 const ancestorsToConnection = (ancestors, {
   shouldUseIdInConnections,
   isHeadIdConnectionPublic,
 } = {}) => {
   const node = ancestors[ancestors.length - 1]
   const root = getRootMemberExpression(ancestors)
+  if (root && isMemberInAssignmentExpression(ancestors, root)) return ''
   const chain = root ? getMemberExpressionsChain(root) : [node.name]
   const head = chain[0]
   if (typeof shouldUseIdInConnections !== 'function' || shouldUseIdInConnections(head)) {
