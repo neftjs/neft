@@ -13,7 +13,23 @@ export default () => ({
   component: null,
   async loadComponent(url) {
     const res = await request(url)
-    const parcelRequire = require
+    const parcelRequire = (id) => {
+      try {
+        return global.require(id)
+      } catch (error) {
+        if (error.code === 'MODULE_NOT_FOUND' && typeof url === 'string' && url[0] !== '.') {
+          // parcel doesn't support requiring by module names outside of a file
+          // where 'require' with that name has been specified;
+          // we're looking for such require in any other file to find proper path to it
+          const { modules } = global.parcelRequire
+          const alias = Object.values(modules).find(([_, aliases]) => id in aliases)
+          if (alias) {
+            return global.require(alias[1][id])
+          }
+        }
+        throw error
+      }
+    }
     const module = { exports: {} }
     eval(res)
     this.component = module.exports
