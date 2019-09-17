@@ -126,9 +126,23 @@ const createEntryFile = async ({
 
   file += initCode
 
-  file += "module.exports = require('./')"
+  file += 'global.require = require\n'
+  file += "module.exports = require('./')\n"
 
   const filename = path.join(input, '.neft-entry.js')
+  await fs.writeFile(filename, file)
+
+  process.on('exit', () => {
+    unlinkSync(filename)
+  })
+
+  return filename
+}
+
+const createEntryLink = async (input) => {
+  const file = `module.exports = require('./${path.relative(realpath, input)}')`
+
+  const filename = path.join(realpath, '.neft-entry.js')
   await fs.writeFile(filename, file)
 
   process.on('exit', () => {
@@ -146,24 +160,35 @@ exports.bundle = async (target, {
   const parcelOptions = {
     outDir: output,
     outFile: outputFile,
-    cacheDir: path.resolve(realpath, './node_modules/', '.cache'),
+    cacheDir: path.resolve(realpath, './node_modules/.cache'),
     watch,
     hmr: watch,
     hmrHostname: localIp,
     hmrPort: hmrServerPort,
     minify: production,
-    target: injectEnvs ? 'browser' : 'node',
+    target: 'browser',
     bundleNodeModules,
     sourceMaps: false,
     logLevel: 2,
+    injectEnvs,
   }
-  const [defaultStyles, defaultComponents, entry] = await Promise.all([
+  const [defaultStyles, defaultComponents] = await Promise.all([
     getDefaultStyles({ extensions }),
     getDefaultComponents({ extensions }),
-    createMainAppEntryFile ? createEntryFile({
-      input, extensions, imports, initCode,
-    }) : input,
   ])
+  let entry
+  if (createMainAppEntryFile) {
+    const defaultStylesImports = defaultStyles.map(s => s.path)
+    const defaultComponentsImports = defaultComponents.map(c => c.path)
+    entry = await createEntryFile({
+      input,
+      extensions,
+      initCode,
+      imports: [...imports, ...defaultStylesImports, ...defaultComponentsImports],
+    })
+  } else {
+    entry = await createEntryLink(input)
+  }
   const entries = [entry]
   const bundler = new ParcelBundler(entries, parcelOptions)
   bundler.options.env = {
