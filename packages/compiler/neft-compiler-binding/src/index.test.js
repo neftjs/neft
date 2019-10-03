@@ -124,6 +124,16 @@ it('right assignment', () => {
   })
 })
 
+it('complex right assignment', () => {
+  const result = parser.parse('form.disabled = !form.name || !form.gender', {
+    prefixIdsByThis: true,
+  })
+  assert.isEqual(result, {
+    hash: 'this.form.disabled = !this.form.name || !this.form.gender',
+    connections: '[[["this","form"],"name"],[["this","form"],"gender"]]',
+  })
+})
+
 it('comparement', () => {
   const result = parser.parse('counter > 1', {
     prefixIdsByThis: true,

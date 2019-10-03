@@ -78,7 +78,12 @@ const suffixByTarget = node => ({
 })
 
 const changeNodes = (ast, types, getNewNode) => {
+  const typesSet = new Set(types)
   const typeCallback = (leaf, ancestors) => {
+    // because we're modifying the tree while iterating on it,
+    // we could potentialy get a leaf with not expected type
+    if (!typesSet.has(leaf.type)) return
+
     const parent = ancestors[ancestors.length - 2]
     switch (parent.type) {
       case 'CallExpression': {
