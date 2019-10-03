@@ -56,7 +56,7 @@ it 'bundles top level selects', ->
           const _r0 = Class.New()
           _RendererObject.setOpts(_r0, {\
           "document.query": 'a > b', \
-          "document.queryElements": [function(){return __elements}, []], \
+          "document.queryElements": __elements, \
           "changes": {"color": 'red'}})
           return { objects: {"_r0": _r0}, select: _r0 }
         })
@@ -64,13 +64,13 @@ it 'bundles top level selects', ->
           const _r0 = Class.New()
           _RendererObject.setOpts(_r0, {\
           "document.query": 'div', \
-          "document.queryElements": [function(){return __elements}, []], \
+          "document.queryElements": __elements, \
           "changes": [], \
           "nesting": function(){
           const _r10 = Class.New()
           return [_RendererObject.setOpts(_r10, {\
           "document.query": 'strong', \
-          "document.queryElements": [function(){return __elements}, []], \
+          "document.queryElements": __elements, \
           "changes": {"font.weight": 1}\
           })]
           }})

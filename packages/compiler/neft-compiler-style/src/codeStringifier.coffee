@@ -229,8 +229,11 @@ class Stringifier
     anchorToString: (value) ->
         JSON.stringify value.split '.'
 
+    isInternalReference: (value) ->
+        String(value).slice(0, 2) is '__'
+
     isReference: (value) ->
-        typeof value is 'string' and util.has(@publicIds, value)
+        typeof value is 'string' and (util.has(@publicIds, value) or @isInternalReference(value))
 
     referenceToString: (value) ->
         value

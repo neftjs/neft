@@ -273,7 +273,7 @@ it 'parses selects', ->
         _RendererObject.setOpts(_i0, {"children": [\
         _RendererObject.setOpts(_r0, {\
         "document.query": 'a > b', \
-        "document.queryElements": [function(){return __elements}, []], \
+        "document.queryElements": __elements, \
         "changes": {"color": 'red'}\
         })\
         ]})
@@ -291,7 +291,7 @@ it 'parses top level selects', ->
         const _r0 = Class.New()
         _RendererObject.setOpts(_r0, {\
         "document.query": 'a > b', \
-        "document.queryElements": [function(){return __elements}, []], \
+        "document.queryElements": __elements, \
         "changes": {"color": 'red'}\
         })
         return { objects: {"_r0": _r0}, select: _r0 }
@@ -313,7 +313,7 @@ it 'parses top level selects with nesting', ->
     expected = '''
         const _r0 = Class.New()
         _RendererObject.setOpts(_r0, {"document.query": 'a > b', \
-        "document.queryElements": [function(){return __elements}, []], \
+        "document.queryElements": __elements, \
         "changes": {"color": 'red'}, "nesting": function(){
         const _i0 = NumberAnimation.New()
         const _i1 = Item.New()
