@@ -3,11 +3,14 @@ const { Element } = require('@neft/core')
 const { Text, Tag } = Element
 
 const applyStyleQueriesInElement = (rootElement, queries, parser) => {
-  Object.keys(queries).forEach((query) => {
-    const elements = rootElement.queryAll(query)
+  Object.entries(queries).forEach(([selector, query]) => {
+    const elements = rootElement.queryAll(selector)
     elements.forEach((element) => {
       if (element instanceof Tag) {
-        element.props.set('n-style', queries[query])
+        // don't use default styles on <n-use />
+        if (query.isDefault && parser.localComponents.has(element.name)) return
+
+        element.props.set('n-style', query.path)
       } else {
         parser.warning(`Styles cannot be attached to texts; ${query} has been omitted`)
       }
@@ -51,10 +54,13 @@ module.exports = (element, parser) => {
   const styles = []
   const queries = {}
 
-  const addStyle = (name, nml, { link = false } = false) => {
+  const addStyle = (name, nml, { link = false, isDefault = false } = {}) => {
     const styleQueries = {}
     Object.entries(nml.queries).forEach(([query, queryPath]) => {
-      styleQueries[query] = [name, ...queryPath]
+      styleQueries[query] = {
+        isDefault,
+        path: [name, ...queryPath],
+      }
     })
     Object.assign(queries, styleQueries)
     styles.push({
@@ -71,7 +77,7 @@ module.exports = (element, parser) => {
 
   if (!bare) {
     parser.defaultStyles
-      .forEach((style) => { addStyle(style.name, style, { link: !!style.path }) })
+      .forEach((style) => { addStyle(style.name, style, { link: !!style.path, isDefault: true }) })
   }
   if (docStyle) {
     const parserStyle = parser.styles[parser.resourcePath]

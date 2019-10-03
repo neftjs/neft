@@ -29,6 +29,7 @@ module.exports = function (element, parser) {
     }
     components[name] = { child, options }
     parser.components.add(name)
+    parser.localComponents.add(name)
   })
 
   // add imports
@@ -37,6 +38,7 @@ module.exports = function (element, parser) {
     if (parser.components.has(name)) return
     parser.dependencies.push(src)
     parser.components.add(name)
+    parser.localComponents.add(name)
     imports[name] = src
   })
 
