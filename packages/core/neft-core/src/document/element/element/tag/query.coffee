@@ -150,6 +150,16 @@ byPropContainsValue.isIterator = false
 byPropContainsValue.priority = ATTRS_PRIORITY
 byPropContainsValue.toString = -> 'byPropContainsValue'
 
+byPropTestsValue = (node, data1, data2) ->
+    if node instanceof Tag
+        prop = node.props[data1]
+        if typeof prop is 'string'
+            return data2.test(prop)
+    false
+byPropTestsValue.isIterator = false
+byPropTestsValue.priority = ATTRS_PRIORITY
+byPropTestsValue.toString = -> 'byPropTestsValue'
+
 TYPE = /^#?[a-zA-Z0-9|\-:_]+/
 DEEP = /^([ ]*)>([ ]*)|^([ ]+)/
 ATTR_SEARCH = /^\[([^\]]+?)\]/
@@ -230,7 +240,7 @@ getQueries = (selector, opts=0) ->
             funcs[arrFunc] byProp, exec[1], null
         else if exec = ATTR_CLASS_SEARCH.exec(sel)
             sel = sel.slice exec[0].length
-            funcs[arrFunc] byPropContainsValue, 'class', exec[1]
+            funcs[arrFunc] byPropTestsValue, 'class', new RegExp("(?:^| )#{exec[1]}(?:$| )")
         else if exec = DEEP.exec(sel)
             sel = sel.slice exec[0].length
             deep = exec[0].trim()
