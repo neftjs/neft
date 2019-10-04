@@ -141,13 +141,31 @@ class Stringifier
     createClass: (ast) ->
         changes = []
         body = []
+        properties = []
+        signals = []
 
         for child in ast.body
             switch child.type
                 when nmlAst.ATTRIBUTE_TYPE, nmlAst.FUNCTION_TYPE
                     changes.push child
+                when nmlAst.PROPERTY_TYPE
+                    properties.push child
+                when nmlAst.SIGNAL_TYPE
+                    signals.push child
                 else
                     body.push child
+
+        if properties.length > 0
+            body.push
+                type: nmlAst.ATTRIBUTE_TYPE
+                name: 'customProperties'
+                value: JSON.stringify properties.map ({name}) -> name
+
+        if signals.length > 0
+            body.push
+                type: nmlAst.ATTRIBUTE_TYPE
+                name: 'customSignals'
+                value: JSON.stringify signals.map ({name}) -> name
 
         object =
             type: nmlAst.OBJECT_TYPE

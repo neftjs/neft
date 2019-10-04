@@ -322,3 +322,45 @@ it 'parses top level selects with nesting', ->
         return { objects: {"_r0": _r0}, select: _r0 }
     '''
     assert.is getObjectCode(code), expected
+
+it 'sets select properties', ->
+    code = '''
+        .foo {
+            property prop1
+            property customProp: 5
+        }
+    '''
+    expected = '''
+        const _r0 = Class.New()
+        _RendererObject.setOpts(_r0, {\
+            "document.query": '.foo', \
+            "document.queryElements": __elements, \
+            "changes": {\
+                "customProp": 5\
+            }, \
+            "customProperties": ["prop1","customProp"]\
+        })
+        return { objects: {"_r0": _r0}, select: _r0 }
+    '''
+    assert.is getObjectCode(code), expected
+
+it 'sets select signals', ->
+    code = '''
+        .foo {
+            signal onPlayerHit
+            signal heal() {console.log(1)}
+        }
+    '''
+    expected = '''
+        const _r0 = Class.New()
+        _RendererObject.setOpts(_r0, {\
+            "document.query": '.foo', \
+            "document.queryElements": __elements, \
+            "changes": {\
+                "heal": function(){console.log(1)}\
+            }, \
+            "customSignals": ["onPlayerHit","heal"]\
+        })
+        return { objects: {"_r0": _r0}, select: _r0 }
+    '''
+    assert.is getObjectCode(code), expected

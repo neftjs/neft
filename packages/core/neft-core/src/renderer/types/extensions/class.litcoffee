@@ -45,6 +45,8 @@
                 @_inheritsPriority = 0
                 @_nestingPriority = 0
                 @_changes = null
+                @_customProperties = null
+                @_customSignals = null
                 @_document = null
                 @_children = null
                 @_nesting = null
@@ -83,6 +85,18 @@ If state is created inside the *Item*, this property is set automatically.
 
                     if val
                         val._extensions.push @
+
+                        if val instanceof itemUtils.Object and Object.isExtensible(val)
+                            if @_customProperties
+                                for prop in @_customProperties
+                                    if not (prop of val)
+                                        itemUtils.Object.createProperty val, prop
+
+                            if @_customSignals
+                                for signal in @_customSignals
+                                    if not (signal of val)
+                                        itemUtils.Object.createSignal val, signal
+
                         if @_priority isnt -1 and !@_bindings?.running and !@_document?._query
                             @running = true
 
@@ -123,6 +137,26 @@ This objects contains all properties to change on the target item.
                 if isRunning
                     updateTargetClass enableClass, @_target, @
 
+                return
+
+## *Object* Class::customProperties
+
+            utils.defineProperty @::, 'customProperties', null, ->
+                @_customProperties ||= []
+            , (arr) ->
+                assert.isArray arr
+                assert.notOk @_running, "Changing class custom properties when running is not yet supported"
+                @_customProperties = arr
+                return
+
+## *Object* Class::customSignals
+
+            utils.defineProperty @::, 'customSignals', null, ->
+                @_customSignals ||= []
+            , (arr) ->
+                assert.isArray arr
+                assert.notOk @_running, "Changing class custom signals when running is not yet supported"
+                @_customSignals = arr
                 return
 
 ## *Integer* Class::priority = `0`
@@ -355,6 +389,8 @@ Grid {
             clone._inheritsPriority = @_inheritsPriority
             clone._nestingPriority = @_nestingPriority
             clone._changes = @_changes
+            clone._customProperties = @_customProperties
+            clone._customSignals = @_customSignals
             clone._nesting = @_nesting
 
             if @_bindings
