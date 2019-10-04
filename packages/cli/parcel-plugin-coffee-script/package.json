@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "coffee-script": "^1.12.7",
-    "parcel-bundler": "https://github.com/neftjs/parcel-bundler.git#1.12.3-neft.3"
+    "parcel-bundler": "https://github.com/neftjs/parcel-bundler.git#1.12.3-neft.4"
   },
   "gitHead": "9d14395fe2f6ff003da37f358dbfee354327f7ca"
 }

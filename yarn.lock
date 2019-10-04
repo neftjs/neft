@@ -8264,9 +8264,9 @@ parallel-transform@^1.1.0:
     inherits "^2.0.3"
     readable-stream "^2.1.5"
 
-"parcel-bundler@https://github.com/neftjs/parcel-bundler.git#1.12.3-neft.3":
+"parcel-bundler@https://github.com/neftjs/parcel-bundler.git#1.12.3-neft.4":
   version "1.12.3"
-  resolved "https://github.com/neftjs/parcel-bundler.git#03568dfcb229d7bbb9509588113fd89271e6deb7"
+  resolved "https://github.com/neftjs/parcel-bundler.git#8d29a4858455f3db0c51b307509d8b33e4f844c3"
   dependencies:
     "@babel/code-frame" "^7.0.0 <7.4.0"
     "@babel/core" "^7.0.0 <7.4.0"
