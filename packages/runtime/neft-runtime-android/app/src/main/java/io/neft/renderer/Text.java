@@ -231,6 +231,7 @@ public class Text extends Item {
 
     public void setColor(ColorValue val) {
         paint.setColor(val.getColor());
+        shape.invalidateSelf();
     }
 
     public void setLineHeight(float val) {
@@ -262,10 +263,12 @@ public class Text extends Item {
 
     public void setAlignmentHorizontal(String val) {
         alignmentHorizontal = ALIGNMENT.get(val);
+        shape.invalidateSelf();
     }
 
     public void setAlignmentVertical(String val) {
         alignmentVertical = ALIGNMENT.get(val);
+        shape.invalidateSelf();
     }
 
     private String[][] splitText() {
