@@ -349,6 +349,7 @@ Grid {
         cloneClassWithNoDocument = ->
             clone = Class.New()
             clone.id = @id
+            clone._path = @_path
             clone._classUid = @_classUid
             clone._priority = @_priority
             clone._inheritsPriority = @_inheritsPriority
@@ -445,6 +446,23 @@ Grid {
             else
                 proto[prop]
 
+        logNoAttributeFound = (item, classElem, attr) ->
+            query = classElem.document?._parent?.query
+            path = classElem._path
+            msg = ""
+            if query and path
+                msg = "Selector `#{query}` at `#{path}`"
+            else if path
+                msg = "Selector at `#{path}`"
+
+            if msg
+                msg += " tries to set unknown attribute `#{attr}` on `#{item}`"
+            else
+                msg = "Attribute `#{attr}` doesn't exist in `#{item}`"
+
+            log.error msg
+            return
+
         enableClass = (item, classElem) ->
             assert.instanceOf item, itemUtils.Object
             assert.instanceOf classElem, Class
@@ -495,9 +513,7 @@ Grid {
 
                     if not object or not (lastPath of object)
                         if process.env.NODE_ENV isnt 'production'
-                            log.error """
-                                Attribute '#{attr}' doesn't exist in '#{item}'
-                            """
+                            logNoAttributeFound item, classElem, attr
                         continue
 
                     if bindings[attr]
