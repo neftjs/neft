@@ -19,7 +19,7 @@ module.exports = (Renderer, Impl) ->
             attrs.push "id=#{item.id}"
         if item._path
             attrs.push "file=#{item._path}"
-        "#{ctorName}(#{attrs.join(', ')})"
+        "@#{ctorName}(#{attrs.join(', ')})"
 
     getObjFile = (item) ->
         path = ''

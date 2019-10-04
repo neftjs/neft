@@ -205,7 +205,9 @@ describe 'Document Element', ->
                     </u>\
                 </b>\
             </div>\
-            <div attr='2'><blank><em>text2</em></blank><em></em></div>
+            <div attr='2' class="firstA Afirst">\
+                <blank><em>text2</em></blank><em></em>\
+            </div>
         """
         doc2div1 = doc2.children[0]
         doc2b = doc2div1.children[0]

@@ -45,6 +45,8 @@
                 @_inheritsPriority = 0
                 @_nestingPriority = 0
                 @_changes = null
+                @_customProperties = null
+                @_customSignals = null
                 @_document = null
                 @_children = null
                 @_nesting = null
@@ -83,6 +85,18 @@ If state is created inside the *Item*, this property is set automatically.
 
                     if val
                         val._extensions.push @
+
+                        if val instanceof itemUtils.Object and Object.isExtensible(val)
+                            if @_customProperties
+                                for prop in @_customProperties
+                                    if not (prop of val)
+                                        itemUtils.Object.createProperty val, prop
+
+                            if @_customSignals
+                                for signal in @_customSignals
+                                    if not (signal of val)
+                                        itemUtils.Object.createSignal val, signal
+
                         if @_priority isnt -1 and !@_bindings?.running and !@_document?._query
                             @running = true
 
@@ -123,6 +137,26 @@ This objects contains all properties to change on the target item.
                 if isRunning
                     updateTargetClass enableClass, @_target, @
 
+                return
+
+## *Object* Class::customProperties
+
+            utils.defineProperty @::, 'customProperties', null, ->
+                @_customProperties ||= []
+            , (arr) ->
+                assert.isArray arr
+                assert.notOk @_running, "Changing class custom properties when running is not yet supported"
+                @_customProperties = arr
+                return
+
+## *Object* Class::customSignals
+
+            utils.defineProperty @::, 'customSignals', null, ->
+                @_customSignals ||= []
+            , (arr) ->
+                assert.isArray arr
+                assert.notOk @_running, "Changing class custom signals when running is not yet supported"
+                @_customSignals = arr
                 return
 
 ## *Integer* Class::priority = `0`
@@ -349,11 +383,14 @@ Grid {
         cloneClassWithNoDocument = ->
             clone = Class.New()
             clone.id = @id
+            clone._path = @_path
             clone._classUid = @_classUid
             clone._priority = @_priority
             clone._inheritsPriority = @_inheritsPriority
             clone._nestingPriority = @_nestingPriority
             clone._changes = @_changes
+            clone._customProperties = @_customProperties
+            clone._customSignals = @_customSignals
             clone._nesting = @_nesting
 
             if @_bindings
@@ -445,6 +482,23 @@ Grid {
             else
                 proto[prop]
 
+        logNoAttributeFound = (item, classElem, attr) ->
+            query = classElem.document?._parent?.query
+            path = classElem._path
+            msg = ""
+            if query and path
+                msg = "Selector `#{query}` at `#{path}`"
+            else if path
+                msg = "Selector at `#{path}`"
+
+            if msg
+                msg += " tries to set unknown attribute `#{attr}` on `#{item}`"
+            else
+                msg = "Attribute `#{attr}` doesn't exist in `#{item}`"
+
+            log.error msg
+            return
+
         enableClass = (item, classElem) ->
             assert.instanceOf item, itemUtils.Object
             assert.instanceOf classElem, Class
@@ -495,9 +549,7 @@ Grid {
 
                     if not object or not (lastPath of object)
                         if process.env.NODE_ENV isnt 'production'
-                            log.error """
-                                Attribute '#{attr}' doesn't exist in '#{item}'
-                            """
+                            logNoAttributeFound item, classElem, attr
                         continue
 
                     if bindings[attr]

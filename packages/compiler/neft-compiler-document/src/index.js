@@ -39,6 +39,7 @@ class ComponentParser {
       [name]: rest,
     }), {})
     this.components = new Set(components)
+    this.localComponents = new Set(components)
     this.dependencies = []
     this[props] = {}
     this[propsToAdd] = {}

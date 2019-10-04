@@ -50,29 +50,24 @@ where `XYZ` is the given name.
 
             PROPERTY_TYPES.text = ->
                 defaultValue: ''
-                developmentSetter: (val) ->
-                    assert.isString val
+                implementationValue: (val) -> String(val)
 
 #### number
 
             PROPERTY_TYPES.number = ->
                 defaultValue: 0
-                developmentSetter: (val) ->
-                    assert.isFloat val
+                implementationValue: (val) -> parseFloat(val) || 0
 
 #### boolean
 
             PROPERTY_TYPES.boolean = ->
                 defaultValue: false
-                developmentSetter: (val) ->
-                    assert.isBoolean val
+                implementationValue: (val) -> Boolean(val)
 
 #### resource
 
             PROPERTY_TYPES.resource = (config) ->
                 defaultValue: ''
-                developmentSetter: (val) ->
-                    assert.isString val
                 implementationValue: do ->
                     RESOURCE_REQUEST =
                         resolution: 1
@@ -88,6 +83,7 @@ where `XYZ` is the given name.
                                     return parseFloat(resolution)
                         return 1
                     (val) ->
+                        val = String(val)
                         unless Resources.testUri(val)
                             return val
                         resource = Impl.resources?.getResource(val)
@@ -103,12 +99,11 @@ where `XYZ` is the given name.
 
             PROPERTY_TYPES.color = (config) ->
                 defaultValue: ''
-                developmentSetter: (val) ->
-                    assert.isString val
                 implementationValue: do ->
                     RESOURCE_REQUEST =
                         property: 'color'
                     (val) ->
+                        val = String(val)
                         val = Impl.resources?.resolve(val, RESOURCE_REQUEST) or val
                         if IS_NATIVE
                             if val?
@@ -122,10 +117,9 @@ where `XYZ` is the given name.
 
             PROPERTY_TYPES.item = (config) ->
                 defaultValue: null
-                developmentSetter: (val) ->
-                    if val?
-                        assert.instanceOf val, Renderer.Item
                 implementationValue: (val) ->
+                    if not (val instanceof Renderer.Item)
+                        return null
                     if IS_NATIVE
                         if val?
                             val._impl.id

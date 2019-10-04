@@ -273,7 +273,7 @@ it 'parses selects', ->
         _RendererObject.setOpts(_i0, {"children": [\
         _RendererObject.setOpts(_r0, {\
         "document.query": 'a > b', \
-        "document.queryElements": [function(){return __elements}, []], \
+        "document.queryElements": __elements, \
         "changes": {"color": 'red'}\
         })\
         ]})
@@ -291,7 +291,7 @@ it 'parses top level selects', ->
         const _r0 = Class.New()
         _RendererObject.setOpts(_r0, {\
         "document.query": 'a > b', \
-        "document.queryElements": [function(){return __elements}, []], \
+        "document.queryElements": __elements, \
         "changes": {"color": 'red'}\
         })
         return { objects: {"_r0": _r0}, select: _r0 }
@@ -313,12 +313,54 @@ it 'parses top level selects with nesting', ->
     expected = '''
         const _r0 = Class.New()
         _RendererObject.setOpts(_r0, {"document.query": 'a > b', \
-        "document.queryElements": [function(){return __elements}, []], \
+        "document.queryElements": __elements, \
         "changes": {"color": 'red'}, "nesting": function(){
         const _i0 = NumberAnimation.New()
         const _i1 = Item.New()
         return [_RendererObject.setOpts(_i0, {"running": true}), _i1]
         }})
+        return { objects: {"_r0": _r0}, select: _r0 }
+    '''
+    assert.is getObjectCode(code), expected
+
+it 'sets select properties', ->
+    code = '''
+        .foo {
+            property prop1
+            property customProp: 5
+        }
+    '''
+    expected = '''
+        const _r0 = Class.New()
+        _RendererObject.setOpts(_r0, {\
+            "document.query": '.foo', \
+            "document.queryElements": __elements, \
+            "changes": {\
+                "customProp": 5\
+            }, \
+            "customProperties": ["prop1","customProp"]\
+        })
+        return { objects: {"_r0": _r0}, select: _r0 }
+    '''
+    assert.is getObjectCode(code), expected
+
+it 'sets select signals', ->
+    code = '''
+        .foo {
+            signal onPlayerHit
+            signal heal() {console.log(1)}
+        }
+    '''
+    expected = '''
+        const _r0 = Class.New()
+        _RendererObject.setOpts(_r0, {\
+            "document.query": '.foo', \
+            "document.queryElements": __elements, \
+            "changes": {\
+                "heal": function(){console.log(1)}\
+            }, \
+            "customSignals": ["onPlayerHit","heal"]\
+        })
         return { objects: {"_r0": _r0}, select: _r0 }
     '''
     assert.is getObjectCode(code), expected
