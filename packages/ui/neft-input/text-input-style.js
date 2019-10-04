@@ -12,7 +12,7 @@ TextInput.__name__ = 'TextInput'
 
 TextInput.Initialize = (item) => {
   item.on('textChange', function (value) {
-    setPropertyValue(this, 'text', value || '')
+    setPropertyValue(this, 'text', String(value || ''))
   })
 }
 
@@ -40,7 +40,7 @@ TextInput.defineProperty({
 TextInput.defineProperty({
   type: 'text',
   name: 'keyboardType',
-  implementationValue: val => val && val.toLowerCase(),
+  implementationValue: val => String(val || '').toLowerCase(),
 })
 
 TextInput.defineProperty({
@@ -52,7 +52,7 @@ TextInput.defineProperty({
 TextInput.defineProperty({
   type: 'text',
   name: 'returnKeyType',
-  implementationValue: val => val && val.toLowerCase(),
+  implementationValue: val => String(val || '').toLowerCase(),
 })
 
 TextInput.defineProperty({
