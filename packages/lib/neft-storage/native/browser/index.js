@@ -5,7 +5,7 @@ const { NativeServerBinding } = require('@neft/core')
 const { onCall, pushEvent } = new NativeServerBinding('Storage')
 
 onCall('get', (uid, key) => {
-  pushEvent('response', [uid, localStorage.getItem(key)])
+  pushEvent('response', [uid, null, localStorage.getItem(key)])
 })
 
 onCall('set', (uid, key, value) => {
