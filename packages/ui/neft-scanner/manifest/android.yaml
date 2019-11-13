@@ -1,0 +1,10 @@
+app:
+  dependencies:
+  - implementation 'com.google.android.gms:play-services-vision:17.0.2'
+xmlManifest: |
+  <uses-permission android:name="android.permission.CAMERA" />
+applicationXmlManifest: |
+  <meta-data
+    android:name="com.google.android.gms.vision.DEPENDENCIES"
+    android:value="barcode"
+  />
