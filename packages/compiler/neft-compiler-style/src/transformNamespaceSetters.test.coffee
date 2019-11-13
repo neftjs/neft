@@ -141,3 +141,31 @@ it 'transforms alignment with binding', ->
         { type: 'attribute', name: 'alignment.horizontal', value: "VAL" },
         { type: 'attribute', name: 'alignment.vertical', value: 'this.alignment.horizontal' },
     ])
+
+it 'transforms margin with nested properties', ->
+    ast = transform '''
+    @Item {
+        margin: {
+            left: 4
+            top: 5
+        }
+    }
+    '''
+    expect(ast.objects[0].body).toEqual([
+        { type: 'attribute', name: 'margin.left', value: '4' },
+        { type: 'attribute', name: 'margin.top', value: '5' },
+    ])
+
+it 'transforms any field with nested properties', ->
+    ast = transform '''
+    @Item {
+        customField: {
+            first: 1.1
+            second: 'red'
+        }
+    }
+    '''
+    expect(ast.objects[0].body).toEqual([
+        { type: 'attribute', name: 'customField.first', value: '1.1' },
+        { type: 'attribute', name: 'customField.second', value: "'red'" },
+    ])
