@@ -2,7 +2,9 @@ package io.neft;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -68,5 +70,11 @@ public class MainActivity extends Activity {
     public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event){
         onKeyEvent(keyCode, event);
         return super.onKeyMultiple(keyCode, repeatCount, event);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+        APP.getPermissions().handleRequestPermissionsResult(requestCode, granted);
     }
 }
