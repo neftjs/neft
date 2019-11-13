@@ -42,6 +42,7 @@ public class App {
     private CustomApp customApp;
     @Getter private Client client;
     @Getter private Renderer renderer;
+    @Getter private AppPermissions permissions = new AppPermissions(this);
     private final UiThreadFrame uiThreadFrame;
     private final FrameCallback frameCallback;
     private final List<MotionEvent> touchEvents = new ArrayList<>();
