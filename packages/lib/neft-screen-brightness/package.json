@@ -1,0 +1,20 @@
+{
+  "name": "@neft/screen-brightness",
+  "version": "1.0.0-alpha.1",
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
+  "publishConfig": {
+    "access": "public",
+    "publishConfig": "dist"
+  },
+  "scripts": {
+    "build": "build-neft-module",
+    "prepublishOnly": "yarn build"
+  },
+  "dependencies": {
+    "@neft/core": "^1.0.0-alpha.1"
+  },
+  "devDependencies": {
+    "@neft/modules-builder": "^1.0.0-alpha.1"
+  }
+}
