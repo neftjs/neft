@@ -130,6 +130,12 @@ const assignManifest = (target, source) => {
     target.applicationXmlManifest = target.applicationXmlManifest || ''
     target.applicationXmlManifest += `${source.applicationXmlManifest}\n`
   }
+
+  // xmlManifest
+  if (source.xmlManifest) {
+    target.xmlManifest = target.xmlManifest || ''
+    target.xmlManifest += `${source.xmlManifest}\n`
+  }
 }
 
 const assignExtenionManifests = async (manifest, extensions) => {
