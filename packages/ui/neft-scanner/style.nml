@@ -1,0 +1,6 @@
+const { Scanner } = require('@neft/scanner')
+
+@Scanner scanner {
+  fillWidth: true
+  fillHeight: true
+}
