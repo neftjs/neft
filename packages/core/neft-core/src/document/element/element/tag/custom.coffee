@@ -95,6 +95,26 @@ module.exports = (Element, Tag) -> class CustomTag extends Tag
 
         return
 
+    @defineStyleSignal = ({ signalName, signalStyleName = signalName }) ->
+        if @ is CustomTag
+            throw new Error 'Cannot define a signal on CustomTag; create your own class'
+
+        @_styleAliases ?= []
+        @_styleAliasesByName ?= {}
+
+        @_styleAliases.push
+            signalName: signalName
+            signalStyleName: signalStyleName
+
+        @_styleAliasesByName[signalName] =
+            styleName: signalStyleName
+
+        signalGetter = -> @_style?[signalStyleName]
+
+        util.defineProperty @::, signalName, util.CONFIGURABLE, signalGetter, null
+
+        return
+
     constructor: ->
         super()
 
