@@ -35,6 +35,7 @@ class Stringifier
         @objects = nmlAst.forEachLeaf
             ast: @ast, onlyType: nmlAst.OBJECT_TYPE, includeGiven: true,
             includeValues: true, deeply: true, omitDeepTypes: new Set([nmlAst.NESTING_TYPE])
+        @objects = @objects.filter (object) -> object.name
         @ids = @objects.map (elem) -> elem.id
         @publicIds = @ids.filter (elem) -> elem[0] isnt '_'
 
@@ -69,6 +70,16 @@ class Stringifier
                     throw new Error "Unknown object type '#{child.type}'"
 
         opts = []
+
+        # attributes as children
+        for attribute in attributes
+            attributeChildren = []
+            if attribute.value.type is nmlAst.OBJECT_TYPE
+                attributeChildren.push
+                    type: nmlAst.OBJECT_TYPE
+                    id: attribute.value.id
+                    body: []
+            children.unshift attributeChildren...
 
         for elem in ids
             opts.push
@@ -167,18 +178,17 @@ class Stringifier
                 name: 'customSignals'
                 value: JSON.stringify signals.map ({name}) -> name
 
+        if changes.length > 0
+            body.unshift
+                type: nmlAst.ATTRIBUTE_TYPE
+                name: 'changes'
+                value: changes
+
         object =
             type: nmlAst.OBJECT_TYPE
             name: 'Class'
             id: @getNextUID()
-            body: [
-                {
-                    type: nmlAst.ATTRIBUTE_TYPE
-                    name: 'changes'
-                    value: changes
-                },
-                body...
-            ]
+            body: body
 
         @objects.push object
         @ids.push object.id

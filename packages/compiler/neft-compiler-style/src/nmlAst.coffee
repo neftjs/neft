@@ -10,7 +10,7 @@ exports.CONDITION_TYPE = 'condition'
 exports.SELECT_TYPE = 'select'
 exports.NESTING_TYPE = 'nesting'
 
-exports.forEachLeaf = ({
+forEachLeaf = ({
     ast,
     onlyType,
     omitTypes,
@@ -38,24 +38,31 @@ exports.forEachLeaf = ({
         if isOk(ast.type)
             callback ast, parent
     if includeValues and ast.value?.type
-        exports.forEachLeaf Object.assign({}, config, {
-                ast: ast.value
-                includeGiven: true
-                includeValues: includeValues and deeply
+        forEachLeaf Object.assign({}, config, {
+            ast: ast.value
+            includeGiven: true
+            includeValues: includeValues and deeply
+            parent: ast
+        }), callback
+    if includeValues and Array.isArray(ast.value)
+        for elem in ast.value
+            forEachLeaf Object.assign({}, config, {
+                ast:
+                    value: elem
                 parent: ast
-            }),
-            callback
+            }), callback
     if deeply
         ast.body?.forEach (elem) ->
             if not omitDeepTypes or not omitDeepTypes.has(elem.type)
-                exports.forEachLeaf Object.assign({}, config, {
-                        ast: elem
-                        includeGiven: true
-                        parent: ast
-                    }),
-                    callback
+                forEachLeaf Object.assign({}, config, {
+                    ast: elem
+                    includeGiven: true
+                    parent: ast
+                }), callback
     else
         ast.body?.forEach (elem) ->
             if isOk(elem.type)
                 callback elem, ast
     result
+
+exports.forEachLeaf = forEachLeaf

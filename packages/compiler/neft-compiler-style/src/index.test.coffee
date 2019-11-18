@@ -65,14 +65,13 @@ it 'bundles top level selects', ->
           _RendererObject.setOpts(_r0, {\
           "document.query": 'div', \
           "document.queryElements": __elements, \
-          "changes": [], \
           "nesting": function(){
           const _r10 = Class.New()
-          return [_RendererObject.setOpts(_r10, {\
+          return {"children": [_RendererObject.setOpts(_r10, {\
           "document.query": 'strong', \
           "document.queryElements": __elements, \
           "changes": {"font.weight": 1}\
-          })]
+          })]}
           }})
           return { objects: {"_r0": _r0}, select: _r0 }
         })

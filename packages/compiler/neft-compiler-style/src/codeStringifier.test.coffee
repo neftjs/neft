@@ -100,7 +100,9 @@ it 'sets item object attributes', ->
     expected = '''
         const _i1 = Item.New()
         const _i0 = Rectangle.New()
-        _RendererObject.setOpts(_i1, {"prop1": _RendererObject.setOpts(_i0, {"color": 'red'})})
+        _RendererObject.setOpts(_i1, {\
+        "prop1": _RendererObject.setOpts(_i0, {"color": 'red'}), \
+        "children": [_i0]})
         return { objects: {"_i1": _i1, "_i0": _i0}, item: _i1 }
     '''
     assert.is getObjectCode(code), expected
@@ -317,7 +319,54 @@ it 'parses top level selects with nesting', ->
         "changes": {"color": 'red'}, "nesting": function(){
         const _i0 = NumberAnimation.New()
         const _i1 = Item.New()
-        return [_RendererObject.setOpts(_i0, {"running": true}), _i1]
+        return {"children": [_RendererObject.setOpts(_i0, {"running": true}), _i1]}
+        }})
+        return { objects: {"_r0": _r0}, select: _r0 }
+    '''
+    assert.is getObjectCode(code), expected
+
+it 'items in custom properties become children', ->
+    code = '''
+        @Item {
+            property background: @Rectangle {
+                color: 'red'
+            }
+            @Image {}
+        }
+    '''
+    expected = '''
+        const _i2 = Item.New()
+        const _i0 = Rectangle.New()
+        const _i1 = Image.New()
+        _RendererObject.createProperty(_i2, "background")
+        _RendererObject.setOpts(_i2, {\
+        "background": _RendererObject.setOpts(_i0, {"color": 'red'}), \
+        "children": [_i0, _i1]\
+        })
+        return { objects: {"_i2": _i2, "_i0": _i0, "_i1": _i1}, item: _i2 }
+    '''
+    assert.is getObjectCode(code), expected
+
+it 'items in custom properties of select become children', ->
+    code = '''
+        .foo {
+            property background: @Rectangle {
+                color: 'red'
+            }
+            @Item {}
+        }
+    '''
+    expected = '''
+        const _r0 = Class.New()
+        _RendererObject.setOpts(_r0, {"document.query": '.foo', \
+        "document.queryElements": __elements, \
+        "customProperties": ["background"], \
+        "nesting": function(){
+        const _i0 = Rectangle.New()
+        const _i1 = Item.New()
+        return {"changes": {\
+        "background": _RendererObject.setOpts(_i0, {"color": 'red'})}, \
+        "children": [_i0, _i1]}
         }})
         return { objects: {"_r0": _r0}, select: _r0 }
     '''

@@ -11,10 +11,18 @@
     log = log.scope 'Rendering', 'Class'
 
     module.exports = (Renderer, Impl, itemUtils) ->
+        CHANGES_OMIT_ATTRIBUTES =
+            __proto__: null
+            id: true
+            properties: true
+            signals: true
+            children: true
+
         class ChangesObject
-            constructor: ->
-                @_attributes = Object.create null
-                @_bindings = Object.create null
+            constructor: (@_attributes, @_bindings, @_namespaces) ->
+                @_attributes ?= Object.create null
+                @_bindings ?= Object.create null
+                @_namespaces ?= []
 
             setAttribute: (prop, val) ->
                 @_attributes[prop] = val
@@ -24,6 +32,55 @@
                 @_attributes[prop] = val
                 @_bindings[prop] = true
                 return
+
+            setValue: (prop, val) ->
+                path = splitAttribute prop
+
+                if path.length > 1 and not utils.has(@_namespaces, path[0])
+                    @_namespaces.push path[0]
+
+                if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
+                    @setBinding prop, val
+                else if not CHANGES_OMIT_ATTRIBUTES[prop]
+                    @setAttribute prop, val
+
+                return
+
+            fillByObject: (obj) ->
+                for prop, val of obj
+                    @setValue prop, val
+                return
+
+            clone: ->
+                attributes = Object.create @_attributes
+                bindings = Object.create @_bindings
+                namespaces = utils.clone @_namespaces
+                new ChangesObject attributes, bindings, namespaces
+
+        reloadNamespaceClasses = (classElem) ->
+            changes = classElem._changes
+            target = classElem._target
+
+            if not changes or not target
+                return
+
+            initialized = false
+            classElem._namespaceClasses = null
+
+            for namespace in changes._namespaces
+                if target[namespace] instanceof itemUtils.Object
+                    namespaceClass = new Class
+                    unless initialized
+                        classElem._namespaceClasses = {}
+                        initialized = true
+                    classElem._namespaceClasses[namespace] = namespaceClass
+                    for attr, attrVal of changes._attributes
+                        path = splitAttribute attr
+                        if path.length > 1 and path[0] is namespace
+                            subAttr = path.slice(1).join('.')
+                            namespaceClass.changes.setValue subAttr, attrVal
+
+            return
 
         class Class extends Renderer.Extension
             @__name__ = 'Class'
@@ -50,6 +107,7 @@
                 @_document = null
                 @_children = null
                 @_nesting = null
+                @_namespaceClasses = null
 
 ## *Item* Class::target
 
@@ -97,6 +155,8 @@ If state is created inside the *Item*, this property is set automatically.
                                     if not (signal of val)
                                         itemUtils.Object.createSignal val, signal
 
+                        reloadNamespaceClasses @
+
                         if @_priority isnt -1 and !@_bindings?.running and !@_document?._query
                             @running = true
 
@@ -107,13 +167,6 @@ If state is created inside the *Item*, this property is set automatically.
 ## *Object* Class::changes
 
 This objects contains all properties to change on the target item.
-
-            CHANGES_OMIT_ATTRIBUTES =
-                __proto__: null
-                id: true
-                properties: true
-                signals: true
-                children: true
 
             utils.defineProperty @::, 'changes', null, ->
                 @_changes ||= new ChangesObject
@@ -126,13 +179,8 @@ This objects contains all properties to change on the target item.
                     updateTargetClass disableClass, @_target, @
 
                 @_changes = new ChangesObject
-                changes = @_changes
-
-                for prop, val of obj
-                    if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
-                        changes.setBinding prop, val
-                    else if not CHANGES_OMIT_ATTRIBUTES[prop]
-                        changes.setAttribute prop, val
+                @_changes.fillByObject obj
+                reloadNamespaceClasses @
 
                 if isRunning
                     updateTargetClass enableClass, @_target, @
@@ -371,10 +419,18 @@ Grid {
 
         initializeNesting = (classElem) ->
             if typeof classElem._nesting is 'function'
-                for child in classElem._nesting()
-                    if child instanceof Class and not child._document
-                        initializeNesting child
-                    classElem.children.append child
+                {changes, children} = classElem._nesting()
+                if changes
+                    if classElem._changes
+                        classElem._changes = classElem._changes.clone()
+                        classElem._changes.fillByObject changes
+                    else
+                        classElem.changes = changes
+                if children
+                    for child in children
+                        if child instanceof Class and not child._document
+                            initializeNesting child
+                        classElem.children.append child
             return
 
         cloneClassChild = (classElem, child) ->
@@ -512,12 +568,28 @@ Grid {
             unless changes = classElem._changes
                 return
 
+            namespaceClasses = classElem._namespaceClasses
             attributes = changes._attributes
             bindings = changes._bindings
 
+            # enable namespace classes
+            if namespaceClasses
+                for namespace, subClass of namespaceClasses
+                    object = item[namespace]
+                    if object
+                        subClass.target = object
+                        subClass._priority = classElem._priority * 10
+                        subClass.running = true
+
             # attributes
             for attr, val of attributes
-                path = null
+                path = splitAttribute attr
+
+                # don't write if there is a namespace class
+                if path.length > 1 and namespaceClasses?[path[0]]
+                    continue
+
+                # don't write if more important class has it
                 writeAttr = true
                 alias = ''
                 for i in [classListIndex - 1..0] by -1
@@ -576,12 +648,23 @@ Grid {
             unless changes = classElem._changes
                 return
 
+            namespaceClasses = classElem._namespaceClasses
             attributes = changes._attributes
             bindings = changes._bindings
 
+            # disable namespace classes
+            if namespaceClasses
+                for namespace, subClass of namespaceClasses
+                    subClass.running = false
+
             # attributes
             for attr, val of attributes
+                path = splitAttribute attr
                 restoreDefault = true
+
+                # don't write if there is a namespace class
+                if path.length > 1 and namespaceClasses?[path[0]]
+                    continue
 
                 # don't restore if this attribute is already set by more important class
                 for i in [classListIndex - 1..0] by -1
