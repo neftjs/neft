@@ -62,6 +62,23 @@ transformAlignment = (elem) ->
         { type: ATTRIBUTE_TYPE, name: "#{elem.name}.vertical", value: vertical },
     ]
 
+transformAnyArrayValue = (elem) ->
+    attributes = []
+
+    elem.value = elem.value.filter (child) ->
+        if child.type is ATTRIBUTE_TYPE
+            attributes.push
+                type: ATTRIBUTE_TYPE
+                name: "#{elem.name}.#{child.name}"
+                value: child.value
+            return false
+        true
+
+    if elem.value.length > 0
+        attributes.unshift elem
+
+    attributes
+
 TRANSFORM_FUNCTIONS =
     margin: transformMargin
     padding: transformMargin
@@ -76,16 +93,19 @@ exports.transform = (ast) ->
         includeValues: true
         deeply: true
     , (elem, parent) ->
-        func = TRANSFORM_FUNCTIONS[elem.name]
-        if func
+        if Array.isArray(elem.value)
+            mapper = transformAnyArrayValue
+        else if typeof elem.value is 'string'
+            mapper = TRANSFORM_FUNCTIONS[elem.name]
+        if mapper
             modify.push
                 elem: elem
                 parent: parent
+                mapper: mapper
         return
 
-    modify.forEach ({ elem, parent }) ->
-        func = TRANSFORM_FUNCTIONS[elem.name]
+    modify.forEach ({ elem, parent, mapper }) ->
         elemIndex = parent.body.indexOf elem
-        parent.body.splice elemIndex, 1, func(elem)...
+        parent.body.splice elemIndex, 1, mapper(elem)...
 
     return
