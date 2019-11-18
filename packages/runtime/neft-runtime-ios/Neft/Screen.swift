@@ -7,11 +7,17 @@ class Screen {
         App.getApp().client.onAction(.setScreenStatusBarColor) {
             (reader: Reader) in
             let val = reader.getString()
+            var style: UIStatusBarStyle
             if val == "Light" {
-                UIApplication.shared.statusBarStyle = .lightContent
+                style = .lightContent
             } else {
-                UIApplication.shared.statusBarStyle = .default
+                if #available(iOS 13.0, *) {
+                    style = .darkContent
+                } else {
+                    style = .default
+                }
             }
+            UIApplication.shared.statusBarStyle = style
         }
     }
 

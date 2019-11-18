@@ -54,6 +54,7 @@ extension Extension.Input {
             fieldView.frame.size.width = 250
             fieldView.frame.size.height = 30
             fieldView.frame = fieldView.frame
+            setTextColor(UIColor.black)
 
             NotificationCenter.default.addObserver(self, selector: #selector(didBeginEditing(_:)), name: UITextField.textDidBeginEditingNotification, object: fieldView)
 
