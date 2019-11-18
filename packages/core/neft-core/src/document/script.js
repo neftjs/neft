@@ -52,6 +52,15 @@ class Script {
       }
     })
 
+    // add lets
+    if (this.document.let) {
+      this.document.let.names.forEach((name) => {
+        if (!(name in object)) {
+          object[name] = null
+        }
+      })
+    }
+
     // create struct
     const exported = new this.ExportedConstructor(this.document, object)
 
