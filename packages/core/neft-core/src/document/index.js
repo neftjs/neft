@@ -5,6 +5,7 @@ const Renderer = require('../renderer')
 const log = require('../log')
 const Use = require('./use')
 const Log = require('./log')
+const Let = require('./let')
 const Condition = require('./condition')
 const TextInput = require('./input/text')
 const PropInput = require('./input/prop')
@@ -99,6 +100,7 @@ class Document {
     this.conditions = mapToTypes(Condition, config.conditions, this)
     this.iterators = mapToTypes(Iterator, config.iterators, this)
     this.logs = mapToTypes(Log, config.logs, this)
+    this.let = config.let ? new Let(this, config.let) : null
     this.style = config.style || {}
     this.styleItems = mapToTypes(StyleItem, config.styleItems, this)
     this.slot = config.slot ? new Slot(this, config.slot) : null
@@ -230,6 +232,7 @@ class Document {
     if (this.slot) this.slot.render(sourceElement)
     this.styleItems.forEach(styleItem => styleItem.render())
     this.logs.forEach(docLog => docLog.render())
+    if (this.let) this.let.render()
 
     this.rendered = true
     if (this.root) this.script.afterRender()

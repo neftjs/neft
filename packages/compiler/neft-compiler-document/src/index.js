@@ -15,6 +15,7 @@ const PARSERS = [
   require('./parse/refs'),
   require('./parse/logs'),
   require('./parse/calls'),
+  require('./parse/lets'),
   require('./parse/slot'),
   require('./parse/unknowns'),
 ]

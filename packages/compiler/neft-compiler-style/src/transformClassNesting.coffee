@@ -11,7 +11,6 @@ getChangesNesting = (elem) ->
         children: []
     elem.body.forEach (child) ->
         if child.type is ATTRIBUTE_TYPE and child.value.type is OBJECT_TYPE
-            console.log child.value
             nesting.changes.push child
             nesting.children.push
                 type: OBJECT_TYPE
