@@ -1,13 +1,18 @@
 const findImports = (element, parser) => {
   const imports = []
   element.queryAll('n-import').forEach((child) => {
-    const { src, as } = child.props
+    const { src } = child.props
+    let { as: name } = child.props
     child.parent = null
-    if (!src || !as) {
-      parser.warning(new Error('<n-import> must provide src="" and as="" properties'))
+    if (!src) {
+      parser.warning(new Error('<n-import> must provide src="" property'))
       return
     }
-    imports.push({ src, name: as })
+    if (!name) {
+      // eslint-disable-next-line prefer-destructuring
+      name = (/\/([^/]+?)(\.[a-zA-Z]+?)?$/.exec(src) || [])[1]
+    }
+    imports.push({ src, name })
   })
   return imports
 }
