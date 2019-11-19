@@ -5,7 +5,6 @@ module.exports = (element, parser) => {
 
   const forChild = (child) => {
     if (!(child instanceof Element.Tag)) return
-    child.children.forEach(forChild)
     const { name } = child
 
     if (parser.components.has(name)) {
@@ -21,6 +20,8 @@ module.exports = (element, parser) => {
       nUses.push(child)
       child.name = 'blank'
     }
+
+    child.children.forEach(forChild)
   }
 
   forChild(element)

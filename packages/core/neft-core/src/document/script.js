@@ -61,6 +61,13 @@ class Script {
       })
     }
 
+    // add contexts
+    this.document.contexts.forEach((context) => {
+      if (!(context.as in object)) {
+        object[context.as] = null
+      }
+    })
+
     // create struct
     const exported = new this.ExportedConstructor(this.document, object)
 

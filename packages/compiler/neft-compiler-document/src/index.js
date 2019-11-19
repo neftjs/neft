@@ -17,6 +17,7 @@ const PARSERS = [
   require('./parse/calls'),
   require('./parse/lets'),
   require('./parse/slot'),
+  require('./parse/context'),
   require('./parse/unknowns'),
 ]
 /* eslint-enable global-require */
