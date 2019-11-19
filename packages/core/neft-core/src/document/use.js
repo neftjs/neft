@@ -68,13 +68,13 @@ class Use {
       return
     }
 
+    component.element.parent = this.element
     component.render({
       context: this.document.context,
       props: this.element.props,
       onPropsChange: this.onElementPropsChange,
       sourceElement: this.element,
     })
-    component.element.parent = this.element
 
     this.name = name
     this.refName = this.element.props['n-ref'] || this.element.props.ref

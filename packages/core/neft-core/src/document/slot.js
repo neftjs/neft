@@ -12,7 +12,9 @@ class Slot {
 
     for (let i = 0, n = children.length; i < n; i += 1) {
       const child = children[0]
-      child.parent = this.element
+      if (child !== this.document.element) {
+        child.parent = this.element
+      }
     }
   }
 

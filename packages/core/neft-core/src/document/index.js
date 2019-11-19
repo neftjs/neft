@@ -12,6 +12,7 @@ const PropInput = require('./input/prop')
 const Script = require('./script')
 const Slot = require('./slot')
 const Iterator = require('./iterator')
+const Context = require('./context')
 const StyleItem = require('./style-item')
 
 const parseImports = (imports) => {
@@ -105,6 +106,7 @@ class Document {
     this.styleItems = mapToTypes(StyleItem, config.styleItems, this)
     this.slot = config.slot ? new Slot(this, config.slot) : null
     this.uses = mapToTypes(Use, config.uses, this)
+    this.contexts = mapToTypes(Context, config.contexts, this)
 
     this.context = null
     this.rendered = false
@@ -225,11 +227,12 @@ class Document {
 
     this[renderSourceElement] = sourceElement
     this[renderListeners] = listeners
+    if (this.slot) this.slot.render(sourceElement)
+    this.contexts.forEach(nContext => nContext.render())
     this.inputs.forEach(input => input.render())
     this.conditions.forEach(condition => condition.render())
     this.uses.forEach(use => use.render())
     this.iterators.forEach(iterator => iterator.render())
-    if (this.slot) this.slot.render(sourceElement)
     this.styleItems.forEach(styleItem => styleItem.render())
     this.logs.forEach(docLog => docLog.render())
     if (this.let) this.let.render()
@@ -253,6 +256,7 @@ class Document {
     this.iterators.forEach(iterator => iterator.revert())
     if (this.slot) this.slot.revert()
     this.styleItems.forEach(styleItem => styleItem.revert())
+    this.contexts.forEach(nContext => nContext.revert())
     this.rendered = false
     this[renderListeners] = null
     this.exported = null
