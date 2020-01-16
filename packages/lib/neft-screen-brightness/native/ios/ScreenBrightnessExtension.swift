@@ -1,38 +1,40 @@
 import UIKit
 
-fileprivate class NoificationsHandler : NSObject {
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == "brightness" {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                Extension.ScreenBrightness.pushBrightness()
-            }
-        }
+fileprivate let app = App.getApp()
+fileprivate let binding = NativeBinding("ScreenBrightness")
+
+fileprivate class BrightnessHandler {
+    var timer: Timer?
+    let screen = UIScreen.main
+
+    init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleBrightnessDidChange(notfication:)), name: UIScreen.brightnessDidChangeNotification, object: nil)
+    }
+
+    @objc func handleBrightnessDidChange(notfication: NSNotification) {
+        pushBrightness()
+    }
+
+    func pushBrightness() {
+        binding.pushEvent("brightness", args: [screen.brightness])
+    }
+
+    func setBrightness(_ val: CGFloat) {
+        screen.brightness = val
     }
 }
 
-fileprivate let app = App.getApp()
-fileprivate let binding = NativeBinding("ScreenBrightness")
-fileprivate let notificationsHandler = NoificationsHandler()
-
 extension Extension.ScreenBrightness {
+    fileprivate static let handler = BrightnessHandler()
+
     static func register() {
         binding
             .onCall("getBrightness") { (args: [Any?]) in
-                pushBrightness()
+                handler.pushBrightness()
             }
             .onCall("setBrightness") { (args: [Any?]) in
-                setBrightness((args[0] as! Number).float())
+                handler.setBrightness((args[0] as! Number).float())
             }
             .finalize()
-
-        UIScreen.main.addObserver(notificationsHandler, forKeyPath: "brightness", options: .new, context: nil)
-    }
-
-    fileprivate static func pushBrightness() {
-        binding.pushEvent("brightness", args: [UIScreen.main.brightness])
-    }
-
-    private static func setBrightness(_ val: CGFloat) {
-        UIScreen.main.brightness = val
     }
 }
