@@ -18,11 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class App {
-    private abstract class UrlResponse implements Runnable {
-        public abstract void run(String response);
-        public void run() {}
-    }
-
     private class FullKeyEvent {
         final int keyCode;
         final KeyEvent keyEvent;
@@ -38,6 +33,7 @@ public class App {
     private static final App INSTANCE = new App();
     private static final Choreographer CHOREOGRAPHER = Choreographer.getInstance();
     private MainActivity activity;
+    private boolean running = false;
     @Getter private WindowView windowView;
     private CustomApp customApp;
     @Getter private Client client;
@@ -107,6 +103,8 @@ public class App {
     }
 
     public void run() {
+        running = true;
+
         System.loadLibrary("neft");
 
         new Timers();
@@ -133,15 +131,15 @@ public class App {
     }
 
     public void attach(@NonNull MainActivity activity) {
-        boolean isFirstAttach = this.activity == null;
-
         this.activity = activity;
+    }
 
-        if (isFirstAttach) {
+    public void load() {
+        if (running) {
+            renderer.restore();
+        } else {
             windowView = new WindowView(activity.getApplicationContext());
             run();
-        } else {
-            renderer.restore();
         }
     }
 

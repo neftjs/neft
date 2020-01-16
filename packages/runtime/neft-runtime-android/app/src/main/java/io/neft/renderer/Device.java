@@ -14,6 +14,8 @@ import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import java.lang.reflect.Array;
+
 import io.neft.App;
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
@@ -499,8 +501,8 @@ public final class Device {
         }
 
         OutAction action = KEY_EVENTS_MAPPING.get(event.getAction());
-        if (action != null) {
-            String actionKeyCode = KEY_CODES[keyCode];
+        String actionKeyCode = KEY_CODES[keyCode];
+        if (action != null && actionKeyCode != null) {
             APP.getClient().pushAction(action, actionKeyCode);
         }
     }
