@@ -4,7 +4,7 @@ const { callNativeFunction, onNativeEvent } = new NativeClientBinding('ScreenBri
 
 let brightness
 util.defineProperty(exports, 'brightness', null, () => brightness, (val) => {
-  callNativeFunction('setBrightness', Math.min(1, Math.max(0, Number(val))))
+  callNativeFunction('setBrightness', Number(val))
 })
 exports.onBrightnessChange = new SignalDispatcher()
 callNativeFunction('getBrightness')
