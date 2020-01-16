@@ -2,7 +2,7 @@ app:
   dependencies:
   - implementation 'com.google.android.gms:play-services-vision:17.0.2'
 xmlManifest: |
-  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-feature android:name="android.permission.CAMERA" android:required="false" />
 applicationXmlManifest: |
   <meta-data
     android:name="com.google.android.gms.vision.DEPENDENCIES"
