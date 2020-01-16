@@ -15,6 +15,7 @@ exports.defaultManifest = {
   label: 'Neft.io App',
   compileSdkVersion: 28,
   targetSdkVersion: 28,
+  minSdkVersion: 20,
   buildToolsVersion: '28.0.3',
 }
 

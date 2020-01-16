@@ -16,6 +16,8 @@ public class MainActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        APP.attach(this);
+
         super.onCreate(savedInstanceState);
 
         // transparent status bar
@@ -23,8 +25,7 @@ public class MainActivity extends Activity {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         );
 
-        APP.attach(this);
-
+        APP.load();
         view = APP.getWindowView();
 
         if (view.getParent() != null) {
