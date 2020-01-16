@@ -16,6 +16,7 @@ exports.util = require('./util')
 exports.assert = require('./assert')
 exports.Struct = require('./struct')
 exports.ObservableArray = require('./observable-array')
+exports.ObservableObject = require('./observable-object')
 exports.eventLoop = require('./event-loop')
 
 // signal
