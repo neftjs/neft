@@ -3,6 +3,7 @@
 process.env.NEFT_NODE = '1'
 process.env.NEFT_SERVER = '1'
 process.env.NEFT_PLATFORM = 'node'
+process.env.NEFT_MODE = 'universal'
 
 require('coffee-script/register')
 

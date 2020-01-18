@@ -43,6 +43,7 @@ exports.args = {
 
 exports.options = {
   production: true,
+  web: true,
 }
 
 exports.devServerPort = 3101

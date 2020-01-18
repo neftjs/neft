@@ -4,6 +4,7 @@ utils = require '../../../util'
 assert = require '../../../assert'
 {SignalsEmitter} = require '../../../signal'
 TypedArray = require '../../../typed-array'
+styles = require '../styles'
 stringify = require './tag/stringify'
 
 assert = assert.scope 'View.Element.Tag'
@@ -33,9 +34,8 @@ module.exports = (Element) -> class Tag extends Element
     @_fromJSON = (arr, obj) ->
         name = arr[JSON_NAME]
         unless obj
-            obj = new Tag
+            obj = new Tag name
         Element._fromJSON arr, obj
-        obj.name = name
         utils.merge obj.props, arr[JSON_PROPS]
 
         prevChild = null
@@ -47,14 +47,24 @@ module.exports = (Element) -> class Tag extends Element
                 prevChild._nextSibling = childObj
             prevChild = childObj
 
+            if process.env.NEFT_MODE is 'web'
+                styles.onSetParent childObj, obj
+
+        if process.env.NEFT_MODE is 'web'
+            for name, val of arr[JSON_PROPS]
+                styles.onSetProp obj, name, val, null
+
         obj
 
-    constructor: ->
+    constructor: (name = 'blank') ->
         super()
 
-        @name = 'blank'
+        @name = name
         @children = []
         @props = new Props @
+
+        if process.env.NEFT_MODE is 'web'
+            @_element = document.createElement @name
 
         if process.env.NODE_ENV isnt 'production' and @constructor is Tag
             Object.seal @
@@ -63,9 +73,8 @@ module.exports = (Element) -> class Tag extends Element
 
     SignalsEmitter.createSignal @, 'onPropsChange'
 
-    clone: (clone = new @constructor) ->
+    clone: (clone = new @constructor(@name)) ->
         super clone
-        clone.name = @name
         utils.merge clone.props, @props
         clone
 
@@ -124,13 +133,11 @@ module.exports = (Element) -> class Tag extends Element
 
         elem
 
-    @query = query = require('./tag/query') Element, @
-
-    queryAll: query.queryAll
-
-    query: query.query
-
-    watch: query.watch
+    if process.env.NEFT_MODE is 'universal'
+        @query = query = require('./tag/query') Element, @
+        @::queryAll = query.queryAll
+        @::query = query.query
+        @::watch = query.watch
 
     stringify: (opts = {}) ->
         stringify.getOuterHTML @, opts

@@ -1,3 +1,5 @@
+const { Element } = require('@neft/core')
+
 const findImports = (element, parser) => {
   const imports = []
   element.queryAll('n-import').forEach((child) => {
@@ -27,12 +29,16 @@ module.exports = function (element, parser) {
     if (!name) return
     if (child.queryParents('n-component')) return
 
-    child.name = ''
     child.parent = null
+    const container = new Element.Tag()
+    while (child.children.length > 0) {
+      child.children[0].parent = container
+    }
+
     const options = {
       resourcePath: `${parser.resourcePath}#${name}`,
     }
-    components[name] = { child, options }
+    components[name] = { child: container, options }
     parser.components.add(name)
     parser.localComponents.add(name)
   })

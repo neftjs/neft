@@ -14,8 +14,9 @@ module.exports = (Element, Tag) -> class CustomTag extends Tag
     @_fromJSON = (arr, obj) ->
         fields = arr[JSON_FIELDS]
         unless obj
-            ctor = customTags[arr[Tag.JSON_NAME]]
-            obj = new ctor
+            name = arr[Tag.JSON_NAME]
+            ctor = customTags[name]
+            obj = new ctor name
         Tag._fromJSON arr, obj
 
         for field, val of fields
@@ -64,59 +65,60 @@ module.exports = (Element, Tag) -> class CustomTag extends Tag
 
         return
 
-    @defineStyleProperty = ({ name, styleName = name }) ->
-        if @ is CustomTag
-            throw new Error 'Cannot define a property on CustomTag; create your own class'
+    if process.env.NEFT_MODE is 'universal'
+        @defineStyleProperty = ({ name, styleName = name }) ->
+            if @ is CustomTag
+                throw new Error 'Cannot define a property on CustomTag; create your own class'
 
-        internalStyleName = "_#{styleName}"
-        signalName = "on#{util.capitalize(name)}Change"
-        signalStyleName = "on#{util.capitalize(styleName)}Change"
+            internalStyleName = "_#{styleName}"
+            signalName = "on#{util.capitalize(name)}Change"
+            signalStyleName = "on#{util.capitalize(styleName)}Change"
 
-        @_styleAliases ?= []
-        @_styleAliasesByName ?= {}
+            @_styleAliases ?= []
+            @_styleAliasesByName ?= {}
 
-        @_styleAliases.push
-            name: name
-            signalName: signalName
-            styleName: styleName
+            @_styleAliases.push
+                name: name
+                signalName: signalName
+                styleName: styleName
 
-        @_styleAliasesByName[signalName] =
-            styleName: signalStyleName
+            @_styleAliasesByName[signalName] =
+                styleName: signalStyleName
 
-        @_styleAliasesByName[name] =
-            styleName: styleName
+            @_styleAliasesByName[name] =
+                styleName: styleName
 
-        signalGetter = -> @_style?[signalStyleName]
-        getter = -> @_style?[internalStyleName]
-        setter = (val) -> @_style?[styleName] = val
+            signalGetter = -> @_style?[signalStyleName]
+            getter = -> @_style?[internalStyleName]
+            setter = (val) -> @_style?[styleName] = val
 
-        util.defineProperty @::, signalName, util.CONFIGURABLE, signalGetter, null
-        util.defineProperty @::, name, util.CONFIGURABLE, getter, setter
+            util.defineProperty @::, signalName, util.CONFIGURABLE, signalGetter, null
+            util.defineProperty @::, name, util.CONFIGURABLE, getter, setter
 
-        return
+            return
 
-    @defineStyleSignal = ({ signalName, signalStyleName = signalName }) ->
-        if @ is CustomTag
-            throw new Error 'Cannot define a signal on CustomTag; create your own class'
+        @defineStyleSignal = ({ signalName, signalStyleName = signalName }) ->
+            if @ is CustomTag
+                throw new Error 'Cannot define a signal on CustomTag; create your own class'
 
-        @_styleAliases ?= []
-        @_styleAliasesByName ?= {}
+            @_styleAliases ?= []
+            @_styleAliasesByName ?= {}
 
-        @_styleAliases.push
-            signalName: signalName
-            signalStyleName: signalStyleName
+            @_styleAliases.push
+                signalName: signalName
+                signalStyleName: signalStyleName
 
-        @_styleAliasesByName[signalName] =
-            styleName: signalStyleName
+            @_styleAliasesByName[signalName] =
+                styleName: signalStyleName
 
-        signalGetter = -> @_style?[signalStyleName]
+            signalGetter = -> @_style?[signalStyleName]
 
-        util.defineProperty @::, signalName, util.CONFIGURABLE, signalGetter, null
+            util.defineProperty @::, signalName, util.CONFIGURABLE, signalGetter, null
 
-        return
+            return
 
-    constructor: ->
-        super()
+    constructor: (name) ->
+        super name
 
         fields = @constructor._fields
         fieldsByName = @constructor._fieldsByName
@@ -133,7 +135,7 @@ module.exports = (Element, Tag) -> class CustomTag extends Tag
                     @[name] = @props[name]
 
 
-    clone: (clone = new @constructor) ->
+    clone: (clone = new @constructor(@name)) ->
         super clone
 
         fields = @constructor._fields

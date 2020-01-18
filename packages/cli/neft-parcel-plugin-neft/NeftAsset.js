@@ -56,7 +56,7 @@ class NeftAsset extends Asset {
       if (key in this.styles) return
       this.styles[key] = result.length
       result.push({
-        type: 'nml',
+        type: style.props.lang || 'nml',
         value: style.stringifyChildren(),
         map: '',
       })

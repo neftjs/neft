@@ -24,6 +24,7 @@ const printHelp = () => {
   logger.log('clean      removes temporary files and built targets\n')
   logger.log('<u>options:</u>')
   logger.log('--production       creates production build')
+  logger.log('--web              uses web mode for browsers and CSS styles')
   logger.log('')
 }
 

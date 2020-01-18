@@ -45,7 +45,8 @@ module.exports = (Tag) -> class Props
 
         # trigger event
         @_ref.emit 'onPropsChange', name, old
-        Tag.query.checkWatchersDeeply @_ref
+        if process.env.NEFT_MODE is 'universal'
+            Tag.query.checkWatchersDeeply @_ref
 
         styles.onSetProp @_ref, name, value, old
 
