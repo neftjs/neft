@@ -26,8 +26,7 @@ module.exports = (xhtml) => {
   xhtmlParser.parse(xhtml, {
     opentag(name) {
       const Ctor = customTags[name] || Tag
-      const tag = new Ctor()
-      tag.name = name
+      const tag = new Ctor(name)
       addElement(tag)
       return stack.push(tag)
     },

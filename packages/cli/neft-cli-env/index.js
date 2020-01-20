@@ -36,10 +36,12 @@ exports.cliEnv = {
   NEFT_NODE: '1',
   NEFT_SERVER: '1',
   NEFT_PLATFORM: 'node',
+  NEFT_MODE: 'universal',
 }
 
-exports.getTargetEnv = ({ target }) => {
+exports.getTargetEnv = ({ target, web }) => {
   const env = {
+    NEFT_MODE: web ? 'web' : 'universal',
     NEFT_PLATFORM: target,
   }
   Object.keys(targetEnvs).forEach((possibleTarget) => {

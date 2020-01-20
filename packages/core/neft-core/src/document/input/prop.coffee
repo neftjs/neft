@@ -3,6 +3,7 @@
 assert = require '../../assert'
 utils = require '../../util'
 Input = require '../input'
+{prefixTagClassOrIdProp} = require '../element/element/tag/util'
 
 module.exports = class InputProp extends Input
     @isHandler = isHandler = (node, prop) ->
@@ -24,6 +25,9 @@ module.exports = class InputProp extends Input
         @element.props[@prop]
 
     setValue: (val) ->
+        if process.env.NEFT_MODE is 'web'
+            val = prefixTagClassOrIdProp @prop, val, @document.uid
+
         @element.props.set @prop, val
 
     render: ->

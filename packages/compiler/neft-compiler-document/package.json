@@ -11,7 +11,9 @@
   "dependencies": {
     "@neft/compiler-binding": "^1.0.0-alpha.1",
     "@neft/core": "^1.0.0-alpha.1",
-    "lite-html-parser": "^0.2.1"
+    "lite-html-parser": "^0.2.1",
+    "postcss": "^7.0.26",
+    "postcss-prefixer": "^2.1.2"
   },
   "gitHead": "9d14395fe2f6ff003da37f358dbfee354327f7ca"
 }

@@ -1,4 +1,8 @@
 /* eslint-disable no-console */
+if (process.env.NEFT_MODE === 'web') {
+  require('./web-polyfill')
+}
+
 const parseXHTML = require('./xhtml-parser')
 
 /* eslint-disable global-require */

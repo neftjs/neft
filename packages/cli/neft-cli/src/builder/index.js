@@ -155,7 +155,7 @@ const createEntryLink = async (input) => {
 exports.bundle = async (target, {
   input, output, extensions = [], imports = [], production = false, watch = false,
   initCode = '', injectEnvs = true, bundleNodeModules = true,
-  createMainAppEntryFile = true,
+  createMainAppEntryFile = true, web = false,
 }) => {
   const parcelOptions = {
     outDir: output,
@@ -191,11 +191,13 @@ exports.bundle = async (target, {
   }
   const entries = [entry]
   const bundler = new ParcelBundler(entries, parcelOptions)
+  const { NEFT_MODE, ...targetEnv } = getTargetEnv({ target, web })
   bundler.options.env = {
-    ...(injectEnvs && getTargetEnv({ production, target })),
+    ...(injectEnvs && targetEnv),
     NODE_ENV: production ? 'production' : 'development',
+    NEFT_MODE,
     NEFT_PARCEL_EXTENSIONS: JSON.stringify(extensions),
-    NEFT_PARCEL_DEFAULT_STYLES: JSON.stringify(defaultStyles),
+    NEFT_PARCEL_DEFAULT_STYLES: web ? '[]' : JSON.stringify(defaultStyles),
     NEFT_PARCEL_DEFAULT_COMPONENTS: JSON.stringify(defaultComponents),
   }
   neftParcelPlugin(bundler)
@@ -221,6 +223,7 @@ exports.build = async (target, args) => {
   logger.log(`\`Building **${target}** target\``)
   const production = !!args.production
   const watch = !!args.run
+  const web = !!args.web
   const targetBuilder = targetBuilders[target]
   const input = realpath
   let output = path.join(outputDir, target)
@@ -250,7 +253,14 @@ exports.build = async (target, args) => {
       imports = await targetBuilder.getImports({ input, target, extensions })
     }
     let config = {
-      input, output, extensions, imports, production, watch, initCode: staticFilesCode,
+      input,
+      output,
+      extensions,
+      imports,
+      production,
+      watch,
+      web,
+      initCode: staticFilesCode,
     }
     if (typeof targetBuilder.getBundleConfig === 'function') {
       config = targetBuilder.getBundleConfig({ config, args })

@@ -6,4 +6,10 @@ if (process.env.NEFT_IOS) {
   require('./runtime/ios')
 }
 
-exports.render = require('./render')
+if (process.env.NEFT_MODE === 'universal') {
+  exports.render = require('./render-universal')
+}
+
+if (process.env.NEFT_MODE === 'web') {
+  exports.render = require('./render-web')
+}

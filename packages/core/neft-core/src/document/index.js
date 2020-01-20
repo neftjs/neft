@@ -1,7 +1,7 @@
 const util = require('../util')
 const assert = require('../assert')
 const eventLoop = require('../event-loop')
-const Renderer = require('../renderer')
+const Renderer = process.env.NEFT_MODE === 'universal' ? require('../renderer') : null
 const log = require('../log')
 const Use = require('./use')
 const Log = require('./log')
@@ -13,7 +13,7 @@ const Script = require('./script')
 const Slot = require('./slot')
 const Iterator = require('./iterator')
 const Context = require('./context')
-const StyleItem = require('./style-item')
+const StyleItem = process.env.NEFT_MODE === 'universal' ? require('./style-item') : null
 
 const parseImports = (imports) => {
   Object.keys(imports).forEach((name) => {
@@ -45,7 +45,7 @@ const createInitLocalPool = (components) => {
 
 const isInternalProp = prop => (prop[0] === 'n' && prop[1] === '-') || prop === 'ref'
 
-const attachStyles = (styles, element) => {
+const attachStyles = process.env.NEFT_MODE === 'universal' ? (styles, element) => {
   Object.values(styles).forEach((style) => {
     const { selects } = style
     if (!selects) return
@@ -55,7 +55,7 @@ const attachStyles = (styles, element) => {
       select.running = true
     })
   })
-}
+} : null
 
 const documents = Object.create(null)
 const globalPool = Object.create(null)
@@ -102,8 +102,10 @@ class Document {
     this.iterators = mapToTypes(Iterator, config.iterators, this)
     this.logs = mapToTypes(Log, config.logs, this)
     this.let = config.let ? new Let(this, config.let) : null
-    this.style = config.style || {}
-    this.styleItems = mapToTypes(StyleItem, config.styleItems, this)
+    if (process.env.NEFT_MODE === 'universal') {
+      this.style = config.style || {}
+      this.styleItems = mapToTypes(StyleItem, config.styleItems, this)
+    }
     this.slot = config.slot ? new Slot(this, config.slot) : null
     this.uses = mapToTypes(Use, config.uses, this)
     this.contexts = mapToTypes(Context, config.contexts, this)
@@ -117,14 +119,16 @@ class Document {
     this[renderSourceElement] = null
     this[renderListeners] = null
 
-    this.uid = util.uid()
+    this.uid = config.uid ? config.uid : util.uid()
     Object.seal(this)
 
     if (process.env.NODE_ENV === 'development') {
       saveInstance(this)
     }
 
-    attachStyles(this.style, this.element)
+    if (process.env.NEFT_MODE === 'universal') {
+      attachStyles(this.style, this.element)
+    }
   }
 
   [callRenderListener](name, arg1, arg2) {
@@ -233,7 +237,9 @@ class Document {
     this.conditions.forEach(condition => condition.render())
     this.uses.forEach(use => use.render())
     this.iterators.forEach(iterator => iterator.render())
-    this.styleItems.forEach(styleItem => styleItem.render())
+    if (process.env.NEFT_MODE === 'universal') {
+      this.styleItems.forEach(styleItem => styleItem.render())
+    }
     this.logs.forEach(docLog => docLog.render())
     if (this.let) this.let.render()
 
@@ -255,7 +261,9 @@ class Document {
     this.uses.forEach(use => use.revert())
     this.iterators.forEach(iterator => iterator.revert())
     if (this.slot) this.slot.revert()
-    this.styleItems.forEach(styleItem => styleItem.revert())
+    if (process.env.NEFT_MODE === 'universal') {
+      this.styleItems.forEach(styleItem => styleItem.revert())
+    }
     this.contexts.forEach(nContext => nContext.revert())
     this.rendered = false
     this[renderListeners] = null

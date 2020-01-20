@@ -68,7 +68,7 @@ it('reverse() emits signal', () => {
 })
 
 it('sort() emits signal', () => {
-  array.sort(() => 1)
+  array.sort(item => (item === 'a' ? 1 : -1))
   assert.isEqual(popped, [['a', 0], ['b', 1]])
   assert.isEqual(pushed, [['b', 0], ['a', 1]])
 })

@@ -28,6 +28,8 @@ class Element extends SignalsEmitter
 
     @_fromJSON = (arr, obj = new Element) ->
         obj._visible = arr[JSON_VISIBLE] is 1
+        if process.env.NEFT_MODE is 'web' and not obj._visible
+            styles.onSetVisible obj, obj._visible
         obj
 
     @Text = require('./element/text') Element
@@ -39,13 +41,17 @@ class Element extends SignalsEmitter
         @_parent = null
         @_nextSibling = null
         @_previousSibling = null
-        @_style = null
-        @_documentStyle = null
         @_visible = true
 
-        @_watchers = null
-        @_inWatchers = null
-        @_checkWatchers = 0
+        if process.env.NEFT_MODE is 'universal'
+            @_style = null
+            @_documentStyle = null
+            @_watchers = null
+            @_inWatchers = null
+            @_checkWatchers = 0
+
+        if process.env.NEFT_MODE is 'web'
+            @_element = null
 
         if process.env.NODE_ENV isnt 'production' and @constructor is Element
             Object.seal @
@@ -157,8 +163,9 @@ class Element extends SignalsEmitter
         # trigger signal
         @emit 'onParentChange', old
 
-        Tag.query.checkWatchersDeeply @, old
-        Tag.query.checkWatchersDeeply @
+        if process.env.NEFT_MODE is 'universal'
+            Tag.query.checkWatchersDeeply @, old
+            Tag.query.checkWatchersDeeply @
 
         styles.onSetParent @, val
 
@@ -166,21 +173,28 @@ class Element extends SignalsEmitter
 
     SignalsEmitter.createSignal @, 'onParentChange'
 
-    opts = utils.CONFIGURABLE
-    utils.defineProperty @::, 'style', opts, ->
-        @_style
-    , (val) ->
-        old = @_style
-        if old is val
-            return false
+    if process.env.NEFT_MODE is 'universal'
+        opts = utils.CONFIGURABLE
+        utils.defineProperty @::, 'style', opts, ->
+            @_style
+        , (val) ->
+            old = @_style
+            if old is val
+                return false
 
-        @_style = val
+            @_style = val
 
-        # trigger signal
-        @emit 'onStyleChange', old, val
-        true
+            # trigger signal
+            @emit 'onStyleChange', old, val
+            true
 
-    SignalsEmitter.createSignal @, 'onStyleChange'
+        SignalsEmitter.createSignal @, 'onStyleChange'
+
+    if process.env.NEFT_MODE is 'web'
+        opts = utils.CONFIGURABLE
+        utils.defineProperty @::, 'element', opts, ->
+            @_element
+        , null
 
     opts = utils.CONFIGURABLE
     utils.defineProperty @::, 'visible', opts, ->
@@ -202,9 +216,9 @@ class Element extends SignalsEmitter
 
     SignalsEmitter.createSignal @, 'onVisibleChange'
 
-    queryAllParents: Tag.query.queryAllParents
-
-    queryParents: Tag.query.queryParents
+    if process.env.NEFT_MODE is 'universal'
+        @::queryAllParents = Tag.query.queryAllParents
+        @::queryParents = Tag.query.queryParents
 
     getAccessPath: (toParent) ->
         if toParent?

@@ -1,14 +1,15 @@
 const { render } = require('./initializer')
-const { NativeClientBinding, NativeServerBinding } = require('./native')
 const { SignalDispatcher, SignalsEmitter } = require('./signal')
 const Resources = require('./resources')
-const Renderer = require('./renderer')
 const Document = require('./document')
 const Element = require('./document/element')
 
 // native
-exports.NativeClientBinding = NativeClientBinding
-exports.NativeServerBinding = NativeServerBinding
+if (process.env.NEFT_MODE === 'universal') {
+  const { NativeClientBinding, NativeServerBinding } = require('./native')
+  exports.NativeClientBinding = NativeClientBinding
+  exports.NativeServerBinding = NativeServerBinding
+}
 
 // utilities
 exports.logger = require('./log')
@@ -28,20 +29,25 @@ exports.Document = Document
 exports.Element = Element
 exports.CustomTag = Element.Tag.CustomTag
 
-// renderer
-exports.render = render
-exports.Renderer = Renderer
-exports.loadFont = Renderer.loadFont
-exports.Item = Renderer.Item
-exports.NativeStyleItem = Renderer.Native
-exports.device = Renderer.device
-exports.screen = Renderer.screen
-exports.navigator = Renderer.navigator
-
 // resources
 exports.Resource = Resources.Resource
 exports.Resources = Resources
 exports.resources = new Resources()
-Renderer.setResources(exports.resources)
+
+// renderer
+if (process.env.NEFT_MODE === 'universal') {
+  const Renderer = require('./renderer')
+  exports.Renderer = Renderer
+  exports.loadFont = Renderer.loadFont
+  exports.Item = Renderer.Item
+  exports.NativeStyleItem = Renderer.Native
+  exports.device = Renderer.device
+  exports.screen = Renderer.screen
+  exports.navigator = Renderer.navigator
+  Renderer.setResources(exports.resources)
+}
+
+// initalizers
+exports.render = render
 
 Object.freeze(exports)

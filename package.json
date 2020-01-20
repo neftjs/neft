@@ -28,6 +28,7 @@
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
+      "/dist/",
       "utils.js"
     ],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|coffee)$",

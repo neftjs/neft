@@ -1,15 +1,11 @@
 const { Element } = require('@neft/core')
 
 const parse = require('./input-parser')
+const { isBinding } = require('./storage-util')
 
 const { Tag, Text } = Element
 
-const InputRE = /{([^}]*)}/g
-
-const testInput = (text) => {
-  InputRE.lastIndex = 0
-  return text && InputRE.test(text)
-}
+const OMIT_TAGS = new Set(['style'])
 
 module.exports = function (rootElement, parser) {
   const textInputs = []
@@ -19,7 +15,7 @@ module.exports = function (rootElement, parser) {
     // text
     if (element instanceof Text) {
       const { text } = element
-      if (testInput(text)) {
+      if (isBinding(text)) {
         const interpolation = parse(text)
         if (interpolation) {
           textInputs.push({ element, interpolation, text })
@@ -27,12 +23,12 @@ module.exports = function (rootElement, parser) {
         }
       }
     // props
-    } else if (element instanceof Tag) {
+    } else if (element instanceof Tag && !OMIT_TAGS.has(element.name)) {
       const { props, children } = element
 
       Object.keys(props).forEach((prop) => {
         const text = props[prop]
-        if (testInput(text)) {
+        if (isBinding(text)) {
           const interpolation = parse(text)
           props.set(prop, null)
           const pushWay = prop[0] === 'n' && prop[1] === '-' ? 'unshift' : 'push'

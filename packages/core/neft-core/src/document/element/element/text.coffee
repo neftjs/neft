@@ -16,22 +16,31 @@ module.exports = (Element) -> class Text extends Element
     JSON_TEXT = i++
     JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
-    @_fromJSON = (arr, obj = new Text) ->
+    @_fromJSON = (arr, obj) ->
         Element._fromJSON arr, obj
-        obj._text = arr[JSON_TEXT]
+        if obj
+            obj._text = arr[JSON_TEXT]
+        else
+            obj = new Text arr[JSON_TEXT]
+
+        if process.env.NEFT_MODE is 'web'
+            styles.onSetText obj, arr[JSON_TEXT]
+
         obj
 
-    constructor: ->
+    constructor: (text = '') ->
         super()
 
-        @_text = ''
+        @_text = text
+
+        if process.env.NEFT_MODE is 'web'
+            @_element = document.createTextNode @_text
 
         if process.env.NODE_ENV isnt 'production' and @constructor is Text
             Object.seal @
 
-    clone: (clone = new Text) ->
+    clone: (clone = new Text(@_text)) ->
         super clone
-        clone._text = @_text
         clone
 
     opts = utils.CONFIGURABLE
@@ -49,7 +58,9 @@ module.exports = (Element) -> class Text extends Element
 
         # trigger event
         @emit 'onTextChange', old
-        Element.Tag.query.checkWatchersDeeply @
+
+        if process.env.NEFT_MODE is 'universal'
+            Element.Tag.query.checkWatchersDeeply @
 
         styles.onSetText @
 
