@@ -31,7 +31,7 @@ describe 'Document n-for', ->
     it 'supports runtime updates on given observable array', ->
         view = createView '''
             <ul n-for="(item, i, each) in {arr}">{each[i]}</ul>
-            <n-props arr />
+            <n-prop name="arr" />
         '''
 
         arr = new ObservableArray 1, 2
@@ -53,7 +53,7 @@ describe 'Document n-for', ->
     it 'supports runtime updates on the n-for prop', ->
         view = createView '''
             <ul n-for="(item, i, each) in {[1, 2]}">{each[i]}</ul>
-            <n-props arr />
+            <n-prop name="arr" />
         '''
 
         renderParse view
@@ -65,7 +65,7 @@ describe 'Document n-for', ->
     it 'access global `props`', ->
         view = createView '''
         <ul n-for="i in {[1,2]}">{a}</ul>
-        <n-props a />
+        <n-prop name="a" />
         '''
 
         renderParse view,
@@ -85,7 +85,7 @@ describe 'Document n-for', ->
         view = createView """
             <n-component name="a">
                 <ul n-for="i in {[1,2]}">{a}</ul>
-                <n-props a />
+                <n-prop name="a" />
             </n-component>
             <n-use n-component="a" a="a" />
         """
@@ -155,7 +155,7 @@ describe 'Document n-for', ->
                     },
                 }
                 </script>
-                <n-props onRevertCalled />
+                <n-prop name="onRevertCalled" />
             </n-component>
             <script>
             exports.default = {
@@ -193,7 +193,7 @@ describe 'Document n-for', ->
 
     it 'populates `n-ref` comes from `n-use`', ->
         view = createView """
-            <n-component name="Abc"><n-props elem /></n-component>
+            <n-component name="Abc"><n-prop name="elem" /></n-component>
             <ul n-for="i in {[1, 2]}"><Abc elem={i} n-ref="deepElem" /></ul>
         """
 

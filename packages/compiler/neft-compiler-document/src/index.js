@@ -12,7 +12,7 @@ const PARSERS = [
   require('./parse/styles'),
   require('./parse/iterators'),
   require('./parse/scripts'),
-  require('./parse/props'),
+  require('./parse/prop'),
   require('./parse/conditions'),
   require('./parse/uses'),
   require('./parse/storage'),

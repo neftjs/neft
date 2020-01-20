@@ -30,7 +30,7 @@ describe('Document n-use', () => {
           n-if="{loops > 0}"
           loops="{loops - 1}"
         />
-        <n-props loops />
+        <n-prop name="loops" />
       </n-component>
       <n-use n-component="a" loops={3} />
     `)
@@ -56,7 +56,8 @@ describe('Document n-use', () => {
       })
       </script>
       <n-component name="Abc">
-        <n-props logs name />
+        <n-prop name="logs" />
+        <n-prop name="name" />
         <script>
         exports.default = {
           onRender() {
@@ -80,7 +81,8 @@ describe('Document n-use', () => {
       })
       </script>
       <n-component name="Abc">
-        <n-props logs status />
+        <n-prop name="logs" />
+        <n-prop name="status" />
         {status}
         <script>
         exports.default = {
@@ -119,7 +121,8 @@ describe('Document n-use', () => {
           },
         }
         </script>
-        <n-props logs name />
+        <n-prop name="logs" />
+        <n-prop name="name" />
       </n-component>
       <div n-if="{false}">
         <Abc logs="{logs}" name="fail" />

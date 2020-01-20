@@ -8,7 +8,7 @@ test('context can be accessed', () => {
       <h1>{configValue.ok}</h1>
     </n-component>
 
-    <n-props config />
+    <n-prop name="config" />
     <n-provide-context name="configContext" value={config}>
       <User />
     </n-provide-context>
@@ -21,7 +21,7 @@ test('context can be accessed', () => {
 test('context can be accessed through n-slot ', () => {
   const view = createView(`
     <n-component name="Store">
-      <n-props config />
+      <n-prop name="config" />
       <div class="store">
         <n-provide-context name="configContext" value={config}>
           <n-slot />
@@ -34,7 +34,7 @@ test('context can be accessed through n-slot ', () => {
       <h1>{configValue.counter}</h1>
     </n-component>
 
-    <n-props config />
+    <n-prop name="config" />
     <Store config={config}>
       <User />
     </Store>

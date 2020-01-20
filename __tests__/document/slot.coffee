@@ -31,7 +31,7 @@ describe 'Document n-slot', ->
         view = createView '''
             <n-component name="a">
                 <n-slot n-if="{x === 1}" />
-                <n-props x />
+                <n-prop name="x" />
             </n-component>
             <n-use n-component="a" x={0}><b></b></n-use>
         '''
