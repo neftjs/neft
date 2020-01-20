@@ -16,7 +16,7 @@ describe 'Document n-if', ->
             <n-component name="Test">
                 <b n-if="{x > 1}">OK</b>
                 <b n-if="{x === 1}">FAIL</b>
-                <n-props x />
+                <n-prop name="x" />
             </n-component>
             <Test x={1} />
         '''
@@ -32,7 +32,7 @@ describe 'Document n-if', ->
             <n-component name="Test">
                 <b n-if="{x > 1}">YES</b>
                 <b n-else>NO</b>
-                <n-props x />
+                <n-prop name="x" />
             </n-component>
             <Test x={1} />
         '''

@@ -23,7 +23,7 @@ describe 'Document script', ->
 
     it 'is called with props in onRender', ->
         view = createView '''
-            <n-props a />
+            <n-prop name="a" />
             <script>
             exports.default = {
                 b: null,

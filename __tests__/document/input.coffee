@@ -31,7 +31,7 @@ describe 'Document string interpolation', ->
             view = createView '''
                 <n-component name="a">
                     {x}
-                    <n-props x />
+                    <n-prop name="x" />
                 </n-component>
                 <n-use n-component="a" x="2" />
             '''
@@ -44,10 +44,10 @@ describe 'Document string interpolation', ->
                 <n-component name="a">
                     <n-component name="b">
                         {x}
-                        <n-props x />
+                        <n-prop name="x" />
                     </n-component>
                     <n-use n-component="b" x="4" />
-                    <n-props x />
+                    <n-prop name="x" />
                 </n-component>
                 <n-use n-component="a" x="3" />
             '''
@@ -73,7 +73,7 @@ describe 'Document string interpolation', ->
         it 'does not contain internal properties', ->
             view = createView '''
                 <n-component name="a">
-                    <n-props x />
+                    <n-prop name="x" />
                     {getThisKeys()}
                     <script>
                     exports.default = () => ({
@@ -291,7 +291,7 @@ describe 'Document string interpolation', ->
             view = createView '''
                 <n-component name="a">
                     {x}
-                    <n-props x />
+                    <n-prop name="x" />
                 </n-component>
                 <n-use n-component="a" x="2" y="1" />
             '''
