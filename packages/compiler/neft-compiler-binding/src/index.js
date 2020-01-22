@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 const acorn = require('acorn')
 const walk = require('acorn-walk')
 const astring = require('astring')
@@ -34,6 +35,9 @@ const GLOBAL_KEYS = new Set([
 
   // control abstraction objects
   'Promise', 'Generator', 'GeneratorFunction', 'AsyncFunction',
+
+  // nonstandard
+  'console',
 ])
 
 exports.isBinding = (code) => {
@@ -77,12 +81,69 @@ const suffixByTarget = node => ({
   computed: false,
 })
 
+const arrowFunctionsParamNames = new Map()
+
+const getArrowFunctionParamNames = (expr) => {
+  if (arrowFunctionsParamNames.has(expr)) {
+    return arrowFunctionsParamNames.get(expr)
+  }
+
+  const names = new Set()
+  let handlers
+
+  function callHandler(node) {
+    if (handlers[node.type]) {
+      handlers[node.type](node)
+    }
+  }
+
+  handlers = {
+    ObjectPattern(node) {
+      node.properties.forEach(callHandler)
+    },
+    Property(node) {
+      callHandler(node.value)
+    },
+    RestElement(node) {
+      callHandler(node.argument)
+    },
+    ArrayPattern(node) {
+      node.elements.forEach(callHandler)
+    },
+    Identifier(node) {
+      names.add(node.name)
+    },
+  }
+
+  expr.params.forEach(callHandler)
+  arrowFunctionsParamNames.set(expr, names)
+
+  return names
+}
+
+const shouldConsiderName = (ancestors, name) => {
+  for (const ancestor of ancestors) {
+    switch (ancestor.type) {
+      case 'ArrowFunctionExpression':
+        if (getArrowFunctionParamNames(ancestor).has(name)) {
+          return false
+        }
+        break
+      default:
+        // NOP
+    }
+  }
+  return true
+}
+
 const changeNodes = (ast, types, getNewNode) => {
   const typesSet = new Set(types)
   const typeCallback = (leaf, ancestors) => {
     // because we're modifying the tree while iterating on it,
     // we could potentialy get a leaf with not expected type
     if (!typesSet.has(leaf.type)) return
+
+    if (!shouldConsiderName(ancestors, leaf.name)) return
 
     const parent = ancestors[ancestors.length - 2]
     switch (parent.type) {
@@ -169,6 +230,21 @@ const changeNodes = (ast, types, getNewNode) => {
           parent.value = getNewNode(leaf)
         }
         break
+      case 'NewExpression': {
+        if (parent.callee === leaf) {
+          parent.callee = getNewNode(leaf)
+        }
+        const argumentIndex = parent.arguments.indexOf(leaf)
+        if (argumentIndex >= 0) {
+          parent.arguments[argumentIndex] = getNewNode(leaf)
+        }
+        break
+      }
+      case 'ArrowFunctionExpression':
+        if (parent.body === leaf) {
+          parent.body = getNewNode(leaf)
+        }
+        break
       default:
         // NOP
     }
@@ -188,6 +264,8 @@ const changeThisExpressionsToSelfIdentifier = (ast) => {
     },
   })
 }
+
+const getNodeOfType = (nodes, type) => nodes.find(node => node.type === type)
 
 const getMemberExpressionsChain = (node, chain = []) => {
   const { object, property } = node
@@ -237,6 +315,7 @@ const ancestorsToConnection = (ancestors, {
   shouldUseIdInConnections,
   isHeadIdConnectionPublic,
 } = {}) => {
+  if (getNodeOfType(ancestors, 'ArrowFunctionExpression')) return ''
   const node = ancestors[ancestors.length - 1]
   const root = getRootMemberExpression(ancestors)
   if (root && isMemberInAssignmentExpression(ancestors, root)) return ''

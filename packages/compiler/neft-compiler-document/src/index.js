@@ -19,7 +19,7 @@ const PARSERS = [
   require('./parse/refs'),
   require('./parse/logs'),
   require('./parse/calls'),
-  require('./parse/lets'),
+  require('./parse/state'),
   require('./parse/slot'),
   require('./parse/context'),
   require('./parse/unknowns'),

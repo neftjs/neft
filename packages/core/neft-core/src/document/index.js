@@ -5,7 +5,7 @@ const Renderer = process.env.NEFT_MODE === 'universal' ? require('../renderer') 
 const log = require('../log')
 const Use = require('./use')
 const Log = require('./log')
-const Let = require('./let')
+const State = require('./state')
 const Condition = require('./condition')
 const TextInput = require('./input/text')
 const PropInput = require('./input/prop')
@@ -96,12 +96,12 @@ class Document {
     this.exported = null
     this.root = options && options.root != null ? options.root : true
 
-    this.inputs = mapToTypes(TextInput, config.textInputs, this)
-      .concat(mapToTypes(PropInput, config.propInputs, this))
+    this.inputs = mapToTypes(PropInput, config.propInputs, this)
+      .concat(mapToTypes(TextInput, config.textInputs, this))
     this.conditions = mapToTypes(Condition, config.conditions, this)
     this.iterators = mapToTypes(Iterator, config.iterators, this)
     this.logs = mapToTypes(Log, config.logs, this)
-    this.let = config.let ? new Let(this, config.let) : null
+    this.states = mapToTypes(State, config.states, this)
     if (process.env.NEFT_MODE === 'universal') {
       this.style = config.style || {}
       this.styleItems = mapToTypes(StyleItem, config.styleItems, this)
@@ -241,7 +241,6 @@ class Document {
       this.styleItems.forEach(styleItem => styleItem.render())
     }
     this.logs.forEach(docLog => docLog.render())
-    if (this.let) this.let.render()
 
     this.rendered = true
     if (this.root) this.script.afterRender()

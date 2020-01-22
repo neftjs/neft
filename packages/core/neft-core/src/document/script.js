@@ -52,11 +52,11 @@ class Script {
       }
     })
 
-    // add lets
-    if (this.document.let) {
-      this.document.let.names.forEach((name) => {
-        if (!(name in object)) {
-          object[name] = null
+    // add states
+    if (this.document.states) {
+      this.document.states.forEach((state) => {
+        if (!(state.name in object)) {
+          object[state.name] = state.getValue()
         }
       })
     }

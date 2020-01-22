@@ -43,11 +43,12 @@ class Connection
             @itemId = item
             @child = null
             @item = @binding.getItemById item
+
         @connect()
 
         Object.seal @
 
-    getSignalChangeListener: do ->
+    getChangeHandler: do ->
         withParent = ->
             @parent.updateItem()
             return
@@ -63,19 +64,19 @@ class Connection
                 noParent
 
     update: ->
-        @getSignalChangeListener().call @
+        @getChangeHandler().call @
 
     connect: ->
         unless @isItemConnected
             handler = @item?[@handlerName]
             if handler
-                handler.connect @getSignalChangeListener(), @
+                handler.connect @getChangeHandler(), @
                 @isItemConnected = true
         return
 
     disconnect: ->
         if @isItemConnected
-            listener = @getSignalChangeListener()
+            listener = @getChangeHandler()
             @item[@handlerName].disconnect listener, @
             @isItemConnected = false
         return
