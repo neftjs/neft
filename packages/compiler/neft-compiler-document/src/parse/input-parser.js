@@ -17,7 +17,7 @@ module.exports = function(text, scopeProps) {
   n = text.length;
   while (i < n) {
     charStr = text[i];
-    if (charStr === '{') {
+    if (charStr === '{' && !isBlock) {
       isBlock = true;
       blocks += 1;
       if (str !== '' || blocks > 1) {
@@ -40,6 +40,7 @@ module.exports = function(text, scopeProps) {
         hash += "(" + parsed.hash + ") + ";
         connections.push.apply(connections, JSON.parse(parsed.connections));
         str = '';
+        isBlock = false
       } else {
         logger.error("Interpolated string parse error: '" + text + "'");
         return;
