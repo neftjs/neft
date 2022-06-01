@@ -35,7 +35,7 @@
     "parcel-plugin-coffee-script": "^1.0.0-alpha.1",
     "regenerator-runtime": "^0.13.2",
     "rimraf": "^2.6.2",
-    "sharp": "^0.21.0",
+    "sharp": "^0.30.5",
     "xcode": "^1.0.0"
   },
   "gitHead": "9d14395fe2f6ff003da37f358dbfee354327f7ca"
